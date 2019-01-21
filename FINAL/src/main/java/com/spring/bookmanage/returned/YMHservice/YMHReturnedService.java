@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.spring.bookmanage.returned.YMHmodel.InterYMHReturnedDAO;
 import com.spring.bookmanage.returned.YMHmodel.ReturnedVO;
 
+@Service
 public class YMHReturnedService implements InterYMHReturnedService 
 {
 	@Autowired
@@ -25,41 +27,5 @@ public class YMHReturnedService implements InterYMHReturnedService
 	public List<ReturnedVO> listReturned(HashMap<String, String> paraMap) {
 		List<ReturnedVO> returnedList = dao.listReturned(paraMap);
 		return returnedList;
-	}
-	
-	
-	
-	
+	}// end of listReturned
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
