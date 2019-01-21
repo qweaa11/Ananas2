@@ -267,10 +267,10 @@
 				}
 				else {
 					html += "<li class=\"list-group-item\">\n" + 
-					"	<div class=\"row\">\n" + 
-					"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
-					"	</div>\n" + 
-					"</li>";
+							"	<div class=\"row\">\n" + 
+							"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
+							"	</div>\n" + 
+							"</li>";
 				}
 				
 				
@@ -383,7 +383,35 @@
 			dataType:"json",
 			success:function(json) {
 				
-				console.log(json.length);
+				var html = "";
+				
+				if(json.length > 0) {
+					
+					$.each(json, function (entryIndex, entry) {
+						html += "<li class=\"list-group-item hover rentalselect\">\n" + 
+								"	<div class=\"row\">\n" + 
+								"		<div class=\"col-xs-1 memberid text-left\" style=\" \">" + entry.MEMBERID + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.NAME + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.TITLE + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.BOOKID + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.RENTALDATE + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.DEADLINE + "</div>\n" + 
+								"		<div class=\"col-xs-1\" style=\"\">" + entry.RENEW + "</div>\n" + 
+								"	</div>\n" + 
+								"</li>";
+					});// end of each()----------------------------- 
+					
+					
+				}
+				else {
+					html += "<li class=\"list-group-item\">\n" + 
+							"	<div class=\"row\">\n" + 
+							"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
+							"	</div>\n" + 
+							"</li>";
+				}
+				
+				$(".rentalSearchList").html(html);
 				
 			},
 			error: function(request, status, error){
@@ -552,7 +580,7 @@
 						                <input type="hidden" name="search_param" value="bookid" id="bookcategory">      
 						                <input type="text" class="form-control" id="search_book" name="x" placeholder="검색어를 입력해주세요.">
 						                <span class="input-group-btn">
-						                    <button class="btn btn-default booksearch" type="button" onclick="searchBook()"><span class="glyphicon glyphicon-search"></span></button>
+						                    <button class="btn btn-default rentalsearch" type="button" onclick="searchBook()"><span class="glyphicon glyphicon-search"></span></button>
 						                </span>
 						            </div>
 						            <!-- /도서 검색 -->
@@ -701,7 +729,7 @@
 								                        </li>
 								                    </ul>
 								                    
-								                    <ul class="list-group list-group-body rentalList">
+								                    <ul class="list-group list-group-body rentalSearchList">
 								                    </ul>
 								                    
 								                </div>
@@ -734,7 +762,7 @@
 								                        </li>
 								                    </ul>
 								                    
-								                    <ul class="list-group list-group-body rentalList" style="">
+								                    <ul class="list-group list-group-body returnList" style="">
 								                        
 								                    </ul>
 								                    
