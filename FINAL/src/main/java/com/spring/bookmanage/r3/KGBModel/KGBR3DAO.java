@@ -204,5 +204,14 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		
 	}// end of deleteReservationByMemberid()-----------------------
 
+	@Override
+	public List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap) {
+		
+		List<HashMap<String, String>> rentalList = sqlsession.selectList("kgb.findAllRentalByCategory", paraMap);
+		
+		return rentalList;
+		
+	}// end of findAllRentalByCategory()-----------------------
+
 	
 }

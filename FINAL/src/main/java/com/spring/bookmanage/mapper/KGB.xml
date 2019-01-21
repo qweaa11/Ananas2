@@ -77,5 +77,27 @@
 		delete reservation
 		where bookid_fk = #{reservebookid}
 	</delete>
+	
+	<resultMap type="HashMap" id="rental">
+		<result column="memberid" property="MEMBERID" javaType="String"/>
+		<result column="name" property="NAME" javaType="String"/>
+		<result column="title" property="TITLE" javaType="String"/>
+		<result column="bookid" property="BOOKID" javaType="String"/>
+		<result column="rentaldate" property="RENTALDATE" javaType="String"/>
+		<result column="deadline" property="DEADLINE" javaType="String"/>
+		<result column="renew" property="RENEW" javaType="String"/>
+	</resultMap>
+	
+	<select id="findAllRentalByCategory" parameterType="HashMap" resultMap="rental">
+	
+		select memberid, name, title, bookid, rentaldate, to_char(deadline, 'yyyy-mm-dd') as deadline, renew
+		from rental R join member M
+		on R.memberid_fk = M.memberid
+		join book B
+		on R.bookid_fk = B.bookid
+		where ${CATEGORY} like '%' || #{SEARCHWORD} || '%'
+		order by ${SORT} asc
+	
+	</select>
 
 </mapper>

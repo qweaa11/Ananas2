@@ -20,6 +20,9 @@ public interface InterKGBR3Service {
 	int addAllRentalByIdAfterUpdate(HashMap<String, String> paraMap) throws Throwable;
 	// 도서대여를 등록해주는 메소드
 
+	List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap);
+	// 대여된 목록을 가져오는 메소드
+
 	
 
 	
