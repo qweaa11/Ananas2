@@ -29,35 +29,3 @@ public class YMHReturnedService implements InterYMHReturnedService
 		return returnedList;
 	}// end of listReturned
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
