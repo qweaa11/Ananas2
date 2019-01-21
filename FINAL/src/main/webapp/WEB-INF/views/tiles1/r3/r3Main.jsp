@@ -25,6 +25,24 @@
 			$('.search-book span#search_concept').text(concept);
 			$('.input-book #bookcategory').val(param);
 		});
+		
+	 	// 대여 검색 카테고리
+	    $('.search-rental').find('a').click(function(e) {
+			e.preventDefault();
+			var param = $(this).attr("href").replace("#","");
+			var concept = $(this).text();
+			$('.search-rental span#search_concept').text(concept);
+			$('.input-rental #rentalcategory').val(param);
+		});
+	 	
+	 	// 반납 정렬 카테고리
+	    $('.sort-rental').find('a').click(function(e) {
+			e.preventDefault();
+			var param = $(this).attr("href").replace("#","");
+			var concept = $(this).text();
+			$('.sort-rental span#search_concept').text(concept);
+			$('.input-rental-sort #sortrental').val(param);
+		});
 	    
 	    // 회원 목록 스타일 부여
 	    $(document).on("mouseover", ".hover", function () {
@@ -39,6 +57,20 @@
 	    $("#search_member").keydown(function(event) {
 			if(event.keyCode == 13) {
 				searchMember();
+			}
+		});
+	    
+	    // 엔터 쳤을 시 도서 검색
+	    $("#search_book").keydown(function(event) {
+			if(event.keyCode == 13) {
+				searchBook();
+			}
+		});
+	    
+	 	// 엔터 쳤을 시 대여 검색
+	    $("#search_rental").keydown(function(event) {
+			if(event.keyCode == 13) {
+				searchRental();
 			}
 		});
 	    
@@ -141,7 +173,12 @@
 			$(".booksearch").click();
 		}
 	    
-	});
+		
+		$("#sortrental").change(function () {
+			searchRental();
+		});
+		
+	});// end of ready()------------------
 	
 	
 	
@@ -230,10 +267,10 @@
 				}
 				else {
 					html += "<li class=\"list-group-item\">\n" + 
-					"	<div class=\"row\">\n" + 
-					"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
-					"	</div>\n" + 
-					"</li>";
+							"	<div class=\"row\">\n" + 
+							"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
+							"	</div>\n" + 
+							"</li>";
 				}
 				
 				
@@ -326,6 +363,65 @@
 		$(".rentalList").empty();
 	}
 	
+	
+	// 대여된 목록을 불러오기
+	function searchRental() {
+		
+		var category = $("#rentalcategory").val();
+		var searchWord = $("#search_rental").val();
+		var sort = $("#sortrental").val();
+		
+		console.log(sort);
+		
+		 var data_form = {"searchWord":searchWord, "category":category, "sort":sort}
+		
+		$.ajax({
+			
+			url:"r3searchRental.ana",
+			type:"GET",
+			data:data_form,
+			dataType:"json",
+			success:function(json) {
+				
+				var html = "";
+				
+				if(json.length > 0) {
+					
+					$.each(json, function (entryIndex, entry) {
+						html += "<li class=\"list-group-item hover rentalselect\">\n" + 
+								"	<div class=\"row\">\n" + 
+								"		<div class=\"col-xs-1 memberid text-left\" style=\" \">" + entry.MEMBERID + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.NAME + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.TITLE + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.BOOKID + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.RENTALDATE + "</div>\n" + 
+								"		<div class=\"col-xs-2\" style=\"\">" + entry.DEADLINE + "</div>\n" + 
+								"		<div class=\"col-xs-1\" style=\"\">" + entry.RENEW + "</div>\n" + 
+								"	</div>\n" + 
+								"</li>";
+					});// end of each()----------------------------- 
+					
+					
+				}
+				else {
+					html += "<li class=\"list-group-item\">\n" + 
+							"	<div class=\"row\">\n" + 
+							"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
+							"	</div>\n" + 
+							"</li>";
+				}
+				
+				$(".rentalSearchList").html(html);
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});// end of $.ajax()---------------------
+		
+	}// end of searchRental()--------------------- 
+	
 
 </script>
     
@@ -347,6 +443,8 @@
 	                
 	                <div class="panel-body">
 	                    <div class="tab-content">
+	                    
+	                    	<!-- 대여 -->
 	                        <div class="tab-pane fade in active" id="tab1info">
 	                        	
 	                        	
@@ -468,7 +566,7 @@
 						            <h2>도서 목록</h2>
 								    <hr>
 								    
-								    <!-- 도서 검색 -->
+						            <!-- 도서 검색 -->
 								    <div class="input-group input-book" style="margin-bottom: 30px;">
 						                <div class="input-group-btn search-panel search-book">
 						                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -482,7 +580,7 @@
 						                <input type="hidden" name="search_param" value="bookid" id="bookcategory">      
 						                <input type="text" class="form-control" id="search_book" name="x" placeholder="검색어를 입력해주세요.">
 						                <span class="input-group-btn">
-						                    <button class="btn btn-default booksearch" type="button" onclick="searchBook()"><span class="glyphicon glyphicon-search"></span></button>
+						                    <button class="btn btn-default rentalsearch" type="button" onclick="searchBook()"><span class="glyphicon glyphicon-search"></span></button>
 						                </span>
 						            </div>
 						            <!-- /도서 검색 -->
@@ -513,6 +611,8 @@
 								    
 								    
 								    <!-- /도서 목록 -->
+								    
+								    <!-- 대여 대기목록 -->
 									<h2>대여 작업</h2>
 								    <hr>
 									<div style="color: red; padding-bottom: 10px; text-align: right;">대여기간은 최대 14일 입니다.</div> 
@@ -547,6 +647,8 @@
 										<button type="button" class="btn btn-warning btn-circle btn-lg" onclick="rentalReset();"><i class="glyphicon glyphicon-remove"></i></button>
 								    </div>
 								    
+								    <!-- /대여 대기목록 -->
+								    
 									
 								    
 						        </div>
@@ -555,14 +657,137 @@
 						        
 						        
 	                        </div>
+	                        <!-- /대여 -->
 	                        
+	                        
+	                        <!-- 반납 -->
 	                        <div class="tab-pane fade" id="tab2info">
-	                        	호호호호호호호호호호호
+	                        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
+						        	
+						            <h2>대여된 목록</h2>
+								    <hr>
+								    
+								    <!-- 대여 검색 -->
+								    <div class="input-group input-rental" style="margin-bottom: 30px;">
+						                <div class="input-group-btn search-panel search-rental">
+						                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						                    	<span id="search_concept">아이디</span> <span class="caret"></span>
+						                    </button>
+						                    <ul class="dropdown-menu" role="menu">
+						                      <li><a href="#memberid">아이디</a></li>
+						                      <li><a href="#name">이름</a></li>
+						                      <li><a href="#bookid">일련번호</a></li>
+						                      <li><a href="#title">제목</a></li>
+						                    </ul>
+						                </div>
+						                <input type="hidden" name="search_param" value="memberid" id="rentalcategory">       
+						                <input type="text" class="form-control" id="search_rental" name="x" placeholder="검색어를 입력해주세요.">
+						                <span class="input-group-btn">
+						                    <button class="btn btn-default booksearch" type="button" onclick="searchRental();"><span class="glyphicon glyphicon-search"></span></button>
+						                </span>
+						            </div>
+						            <!-- /대여 검색 -->
+						            
+						            
+						            <!-- 정렬기준 -->
+						            <div class="input-group input-rental-sort col-xs-12" style="margin-bottom: 30px;">
+						            	<span style="float: right; padding-right: 10px; padding-top: 7px;">정렬기준 : </span> 
+						                <div class="input-group-btn search-panel sort-rental">
+						                	<div style="float: right;"> 
+							                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="border-radius: 5px;">
+							                    	<span id="search_concept">아이디</span> <span class="caret"></span>
+							                    </button>
+							                    <ul class="dropdown-menu" role="menu" style="float: right;">
+							                      <li><a href="#memberid">아이디</a></li>
+							                      <li><a href="#name">이름</a></li>
+							                      <li><a href="#deadline">반납예정날짜</a></li>
+							                    </ul>
+						                    </div>
+						                </div>
+						                <input type="hidden" name="search_param" value="memberid" id="sortrental"> 
+						            </div>
+						            <!-- /정렬기준 -->
+								    
+								    
+								    <!-- 대여 목록 -->
+								    <div class="row">
+								        <div class="col-xs-12" style="">
+								            <div class="panel panel-default list-group-panel" style="max-width: 100%; max-height: 300px; overflow: auto;">
+								                <div class="panel-body" style="min-width: 1800px; overflow: auto;">
+								                
+								                    <ul class="list-group list-group-header">
+								                        <li class="list-group-item list-group-body">
+								                            <div class="row">
+								                            	<div class="col-xs-1 text-left">아이디</div>
+								                                <div class="col-xs-2">이름</div> 
+								                                <div class="col-xs-2">제목</div> 
+								                                <div class="col-xs-2 text-left">일련번호</div>
+								                                <div class="col-xs-2">대여날짜</div>  
+								                                <div class="col-xs-2">반납예정일</div>
+								                                <div class="col-xs-1">연장 가능 여부</div>
+								                            </div>
+								                        </li>
+								                    </ul>
+								                    
+								                    <ul class="list-group list-group-body rentalSearchList">
+								                    </ul>
+								                    
+								                </div>
+								            </div>
+								        </div>
+								    </div>
+								    
+								    
+								    <!-- /대여 목록 -->
+								    
+								    <!-- 반납 대기목록 -->
+									<h2>반납 작업</h2>
+								    <hr>
+								    
+								    <div class="row">
+								        <div class="col-xs-12" >
+								            <div class="panel panel-default list-group-panel" style="max-width: 100%; max-height: 300px; overflow: auto;">
+								                <div class="panel-body" style="min-width: 1800px; overflow: auto;">
+								                
+								                    <ul class="list-group list-group-header">
+								                        <li class="list-group-item list-group-body">
+								                            <div class="row">
+								                                <div class="col-xs-1 text-left">아이디</div>
+								                                <div class="col-xs-2">이름</div> 
+								                                <div class="col-xs-3">제목</div> 
+								                                <div class="col-xs-2">일련번호</div> 
+								                                <div class="col-xs-2">대여기간</div>  
+								                                <div class="col-xs-2">반납예정일</div> 
+								                            </div>
+								                        </li>
+								                    </ul>
+								                    
+								                    <ul class="list-group list-group-body returnList" style="">
+								                        
+								                    </ul>
+								                    
+								                </div>
+								            </div>
+								        </div>
+								    </div>
+								    <div style="float: right; margin-bottom: 30px;">
+								    	<button type="button" class="btn btn-info btn-circle btn-lg" onclick="rental();"><i class="glyphicon glyphicon-ok"></i></button>
+								    	<button type="button" class="btn btn-success btn-circle btn-lg"><i class="glyphicon glyphicon-plus"></i></button>
+										<button type="button" class="btn btn-warning btn-circle btn-lg" onclick="rentalReset();"><i class="glyphicon glyphicon-remove"></i></button>
+								    </div>
+								    
+									<!-- /반납 대기목록 -->
+								    
+						        </div>
 	                        </div>
+	                        <!-- /반납 -->
 	                         
+	                         
+	                        <!-- 예약 -->
 	                        <div class="tab-pane fade" id="tab3info">
 	                        	하하하하하하하하하
 	                        </div> 
+	                        <!-- 예약 끝 -->
 	                        
 	                    </div>
 	                </div>

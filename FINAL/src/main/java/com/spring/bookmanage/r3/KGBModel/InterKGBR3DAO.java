@@ -31,6 +31,9 @@ public interface InterKGBR3DAO {
 	void deleteReservationByMemberid(String reserveMemberid) throws Throwable;
 	// 예약 테이블에 예약된 책이 대출이 되어 지우는 메소드
 
+	List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap);
+	// 대여된 목록을 가져오는 메소드
+
 	
 
 

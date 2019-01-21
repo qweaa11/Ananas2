@@ -83,6 +83,16 @@ public class KGBR3Service implements InterKGBR3Service{
 	}// end of addAllRentalById()----------------------------------
 
 	
+	@Override
+	public List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap) {
+		
+		List<HashMap<String, String>> rentalList = r3DAO.findAllRentalByCategory(paraMap);
+		
+		return rentalList;
+		
+	}// end of findAllRentalByCategory()-----------------------
+
+	
 
 	
 	

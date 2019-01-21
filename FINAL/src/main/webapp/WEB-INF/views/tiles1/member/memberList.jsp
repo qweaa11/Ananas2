@@ -18,7 +18,7 @@
 		text-decoration: none;
 		border: none;
 	}
-	
+
 </style>
 
 <script type="text/javascript">
@@ -31,7 +31,12 @@
 			$(this).parent().find(".check").prop("checked",!flag);
 		});// end of tr click
 
-	});
+		$("#searchWord").keydown(function(event) {
+	         if(event.keyCode == 13) {
+	        	 search();
+	         }// end of if
+	    });// end of searchword keydown
+	});// end of document ready
 	
 	function search() {
 		var searchFrm = document.searchFrm;
@@ -112,7 +117,7 @@
 			} else {
 				count++;
 			}// end of if~else
-		});
+		});// end of each
 
 		var choice = confirm(count+"명의 회원을 모두 탈퇴처리 하시겠습니까?");
 		var status = "";
@@ -129,7 +134,7 @@
 					}// end of inner deep if
 				}// end of if
 
-			});
+			});// end of each
 
 			if(breakPoint) {
 				alert("선택하신 회원중 이미 탈퇴한 회원이 존재합니다.");
@@ -158,7 +163,7 @@
 			} else {
 				count++;
 			}// end of if~else
-		});
+		});// end of each
 
 		var choice = confirm(count+"명의 회원을 모두 영구정지 처리하시겠습니까?");
 		var status = "";
@@ -175,7 +180,7 @@
 					}// end of inner deep if
 				}// end of if
 
-			});
+			});// end of each
 
 			if(breakPoint) {
 				alert("선택하신 회원중 이미 영구정지상태인 회원이 존재합니다.");
