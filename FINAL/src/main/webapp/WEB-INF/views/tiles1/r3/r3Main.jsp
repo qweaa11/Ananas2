@@ -45,7 +45,7 @@
 		});
 	    
 	    // 회원 목록 스타일 부여
-	    $(document).on("mouseover", ".hover", function () {
+	    $(document).on("mouseover", ".hover", function () { 
 	    	$(this).addClass("hoverStyle");
 		});
 	    
@@ -173,15 +173,71 @@
 			$(".booksearch").click();
 		}
 	    
-		
-		$("#sortrental").change(function () {
+		// 정렬 클릭시 정렬을 위해 함수 호출
+		$(".btnRentalSort").click(function () {
 			searchRental();
 		});
+		
+		
+		// 반납 대기 창으로 옮기기
+		$(document).on("click", ".rentalselect", function () {
+
+	    	var memberid = $(this).find(".rentalMemberid").text();
+	    	var name = $(this).find("#rentalName").text();
+	    	var bookid = $(this).find(".rentalBookid").text();
+	    	var title = $(this).find(".rentalTitle").text();
+	    	var rentalDate = $(this).find(".rentalRentaldate").text();
+	    	var deadline = $(this).find(".rentalDeadline").text();
+	    	var renew = $(this).find(".rentalRenew").text();
+	    	
+	    	var flag = false;
+	    	
+	    	$(".rentalval").each(function () {
+				if($(this).val() == bookid){
+					flag = true;
+					return false;
+				}
+			});
+	    	
+	    	if(flag) {
+	    		alert("이미 반납대기 목록에 들어있는 책 입니다.");
+	    		return;
+	    	}
+	    	
+	    	renew = renew.substring(0, 1);
+	    	
+	    	title = title.length > 15?title.substring(0, 15) + "...":title; 
+	    	
+	    	var name = $("#name").text();
+	    	
+	    	var today = new Date();
+	    	
+	    	var dd = today.getDate();
+	    	var mm = today.getMonth()+1; //January is 0!
+	    	var yyyy = today.getFullYear();
+	    	
+	    	html = 	"<li class=\"list-group-item hover rentalredy\">\n" + 
+					"    <div class=\"row\">\n" + 
+					"		<div class=\"col-xs-1 rentalMemberid text-left\" style=\" \">" + memberid + "</div>\n" + 
+					"		<div class=\"col-xs-2 rentalName\" style=\"\">" + name + "</div>\n" + 
+					"		<div class=\"col-xs-2 rentalTitle\" style=\"\">" + title + "</div>\n" + 
+					"		<div class=\"col-xs-2 rentalBookid\" style=\"\">" + bookid + "</div>\n" + 
+					"		<div class=\"col-xs-2 rentalRentaldate\" style=\"\">" + rentalDate + "</div>\n" + 
+					"		<div class=\"col-xs-2 rentalDeadline\" style=\"\">" + deadline + "</div>\n" + 
+					"		<div class=\"col-xs-1 rentalRenew text-center\" style=\"\">" + (renew > 0?renew + "회 남음":"연장불가") + "</div>\n" +
+					"		<input type='hidden' class='rentalval' value='" + bookid + "'/>" +
+					"    </div>\n" + 
+					"</li>";
+					
+			$(".returnList").append(html);
+	    	
+		});// end of $(document).on()--------------------------------------
+		
 		
 	});// end of ready()------------------
 	
 	
-	
+	// 회원목록 표시
 	function searchMember() {
 		
 		var cateogry = $("#membercategory").val();
@@ -234,6 +290,7 @@
 		
 	}
 	
+	// 도서목록 표시
 	function searchBook() {
 		
 		var cateogry = $("#bookcategory").val();
@@ -390,13 +447,13 @@
 					$.each(json, function (entryIndex, entry) {
 						html += "<li class=\"list-group-item hover rentalselect\">\n" + 
 								"	<div class=\"row\">\n" + 
-								"		<div class=\"col-xs-1 memberid text-left\" style=\" \">" + entry.MEMBERID + "</div>\n" + 
-								"		<div class=\"col-xs-2\" style=\"\">" + entry.NAME + "</div>\n" + 
-								"		<div class=\"col-xs-2\" style=\"\">" + entry.TITLE + "</div>\n" + 
-								"		<div class=\"col-xs-2\" style=\"\">" + entry.BOOKID + "</div>\n" + 
-								"		<div class=\"col-xs-2\" style=\"\">" + entry.RENTALDATE + "</div>\n" + 
-								"		<div class=\"col-xs-2\" style=\"\">" + entry.DEADLINE + "</div>\n" + 
-								"		<div class=\"col-xs-1\" style=\"\">" + entry.RENEW + "</div>\n" + 
+								"		<div class=\"col-xs-1 rentalMemberid text-left\" style=\" \">" + entry.MEMBERID + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalName\" style=\"\">" + entry.NAME + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalTitle\" style=\"\">" + entry.TITLE + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalBookid\" style=\"\">" + entry.BOOKID + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalRentaldate\" style=\"\">" + entry.RENTALDATE + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalDeadline\" style=\"\">" + entry.DEADLINE + "</div>\n" + 
+								"		<div class=\"col-xs-1 rentalRenew text-center\" style=\"\">" + (3 - entry.RENEW) + "회 남음</div>\n" + 
 								"	</div>\n" + 
 								"</li>";
 					});// end of each()----------------------------- 
@@ -698,9 +755,9 @@
 							                    	<span id="search_concept">아이디</span> <span class="caret"></span>
 							                    </button>
 							                    <ul class="dropdown-menu" role="menu" style="float: right;">
-							                      <li><a href="#memberid">아이디</a></li>
-							                      <li><a href="#name">이름</a></li>
-							                      <li><a href="#deadline">반납예정날짜</a></li>
+							                      <li><a href="#memberid" class="btnRentalSort">아이디</a></li>
+							                      <li><a href="#name" class="btnRentalSort">이름</a></li>
+							                      <li><a href="#deadline" class="btnRentalSort">반납예정날짜</a></li>
 							                    </ul>
 						                    </div>
 						                </div>
@@ -753,11 +810,12 @@
 								                        <li class="list-group-item list-group-body">
 								                            <div class="row">
 								                                <div class="col-xs-1 text-left">아이디</div>
-								                                <div class="col-xs-2">이름</div> 
+								                                <div class="col-xs-1">이름</div> 
 								                                <div class="col-xs-3">제목</div> 
-								                                <div class="col-xs-2">일련번호</div> 
-								                                <div class="col-xs-2">대여기간</div>  
-								                                <div class="col-xs-2">반납예정일</div> 
+								                                <div class="col-xs-2 text-left">일련번호</div>
+								                                <div class="col-xs-2">대여날짜</div>  
+								                                <div class="col-xs-2">반납예정일</div>
+								                                <div class="col-xs-1 text-center">연장 가능 여부</div> 
 								                            </div>
 								                        </li>
 								                    </ul>

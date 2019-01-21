@@ -189,8 +189,6 @@ public class KGBR3Controller {
 		String category = request.getParameter("category");
 		String searchWord = request.getParameter("searchWord");
 		String sort = request.getParameter("sort");
-		
-		System.out.println(category + searchWord + sort);
 			
 		HashMap<String, String> paraMap = new HashMap<String, String>(); 
 		paraMap.put("CATEGORY", category);
