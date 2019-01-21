@@ -46,5 +46,12 @@
 		update member set status = 3
 		where idx = #{idx}
 	</update>
+	
+	<!-- 선택한 회원목록에 따른 계정 복원 -->
+	<update id="recoverAllByStatus" parameterType="String">
+		update member set status = 0, lastDate = SYSDATE
+		where idx = #{idx}
+		and status in(2,3)
+	</update>
 
 </mapper>

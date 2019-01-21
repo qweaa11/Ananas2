@@ -74,6 +74,13 @@
 		});
 
 		var choice = confirm(count+"명의 회원을 모두 활성화(휴면해제) 하시겠습니까?");
+		if(count < 1) {
+			alert("1명 이상의 회원을 선택해주세요.");
+			$(".tr-row").find(".idx").attr("disabled", false);
+			
+			return ;
+		}// end of if
+		
 		var status = "";
 		if(choice) {
 			var breakPoint = false;// continue or break
@@ -102,6 +109,59 @@
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of unlock
 	
+	function recover() {// 계정 복원처리
+		var frm = searchFrm;
+		frm.method = "POST";
+		frm.action = "recover.ana";
+	
+		var flag = false;
+		var count = 0;
+		$(".tr-row").each(function() {
+			flag = $(this).find(".check").is(":checked");
+			
+			if(!flag) {
+				$(this).find(".idx").attr("disabled", true);
+			} else {
+				count++;
+			}// end of if~else
+		});// end of each
+
+		var choice = confirm(count+"명의 회원을 모두 복원하시겠습니까?");
+		if(count < 1) {
+			alert("1명 이상의 회원을 선택해주세요.");
+			$(".tr-row").find(".idx").attr("disabled", false);
+			
+			return ;
+		}// end of if
+		
+		var status = "";
+		if(choice) {
+			var breakPoint = false;// continue or break
+			$(".tr-row").each(function() {
+				flag = $(this).find(".check").is(":checked");
+				if(flag) {
+					status = $(this).find(".status").text();
+					if(status == "일반" || status == "영구정지") {
+						console.log(status);
+						breakPoint = true;
+						return false;
+					}// end of inner deep if
+				}// end of if
+
+			});// end of each
+
+			if(breakPoint) {
+				alert("선택하신 회원중 복원불가능한 계정이 포함되어있습니다.(일반, 영구정지) ");
+			} else {
+				frm.submit();
+				return ;
+			}// end of inner if~else
+
+		}// end of outer if
+
+		$(".tr-row").find(".idx").attr("disabled", false);
+	}// end of recover
+	
 	function remove() {// 계정 탈퇴처리
 		var frm = searchFrm;
 		frm.method = "POST";
@@ -120,6 +180,13 @@
 		});// end of each
 
 		var choice = confirm(count+"명의 회원을 모두 탈퇴처리 하시겠습니까?");
+		if(count < 1) {
+			alert("1명 이상의 회원을 선택해주세요.");
+			$(".tr-row").find(".idx").attr("disabled", false);
+			
+			return ;
+		}// end of if
+
 		var status = "";
 		if(choice) {
 			var breakPoint = false;// continue or break
@@ -166,6 +233,13 @@
 		});// end of each
 
 		var choice = confirm(count+"명의 회원을 모두 영구정지 처리하시겠습니까?");
+		if(count < 1) {
+			alert("1명 이상의 회원을 선택해주세요.");
+			$(".tr-row").find(".idx").attr("disabled", false);
+			
+			return ;
+		}// end of if
+		
 		var status = "";
 		if(choice) {
 			var breakPoint = false;// continue or break
@@ -193,6 +267,7 @@
 
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of ban
+	
 </script>
 
 <div class="container">
@@ -215,6 +290,7 @@
 				</div>
 				<div style="float: right;">
 					<button type="button" class="btn btn-success" onclick="unlock();">휴면해제<i class="glyphicon glyphicon-ok"></i></button>
+					<button type="button" class="btn btn-dark" onclick="recover();">복원하기<i class="glyphicon glyphicon-refresh"></i></button>
 					<button type="button" class="btn btn-warning" onclick="ban();">영구정지<i class="glyphicon glyphicon-remove"></i></button>
 					<button type="button" class="btn btn-danger" onclick="remove();">탈퇴처리<i class="glyphicon glyphicon-remove"></i></button>
 				</div>

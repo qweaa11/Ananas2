@@ -75,4 +75,19 @@ public class MemberDAO implements MemberMapper {
 
 		return row;
 	}// end of removeAllMemberByStatus
+
+	/**
+	 * 계정 복구
+	 */
+	@Override
+	public int recoverAllByStatus(String[] idxArray) {
+		int row = 0;
+		String idx = "";
+		for(int i=0;i<idxArray.length;i++) {
+			idx = idxArray[i];
+			row = sqlsession.update("jgh.recoverAllByStatus", idx);
+		}// end of for
+
+		return row;
+	}// end of recoverAllByStatus
 }

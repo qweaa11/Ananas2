@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bookmanage.library.Yjkmodel.YjkVO;
+import com.spring.bookmanage.rental.YSWmodel.YSWRentalVO;
 
 
 @Repository
@@ -88,5 +89,6 @@ public class YSWDAO implements InterYSWDAO {
 		int result = sqlsession.delete("YSW.deleteLibrarian", lIBRARIANIDX);
 		return result;
 	}
+
 
 }
