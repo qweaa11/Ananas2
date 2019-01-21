@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bookmanage.library.Yjkmodel.YjkVO;
+import com.spring.bookmanage.rental.YSWmodel.YSWRentalVO;
 
 @Repository
 public interface InterYSWDAO {
@@ -33,8 +34,6 @@ public interface InterYSWDAO {
 	// 사서 정보 삭제(Real Delete)
 	int deleteLibrarian(String lIBRARIANIDX);
 
-	// 대출 목록 페이지 보여주기
-	List<YSWRentalVO> findRentalList();
 	
 	
 

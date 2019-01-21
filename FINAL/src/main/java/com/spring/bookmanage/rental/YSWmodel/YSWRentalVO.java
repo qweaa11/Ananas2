@@ -1,4 +1,4 @@
-package com.spring.bookmanage.member.YSWmodel;
+package com.spring.bookmanage.rental.YSWmodel;
 
 public class YSWRentalVO {
 	

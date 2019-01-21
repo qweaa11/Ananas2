@@ -1,9 +1,6 @@
 package com.spring.bookmanage.member.YSWcontroller;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +24,8 @@ import com.spring.bookmanage.common.SHA256;
 import com.spring.bookmanage.library.Yjkmodel.YjkVO;
 import com.spring.bookmanage.member.YSWmodel.YSWLibrarianVO;
 import com.spring.bookmanage.member.YSWmodel.YSWMemberVO;
-import com.spring.bookmanage.member.YSWmodel.YSWRentalVO;
 import com.spring.bookmanage.member.YSWservice.InterYSWService;
+import com.spring.bookmanage.rental.YSWmodel.YSWRentalVO;
 
 
 @Controller
@@ -459,37 +456,6 @@ public class YSWController {
 
 		}
 	}// public String deleteLibrarian(HttpServletRequest req, YjkVO yjkvo)
-	
-	
-	
-	// 대출 목록 페이지 보여주기
-	@RequestMapping(value="/rentalList.ana", method= {RequestMethod.GET})
-	public String rentalList(HttpServletRequest req, HttpServletResponse res) {
-		
-		List<HashMap<String, String>> List = new ArrayList<HashMap<String, String>>();
-		List<YSWRentalVO> rentalList = service.findRentalList();
-				
-		for(YSWRentalVO rentalvo : rentalList) {
-			
-			HashMap<String, String> rentalMap = new HashMap<String, String>();
-			
-			rentalMap.put("IDX", rentalvo.getIdx());
-			rentalMap.put("BOOKID", rentalvo.getBookid());
-			rentalMap.put("MEMBERID", rentalvo.getMemberid());
-			rentalMap.put("RETALDATE", rentalvo.getRetalDate());
-			rentalMap.put("DEADLINE", rentalvo.getDeadline());
-			rentalMap.put("RENEW", rentalvo.getRenew());
-			rentalMap.put("BOOKTITLE", rentalvo.getBookTitle());
-			rentalMap.put("PUBNAME", rentalvo.getPubname());
-			rentalMap.put("BOOKAUTHOR", rentalvo.getBookAuthor());
-			rentalMap.put("MEMBERNAME", rentalvo.getMemberName());
-			
-			List.add(rentalMap);
-		}
-		
-		req.setAttribute("LIST", List);
-		
-		return "rental/rentalList.tiles1";
-	}// End of public String rentalList(HttpServletRequest req, HttpServletResponse res) 
+
 		
 }

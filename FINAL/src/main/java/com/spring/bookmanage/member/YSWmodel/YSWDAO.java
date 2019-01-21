@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bookmanage.library.Yjkmodel.YjkVO;
+import com.spring.bookmanage.rental.YSWmodel.YSWRentalVO;
 
 
 @Repository
@@ -89,13 +90,5 @@ public class YSWDAO implements InterYSWDAO {
 		return result;
 	}
 
-
-	// 대출 목록 페이지 보여주기
-	@Override
-	public List<YSWRentalVO> findRentalList() {
-		
-		List<YSWRentalVO> rentalList = sqlsession.selectList("YSW.findRentalList");
-		return rentalList;
-	}
 
 }
