@@ -31,7 +31,7 @@
 	
 	<!-- 선택한 회원목록에 따른 계정 활성화(휴면해제) -->
 	<update id="unlockAllByStatus" parameterType="String">
-		update member set status = 0
+		update member set status = 0, lastDate = SYSDATE
 		where idx = #{idx}
 	</update>
 	
@@ -46,4 +46,5 @@
 		update member set status = 3
 		where idx = #{idx}
 	</update>
+
 </mapper>
