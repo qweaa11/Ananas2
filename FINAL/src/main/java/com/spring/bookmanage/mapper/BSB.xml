@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===== #28. mapper 기본 설정 ===== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- ===== #29. 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
+<mapper namespace="BSB">
+
+	
+	<!--  ==== #47. 로그인 여부 알아오기 및 마지막으로 로그인한 날짜 기록하기 ==== -->
+ 	<select id="getLoginMember" parameterType="HashMap" resultType="com.spring.bookmanage.login.BSBmodel.BSBMemberVO">
+ 	
+	
+		select memberid, name
+		from member
+		where status = 0 and
+			  memberid = #{MEMBERID} and
+			  pwd = #{PWD}
+		 	
+ 	</select> 
+ 	
+ 	
+ 	 <!-- // ==== #115. 검색조건에 만족하는 총게시물 갯수를 알아오기 ==== -->
+	 <select id="getTotalCountWithSearch" parameterType="HashMap" resultType="int">
+	 
+	 	select count(*)
+	 	from board
+	 	where status = 0
+	 	and ${COLNAME} like '%'|| #{SEARCH} ||'%'
+	 
+	 </select>
+	
+	
+	
+	<!-- // ==== #116. 검색조건이 없는 총게시물 갯수를 알아오기 ==== -->
+	 <select id="getTotalCountNoSearch" resultType="int">
+	 
+	 	select count(*)
+	 	from board
+	 	where status = 0
+	 	
+	 </select>
+	 
+	  <select id="boardListPaging" parameterType="HashMap" resultType="com.spring.bookmanage.board.BSBmodel.BSBboardVO"> 
+ 			select RNO, idx, name, subject, readCount, regDate, commentCount
+			from
+			(
+			    select rownum AS RNO
+	                   ,idx, name, subject, readCount, regDate, commentCount
+	                   
+	    		from
+   				(
+		    	    select  idx, name, subject, readCount
+	                       ,to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
+	                       ,commentCount
+	                       
+			        from board
+			        where status = 0
+			        <if test='SEARCH != null and SEARCH !="" and SEARCH != "null" '>
+			        and ${COLNAME} like '%'|| #{SEARCH} ||'%'
+			        </if>
+	 				order by idx desc
+			       			        
+			    )V
+			)T
+			where RNO between #{STARTRNO} and #{ENDRNO}
+	 
+	 </select> 
+	 
+	  <!-- ===== #56. 글쓰기(파일첨부가 없는 글쓰기) ==== -->
+	  <insert id="add" parameterType="com.spring.bookmanage.board.BSBmodel.BSBboardVO">
+			insert into board(idx, libid_fk, name,  subject, content, pw, readcount, regdate, status
+			, groupno, root, depthno, commentcount, filename,  filesize)
+			values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, 0, sysdate, 0
+			,0,0,0,0,null,0)
+	
+	</insert>  
+	
+	<select id="getView" parameterType="String" resultType="com.spring.bookmanage.board.BSBmodel.BSBboardVO">
+					
+			  select  idx, libid_fk, name, subject, content, readCount
+			        ,to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
+			        ,commentCount
+			        
+			    from board
+			    where status = 0 and idx = #{idx}
+			
+			
+	
+	</select>
+ 	
+	
+	
+
+</mapper>

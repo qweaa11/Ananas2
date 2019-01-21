@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="YSW">
+
+	<!-- ===== 아이디 중복 체크 요청. ===== -->
+	<select id="idDuplicate" parameterType="String" resultType="int">
+	
+		select count(*)
+		from member
+		where memberid = #{memberid}
+	
+	</select>
+
+
+	<!-- ===== 회원등록 ===== -->
+	<insert id="memberRegistEnd" parameterType="com.spring.bookmanage.member.YSWmodel.YSWMemberVO">
+	
+		insert into member (memberid, idx, pwd, name, email, phone, addr1, addr2, post, birth, gender, fileSize, imgFileName, regDate, lastDate, pwDate, status)
+		values(#{memberid}, member_seq.nextval, #{pwd}, #{name}, #{email}, #{phone}, #{addr1}, #{addr2}, #{post}, #{birth}, #{gender}, #{fileSize}, #{imgFileName}, sysdate, sysdate, sysdate, default)
+		
+	</insert>
+	
+	
+	<resultMap type="com.spring.bookmanage.member.YSWmodel.YSWLibrarianVO" id="dataResultMap">
+		<!-- set 다음에 나오는 이름을 쓴다! -->
+		<result property="RNO" column="RNO" javaType="int"/>
+		<result property="librarianIDX" column="librarianIDX" javaType="int"/>
+		<result property="libid" column="libid" javaType="String"/>
+		<result property="pwd" column="pwd" javaType="String"/>
+		<result property="libcode_fk" column="libcode_fk" javaType="String"/>
+		<result property="librarianName" column="librarianName" javaType="String"/>
+		<result property="librarianTel" column="librarianTel" javaType="String"/>
+		<result property="status" column="status" javaType="int"/>
+		<result property="imgfilename" column="imgfilename" javaType="String"/>
+		<result property="libName" column="libName" javaType="String"/>
+		<result property="libTel" column="libTel" javaType="String"/>
+		<result property="addr" column="addr" javaType="String"/>
+	</resultMap>
+	
+	
+	<!--  ===== 조건을 이용해서 사서 목록 가져오기. ===== -->
+	<select id="findListWithOption" parameterType="HashMap" resultMap="dataResultMap">
+	
+		select RNO, librarianIDX, libid, libcode_fk, librarianName, librarianTel, status
+		      ,imgfilename ,libName ,libTel ,addr
+		from
+		(
+		    select rownum as RNO, A.idx as librarianIDX, libid, pwd, libcode_fk, A.name as librarianName, A.tel as librarianTel, status, imgfilename
+		                  ,libName, B.tel as libTel, addr
+		    from librarian A JOIN library B
+		    ON A.libcode_fk = B.libcode
+		    where ${sort} like '%'||#{searchWord}||'%'
+		    order by A.idx
+		)V
+		where RNO between #{pageNum} and #{lastNum}
+	
+	</select>
+	
+
+	<!--  ===== 조건이 없을 때 사서 목록 가져오기. ===== -->
+	<select id="findListNoneOption" parameterType="HashMap" resultMap="dataResultMap">
+	
+		select RNO, librarianIDX, libid, libcode_fk, librarianName, librarianTel, status
+     		  ,imgfilename ,libName ,libTel ,addr
+		from
+		(
+		    select rownum as RNO, A.idx as librarianIDX, libid, pwd, libcode_fk, A.name as librarianName, A.tel as librarianTel, status, imgfilename
+		                  ,libName, B.tel as libTel, addr
+		    from librarian A JOIN library B
+		    ON A.libcode_fk = B.libcode
+		    order by A.idx
+		)V
+		where RNO between #{pageNum} and #{lastNum}
+	
+	</select>
+	
+	
+	<!-- ===== 조건을 입력했을 때 페이징처리(더보기)를 위한 totalCount ===== -->
+	<select id="totalCounttWithOption" parameterType="HashMap" resultType="int">
+	
+		select count(*)
+		from librarian A JOIN library B
+		ON A.libcode_fk = B.libcode
+		where ${sort} like '%'||#{searchWord}||'%'
+	
+	</select>
+	
+	
+	<!--===== 조건이 없을 때 페이징처리(더보기)를 위한 totalCount ===== -->
+	<select id="totalNoneOption" resultType="int">
+	
+		select count(*)
+		from librarian A JOIN library B
+		ON A.libcode_fk = B.libcode
+	
+	</select>
+
+
+	<!--===== 사서 정보 수정 ===== -->
+	<update id="updatelibrarianInfo" parameterType="HashMap">
+		
+		update librarian set LIBCODE_FK = #{LIBCODE_FK},
+		                     NAME = #{LIBRARIANNAME},
+		                     TEL = #{LIBRARIANTEL},
+		                     STATUS = #{STATUS},
+		                     IMGFILENAME = #{IMGFILENAME}
+		where idx = #{IDX}
+	
+	</update>
+	
+	
+	<!--===== 사서 정보 삭제(Real Delete) ===== -->
+	<delete id="deleteLibrarian" parameterType="String">
+	
+		delete from librarian
+		where idx = #{lIBRARIANIDX}
+	
+	</delete>
+
+</mapper>

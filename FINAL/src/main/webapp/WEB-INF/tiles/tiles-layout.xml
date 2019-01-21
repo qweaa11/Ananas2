@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ======= #21. tiles 레이아웃 설정하기 ======= -->
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+    
+	<!-- ==== tiles 를 사용하는 레이아웃 설정 시작 ==== -->
+	<definition name="layout-tiles1" template="/WEB-INF/tiles/layout/layout-tiles1.jsp"> 
+		<put-attribute name="header" value="/WEB-INF/tiles/tile1/header.jsp" />
+		<put-attribute name="sideinfo" value="/WEB-INF/tiles/tile1/sideinfo.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/tiles/tile1/footer.jsp" />
+	</definition>
+	<!--즉, 여기서 레이아웃설정을 한뒤 실제 jsp파일내에선  위의 name값만 적으면 사용이 가능하다는 뜻-->
+	
+	
+	
+	<!-- 위의 content부분의 경로가 지정되있지 않기때문에 아래에서처럼 끝이 tiles1인 jsp파일들을 layout-tiles1 타일의 content로 설정하겠다는 뜻 
+		이경우 /WEB-INF/views/tiles1 폴더안의 {1} <<요건  name 값의 * 을 의미  
+		즉, tiles1 폴더 밑의 이름이 아무거나 상관없는 파일을 content로 설정한다는 뜻-->
+	<definition name="*.tiles1" extends="layout-tiles1">
+		<put-attribute name="content" value="/WEB-INF/views/tiles1/{1}.jsp"/>
+	</definition>
+	<definition name="*/*.tiles1" extends="layout-tiles1">
+		<put-attribute name="content" value="/WEB-INF/views/tiles1/{1}/{2}.jsp"/>
+	</definition>
+	<definition name="*/*/*.tiles1" extends="layout-tiles1">
+		<put-attribute name="content" value="/WEB-INF/views/tiles1/{1}/{2}/{3}.jsp"/>
+	</definition>
+	<!-- ==== tiles 를 사용하는 레이아웃 설정 끝 ==== -->    
+    
+    
+    <!-- ==== tiles 를 사용하는 레이아웃 설정 시작 ==== -->
+	<definition name="layout-tiles2" template="/WEB-INF/tiles/layout/layout-tiles2.jsp"> 
+		<put-attribute name="header" value="/WEB-INF/tiles/tile2/header.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="sideinfo" value="/WEB-INF/tiles/tile2/sideinfo.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/tiles/tile2/footer.jsp" />
+	</definition>
+	
+	
+	<definition name="*.tiles2" extends="layout-tiles2">
+		<put-attribute name="content" value="/WEB-INF/views/tiles2/{1}.jsp"/>
+	</definition>
+	<definition name="*/*.tiles2" extends="layout-tiles2">
+		<put-attribute name="content" value="/WEB-INF/views/tiles2/{1}/{2}.jsp"/>
+	</definition>
+	<definition name="*/*/*.tiles2" extends="layout-tiles2">
+		<put-attribute name="content" value="/WEB-INF/views/tiles2/{1}/{2}/{3}.jsp"/>
+	</definition>
+	<!-- ==== tiles 를 사용하는 레이아웃 설정 끝 ==== -->
+	
+	
+	<!-- ==== tiles 를 사용하지 않는 레이아웃 설정 시작 ==== -->
+	<definition name="layout-notiles" template="/WEB-INF/tiles/layout/layout-notiles.jsp"> 
+		<put-attribute name="content" value="" />
+	</definition>
+	
+	<definition name="*.notiles" extends="layout-notiles">
+		<put-attribute name="content" value="/WEB-INF/views/notiles/{1}.jsp"/>
+	</definition>
+	<!-- ==== tiles 를 사용하지 않는 레이아웃 설정 끝 ==== -->
+	
+</tiles-definitions>       
+
+
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===== #28. mapper 기본 설정 ===== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- ===== #29. 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
+<mapper namespace="jgh">
+	<!-- 회원목록 전체조회 -->
+	<select id="findAllMember" resultType="com.spring.bookmanage.member.JGHmodel.MemberVO">
+		select idx, name, memberid
+		    , case when func_age(birth)<![CDATA[<]]>14 then '아동'
+		    when func_age(birth)<![CDATA[<]]>20 then '청소년'
+		    else '성인' end as ages, gender
+		    , email, phone, status
+		    , to_char(regDate,'yyyy-mm-dd') as regDate
+		from member
+		order by idx desc
+	</select>
+	
+	<!-- 검색설정과 입력받은 검색어에 따른 회원목록 조회 -->
+	<select id="findAllMemberBySearchWord" parameterType="HashMap" resultType="com.spring.bookmanage.member.JGHmodel.MemberVO">
+		select idx, name, memberid
+		    , case when func_age(birth)<![CDATA[<]]>14 then '아동'
+		    when func_age(birth)<![CDATA[<]]>20 then '청소년'
+		    else '성인' end as ages, gender
+		    , email, phone, status
+		    , to_char(regDate,'yyyy-mm-dd') as regDate
+		from member
+		where ${colname} like '%'||#{searchWord}||'%'
+		order by idx desc
+	</select>
+	
+	<!-- 선택한 회원목록에 따른 계정 활성화(휴면해제) -->
+	<update id="unlockAllByStatus" parameterType="String">
+		update member set status = 0
+		where idx = #{idx}
+	</update>
+	
+	<!-- 선택한 회원목록에 따른 계정 영구정지 -->
+	<update id="banAllByStatus" parameterType="String">
+		update member set status = 4
+		where idx = #{idx}
+	</update>
+	
+	<!-- 선택한 회원목록에 따른 계정 탈퇴 -->
+	<update id="removeAllByStatus" parameterType="String">
+		update member set status = 3
+		where idx = #{idx}
+	</update>
+</mapper>

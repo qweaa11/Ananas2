@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="KKH">
+
+
+	<select id="findBookBysidebar" parameterType="HashMap"
+		resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select  distinct substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) as bookid, title, author,  agecode 
+                ,gcode_fk, gname,ncode_fk,  nname,lcode_fk, lname,fcode_fk,  fname,ccode_fk,  cname
+                ,libcode_fk,  libname ,pubcode_fk, pubname, count
+        from book A join book_detail D on A.bookid = D.bookid join genre G on A.gcode_fk = G.gcode join nation N on A.ncode_fk = N.ncode join language L on A.lcode_fk = L.lcode
+        join field F on A.fcode_fk = F.fcode join category C on A.ccode_fk = C.ccode join library LIB on A.libcode_fk = LIB.libcode join publisher P on A.pubcode_fk = P.pubcode
+        join 
+        (select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
+        from book
+        group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
+        ) V
+        on substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) = V.bookid
+		where 1=1
+		
+		<if test="LIBRARY != '' and LIBRARY != null">
+			and libcode_fk in (${LIBRARY})
+		</if>
+		 <if test="CATEGORY != '' and CATEGORY != null">
+			and ccode_fk in	(${CATEGORY})
+			
+		</if>
+		<if test="LANGUAGE != '' and LANGUAGE != null">
+			and lcode_fk in (${LANGUAGE})
+		</if>
+		<if test="FIELD != '' and FIELD != null">
+			and substr(fcode_fk,1,1) in (${FIELD})
+		</if> 
+		<if test="SORT == 'count' ">
+			order by ${SORT} desc
+		</if>
+		<if test="SORT != 'count' ">
+			order by ${SORT}
+		</if>
+	</select>
+	
+	<select id="findBookBysearchbar" parameterType="HashMap" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select  distinct substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) as bookid, title, author,  agecode 
+                ,gcode_fk, gname,ncode_fk,  nname,lcode_fk, lname,fcode_fk,  fname,ccode_fk,  cname
+                ,libcode_fk,  libname ,pubcode_fk, pubname, count
+        from book A join book_detail D on A.bookid = D.bookid join genre G on A.gcode_fk = G.gcode join nation N on A.ncode_fk = N.ncode join language L on A.lcode_fk = L.lcode
+        join field F on A.fcode_fk = F.fcode join category C on A.ccode_fk = C.ccode join library LIB on A.libcode_fk = LIB.libcode join publisher P on A.pubcode_fk = P.pubcode
+        join 
+        (select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
+        from book
+        group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
+        ) V
+        on substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) = V.bookid
+		 where ${SEARCHTYPE} like '%'||'${SEARCHWORD}'||'%'
+	</select>
+	
+	
+	<select id="findBookDetail" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select A.bookid, title, author, agecode	,gcode_fk, gname,ncode_fk, nname,lcode_fk, lname,fcode_fk, fname,ccode_fk, cname
+		,libcode_fk, libname ,pubcode_fk, pubname, isbn, price, intro, D.image, weight, totalpage, D.pdate, D.regdate, A.status
+		from book A join book_detail D on A.bookid = D.bookid join genre G on A.gcode_fk = G.gcode join nation N on	A.ncode_fk = N.ncode join language L on A.lcode_fk = L.lcode
+		join field F on A.fcode_fk = F.fcode join category C on A.ccode_fk = C.ccode join library LIB on A.libcode_fk = LIB.libcode
+		join publisher P on A.pubcode_fk = P.pubcode
+		where substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) like #{bookid};
+		order by A.bookid
+	</select>
+
+</mapper>

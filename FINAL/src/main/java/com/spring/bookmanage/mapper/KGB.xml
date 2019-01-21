@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===== #28. mapper 기본 설정 ===== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- ===== #29. 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
+<mapper namespace="kgb">
+
+	<!-- 컬럼명과 검색어를 받아 회원을 조회 -->
+	<select id="findAllMemberBySearchWord" parameterType="HashMap" resultType="com.spring.bookmanage.member.JGHmodel.MemberVO">
+	
+		select *
+		from member
+		where ${CATEGORY} like '%' || #{SEARCHWORD} || '%'
+		and status = 0
+	
+	</select>
+	
+	<!-- 아이디를 받아 한명의 회원을 조회해오는 메소드 -->
+	<select id="findOneMemberBymemberid" parameterType="String" resultType="com.spring.bookmanage.member.JGHmodel.MemberVO">
+	
+		select memberid, idx, pwd, name, email, phone, addr1, 
+		       addr2, post, birth, gender, regdate, lastdate, pwdate, status, imgfilename, filesize,
+		       func_age(birth) as ages
+		from member
+		where memberid = #{memberid}
+	
+	</select>
+	
+	<!-- 컬럼명과 검색어를 받아 도서를 조회해오는 메소드  -->
+	<select id="findAllBookBySearchWord" parameterType="HashMap" resultType="com.spring.bookmanage.r3.KGBModel.KGBBookVO">
+	
+		select *
+		from book
+		where ${CATEGORY} like '%' || #{SEARCHWORD} || '%'
+		and status = 0
+	
+	</select>
+	
+	
+	<!-- 대여 최대갯수를 제한하기위한 메소드 -->
+	<select id="findAllRentalByMemberid" parameterType="String" resultType="int">
+	
+		select count(*)
+		from rental R join book B
+		on R.bookid_fk = B.bookid
+		where status = 1
+		and memberid_fk = #{memberid}
+		
+	</select>
+	
+	
+	<!-- 도서대여를 등록해주는 메소드 -->
+	<insert id="addAllRentalById" parameterType="HashMap">
+	
+		insert into rental(idx, bookid_fk, memberid_fk, rentaldate, deadline, renew)
+		values(rent_seq.nextval, #{BOOKID}, #{MEMBERID}, sysdate, #{DEADLINE}, default)
+	
+	</insert>
+	
+	
+	<!-- 도서를 대여상태로 업데이트 해주는 메소드 -->
+	<update id="updateAllBookByBookid" parameterType="String">
+		update book set status = 1
+		where bookid = #{bookid}
+		and status = 0
+	</update>
+	
+	
+	<select id="findAllReservationByBookid" parameterType="String" resultType="String">
+		select memberid_fk
+		from reservation
+		where bookid_fk = #{BOOKID}
+	</select>
+	
+	
+	<delete id="deleteReservationByMemberid" parameterType="String">
+		delete reservation
+		where bookid_fk = #{reservebookid}
+	</delete>
+
+</mapper>

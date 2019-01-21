@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===== mapper 기본 설정 ===== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- ===== 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
+<mapper namespace="bookmanage">
+
+<!--  ==== 아이디 중복체크 ==== -->
+<select id="idDuplicateCheck" parameterType="String" resultType="int">
+	select count(*)
+	from LIBRARIAN 
+	where libid = #{libid}
+</select> 
+
+<!-- ==== 관리자 등록하기 ==== -->
+<insert id="adminRegistEnd" parameterType="com.spring.bookmanage.library.Yjkmodel.YjkVO">
+
+	insert into librarian (libid, libcode_fk, idx, pwd, name, tel, status, imgFileName)
+	values(#{libid}, #{libcode_fk}, LIBRARIAN_seq.nextval, #{pwd}, #{name}, #{tel}, #{status}, #{imgFileName})
+
+</insert>
+
+<!-- ==== 도서관 정보 가져오기 ==== -->
+<select id="getliblibrary" resultType="com.spring.bookmanage.library.Yjkmodel.LibraryVO">
+	select *
+	from library
+</select>
+
+
+</mapper>

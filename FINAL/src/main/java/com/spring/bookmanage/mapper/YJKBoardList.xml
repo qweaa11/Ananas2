@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===== mapper 기본 설정 ===== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- ===== 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
+<mapper namespace="bookmanage">
+
+<!-- 글 쓰기 완료요청(파일첨부가 없는) -->
+<insert id="boardAdd" parameterType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
+	<if test="root.equals('')"> <!-- 원글 -->
+	insert into Board(idx, libid_fk, name, subject, content, pw, readCount, regDate, status, groupno, root, depthno)
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, 0, 0)
+	</if>
+	<if test="!root.equals('')"> <!-- 답글 -->
+	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno)
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, #{root}, #{depthno}+1)
+	</if>
+</insert>
+
+<!-- 글 쓰기 완료요청(파일첨부가 있는) -->
+<insert id="boardAdd_withFile" parameterType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
+	<if test="root.equals('')"> <!-- 원글 -->
+	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, fileName, orgFileName, fileSize, root, depthno)
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, #{fileName}, #{orgFileName}, #{fileSize}, 0, 0)
+	</if>
+	<if test="!root.equals('')"> <!-- 답글 -->
+	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno, fileName, orgFileName, fileSize)
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, #{root}, #{depthno}+1, #{fileName}, #{orgFileName}, #{fileSize})
+	</if>
+</insert>
+
+<!-- 전체글 목록 가져오기 -->
+<select id="getboardList" resultType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
+
+	select idx, name, subject, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') AS regdate, fileName, fileSize
+	from board
+	where status = 0
+	order by idx desc	
+
+</select>
+
+<!-- ==== 글 1개를 보여줄 때 조회수(readCount) 1 증가 시키기  ==== -->
+<update id="setAddReadCount" parameterType="String">
+	update Board set readcount = readcount + 1
+	where status = 1 and idx = #{idx}
+</update>
+
+<!-- ==== 파일첨부가 있는 답변형 게시판에서 글 1개를 보여주기 -->
+<select id="getView" parameterType="String" resultType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
+	select previousidx, previoussubject,
+		   idx, libid_fk, name, subject, content, readcount, 
+		   regDate, nextidx, nextsubject, 
+		   commentCount,
+		   groupno, root, depthno,
+		   fileName, orgFilename, fileSize
+	from
+	(
+        select lag(idx, 1) over(order by idx desc) as previousidx
+             , lag(subject, 1) over(order by idx desc) as previoussubject
+             , idx, libid_fk, name, subject, content, readcount
+             , to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') as regDate
+             , lead(idx, 1) over(order by idx desc) as nextidx
+             , lead(subject, 1) over(order by idx desc) as nextsubject
+             , commentCount
+             , groupno, root, depthno
+             , fileName, orgFilename, fileSize
+        from Board
+        where status = 0
+    )V
+	where V.idx = #{idx}
+</select>
+
+<!-- ==== tblBoard 테이블에서 groupno 컬럼의 최대값 알아오기 -->
+<select id="getGroupnoMax" resultType="int">
+	select nvl(max(groupno), 0)
+	from Board
+</select>
+
+</mapper>
+
