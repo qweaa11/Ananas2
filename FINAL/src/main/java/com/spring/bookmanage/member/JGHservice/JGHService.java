@@ -77,4 +77,15 @@ public class JGHService {
 
 		return row;
 	}// end of removeMember
+
+	/**
+	 * 회원 복구처리
+	 * @param idxArray
+	 * @return
+	 */
+	public int recoverMember(String[] idxArray) {
+		int row = mapper.recoverAllByStatus(idxArray);
+
+		return row;
+	}// end of recoverMember
 }

@@ -36,4 +36,11 @@ public interface MemberMapper {
 	 * @return
 	 */
 	int removeAllByStatus(String[] idxArray);
+
+	/**
+	 * 계정 복구처리
+	 * @param idxArray
+	 * @return
+	 */
+	int recoverAllByStatus(String[] idxArray);
 }

@@ -138,4 +138,26 @@ public class JGHController {
 
 		return "msg";
 	}// end of updateDeleteMember
+
+	@RequestMapping(value = "recover.ana", method = {RequestMethod.POST})
+	public String updateRecoverMember(HttpServletRequest request, HttpServletResponse response) {
+		String[] idxArray = request.getParameterValues("idx");
+
+		int row = service.recoverMember(idxArray);
+
+		String msg = "";
+		String loc = "";
+		if(row != 1) {
+			msg = "회원복구 일괄처리에 실패하였습니다.";
+			loc = "javascript:history.back();";
+		} else {
+			msg = "회원복구 일괄처리가 성공하였습니다.";
+			loc = "memberList.ana";
+		}// end of if~else
+
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+
+		return "msg";
+	}// end of updateRecoverMember
 }
