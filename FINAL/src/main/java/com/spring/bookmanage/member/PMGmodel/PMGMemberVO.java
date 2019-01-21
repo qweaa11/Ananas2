@@ -1,10 +1,5 @@
 package com.spring.bookmanage.member.PMGmodel;
 
-/**
- * <b>member(회원)테이블 VO</b>
- * <pre>회원상세정보 페이지에서 회원기본정보를 보여주는 VO</pre>
- * @author 박민규
- */
 public class PMGMemberVO {
 
 	private int idx;			// 인덱스(회원번호)
