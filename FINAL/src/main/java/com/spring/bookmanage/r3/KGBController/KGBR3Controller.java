@@ -181,4 +181,42 @@ public class KGBR3Controller {
 	}// end of rentalInsert()------------------------
 	
 	
+	
+	@RequestMapping(value="/r3searchRental.ana", method= {RequestMethod.GET})
+	@ResponseBody
+	public List<HashMap<String, String>> searchRental(HttpServletRequest request, HttpServletResponse response) {
+		
+		String category = request.getParameter("category");
+		String searchWord = request.getParameter("searchWord");
+		String sort = request.getParameter("sort");
+		
+		System.out.println(category + searchWord + sort);
+			
+		HashMap<String, String> paraMap = new HashMap<String, String>(); 
+		paraMap.put("CATEGORY", category);
+		paraMap.put("SEARCHWORD", searchWord);
+		paraMap.put("SORT", sort);
+		
+		List<HashMap<String, String>> rentalList = r3service.findAllRentalByCategory(paraMap);
+		
+		List<HashMap<String, String>> jsonList = new ArrayList<HashMap<String, String>>();
+		
+		for(HashMap<String, String> rental : rentalList) {
+			HashMap<String, String> json = new HashMap<String, String>();
+			
+			json.put("BOOKID", rental.get("BOOKID"));
+			json.put("NAME", rental.get("NAME"));
+			json.put("TITLE", rental.get("TITLE"));
+			json.put("MEMBERID", rental.get("MEMBERID"));
+			json.put("RENTALDATE", rental.get("RENTALDATE"));
+			json.put("DEADLINE", rental.get("DEADLINE"));
+			json.put("RENEW", rental.get("RENEW"));
+			
+			jsonList.add(json);
+		}
+		
+		return jsonList;
+		
+	}// end of searchRental()-------------------
+	
 }

@@ -97,7 +97,7 @@ public class KKHController {
 		//System.out.println(parameterMap.get("LIBRARY"));
 		List<KKHBookVO> bookList = null;
 		bookList = service.findBookBysidebar(parameterMap);
-		
+		System.out.println("implements 왔다감 by 구현");
 		
 		for(KKHBookVO bookvo : bookList) {
 			HashMap<String,Object> map = new HashMap<String,Object>();

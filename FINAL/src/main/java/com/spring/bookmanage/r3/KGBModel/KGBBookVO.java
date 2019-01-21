@@ -5,6 +5,7 @@ public class KGBBookVO {
 	
 	// 도서 테이블
 	private String bookid;		// 도서일련번호
+	private String bookid_fk;	// 참조키인 도서일련번호
 	private String title;		// 도서명
 	private String author;		// 저자명
 	private int status;			// 상태(일반 0, 대여 1,예약 2,분실 3, 삭제 4)
@@ -42,6 +43,7 @@ public class KGBBookVO {
 	
 	
 	// 대여/반납 테이블
+	private String memberid_fk;	// 참조 회원 아이디
 	private String returndate;	// 반납일자
 	private String rentaldate;	// 대여날짜
 	private String deadline;	// 반납예정날짜
@@ -338,4 +340,22 @@ public class KGBBookVO {
 	public void setRenew(String renew) {
 		this.renew = renew;
 	}
+
+	public String getBookid_fk() {
+		return bookid_fk;
+	}
+
+	public void setBookid_fk(String bookid_fk) {
+		this.bookid_fk = bookid_fk;
+	}
+
+	public String getMemberid_fk() {
+		return memberid_fk;
+	}
+
+	public void setMemberid_fk(String memberid_fk) {
+		this.memberid_fk = memberid_fk;
+	}
+	
+	
 }
