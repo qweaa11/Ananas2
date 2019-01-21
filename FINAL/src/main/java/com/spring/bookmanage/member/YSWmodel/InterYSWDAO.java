@@ -32,6 +32,9 @@ public interface InterYSWDAO {
 
 	// 사서 정보 삭제(Real Delete)
 	int deleteLibrarian(String lIBRARIANIDX);
+
+	// 대출 목록 페이지 보여주기
+	List<YSWRentalVO> findRentalList();
 	
 	
 

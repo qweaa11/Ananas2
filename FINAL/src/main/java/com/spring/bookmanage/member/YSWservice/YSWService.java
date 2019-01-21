@@ -10,6 +10,7 @@ import com.spring.bookmanage.library.Yjkmodel.YjkVO;
 import com.spring.bookmanage.member.YSWmodel.InterYSWDAO;
 import com.spring.bookmanage.member.YSWmodel.YSWLibrarianVO;
 import com.spring.bookmanage.member.YSWmodel.YSWMemberVO;
+import com.spring.bookmanage.member.YSWmodel.YSWRentalVO;
 
 @Service
 public class YSWService implements InterYSWService {
@@ -87,6 +88,15 @@ public class YSWService implements InterYSWService {
 		
 		int result = dao.deleteLibrarian(lIBRARIANIDX);
 		return result;
+	}
+
+
+	// 대출 목록 페이지 보여주기
+	@Override
+	public List<YSWRentalVO> findRentalList() {
+
+		List<YSWRentalVO> rentalList = dao.findRentalList();
+		return rentalList;
 	}
 
 }

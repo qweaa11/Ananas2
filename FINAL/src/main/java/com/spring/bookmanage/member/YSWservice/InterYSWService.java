@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.spring.bookmanage.library.Yjkmodel.YjkVO;
 import com.spring.bookmanage.member.YSWmodel.YSWLibrarianVO;
 import com.spring.bookmanage.member.YSWmodel.YSWMemberVO;
+import com.spring.bookmanage.member.YSWmodel.YSWRentalVO;
 
 @Service
 public interface InterYSWService {
@@ -35,5 +36,8 @@ public interface InterYSWService {
 
 	// 사서 정보 삭제(Real Delete)
 	int deleteLibrarian(String lIBRARIANIDX);
+
+	// 대출 목록 페이지 보여주기
+	List<YSWRentalVO> findRentalList();
 	
 }

@@ -118,5 +118,21 @@
 		where idx = #{lIBRARIANIDX}
 	
 	</delete>
+	
+	
+	<!-- 대출 목록 페이지 보여주기 -->
+	<select id="findRentalList" resultType="com.spring.bookmanage.member.YSWmodel.YSWRentalVO">
+	
+		select a.idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as retalDate
+				     ,to_char(a.deadline,'yyyy-mm-dd') as deadline, a.renew as renew, b.title as bookTitle, D.pubname as pubname
+				     ,b.author as bookAuthor, c.name as memberName
+				from rental A JOIN book B
+				on A.bookid_fk = B.bookid
+				LEFT JOIN member C
+				on A.memberid_fk = C.memberid
+				LEFT JOIN PUBLISHER D
+				on B.pubcode_fk = D.pubcode
+	
+	</select>
 
 </mapper>
