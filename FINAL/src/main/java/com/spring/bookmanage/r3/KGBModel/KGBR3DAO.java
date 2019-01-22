@@ -204,6 +204,7 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		
 	}// end of deleteReservationByMemberid()-----------------------
 
+	
 	@Override
 	public List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap) {
 		
@@ -212,6 +213,101 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		return rentalList;
 		
 	}// end of findAllRentalByCategory()-----------------------
+
+	
+	@Override
+	public void updateMemberByDeadeline(HashMap<String, String> paraMap) throws Throwable {
+		
+		String[] memberidArr = paraMap.get("MEMBERIDS").split(",");
+		String[] deadlinecutArr = paraMap.get("DEADLINECUTS").split(",");
+		
+		for(int i=0; i<memberidArr.length; i++) {
+			if(Integer.parseInt(deadlinecutArr[i]) > 0) {
+			
+				HashMap<String, String> map = new HashMap<String, String>();
+				
+				map.put("MEMBERID", memberidArr[i]);
+				map.put("DEADLINECUT", deadlinecutArr[i]);
+				
+				int n = sqlsession.update("kgb.updateMemberByDeadeline", map);
+				
+				if(n == 0) {
+					Throwable ex = new Throwable("반납중 오류가 발생했습니다."); 
+					
+					throw ex;
+				}
+			}
+		}// end of for----------------------
+		
+		
+		
+	}// end of updateMemberByDeadeline()------------------------------
+
+	
+	@Override
+	public void updateBookstatusByBookid(HashMap<String, String> paraMap) throws Throwable{
+		
+		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		
+		for(String bookid : bookidArr) {
+			
+			int n = sqlsession.update("kgb.updateBookstatusByBookid", bookid);
+			
+			if(n == 0) {
+				Throwable ex = new Throwable("반납중 오류가 발생했습니다."); 
+				
+				throw ex;
+			}
+			
+		}// end of for----------------------
+		
+	}// end of updateBookstatusByBookid()------------------------------
+
+	@Override
+	public void insertReturnByRentalInfo(HashMap<String, String> paraMap) throws Throwable{
+		
+		String[] memberidArr = paraMap.get("MEMBERIDS").split(",");
+		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		
+		for(int i=0; i<memberidArr.length; i++) {
+			
+			HashMap<String, String> map = new HashMap<String, String>();
+			
+			map.put("MEMBERID", memberidArr[i]);
+			map.put("BOOKID", bookidArr[i]);
+			
+			int n = sqlsession.update("kgb.insertReturnByRentalInfo", map);
+			
+			if(n == 0) {
+				Throwable ex = new Throwable("반납중 오류가 발생했습니다."); 
+				
+				throw ex;
+			}
+				
+		}// end of for----------------------
+		
+	}// end of insertReturnByRentalInfo()-----------------------
+
+	@Override
+	public void deleteRentalByBookid(HashMap<String, String> paraMap)  throws Throwable{
+		
+		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		
+		for(String bookid : bookidArr) {
+			
+			int n = sqlsession.delete("kgb.deleteRentalByBookid", bookid);
+			
+			if(n == 0) {
+				Throwable ex = new Throwable("반납중 오류가 발생했습니다."); 
+				
+				throw ex;
+			}
+			
+		}// end of for----------------------
+		
+		
+		
+	}// end of deleteRentalByBookid()-------------------------
 
 	
 }
