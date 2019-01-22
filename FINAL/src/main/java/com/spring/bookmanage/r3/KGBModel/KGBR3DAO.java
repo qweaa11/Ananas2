@@ -258,8 +258,8 @@ public class KGBR3DAO implements InterKGBR3DAO {
 				
 				throw ex;
 			}
-			
 		}// end of for----------------------
+		
 		
 	}// end of updateBookstatusByBookid()------------------------------
 
@@ -283,7 +283,7 @@ public class KGBR3DAO implements InterKGBR3DAO {
 				
 				throw ex;
 			}
-				
+			
 		}// end of for----------------------
 		
 	}// end of insertReturnByRentalInfo()-----------------------
@@ -305,9 +305,55 @@ public class KGBR3DAO implements InterKGBR3DAO {
 			
 		}// end of for----------------------
 		
-		
-		
 	}// end of deleteRentalByBookid()-------------------------
+
+	@Override
+	public void findAllReservationCountByBookid(HashMap<String, String> paraMap) throws Throwable{
+		
+		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		
+		String result = "";
+		
+		for(String bookid : bookidArr) {
+			String reserveName = sqlsession.selectOne("kgb.findAllReservationCountByBookid", bookid);
+			
+			if(reserveName != null && !reserveName.trim().equals("")) {
+				result += reserveName + ",";
+			}
+			
+		}// end of for--------------------------------
+		
+		if(result.length() > 0) {
+			result = result.substring(0, result.length()-1);
+			
+			Throwable ex = new Throwable(result + " 책은 이미 예약이 있습니다."); 
+			
+			throw ex;
+		}// end of if----------------------------------
+		
+	}// end of findAllReservationCountByBookid()-------------------
+
+	
+	@Override
+	public void UpdateAllRenewByBookid(HashMap<String, String> paraMap) throws Throwable{
+		
+		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		
+		for(String bookid : bookidArr) {
+			
+			int n = sqlsession.update("kgb.UpdateAllRenewByBookid", bookid);
+			
+			if(n == 0) {
+				Throwable ex = new Throwable("연장중 오류가 발생했습니다."); 
+				
+				throw ex;
+			}
+			
+		}// end of for--------------------------------
+		
+		
+		
+	}// end of UpdateAllRenewByBookid()--------------------------
 
 	
 }

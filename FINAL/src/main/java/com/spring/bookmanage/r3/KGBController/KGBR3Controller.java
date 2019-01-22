@@ -229,9 +229,9 @@ public class KGBR3Controller {
 	}// end of searchRental()-------------------
 	
 	
-	@RequestMapping(value="/bookReturn.ana", method= {RequestMethod.POST})
+	@RequestMapping(value="/r3bookReturn.ana", method= {RequestMethod.POST})
 	@ResponseBody
-	public HashMap<String, String> bookReturn(HttpServletRequest request, HttpServletResponse response) {
+	public HashMap<String, String> r3bookReturn(HttpServletRequest request, HttpServletResponse response) {
 		
 		String bookids = request.getParameter("bookids");
 		String memberids = request.getParameter("memberids");
@@ -248,6 +248,7 @@ public class KGBR3Controller {
 		
 		try {
 			n = r3service.addReturnByBookid(paraMap);
+			
 		} catch (Throwable e) {
 			msg = e.getMessage();
 		}
@@ -261,5 +262,35 @@ public class KGBR3Controller {
 		return json;
 		
 	}// end of bookReturn()---------------
+	
+	
+	@RequestMapping(value="/r3bookRenew.ana", method= {RequestMethod.POST})
+	@ResponseBody
+	public HashMap<String, String> r3bookRenew(HttpServletRequest request, HttpServletResponse response) {
+		
+		String bookids = request.getParameter("bookids");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		
+		paraMap.put("BOOKIDS", bookids);
+		
+		int n = 0;
+		String msg = "";
+		
+		try {
+			n = r3service.updateRentalRenewByBookid(paraMap);
+		} catch (Throwable e) {
+			msg = e.getMessage();
+		}
+		
+		
+		HashMap<String, String> json = new HashMap<String, String>();
+		
+		json.put("RESULT", String.valueOf(n));
+		json.put("MSG", msg);
+		
+		return json;
+		
+	}// end of r3bookReservation()-------------------------------
 	
 }

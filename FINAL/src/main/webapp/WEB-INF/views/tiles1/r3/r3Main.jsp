@@ -193,7 +193,7 @@
 	    	
 	    	var flag = false;
 	    	
-	    	$(".rentalval").each(function () {
+	    	$(".rentalBookval").each(function () {
 				if($(this).val() == bookid){
 					flag = true;
 					return false;
@@ -204,8 +204,6 @@
 	    		alert("이미 반납대기 목록에 들어있는 책 입니다.");
 	    		return;
 	    	}
-	    	
-	    	renew = renew.substring(0, 1);
 	    	
 	    	title = title.length > 15?title.substring(0, 15) + "...":title; 
 	    	
@@ -223,10 +221,10 @@
 					"		<div class=\"col-xs-2\" style=\"\">" + bookid + "</div>\n" + 
 					"		<div class=\"col-xs-2\" style=\"\">" + rentalDate + "</div>\n" + 
 					"		<div class=\"col-xs-2\" style=\"\">" + deadline + "</div>\n" + 
-					"		<div class=\"col-xs-1 text-center\" style=\"\">" + (renew > 0?renew + "회 남음":"연장불가") + "</div>\n" +
+					"		<div class=\"col-xs-1 text-center\" style=\"\">" + (renew < 3?(3-renew) + "회 남음":"연장불가") + "</div>\n" +
 					"		<input type='hidden' class='rentalBookval' value='" + bookid + "'/>" +
 					"		<input type='hidden' class='rentalMemberval' value='" + memberid + "'/>" +
-					"		<input type='hidden' class='rentalRenewval' value='" + renew + "'/>" +
+					"		<div class='rentalRenewval' style='display: none;'>" + renew + "</div>" +
 					"		<div class='rentalDeadlinecutval' style='display: none;'>" + deadlinecut + "</div>" +
 					"    </div>\n" + 
 					"</li>";
@@ -459,8 +457,9 @@
 								"		<div class=\"col-xs-2 rentalBookid\" style=\"\">" + entry.BOOKID + "</div>\n" + 
 								"		<div class=\"col-xs-2 rentalRentaldate\" style=\"\">" + entry.RENTALDATE + "</div>\n" + 
 								"		<div class=\"col-xs-2 rentalDeadline\" style=\"\">" + entry.DEADLINE + "</div>\n" + 
-								"		<div class=\"col-xs-1 rentalRenew text-center\" style=\"\">" + (entry.DEADLINECUT < 1 && entry.RENEW < 1?(3 - entry.RENEW) + "회 남음":"연장불가") + "</div>\n" +
+								"		<div class=\"col-xs-1 text-center\" style=\"\">" + (entry.DEADLINECUT < 1 && entry.RENEW < 3?(3 - entry.RENEW) + "회 남음":"연장불가") + "</div>\n" +
 								"		<div class='rentalDeadlinecut' style='display: none;'>" + entry.DEADLINECUT + "</div>" + 
+								"		<div class='rentalRenew' style='display: none;'>" + entry.RENEW + "</div>" + 
 								"	</div>\n" + 
 								"</li>";
 					});// end of each()----------------------------- 
@@ -527,10 +526,8 @@
 		
 		var data_form = {"bookids":bookids, "memberids":memberids, "deadlinecuts":deadlinecuts};
 		
-		console.log(bookids + " " + memberids + " " + deadlinecuts)
-		
 		$.ajax({
-			url:"bookReturn.ana",
+			url:"r3bookReturn.ana",
 			type:"POST",
 			data:data_form,
 			dataType:"json",
@@ -555,9 +552,76 @@
 	}// end of returned()-------------------
 	
 	
+	// 도서 대여 연장
 	function reservation() {
 		
+		var bookids = "";
 		
+		$(".rentalBookval").each(function () {
+			bookids += $(this).val() + ","; 
+		});
+		
+		bookids = bookids.substring(0, bookids.length-1);
+		
+		var flag = false;
+		
+		$(".rentalRenewval").each(function () {
+			
+			if($(this).text() > 2){
+				flag = true;
+				return false;
+			}
+		});
+		
+		if(flag) {
+			alert("연장 횟수를 초과한 책이 있어 연장이 불가능 합니다.");
+			return;
+		}
+		
+		if(bookids.trim() == "") {
+			alert("목록에 등록해주세요");
+			return;
+		}
+		
+		flag = false;
+		
+		$(".rentalDeadlinecutval").each(function () {
+			
+			if($(this).text() > 0){
+				flag = true;
+				return false;
+			}
+		});
+		
+		if(flag) {
+			alert("연체되어 있는 책이 있어 연장이 불가능 합니다.");
+			return;
+		}
+		
+		var data_form = {"bookids":bookids};
+		
+		$.ajax({
+			url:"r3bookRenew.ana",
+			type:"POST",
+			data:data_form,
+			dataType:"json",
+			success:function(json) {
+				
+				if(json.RESULT == "1"){
+					alert("연장이 되었습니다.");
+					$(".returnList").empty();
+					$(".rentalsearch").click();
+				}
+				else {
+					alert(json.MSG);
+				}
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});// end of $.ajax()-------------------------
 		
 	}// end of reservation()------------------------
 	
@@ -718,7 +782,7 @@
 						                <input type="hidden" name="search_param" value="bookid" id="bookcategory">      
 						                <input type="text" class="form-control" id="search_book" name="x" placeholder="검색어를 입력해주세요.">
 						                <span class="input-group-btn">
-						                    <button class="btn btn-default rentalsearch" type="button" onclick="searchBook()"><span class="glyphicon glyphicon-search"></span></button>
+						                    <button class="btn btn-default booksearch" type="button" onclick="searchBook()"><span class="glyphicon glyphicon-search"></span></button>
 						                </span>
 						            </div>
 						            <!-- /도서 검색 -->

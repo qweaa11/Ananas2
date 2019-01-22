@@ -45,6 +45,12 @@ public interface InterKGBR3DAO {
 
 	void deleteRentalByBookid(HashMap<String, String> paraMap) throws Throwable;
 	// 대여 테이블의 반납이 된 정보를 지워주는 메소드
+
+	void findAllReservationCountByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 책의 예약이 있는지 조회해오는 메소드
+
+	void UpdateAllRenewByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 대여한 도서의 반납기간을 연장하는 메소드
 	
 
 

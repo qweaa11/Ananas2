@@ -106,6 +106,18 @@ public class KGBR3Service implements InterKGBR3Service{
 	}// end of addReturnByBookid()-----------------
 
 	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int updateRentalRenewByBookid(HashMap<String, String> paraMap) throws Throwable{
+		
+		r3DAO.findAllReservationCountByBookid(paraMap);
+		r3DAO.UpdateAllRenewByBookid(paraMap);
+		
+		return 1;
+		
+	}// end of updateRentalByBookid()----------------
+
+	
 
 	
 	
