@@ -14,7 +14,29 @@ public class KKHBookService implements InterKKHBookService{
 	
 	@Autowired
 	private InterKKHBookDAO bookdao;
-
+	
+	@Override
+	public List<HashMap<String, String>> findAllLibrary() {
+		List<HashMap<String,String>> libraryList = bookdao.findAllLibrary();
+		return libraryList;
+	}
+	@Override
+	public List<HashMap<String, String>> findAllLanguage() {
+		List<HashMap<String,String>> languageList = bookdao.findAllLanguage();
+		return languageList;
+	}
+	@Override
+	public List<HashMap<String, String>> findAllCategory() {
+		List<HashMap<String,String>> categoryList = bookdao.findAllCategory();
+		return categoryList;
+	}
+	@Override
+	public List<HashMap<String, String>> findAllField() {
+		List<HashMap<String,String>> fieldList = bookdao.findAllField();
+		return fieldList;
+	}
+	
+	
 	@Override
 	public List<KKHBookVO> findBookBysidebar(HashMap<String, Object> parameterMap) {
 		List<KKHBookVO> bookList = bookdao.findBookBysidebar(parameterMap);
@@ -32,5 +54,14 @@ public class KKHBookService implements InterKKHBookService{
 		List<KKHBookVO> bookDetail = bookdao.findBookDetail(bookid);
 		return bookDetail;
 	}
+
+	@Override
+	public List<HashMap<String,String>> findBookReservateList(String bookid) {
+		List<HashMap<String,String>> bookReservateList = bookdao.findBookReservateList(bookid);
+		return bookReservateList;
+	}
+	
+
+	
 
 }
