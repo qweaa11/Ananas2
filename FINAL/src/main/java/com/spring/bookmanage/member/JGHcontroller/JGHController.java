@@ -36,6 +36,7 @@ public class JGHController {
 	public String list(HttpServletRequest request, HttpServletRequest response)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		List<MemberVO> memberList = null;
+
 		String colname = request.getParameter("colname");
 		String searchWord = request.getParameter("searchWord");
 
@@ -43,6 +44,14 @@ public class JGHController {
 		parameterMap.put("colname", colname);
 		parameterMap.put("searchWord", searchWord);
 
+		int currentPageNo = 1;// 현재 페이지번호
+		int sizePerPage = 5;// 페이지당 레코드 수
+		
+		int front;// 시작행번호
+		int rear;// 끝행번호
+		
+		int blockSize = 10;
+		
 		if(searchWord != null && !searchWord.trim().isEmpty()) {
 			memberList = service.searchList(parameterMap);
 			request.setAttribute("colname", colname);
@@ -160,4 +169,5 @@ public class JGHController {
 
 		return "msg";
 	}// end of updateRecoverMember
+
 }
