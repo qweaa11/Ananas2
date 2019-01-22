@@ -24,7 +24,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		searchKeep();
-		
+
 		// 한 행을 클릭할 경우 체크박스 선택, 해제
 		$(".td").click(function() {
 			var flag = $(this).parent().find(".check").is(":checked");

@@ -53,5 +53,19 @@
 		where idx = #{idx}
 		and status in(2,3)
 	</update>
+	
+	<!-- 검색설정에 따른 회원수 조회 -->
+	<select id="countAllMemberWithSearchMap" parameterType="HashMap" resultType="Integer">
+		select count(*)
+		from member
+		where ${colname} like '%'||#{searchWord}||'%'
+		order by idx desc
+	</select>
+	
+	<!-- 검색없이 회원수 조회(전체 회원수 조회) -->
+	<select id="countAllMember" resultType="Integer">
+		select count(*)
+		from member
+	</select>
 
 </mapper>
