@@ -34,6 +34,23 @@ public interface InterKGBR3DAO {
 	List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap);
 	// 대여된 목록을 가져오는 메소드
 
+	void updateMemberByDeadeline(HashMap<String, String> paraMap) throws Throwable;
+	// 연체료와 이용정지기간 등록하기
+
+	void updateBookstatusByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 책 상태 일반 상태로 만드는 메소드
+
+	void insertReturnByRentalInfo(HashMap<String, String> paraMap) throws Throwable;
+	// 대여에 있던 정보를 반납에 넣어주는 메소드 
+
+	void deleteRentalByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 대여 테이블의 반납이 된 정보를 지워주는 메소드
+
+	void findAllReservationCountByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 책의 예약이 있는지 조회해오는 메소드
+
+	void UpdateAllRenewByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 대여한 도서의 반납기간을 연장하는 메소드
 	
 
 

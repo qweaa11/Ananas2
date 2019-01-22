@@ -23,6 +23,12 @@ public interface InterKGBR3Service {
 	List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap);
 	// 대여된 목록을 가져오는 메소드
 
+	int addReturnByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 도서 반납하는 메소드
+
+	int updateRentalRenewByBookid(HashMap<String, String> paraMap) throws Throwable;
+	// 대여 기간을 연장해주는 메소드
+
 	
 
 	

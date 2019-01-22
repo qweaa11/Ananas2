@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.member.JGHmodel.MemberVO;
 import com.spring.bookmanage.r3.KGBModel.KGBBookVO;
 import com.spring.bookmanage.r3.KGBService.InterKGBR3Service;
@@ -111,8 +113,13 @@ public class KGBR3Controller {
 			searchWord = "";
 		}
 		
+		HttpSession session = request.getSession();
+		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		
+		if(librarian != null)
+			paraMap.put("LIBCODE", librarian.getLibcode_fk());
 		paraMap.put("SEARCHWORD", searchWord);
 		paraMap.put("CATEGORY", category);
 		
@@ -129,9 +136,7 @@ public class KGBR3Controller {
 			
 			jsonList.add(json);
 			
-			
-			
-		}
+		}// end of for-------------------
 		
 		return jsonList;
 		
@@ -189,8 +194,13 @@ public class KGBR3Controller {
 		String category = request.getParameter("category");
 		String searchWord = request.getParameter("searchWord");
 		String sort = request.getParameter("sort");
+		
+		HttpSession session = request.getSession();
+		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
 			
 		HashMap<String, String> paraMap = new HashMap<String, String>(); 
+		if(librarian != null)
+			paraMap.put("LIBCODE", librarian.getLibcode_fk());
 		paraMap.put("CATEGORY", category);
 		paraMap.put("SEARCHWORD", searchWord);
 		paraMap.put("SORT", sort);
@@ -209,6 +219,7 @@ public class KGBR3Controller {
 			json.put("RENTALDATE", rental.get("RENTALDATE"));
 			json.put("DEADLINE", rental.get("DEADLINE"));
 			json.put("RENEW", rental.get("RENEW"));
+			json.put("DEADLINECUT", rental.get("DEADLINECUT"));
 			
 			jsonList.add(json);
 		}
@@ -216,5 +227,70 @@ public class KGBR3Controller {
 		return jsonList;
 		
 	}// end of searchRental()-------------------
+	
+	
+	@RequestMapping(value="/r3bookReturn.ana", method= {RequestMethod.POST})
+	@ResponseBody
+	public HashMap<String, String> r3bookReturn(HttpServletRequest request, HttpServletResponse response) {
+		
+		String bookids = request.getParameter("bookids");
+		String memberids = request.getParameter("memberids");
+		String deadlinecuts = request.getParameter("deadlinecuts");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		
+		paraMap.put("DEADLINECUTS", deadlinecuts);
+		paraMap.put("MEMBERIDS", memberids);
+		paraMap.put("BOOKIDS", bookids);
+		
+		int n = 0;
+		String msg = "";
+		
+		try {
+			n = r3service.addReturnByBookid(paraMap);
+			
+		} catch (Throwable e) {
+			msg = e.getMessage();
+		}
+		
+		
+		HashMap<String, String> json = new HashMap<String, String>();
+		
+		json.put("RESULT", String.valueOf(n));
+		json.put("MSG", msg);
+		
+		return json;
+		
+	}// end of bookReturn()---------------
+	
+	
+	@RequestMapping(value="/r3bookRenew.ana", method= {RequestMethod.POST})
+	@ResponseBody
+	public HashMap<String, String> r3bookRenew(HttpServletRequest request, HttpServletResponse response) {
+		
+		String bookids = request.getParameter("bookids");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		
+		paraMap.put("BOOKIDS", bookids);
+		
+		int n = 0;
+		String msg = "";
+		
+		try {
+			n = r3service.updateRentalRenewByBookid(paraMap);
+		} catch (Throwable e) {
+			msg = e.getMessage();
+		}
+		
+		
+		HashMap<String, String> json = new HashMap<String, String>();
+		
+		json.put("RESULT", String.valueOf(n));
+		json.put("MSG", msg);
+		
+		return json;
+		
+	}// end of r3bookReservation()-------------------------------
 	
 }
