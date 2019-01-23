@@ -227,10 +227,10 @@ public class MyUtil {
 		String str_pageNo = "";
 
 		if(pageNo == 1) {
-			str_pageNo = "<li class='disabled'><a href='#'>prev</a></li>\n";
+			str_pageNo = "<li class='disabled'><a href='#'>&lt;</a></li>\n";
 		} else {
 			str_pageNo = "<li><a href='"+url+"'?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
-					+"&colname="+colname+"&searchWord="+searchWord+"' >prev</a></li>\n";
+					+"&colname="+colname+"&searchWord="+searchWord+"' >&lt;</a></li>\n";
 		} // end of if~else
 
 		pageBar += str_pageNo;
@@ -248,12 +248,12 @@ public class MyUtil {
 			loop++;
 		} // end of while
 
-		// next page
+		// &lt; page
 		if(pageNo > totalPage) {
-			str_pageNo = "<li class='disabled'><a href='#'>next</a></li>\n";
+			str_pageNo = "<li class='disabled'><a href='#'>&gt;</a></li>\n";
 		} else {			
 			str_pageNo = "<li><a href='"+url+"?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
-					+"&colname="+colname+"&searchWord="+searchWord+"' >next</a></li>\n";
+					+"&colname="+colname+"&searchWord="+searchWord+"' >&gt;</a></li>\n";
 		} // end of if~else	
 
 		pageBar += str_pageNo;
