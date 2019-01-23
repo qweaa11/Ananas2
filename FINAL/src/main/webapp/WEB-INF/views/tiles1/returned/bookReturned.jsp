@@ -302,8 +302,8 @@
         				</select>&nbsp;&nbsp;&nbsp;
         				<input type="text" name="search" id="search" size="40" style="height:30px;" placeholder="검색어를 입력하세요" />
         				<input type="hidden" name="test"></input>
-        				<button type="button" class="search" onClick="goSearch('1');" style="height:30px;">
-							<i class="fa fa-search"></i>
+        				<button type="button" class="search btn btn-primary" onClick="goSearch('1');" style="height:30px;">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</button>
         				&nbsp;&nbsp;&nbsp;&nbsp;정렬:&nbsp;
         				<select name="sortname" id="sortname" style="height: 30px; margin-right: 70px; margin-top: 1px;">
