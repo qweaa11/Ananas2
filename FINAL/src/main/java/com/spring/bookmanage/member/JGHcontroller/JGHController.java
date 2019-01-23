@@ -48,24 +48,23 @@ public class JGHController {
 		String str_currentPageNo = request.getParameter("currentPageNo");
 
 		int countMember = 0;// 회원수
+		int sizePerPage = 10;// 페이지당 레코드 수
 		int currentPageNo = 1;// 현재 페이지번호
-		
-		int sizePerPage = 5;// 페이지당 레코드 수
 
-		int front;// 시작행번호
-		int rear;// 끝행번호
-		int blockSize = 10;// 블럭사이즈
+		int front;// 시작 행번호
+		int rear;// 끝 행번호
+		int blockSize = 10;// 블럭사이즈 = 페이지바에 나타낼 페이지 수
 		
-		if(searchWord != null && !searchWord.trim().isEmpty()) {
+		if(searchWord != null && !searchWord.trim().equals("") && !searchWord.trim().equals("null")) {
 			countMember = service.countMemberWithSearchOption(parameterMap);
-
-			memberList = service.searchList(parameterMap);
-			request.setAttribute("colname", colname);
-			request.setAttribute("searchWord", searchWord);
 		} else {
 			countMember = service.countMemberWithOutSearchOption();
-			memberList = service.noSearchList();
+			colname = "";
+			searchWord = "";
 		}// end of if~else
+
+		request.setAttribute("colname", colname);
+		request.setAttribute("searchWord", searchWord);
 		
 		int totalPage = (int)Math.ceil((double)countMember/sizePerPage);
 		
@@ -87,16 +86,18 @@ public class JGHController {
 		parameterMap.put("front", String.valueOf(front));
 		parameterMap.put("rear", String.valueOf(rear));
 
+		memberList = service.listServiceWithPagination(parameterMap);
+		request.setAttribute("memberList", memberList);
+
 		for(MemberVO memberVO : memberList) {
 			memberVO.setEmail(aes.decrypt(memberVO.getEmail()));
 			memberVO.setPhone(aes.decrypt(memberVO.getPhone()));
 		}// end of for
-
-		request.setAttribute("memberList", memberList);
 		
-		String pageBar = "<ul>";
-		pageBar += MyUtil.getPageBarWithSearch(sizePerPage, blockSize, totalPage, currentPageNo, colname, searchWord, null, "memberList.ana")
+		String pageBar = "<ul class='pagination'>"; 
+		pageBar += MyUtil.createPageBar(sizePerPage, blockSize, totalPage, currentPageNo, colname, searchWord, "memberList.ana")
 				+"</ul>";
+		request.setAttribute("pageBar", pageBar);
 
 		return "member/memberList.tiles1";
 	}// end of list

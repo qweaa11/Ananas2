@@ -214,4 +214,52 @@ public class MyUtil {
 
 		return currentURL;
 	}// end of getCurrentURL
+
+	public static String createPageBar(int sizePerPage, int blockSize, int totalPage, int currentPageNo,
+			String colname, String searchWord, String url) {
+		String pageBar = "";
+		int loop = 1;
+		int pageNo = ((currentPageNo-1)/blockSize)*blockSize+1;// 공식임!!!
+
+		// currentPageNo 가 1~10 일때 pageNo 는 1
+		// currentPageNo 가 11~20 일때 pageNo 는 11
+		// currentPageNo 가 21~30 일때 pageNo 는 21
+		String str_pageNo = "";
+
+		if(pageNo == 1) {
+			str_pageNo = "<li class='disabled'><a href='#'>prev</a></li>\n";
+		} else {
+			str_pageNo = "<li><a href='"+url+"'?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
+					+"&colname="+colname+"&searchWord="+searchWord+"' >prev</a></li>\n";
+		} // end of if~else
+
+		pageBar += str_pageNo;
+
+		while(!(pageNo > totalPage || loop > blockSize)) {
+			if(pageNo == currentPageNo) {
+				str_pageNo = "<li class='active'><a href='#'>"+pageNo+"<span class='sr-only'>(current)</span></a></li>\n";
+			} else {
+				str_pageNo = "<li><a href='"+url+"?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
+						+"&colname="+colname+"&searchWord="+searchWord+"'>"+pageNo+"</a></li>\n";
+			} // end of if~else
+
+			pageBar += str_pageNo;
+			pageNo++;
+			loop++;
+		} // end of while
+
+		// next page
+		if(pageNo > totalPage) {
+			str_pageNo = "<li class='disabled'><a href='#'>next</a></li>\n";
+		} else {			
+			str_pageNo = "<li><a href='"+url+"?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
+					+"&colname="+colname+"&searchWord="+searchWord+"' >next</a></li>\n";
+		} // end of if~else	
+
+		pageBar += str_pageNo;
+		
+		System.out.println(pageBar);
+
+		return pageBar;
+	}// end of createPageBar
 }

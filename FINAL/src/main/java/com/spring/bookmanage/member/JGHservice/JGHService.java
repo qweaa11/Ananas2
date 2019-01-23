@@ -109,4 +109,15 @@ public class JGHService {
 
 		return count;
 	}// end of countMemberWithOutSearchOption
+
+	/**
+	 * 검색한 따른 회원목록 불러오기(페이지네이션 구현)
+	 * @param parameterMap
+	 * @return
+	 */
+	public List<MemberVO> listServiceWithPagination(HashMap<String, String> parameterMap) {
+		List<MemberVO> memberList = mapper.findAllMemberWithPagination(parameterMap);
+
+		return memberList;
+	}// end of listServiceWithPagination
 }
