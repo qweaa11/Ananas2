@@ -111,7 +111,7 @@
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><a style='color:white;' href='javascript:showReturned(\""+(pageNo-1)+"\");'><</a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<a style='color:white;' href='javascript:showReturned(\""+(pageNo-1)+"\");'><button type='button' class='btn btn-primary btn-circle'><</button></a>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
@@ -121,14 +121,14 @@
 						}
 						else
 						{
-							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><a style='color:white;' href='javascript:showReturned(\""+pageNo+"\");'>"+pageNo+"</a></button>&nbsp;";
+							pageBarHTML += "&nbsp;<a style='color:white;' href='javascript:showReturned(\""+pageNo+"\");'><button type='button' class='btn btn-primary btn-circle'>"+pageNo+"</button></a>&nbsp;";
 						}
 						loop++;
 						pageNo++;
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><a style='color:white;' href='javascript:showReturned(\""+(pageNo)+"\");'>></a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<a style='color:white;' href='javascript:showReturned(\""+(pageNo)+"\");'><button type='button' class='btn btn-primary btn-circle'>></button></a>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
@@ -214,7 +214,7 @@
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo-1)+"\");'><</a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo-1)+"\");'><button type='button' class='btn btn-primary'><</button></a>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
@@ -231,7 +231,7 @@
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo)+"\");'>></a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo)+"\");'><button type='button' class='btn btn-primary'>></button></a>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
