@@ -1,16 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%
-	String ctxPath = request.getContextPath();
-%>
- 
-    
-    
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script type="text/javascript" src="<%= ctxPath %>/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script> 
+<script type="text/javascript" src="<%= request.getContextPath() %>/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script> 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -197,7 +191,7 @@
 			
 			
 			var signupFrm = document.signup;
-			signupFrm.action = "<%= ctxPath%>/bookRegisterEnd.ana";
+			signupFrm.action = "<%= request.getContextPath()%>/bookRegisterEnd.ana";
 			signupFrm.method="POST";
 			
 			signupFrm.submit();
@@ -312,7 +306,7 @@
 	<div class="row border">
     	<div class="col-md-8">
     	      
-	        <h1 class="entry-title"><span>자료 등록</span> <img src="<%= ctxPath%>/resources/img/BWFile.jpg">  <small> 자료관리 > 자료등록</small> </h1>
+	        <h1 class="entry-title"><span>자료 등록</span> <img src="<%= request.getContextPath()%>/resources/img/BWFile.jpg">  <small> 자료관리 > 자료등록</small> </h1>
 	        <hr>
 	        
 	    <!-- 도서 등록시 필요한 도서 등록 폼 추가 -->    

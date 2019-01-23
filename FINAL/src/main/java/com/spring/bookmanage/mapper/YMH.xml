@@ -68,7 +68,7 @@
 		select idx, memberid, name, phone, title, author, returndate, rentaldate
 		from 
 		(
-			select row_number() over(order by ${SORT}) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			select row_number() over(order by ${SORT} desc) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
 			from book A join returned B
 			on a.bookid = b.bookid_fk
 			join member C on c.memberid = b.memberid_fk
@@ -92,7 +92,7 @@
 		select idx, memberid, name, phone, title, author, returndate, rentaldate
 		from 
 		(
-			select row_number() over(order by ${SORT}) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			select row_number() over(order by ${SORT} desc) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
 			from book A join returned B
 			on a.bookid = b.bookid_fk
 			join member C on c.memberid = b.memberid_fk
