@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
+  
+  
 <script type="text/javascript">
 	
 	$(document).ready(function()
@@ -99,30 +105,30 @@
 				{
 					var totalPage = json.TOTALPAGE;
 					var pageBarHTML = "";
-					var blockSize = 3;
+					var blockSize = 10;
 					var loop = 1;
 					var pageNo = Math.floor((currentShowPageNo - 1)/blockSize)*blockSize+1;
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:showReturned(\""+(pageNo-1)+"\");'>[이전]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a style='color:white;' href='javascript:showReturned(\""+(pageNo-1)+"\");'>[이전]</a></button>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
 						if(pageNo == currentShowPageNo)
 						{
-							pageBarHTML += "&nbsp;<span style='color:red; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span>&nbsp;";
+							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><span style='color:#ff9999; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span></button>&nbsp;";
 						}
 						else
 						{
-							pageBarHTML += "&nbsp;<a href='javascript:showReturned(\""+pageNo+"\");'>"+pageNo+"</a>&nbsp;";
+							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a style='color:white;' href='javascript:showReturned(\""+pageNo+"\");'>"+pageNo+"</a></button>&nbsp;";
 						}
 						loop++;
 						pageNo++;
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:showReturned(\""+(pageNo)+"\");'>[다음]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a style='color:white;' href='javascript:showReturned(\""+(pageNo)+"\");'>[다음]</a></button>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
@@ -208,24 +214,24 @@
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo-1)+"\");'>[이전]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo-1)+"\");'>[이전]</a></button>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
 						if(pageNo == currentShowPageNo)
 						{
-							pageBarHTML += "&nbsp;<span style='color:red; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span>&nbsp;";
+							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><span style='color:#ff9999; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span></button>&nbsp;";
 						}
 						else
 						{
-							pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+pageNo+"\");'>"+pageNo+"</a>&nbsp;";
+							pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+pageNo+"\");'><button type='button' class='btn btn-primary'>"+pageNo+"</button></a>&nbsp;";
 						}
 						loop++;
 						pageNo++;
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo)+"\");'>[다음]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo)+"\");'>[다음]</a></button>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
@@ -326,7 +332,9 @@
 						</thead>
 					<tbody id="returnedBookDisplay"></tbody>
 					</table>
-					<div id="pageBar" style="height: 50px; text-align: center;"></div>
+					<ul>
+					<div id="pageBar"  style="height: 50px; text-align: center;"></div>
+					</ul>
 				</div>
 			</div>
 		</div>
