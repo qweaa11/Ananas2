@@ -56,4 +56,11 @@ public interface MemberMapper {
 	 * @return
 	 */
 	int countAllMember();
+
+	/**
+	 * 검색조건에 따른 글목록 전체조회(페이지네이션 구현)
+	 * @param parameterMap
+	 * @return
+	 */
+	List<MemberVO> findAllMemberWithPagination(HashMap<String, String> parameterMap);
 }

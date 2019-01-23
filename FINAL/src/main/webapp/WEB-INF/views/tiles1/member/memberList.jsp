@@ -18,6 +18,11 @@
 		text-decoration: none;
 		border: none;
 	}
+	
+	.pagination>li>a, .pagination>li>span {
+		border-radius: 50% !important;
+		margin: 0 5px;
+	}
 
 </style>
 
@@ -55,12 +60,12 @@
 	function allCheckFalse() {
 		var flag = $("input:checkbox[name=check]").prop("checked",false);
 	}// end of allCheck
-	
+
 	function unlock() {// 계정 휴면해제 함수(활성화)
 		var frm = searchFrm;
 		frm.method = "POST";
 		frm.action = "unlock.ana";
-	
+
 		var flag = false;
 		var count = 0;
 		$(".tr-row").each(function() {
@@ -323,7 +328,7 @@
 							<c:forEach var="memberVO" items="${memberList}" varStatus="no">
 						<tr class="tr-row">
 							<td><input type="checkbox" class="check" name="check" /></td>
-							<td class="td">${no.count}</td>
+							<td class="td">${memberVO.rno}</td>
 							<td class="td">${memberVO.name}</td>
 							<td class="td">${memberVO.memberid}</td>
 							<td class="td">${memberVO.ages}</td>
@@ -344,9 +349,15 @@
 					</tbody>
 				</table>
 			</form>
+			
 
 		</div>
 
 	</div>
+	
+	<div class="row" align="center">
+		${pageBar}
+	</div>
 
 </div>
+
