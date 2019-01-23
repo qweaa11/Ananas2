@@ -43,7 +43,7 @@ public class YSWController {
 	
 	//===== 회원등록 페이지 요청. =====
 	@RequestMapping(value="/memberRegist.ana", method= {RequestMethod.GET})
-	public String registUser(HttpServletRequest req) {
+	public String registUser(HttpServletRequest req, HttpServletResponse res) {
 				
 		return "member/memberRegist.tiles1";  
 	}// end of public String registUser(HttpServletRequest req) 
@@ -52,7 +52,7 @@ public class YSWController {
 	//===== 아이디 중복 체크 요청. =====
 	@RequestMapping(value="/idDuplicate.ana", method= {RequestMethod.POST})
 	@ResponseBody
-	public HashMap<String,Integer> idDuplicate(HttpServletRequest req) {
+	public HashMap<String,Integer> idDuplicate(HttpServletRequest req, HttpServletResponse res) {
 		
 		String memberid = req.getParameter("memberid");
 		System.out.println("memberid : " + memberid);
@@ -71,7 +71,7 @@ public class YSWController {
 	
 	//===== 회원등록 =====
 	@RequestMapping(value="/memberRegistEnd.ana", method= {RequestMethod.POST})
-	public String memberRegistEnd(MultipartHttpServletRequest req, YSWMemberVO membervo) {
+	public String memberRegistEnd(MultipartHttpServletRequest req, HttpServletResponse res, YSWMemberVO membervo) {
 		
 		int result = 0;
 		
@@ -188,7 +188,7 @@ public class YSWController {
 		else {
 			
 			String msg = "회원가입 되었습니다.";
-			String loc = "Login/loginform.ana";
+			String loc = "loginform.ana";
 			
 			req.setAttribute("msg", msg);
 			req.setAttribute("loc", loc);
@@ -204,7 +204,7 @@ public class YSWController {
 	
 	// 사서 리스트의 페이지
 	@RequestMapping(value="/librarianList.ana", method={RequestMethod.GET})
-	public String librarianList(HttpServletRequest req) {
+	public String librarianList(HttpServletRequest req, HttpServletResponse res) {
 
 		String sort = req.getParameter("sort");
 		String searchWord = req.getParameter("searchWord");
@@ -236,7 +236,7 @@ public class YSWController {
 	// 조건에 따른 특정 사서 검색
 	@RequestMapping(value="/findLibrarianList.ana", method={RequestMethod.GET})
 	@ResponseBody
-	public List<HashMap <String, Object>> findLibrarianList(HttpServletRequest req) {
+	public List<HashMap <String, Object>> findLibrarianList(HttpServletRequest req, HttpServletResponse res) {
 		
 		String sort = req.getParameter("sort");
 		String searchWord = req.getParameter("searchWord");
@@ -315,7 +315,7 @@ public class YSWController {
 	
 	// 사서 정보 수정
 	@RequestMapping(value="/updatelibrarianInfo.ana", method={RequestMethod.POST})
-	public String updatelibrarianInfo(HttpServletRequest req, YjkVO yjkvo) {
+	public String updatelibrarianInfo(HttpServletRequest req, HttpServletResponse res, YjkVO yjkvo) {
 		
 		int result = 0;
 		
@@ -422,7 +422,7 @@ public class YSWController {
 	
 	// 사서 정보 삭제(Real Delete)
 	@RequestMapping(value="/deleteLibrarian.ana", method={RequestMethod.POST})
-	public String deleteLibrarian(HttpServletRequest req, YjkVO yjkvo) {
+	public String deleteLibrarian(HttpServletRequest req, HttpServletResponse res, YjkVO yjkvo) {
 		
 		int result = 0;
 		

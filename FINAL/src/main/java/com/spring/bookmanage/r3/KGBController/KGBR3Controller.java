@@ -171,7 +171,6 @@ public class KGBR3Controller {
 			n = 0;
 			
 		} catch (Throwable e) {
-			e.printStackTrace();
 			msg = e.getMessage();
 			n = 0;
 		} 
@@ -292,5 +291,40 @@ public class KGBR3Controller {
 		return json;
 		
 	}// end of r3bookReservation()-------------------------------
+	
+	
+	
+	@RequestMapping(value="r3bookReservation.ana", method= {RequestMethod.POST})
+	@ResponseBody
+	public HashMap<String, String> r3bookReservation(HttpServletRequest request, HttpServletResponse response) {
+		
+		String bookids = request.getParameter("bookids");
+		String memberids = request.getParameter("memberids");
+		String reservedates = request.getParameter("reservedates");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		
+		paraMap.put("BOOKIDS", bookids);
+		paraMap.put("MEMBERIDS", memberids);
+		paraMap.put("RESERVEDATES", reservedates);
+		
+		int n = 0;
+		String msg = "";
+		
+		try {
+			n = r3service.insertReserveByRentalInfo(paraMap);
+		} catch (Throwable e) {
+			msg = e.getMessage();
+		}
+		
+		
+		HashMap<String, String> json = new HashMap<String, String>();
+		
+		json.put("RESULT", String.valueOf(n));
+		json.put("MSG", msg);
+		
+		return json;
+		
+	}// end of r3bookReservation()------------------------------------------------
 	
 }
