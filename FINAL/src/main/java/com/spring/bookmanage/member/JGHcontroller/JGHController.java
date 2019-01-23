@@ -99,6 +99,12 @@ public class JGHController {
 				+"</ul>";
 		request.setAttribute("pageBar", pageBar);
 
+		// 특정 글 상세정보를 조회해온 이후 페이징처리된 해당페이지로 그대로 돌아가고자 할때 돌아갈 페이지 주소를 위해 View단으로 goBackURL을 넘겨준다.
+		String goBackURL = request.getContextPath()+"/memberList.ana?currentPageNo="+currentPageNo
+				+"&colname="+colname+"&searchWord="+searchWord;
+		System.out.println(goBackURL);
+		request.setAttribute("goBackURL", goBackURL);
+
 		return "member/memberList.tiles1";
 	}// end of list
 
@@ -115,17 +121,13 @@ public class JGHController {
 		int row = service.unlockMember(idxArray);
 
 		String msg = "";
-		String loc = "";
-		if(row != 1) {
+		if(row != 1)
 			msg = "계정 활성화에 실패하였습니다.";
-			loc = "javascript:histroy.back();";
-		} else {
+		else
 			msg = "계정 활성화에 성공하였습니다.";
-			loc = "memberList.ana";
-		}// end of if~else
 
 		request.setAttribute("msg", msg);
-		request.setAttribute("loc", loc);
+		request.setAttribute("loc", request.getParameter("goBackURL"));
 
 		return "msg";
 	}// end of updateUnlockMember
@@ -143,17 +145,13 @@ public class JGHController {
 		int row = service.banMember(idxArray);
 
 		String msg = "";
-		String loc = "";
-		if(row != 1) {
+		if(row != 1)
 			msg = "영구정지 일괄처리가 실패하였습니다.";
-			loc = "javascript:history.back();";
-		} else {
+		else
 			msg = "영구정지 일괄처리가 성공하였습니다.";
-			loc = "memberList.ana";
-		}// end of if~else
 
 		request.setAttribute("msg", msg);
-		request.setAttribute("loc", loc);
+		request.setAttribute("loc", request.getParameter("goBackURL"));
 
 		return "msg";
 	}// end of updateBanMember
@@ -165,17 +163,13 @@ public class JGHController {
 		int row = service.removeMember(idxArray);
 
 		String msg = "";
-		String loc = "";
-		if(row != 1) {
+		if(row != 1)
 			msg = "회원탈퇴 일괄처리에 실패하였습니다.";
-			loc = "javascript:history.back();";
-		} else { 
+		else
 			msg = "회원탈퇴 일괄처리가 성공하였습니다.";
-			loc = "memberList.ana";
-		}// end of if~else
 
 		request.setAttribute("msg", msg);
-		request.setAttribute("loc", loc);
+		request.setAttribute("loc", request.getParameter("goBackURL"));
 
 		return "msg";
 	}// end of updateDeleteMember
@@ -187,17 +181,13 @@ public class JGHController {
 		int row = service.recoverMember(idxArray);
 
 		String msg = "";
-		String loc = "";
-		if(row != 1) {
+		if(row != 1)
 			msg = "회원복구 일괄처리에 실패하였습니다.";
-			loc = "javascript:history.back();";
-		} else {
+		else
 			msg = "회원복구 일괄처리가 성공하였습니다.";
-			loc = "memberList.ana";
-		}// end of if~else
 
 		request.setAttribute("msg", msg);
-		request.setAttribute("loc", loc);
+		request.setAttribute("loc", request.getParameter("goBackURL"));
 
 		return "msg";
 	}// end of updateRecoverMember
