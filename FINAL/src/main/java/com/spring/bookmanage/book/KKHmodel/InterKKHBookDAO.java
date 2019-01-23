@@ -12,4 +12,14 @@ public interface InterKKHBookDAO {
 
 	List<KKHBookVO> findBookDetail(String bookid);
 
+	List<HashMap<String,String>> findBookReservateList(String bookid);
+
+	List<HashMap<String, String>> findAllLibrary();
+
+	List<HashMap<String, String>> findAllLanguage();
+
+	List<HashMap<String, String>> findAllCategory();
+
+	List<HashMap<String, String>> findAllField();
+
 }

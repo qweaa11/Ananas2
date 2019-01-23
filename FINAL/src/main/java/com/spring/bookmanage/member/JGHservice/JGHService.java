@@ -88,4 +88,25 @@ public class JGHService {
 
 		return row;
 	}// end of recoverMember
+
+	/**
+	 * 검색설정에 따른 회원수 불러오기
+	 * @param parameterMap
+	 * @return
+	 */
+	public int countMemberWithSearchOption(HashMap<String, String> parameterMap) {
+		int count = mapper.countAllMemberWithSearchMap(parameterMap);
+
+		return count;
+	}// end of countMemberListWithSearchWord
+
+	/**
+	 * 검색없이 회원수 불러오기(전체회원수)
+	 * @return
+	 */
+	public int countMemberWithOutSearchOption() {
+		int count = mapper.countAllMember();
+
+		return count;
+	}// end of countMemberWithOutSearchOption
 }

@@ -24,7 +24,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		searchKeep();
-		
+
 		// 한 행을 클릭할 경우 체크박스 선택, 해제
 		$(".td").click(function() {
 			var flag = $(this).parent().find(".check").is(":checked");
@@ -275,12 +275,13 @@
 
 		<div class="container border" style="height: 50%; width: 100%; align-content: center;">
 
-			<form name="searchFrm">
+			<form name="searchFrm" onsubmit="return false">
 				<div>
 					<select id="colname" name="colname" style="height: 25px;" >
 						<option value="name">이름</option>
 						<option value="memberid">아이디</option>
 					</select>
+
 					<input type="text" id="searchWord" name="searchWord" />
 					<button type="button" class="btn btn-info" onclick="search();">검색</button>
 				</div>
@@ -314,7 +315,7 @@
 					<tbody align="center">
 						<c:if test="${empty memberList}">
 						<tr>
-							<td colspan="10"><span style="color: #ff4d4d; font-weight: bold;">입력된 내용과 일치하는 회원이 존재하지 않습니다.</span></td>
+							<td colspan="11"><span style="color: #ff4d4d; font-weight: bold;">입력된 내용과 일치하는 회원이 존재하지 않습니다.</span></td>
 						</tr>
 						</c:if>
 						

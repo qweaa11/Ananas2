@@ -90,4 +90,24 @@ public class MemberDAO implements MemberMapper {
 
 		return row;
 	}// end of recoverAllByStatus
+
+	/**
+	 * 검색에 따른 회원수 조회
+	 */
+	@Override
+	public int countAllMemberWithSearchMap(HashMap<String, String> parameterMap) {
+		int count = sqlsession.selectOne("jgh.countAllMemberBySearchMap", parameterMap);
+
+		return count;
+	}// end of countAllMemberWithSearchMap
+
+	/**
+	 * 검색없이 회원수 조회(전체 회원수 조회)
+	 */
+	@Override
+	public int countAllMember() {
+		int count = sqlsession.selectOne("jgh.countAllMember");
+
+		return count;
+	}// end of countAllMember
 }

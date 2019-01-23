@@ -14,6 +14,31 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	
 	@Autowired
 	private SqlSessionTemplate sqlsession;
+	
+	@Override
+	public List<HashMap<String, String>> findAllLibrary() {
+		List<HashMap<String,String>> libraryList = sqlsession.selectList("KKH.findAllLibrary");
+		return libraryList;
+	}  
+	@Override
+	public List<HashMap<String, String>> findAllLanguage() {
+		List<HashMap<String,String>> languageList = sqlsession.selectList("KKH.findAllLanguage");
+		return languageList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> findAllCategory() {
+		List<HashMap<String,String>> categoryList = sqlsession.selectList("KKH.findAllCategory");
+		return categoryList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> findAllField() {
+		List<HashMap<String,String>> fieldList = sqlsession.selectList("KKH.findAllField");
+		return fieldList;
+	}
+	
+	
 
 	@Override
 	public List<KKHBookVO> findBookBysidebar(HashMap<String, Object> parameterMap) {
@@ -35,6 +60,18 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	public List<KKHBookVO> findBookDetail(String bookid) {
 		List<KKHBookVO> bookDetail = sqlsession.selectList("KKH.findBookDetail", bookid);
 		return bookDetail;
-	}  
+	}
+
+
+	@Override
+	public List<HashMap<String,String>> findBookReservateList(String bookid) {
+		List<HashMap<String,String>> bookReservateList =  sqlsession.selectList("KKH.findBookReservation",bookid);
+		return bookReservateList;
+	}
+
+	
+
+
+	
 
 }
