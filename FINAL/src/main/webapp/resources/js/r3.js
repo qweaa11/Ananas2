@@ -603,10 +603,19 @@ $(document).ready(function(e){
 		
 		
 		 var data_form = {"searchWord":searchWord, "category":category, "sort":sort}
+		 
+		 var url = "";
+		 
+		 if(type == "1") {
+			 url = "r3searchRental.ana";
+		 }
+		 else {
+			 url = "r3searchReserveRental.ana";
+		 }
 		
 		$.ajax({
 			
-			url:"r3searchRental.ana",
+			url:url,
 			type:"GET",
 			data:data_form,
 			dataType:"json",
