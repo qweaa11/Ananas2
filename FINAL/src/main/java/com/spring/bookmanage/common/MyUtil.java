@@ -190,12 +190,12 @@ public class MyUtil {
 	 * @return
 	 */
 	public static String getCurrentURL(HttpServletRequest request) {
-		String currentURL = request.getRequestURL().toString();// ==> 확인용 currentURL => http://localhost:9090/MyMVC/memberList.do
+		String currentURL = request.getRequestURL().toString();// ==> 확인용 currentURL => http://localhost:9090/bookmanage/memberList.ana
 		String method = request.getMethod();
 
 		if("GET".equalsIgnoreCase(method)) {
 			String queryString = request.getQueryString();
-			// ==> 확인용 queryString => currentShowPageNo=3&sizePerPage=5
+			// ==> 확인용 queryString => currentPageNo=3&sizePerPage=5
 
 			currentURL += "?"+queryString;
 			// ==> ==> 확인용 currentURL =>
@@ -226,11 +226,12 @@ public class MyUtil {
 		// currentPageNo 가 21~30 일때 pageNo 는 21
 		String str_pageNo = "";
 
+		// prev page
 		if(pageNo == 1) {
-			str_pageNo = "<li class='disabled'><a href='#'>&lt;</a></li>\n";
+			str_pageNo = "<li class='disabled'><a href='#'>«</a></li>\n";
 		} else {
 			str_pageNo = "<li><a href='"+url+"'?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
-					+"&colname="+colname+"&searchWord="+searchWord+"' >&lt;</a></li>\n";
+					+"&colname="+colname+"&searchWord="+searchWord+"' >«</a></li>\n";
 		} // end of if~else
 
 		pageBar += str_pageNo;
@@ -248,17 +249,17 @@ public class MyUtil {
 			loop++;
 		} // end of while
 
-		// &lt; page
+		// next page
 		if(pageNo > totalPage) {
-			str_pageNo = "<li class='disabled'><a href='#'>&gt;</a></li>\n";
-		} else {			
+			str_pageNo = "<li class='disabled'><a href='#'>»</a></li>\n";
+		} else {
 			str_pageNo = "<li><a href='"+url+"?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
-					+"&colname="+colname+"&searchWord="+searchWord+"' >&gt;</a></li>\n";
+					+"&colname="+colname+"&searchWord="+searchWord+"' >»</a></li>\n";
 		} // end of if~else	
 
 		pageBar += str_pageNo;
-		
-		System.out.println(pageBar);
+
+		// System.out.println(pageBar);
 
 		return pageBar;
 	}// end of createPageBar
