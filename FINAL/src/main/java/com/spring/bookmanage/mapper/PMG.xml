@@ -20,7 +20,8 @@
 		                   when 1 then '휴면'
 		                   when 2 then '정지'
 		                   when 3 then '탈퇴'
-		                   else '' end AS status
+		                   when 4 then '영구정지'
+		                   else '존재하지 않는 회원' end AS status
 		from member
 		where idx = #{idx}	
 	</select>
@@ -35,12 +36,17 @@
 		where idx = #{idx}
 	</update>
 	
-	<update id="EditStopOneMemberByIdx" parameterType="String">
-		update member set status = 2
+	<update id="EditWithdrawalOneMemberByIdx" parameterType="String">
+		update member set status = 3
+		where idx = #{idx}
+	</update>
+	<update id="EditShutdownOneMemberByIdx" parameterType="String">
+		update member set status = 4
 		where idx = #{idx}
 	</update>
 
 
+	  
 	<resultMap type="HashMap" id="rentalMap">
 		<result property="ROWNUM" column="rownum" javaType="String" />
 		<result property="MEMBERID" column="memberid" javaType="String" />
@@ -67,8 +73,8 @@
 		     , to_char(rentalDate, 'yyyy-mm-dd hh24:mi:ss') AS rentalDate
 		     , to_char(deadline, 'yyyy-mm-dd') AS deadline
 		     , case renew when 0 then 'X' else 'O' end AS renew
-		     , trunc(sysdate - deadline) AS overdue
-		     , trunc(sysdate - deadline) * 100 AS latefee
+		     , trunc(rentaldate - sysdate) AS overdue
+		     , trunc(rentaldate - sysdate) * 100 AS latefee
 		from member M join rental R
 		on M.memberid = R.memberid_fk
 		join book B
@@ -83,8 +89,8 @@
 		order by rownum desc	
 	</select>
 
-
-	<resultMap type="HashMap" id="reservationMap">
+	
+	<!-- <resultMap type="HashMap" id="reservationMap">
 		<result property="ROWNUM" column="rownum" javaType="String" />
 		<result property="MEMBERID" column="memberid" javaType="String" />
 		<result property="BOOKID" column="bookid" javaType="String" />
@@ -116,7 +122,12 @@
 		on B.libcode_fk = L.libcode
 		where M.memberid = #{memberid}
 		order by rownum desc
-	</select>
+	</select> -->
+	
+	<!-- <insert id="noticeWriteadd" parameterType="com.spring.bookmanage.board.PMGmodel.PMGNoticeVO">
+		insert into notice(idx, adminid_fk, name, subject, content, pw, readCount, regDate, status, fileName, orgFileName, fileSize)
+		values(notice_seq, #{})
+	</insert> -->
 
 
 </mapper>

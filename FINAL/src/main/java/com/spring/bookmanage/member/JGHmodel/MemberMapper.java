@@ -36,4 +36,24 @@ public interface MemberMapper {
 	 * @return
 	 */
 	int removeAllByStatus(String[] idxArray);
+
+	/**
+	 * 계정 복구처리
+	 * @param idxArray
+	 * @return
+	 */
+	int recoverAllByStatus(String[] idxArray);
+
+	/**
+	 * 검색에 따른 회원수 조회
+	 * @param parameterMap
+	 * @return
+	 */
+	int countAllMemberWithSearchMap(HashMap<String, String> parameterMap);
+
+	/**
+	 * 전체 회원수 조회(검색없이 회원수 조회)
+	 * @return
+	 */
+	int countAllMember();
 }

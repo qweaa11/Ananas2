@@ -36,8 +36,13 @@ public class PMGMemberDAO implements InterPMGMemberDAO {
 		return n;
 	}
 	@Override
-	public int EditStopOneMemberByIdx(String idx) {
-		int n = sqlsession.update("PMG.EditStopOneMemberByIdx", idx);
+	public int EditWithdrawalOneMemberByIdx(String idx) {
+		int n = sqlsession.update("PMG.EditWithdrawalOneMemberByIdx", idx);
+		return n;
+	}
+	@Override
+	public int EditShutdownOneMemberByIdx(String idx) {
+		int n = sqlsession.update("PMG.EditShutdownOneMemberByIdx", idx);
 		return n;
 	}
 

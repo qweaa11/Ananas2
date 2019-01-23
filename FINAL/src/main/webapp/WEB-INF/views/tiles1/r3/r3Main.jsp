@@ -25,9 +25,27 @@
 			$('.search-book span#search_concept').text(concept);
 			$('.input-book #bookcategory').val(param);
 		});
+		
+	 	// 대여 검색 카테고리
+	    $('.search-rental').find('a').click(function(e) {
+			e.preventDefault();
+			var param = $(this).attr("href").replace("#","");
+			var concept = $(this).text();
+			$('.search-rental span#search_concept').text(concept);
+			$('.input-rental #rentalcategory').val(param);
+		});
+	 	
+	 	// 반납 정렬 카테고리
+	    $('.sort-rental').find('a').click(function(e) {
+			e.preventDefault();
+			var param = $(this).attr("href").replace("#","");
+			var concept = $(this).text();
+			$('.sort-rental span#search_concept').text(concept);
+			$('.input-rental-sort #sortrental').val(param);
+		});
 	    
 	    // 회원 목록 스타일 부여
-	    $(document).on("mouseover", ".hover", function () {
+	    $(document).on("mouseover", ".hover", function () { 
 	    	$(this).addClass("hoverStyle");
 		});
 	    
@@ -39,6 +57,20 @@
 	    $("#search_member").keydown(function(event) {
 			if(event.keyCode == 13) {
 				searchMember();
+			}
+		});
+	    
+	    // 엔터 쳤을 시 도서 검색
+	    $("#search_book").keydown(function(event) {
+			if(event.keyCode == 13) {
+				searchBook();
+			}
+		});
+	    
+	 	// 엔터 쳤을 시 대여 검색
+	    $("#search_rental").keydown(function(event) {
+			if(event.keyCode == 13) {
+				searchRental();
 			}
 		});
 	    
@@ -141,10 +173,76 @@
 			$(".booksearch").click();
 		}
 	    
-	});
+		// 정렬 클릭시 정렬을 위해 함수 호출
+		$(".btnRentalSort").click(function () {
+			searchRental();
+		});
+		
+		
+		// 반납 대기 창으로 옮기기
+		$(document).on("click", ".rentalselect", function () {
+
+	    	var memberid = $(this).find(".rentalMemberid").text();
+	    	var name = $(this).find(".rentalName").text();
+	    	var bookid = $(this).find(".rentalBookid").text();
+	    	var title = $(this).find(".rentalTitle").text();
+	    	var rentalDate = $(this).find(".rentalRentaldate").text();
+	    	var deadline = $(this).find(".rentalDeadline").text();
+	    	var renew = $(this).find(".rentalRenew").text();
+	    	var deadlinecut = $(this).find(".rentalDeadlinecut").text() + "";
+	    	
+	    	var flag = false;
+	    	
+	    	$(".rentalBookval").each(function () {
+				if($(this).val() == bookid){
+					flag = true;
+					return false;
+				}
+			});
+	    	
+	    	if(flag) {
+	    		alert("이미 반납대기 목록에 들어있는 책 입니다.");
+	    		return;
+	    	}
+	    	
+	    	title = title.length > 15?title.substring(0, 15) + "...":title; 
+	    	
+	    	var today = new Date();
+	    	
+	    	var dd = today.getDate();
+	    	var mm = today.getMonth()+1; //January is 0!
+	    	var yyyy = today.getFullYear();
+	    	
+	    	html = 	"<li class=\"list-group-item hover returnredy\">\n" + 
+					"    <div class=\"row\">\n" + 
+					"		<div class=\"col-xs-1 text-left\" style=\" \">" + memberid + "</div>\n" + 
+					"		<div class=\"col-xs-1\" style=\"\">" + name + "</div>\n" + 
+					"		<div class=\"col-xs-3\" style=\"\">" + title + "</div>\n" + 
+					"		<div class=\"col-xs-2\" style=\"\">" + bookid + "</div>\n" + 
+					"		<div class=\"col-xs-2\" style=\"\">" + rentalDate + "</div>\n" + 
+					"		<div class=\"col-xs-2\" style=\"\">" + deadline + "</div>\n" + 
+					"		<div class=\"col-xs-1 text-center\" style=\"\">" + (renew < 3?(3-renew) + "회 남음":"연장불가") + "</div>\n" +
+					"		<input type='hidden' class='rentalBookval' value='" + bookid + "'/>" +
+					"		<input type='hidden' class='rentalMemberval' value='" + memberid + "'/>" +
+					"		<div class='rentalRenewval' style='display: none;'>" + renew + "</div>" +
+					"		<div class='rentalDeadlinecutval' style='display: none;'>" + deadlinecut + "</div>" +
+					"    </div>\n" + 
+					"</li>";
+					
+			$(".returnList").append(html);
+	    	
+		});// end of $(document).on()--------------------------------------
+		
+		
+		// 반납 대기창에서 지우기 
+		$(document).on("click", ".returnredy", function () {
+			$(this).empty().hide();
+		});// end of $(document).on()----------------------------
+		
+	});// end of ready()------------------
 	
 	
-	
+	// 회원목록 표시
 	function searchMember() {
 		
 		var cateogry = $("#membercategory").val();
@@ -197,6 +295,7 @@
 		
 	}
 	
+	// 도서목록 표시
 	function searchBook() {
 		
 		var cateogry = $("#bookcategory").val();
@@ -230,10 +329,10 @@
 				}
 				else {
 					html += "<li class=\"list-group-item\">\n" + 
-					"	<div class=\"row\">\n" + 
-					"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
-					"	</div>\n" + 
-					"</li>";
+							"	<div class=\"row\">\n" + 
+							"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
+							"	</div>\n" + 
+							"</li>";
 				}
 				
 				
@@ -249,6 +348,7 @@
 		});// end of $.ajax()---------------------
 		
 	}
+	
 	
 	// 책 대여 기능
 	function rental() {
@@ -324,9 +424,207 @@
 	// 대여 대기목록 리셋
 	function rentalReset() {
 		$(".rentalList").empty();
-	}
+	}// end of rentalReset()-------------------
 	
-
+	
+	// 대여된 목록을 불러오기
+	function searchRental() {
+		
+		var category = $("#rentalcategory").val();
+		var searchWord = $("#search_rental").val();
+		var sort = $("#sortrental").val();
+		
+		 var data_form = {"searchWord":searchWord, "category":category, "sort":sort}
+		
+		$.ajax({
+			
+			url:"r3searchRental.ana",
+			type:"GET",
+			data:data_form,
+			dataType:"json",
+			success:function(json) {
+				
+				var html = "";
+				
+				if(json.length > 0) {
+					
+					$.each(json, function (entryIndex, entry) {
+						html += "<li class=\"list-group-item hover rentalselect\" " + (entry.DEADLINECUT > 0?"style='background-color: red; color: white;'":"") + ">\n" + 
+								"	<div class=\"row\">\n" + 
+								"		<div class=\"col-xs-1 rentalMemberid text-left\" style=\" \">" + entry.MEMBERID + "</div>\n" + 
+								"		<div class=\"col-xs-1 rentalName\" style=\"\">" + entry.NAME + "</div>\n" + 
+								"		<div class=\"col-xs-3 rentalTitle\" style=\"\">" + entry.TITLE + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalBookid\" style=\"\">" + entry.BOOKID + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalRentaldate\" style=\"\">" + entry.RENTALDATE + "</div>\n" + 
+								"		<div class=\"col-xs-2 rentalDeadline\" style=\"\">" + entry.DEADLINE + "</div>\n" + 
+								"		<div class=\"col-xs-1 text-center\" style=\"\">" + (entry.DEADLINECUT < 1 && entry.RENEW < 3?(3 - entry.RENEW) + "회 남음":"연장불가") + "</div>\n" +
+								"		<div class='rentalDeadlinecut' style='display: none;'>" + entry.DEADLINECUT + "</div>" + 
+								"		<div class='rentalRenew' style='display: none;'>" + entry.RENEW + "</div>" + 
+								"	</div>\n" + 
+								"</li>";
+					});// end of each()----------------------------- 
+					
+					
+				}
+				else {
+					html += "<li class=\"list-group-item\">\n" + 
+							"	<div class=\"row\">\n" + 
+							"		<div class=\"col-xs-12 memberid text-left\" style=\"text-align: center;\">검색 결과가 없습니다.</div>\n" + 
+							"	</div>\n" + 
+							"</li>";
+				}
+				
+				$(".rentalSearchList").html(html);
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});// end of $.ajax()---------------------
+		
+	}// end of searchRental()--------------------- 
+	
+	
+	// 반납 대기목록 리셋
+	function returnReset() {
+		$(".returnList").empty();
+	}// end of rentalReset()------------------
+	
+	
+	// 도서 반납 페이지
+	function returned() {
+		
+		var bookids = "";
+		
+		$(".rentalBookval").each(function () {
+			bookids += $(this).val() + ","; 
+		});
+		
+		bookids = bookids.substring(0, bookids.length-1);
+		
+		var memberids = "";
+		
+		$(".rentalMemberval").each(function () {
+			memberids += $(this).val() + ",";
+		});
+		
+		memberids = memberids.substring(0, memberids.length-1);
+		
+		if(bookids.trim() == "" || memberids.trim() == "") {
+			alert("목록에 등록해주세요");
+			return;
+		}
+		
+		var deadlinecuts = "";
+		
+		$(".rentalDeadlinecutval").each(function () {
+			deadlinecuts += $(this).text() + ","; 
+		});
+		
+		deadlinecuts = deadlinecuts.substring(0, deadlinecuts.length-1);
+		
+		var data_form = {"bookids":bookids, "memberids":memberids, "deadlinecuts":deadlinecuts};
+		
+		$.ajax({
+			url:"r3bookReturn.ana",
+			type:"POST",
+			data:data_form,
+			dataType:"json",
+			success:function(json) {
+				
+				if(json.RESULT == "1"){
+					alert("반납이 되었습니다.");
+					$(".returnList").empty();
+					$(".rentalsearch").click();
+				}
+				else {
+					alert(json.MSG);
+				}
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});// end of $.ajax()-------------------------
+		
+	}// end of returned()-------------------
+	
+	
+	// 도서 대여 연장
+	function reservation() {
+		
+		var bookids = "";
+		
+		$(".rentalBookval").each(function () {
+			bookids += $(this).val() + ","; 
+		});
+		
+		bookids = bookids.substring(0, bookids.length-1);
+		
+		var flag = false;
+		
+		$(".rentalRenewval").each(function () {
+			
+			if($(this).text() > 2){
+				flag = true;
+				return false;
+			}
+		});
+		
+		if(flag) {
+			alert("연장 횟수를 초과한 책이 있어 연장이 불가능 합니다.");
+			return;
+		}
+		
+		if(bookids.trim() == "") {
+			alert("목록에 등록해주세요");
+			return;
+		}
+		
+		flag = false;
+		
+		$(".rentalDeadlinecutval").each(function () {
+			
+			if($(this).text() > 0){
+				flag = true;
+				return false;
+			}
+		});
+		
+		if(flag) {
+			alert("연체되어 있는 책이 있어 연장이 불가능 합니다.");
+			return;
+		}
+		
+		var data_form = {"bookids":bookids};
+		
+		$.ajax({
+			url:"r3bookRenew.ana",
+			type:"POST",
+			data:data_form,
+			dataType:"json",
+			success:function(json) {
+				
+				if(json.RESULT == "1"){
+					alert("연장이 되었습니다.");
+					$(".returnList").empty();
+					$(".rentalsearch").click();
+				}
+				else {
+					alert(json.MSG);
+				}
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});// end of $.ajax()-------------------------
+		
+	}// end of reservation()------------------------
+	
 </script>
     
 <div>
@@ -347,6 +645,8 @@
 	                
 	                <div class="panel-body">
 	                    <div class="tab-content">
+	                    
+	                    	<!-- 대여 -->
 	                        <div class="tab-pane fade in active" id="tab1info">
 	                        	
 	                        	
@@ -468,7 +768,7 @@
 						            <h2>도서 목록</h2>
 								    <hr>
 								    
-								    <!-- 도서 검색 -->
+						            <!-- 도서 검색 -->
 								    <div class="input-group input-book" style="margin-bottom: 30px;">
 						                <div class="input-group-btn search-panel search-book">
 						                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -513,6 +813,8 @@
 								    
 								    
 								    <!-- /도서 목록 -->
+								    
+								    <!-- 대여 대기목록 -->
 									<h2>대여 작업</h2>
 								    <hr>
 									<div style="color: red; padding-bottom: 10px; text-align: right;">대여기간은 최대 14일 입니다.</div> 
@@ -547,6 +849,8 @@
 										<button type="button" class="btn btn-warning btn-circle btn-lg" onclick="rentalReset();"><i class="glyphicon glyphicon-remove"></i></button>
 								    </div>
 								    
+								    <!-- /대여 대기목록 -->
+								    
 									
 								    
 						        </div>
@@ -555,14 +859,138 @@
 						        
 						        
 	                        </div>
+	                        <!-- /대여 -->
 	                        
+	                        
+	                        <!-- 반납 -->
 	                        <div class="tab-pane fade" id="tab2info">
-	                        	호호호호호호호호호호호
+	                        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
+						        	
+						            <h2>대여된 목록</h2>
+								    <hr>
+								    
+								    <!-- 대여 검색 -->
+								    <div class="input-group input-rental" style="margin-bottom: 30px;">
+						                <div class="input-group-btn search-panel search-rental">
+						                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						                    	<span id="search_concept">아이디</span> <span class="caret"></span>
+						                    </button>
+						                    <ul class="dropdown-menu" role="menu">
+						                      <li><a href="#memberid">아이디</a></li>
+						                      <li><a href="#name">이름</a></li>
+						                      <li><a href="#bookid">일련번호</a></li>
+						                      <li><a href="#title">제목</a></li>
+						                    </ul>
+						                </div>
+						                <input type="hidden" name="search_param" value="memberid" id="rentalcategory">       
+						                <input type="text" class="form-control" id="search_rental" name="x" placeholder="검색어를 입력해주세요.">
+						                <span class="input-group-btn">
+						                    <button class="btn btn-default rentalsearch" type="button" onclick="searchRental();"><span class="glyphicon glyphicon-search"></span></button>
+						                </span>
+						            </div>
+						            <!-- /대여 검색 -->
+						            
+						            
+						            <!-- 정렬기준 -->
+						            <div class="input-group input-rental-sort col-xs-12" style="margin-bottom: 30px;">
+						            	<span style="float: right; padding-right: 10px; padding-top: 7px;">정렬기준 : </span> 
+						                <div class="input-group-btn search-panel sort-rental">
+						                	<div style="float: right;"> 
+							                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="border-radius: 5px;">
+							                    	<span id="search_concept">아이디</span> <span class="caret"></span>
+							                    </button>
+							                    <ul class="dropdown-menu" role="menu" style="float: right;">
+							                      <li><a href="#memberid" class="btnRentalSort">아이디</a></li>
+							                      <li><a href="#name" class="btnRentalSort">이름</a></li>
+							                      <li><a href="#deadline" class="btnRentalSort">반납예정날짜</a></li>
+							                    </ul>
+						                    </div>
+						                </div>
+						                <input type="hidden" name="search_param" value="memberid" id="sortrental"> 
+						            </div>
+						            <!-- /정렬기준 -->
+								    
+								    
+								    <!-- 대여 목록 -->
+								    <div class="row">
+								        <div class="col-xs-12" style="">
+								            <div class="panel panel-default list-group-panel" style="max-width: 100%; max-height: 300px; overflow: auto;">
+								                <div class="panel-body" style="min-width: 1800px; overflow: auto;">
+								                
+								                    <ul class="list-group list-group-header">
+								                        <li class="list-group-item list-group-body">
+								                            <div class="row">
+								                            	<div class="col-xs-1 text-left">아이디</div>
+								                                <div class="col-xs-1">이름</div> 
+								                                <div class="col-xs-3">제목</div>  
+								                                <div class="col-xs-2 text-left">일련번호</div>
+								                                <div class="col-xs-2">대여날짜</div>  
+								                                <div class="col-xs-2">반납예정일</div>
+								                                <div class="col-xs-1 text-center">연장 가능 여부</div>
+								                            </div>
+								                        </li>
+								                    </ul>
+								                    
+								                    <ul class="list-group list-group-body rentalSearchList">
+								                    </ul>
+								                    
+								                </div>
+								            </div>
+								        </div>
+								    </div>
+								    
+								    
+								    <!-- /대여 목록 -->
+								    
+								    <!-- 반납 대기목록 -->
+									<h2>반납 작업</h2>
+								    <hr>
+								    
+								    <div class="row">
+								        <div class="col-xs-12" >
+								            <div class="panel panel-default list-group-panel" style="max-width: 100%; max-height: 300px; overflow: auto;">
+								                <div class="panel-body" style="min-width: 1800px; overflow: auto;">
+								                
+								                    <ul class="list-group list-group-header">
+								                        <li class="list-group-item list-group-body">
+								                            <div class="row">
+								                                <div class="col-xs-1 text-left">아이디</div>
+								                                <div class="col-xs-1">이름</div> 
+								                                <div class="col-xs-3">제목</div> 
+								                                <div class="col-xs-2 text-left">일련번호</div>
+								                                <div class="col-xs-2">대여날짜</div>  
+								                                <div class="col-xs-2">반납예정일</div>
+								                                <div class="col-xs-1 text-center">연장 가능 여부</div> 
+								                            </div>
+								                        </li>
+								                    </ul>
+								                    
+								                    <ul class="list-group list-group-body returnList" style="">
+								                        
+								                    </ul>
+								                    
+								                </div>
+								            </div>
+								        </div>
+								    </div>
+								    <div style="float: right; margin-bottom: 30px;">
+								    	<button type="button" class="btn btn-info btn-circle btn-lg" onclick="returned();"><i class="glyphicon glyphicon-ok"></i></button>
+								    	<button type="button" class="btn btn-success btn-circle btn-lg" onclick="reservation();"><i class="glyphicon glyphicon-plus"></i></button>
+										<button type="button" class="btn btn-warning btn-circle btn-lg" onclick="returnReset();"><i class="glyphicon glyphicon-remove"></i></button>
+								    </div>
+								    
+									<!-- /반납 대기목록 -->
+								    
+						        </div>
 	                        </div>
+	                        <!-- /반납 -->
 	                         
+	                         
+	                        <!-- 예약 -->
 	                        <div class="tab-pane fade" id="tab3info">
 	                        	하하하하하하하하하
 	                        </div> 
+	                        <!-- 예약 끝 -->
 	                        
 	                    </div>
 	                </div>

@@ -67,7 +67,7 @@ public class KGBR3Service implements InterKGBR3Service{
 		int n = 0;
 		
 		String reservebookid = r3DAO.findAllReservationByBookid(paraMap);
-		System.out.println(reservebookid);
+		
 		if(reservebookid.length() > 0)
 			r3DAO.deleteReservationByMemberid(reservebookid);
 		
@@ -81,6 +81,41 @@ public class KGBR3Service implements InterKGBR3Service{
 		
 		return n;
 	}// end of addAllRentalById()----------------------------------
+
+	
+	@Override
+	public List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap) {
+		
+		List<HashMap<String, String>> rentalList = r3DAO.findAllRentalByCategory(paraMap);
+		
+		return rentalList;
+		
+	}// end of findAllRentalByCategory()-----------------------
+
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int addReturnByBookid(HashMap<String, String> paraMap) throws Throwable{
+		
+		r3DAO.updateMemberByDeadeline(paraMap);
+		r3DAO.updateBookstatusByBookid(paraMap);
+		r3DAO.insertReturnByRentalInfo(paraMap);
+		r3DAO.deleteRentalByBookid(paraMap);
+		
+		return 1;
+	}// end of addReturnByBookid()-----------------
+
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int updateRentalRenewByBookid(HashMap<String, String> paraMap) throws Throwable{
+		
+		r3DAO.findAllReservationCountByBookid(paraMap);
+		r3DAO.UpdateAllRenewByBookid(paraMap);
+		
+		return 1;
+		
+	}// end of updateRentalByBookid()----------------
 
 	
 

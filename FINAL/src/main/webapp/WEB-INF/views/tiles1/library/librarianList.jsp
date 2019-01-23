@@ -3,6 +3,8 @@
     
 <% String ctxPath = request.getContextPath(); %>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
@@ -346,7 +348,7 @@ li {
         </div>
         	<div class="modal-body">
         			<div class="col-xs-6 col-sm-6 col-lg-3" style="float: left"><img name="faceImgInDetail" id="faceImgInDetail" style="cursor: pointer;" width="250" height="220" alt="이미지 없음" src=""></div>
-	        	<div class="col-xs-6 col-sm-6 col-lg-4">
+	        	<div class="col-xs-6 col-sm-6 col-lg-4" style="margin-left: 40px;">
 	        		<ul>
 	        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">사서 번호</span></li>
 	        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">사서 아이디</span></li>
@@ -400,11 +402,11 @@ li {
         	<form name="updateInfoFrm" enctype="multipart/form-data">
         		<div class="modal-body">
 	        		<div class="col-xs-6 col-sm-6 col-lg-3" style="float: left"><img name="faceImgInUpdate" id="faceImgInUpdate" width="250" height="220" alt="이미지 없음" src=""></div>
-		        	<div class="col-xs-6 col-sm-6 col-lg-4">
+		        	<div class="col-xs-6 col-sm-6 col-lg-4" style="margin-left: 40px;">
 		        		<ul>
 		        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">사서 번호</span></li>
 		        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">사서 아이디</span></li>
-		        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">도서관 코드</span></li>
+		        			<li><span style="font-size: 14pt; font-weight:bold; color: x#666666;">도서관 코드</span></li>
 		        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">사서 성명</span></li>
 		        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">사서 연락처</span></li>
 		        			<li><span style="font-size: 14pt; font-weight:bold; color: #666666;">사서 직책</span></li>
@@ -416,7 +418,7 @@ li {
 			          	
 		          	<div class="col-xs-6 col-sm-6 col-lg-4">
 		          		<ul>
-		          			<li><input type="text" name="personalInfo0" class="personalInfo0" value=""  readonly/></li>
+		          			<li><input type="text" name="personalInfo0" class="personalInfo0" value="" readonly/></li>
 		          			<li><input type="text" name="personalInfo1" class="personalInfo1" value="" readonly/></li>
 		          			<li><input type="text" name="personalInfo2" class="personalInfo2" value="" readonly/></li>
 		          			<li><input type="text" name="personalInfo3" class="personalInfo3" value=""/></li>

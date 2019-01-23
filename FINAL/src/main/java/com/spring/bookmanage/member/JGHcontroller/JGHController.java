@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.bookmanage.common.AES256;
+import com.spring.bookmanage.common.MyUtil;
 import com.spring.bookmanage.member.JGHmodel.MemberVO;
 import com.spring.bookmanage.member.JGHservice.JGHService;
 
@@ -36,20 +37,55 @@ public class JGHController {
 	public String list(HttpServletRequest request, HttpServletRequest response)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		List<MemberVO> memberList = null;
+
 		String colname = request.getParameter("colname");
 		String searchWord = request.getParameter("searchWord");
 
 		HashMap<String, String> parameterMap = new HashMap<>();
 		parameterMap.put("colname", colname);
 		parameterMap.put("searchWord", searchWord);
+		
+		String str_currentPageNo = request.getParameter("currentPageNo");
 
+		int countMember = 0;// 회원수
+		int currentPageNo = 1;// 현재 페이지번호
+		
+		int sizePerPage = 5;// 페이지당 레코드 수
+
+		int front;// 시작행번호
+		int rear;// 끝행번호
+		int blockSize = 10;// 블럭사이즈
+		
 		if(searchWord != null && !searchWord.trim().isEmpty()) {
+			countMember = service.countMemberWithSearchOption(parameterMap);
+
 			memberList = service.searchList(parameterMap);
 			request.setAttribute("colname", colname);
 			request.setAttribute("searchWord", searchWord);
 		} else {
+			countMember = service.countMemberWithOutSearchOption();
 			memberList = service.noSearchList();
 		}// end of if~else
+		
+		int totalPage = (int)Math.ceil((double)countMember/sizePerPage);
+		
+		if(str_currentPageNo == null) {// 게시판 초기화면의 경우
+			currentPageNo = 1;
+		} else {// 특정페이지를 조회한 경우
+			try {
+				currentPageNo = Integer.parseInt(str_currentPageNo);
+
+				if(currentPageNo < 1 || currentPageNo > totalPage)// 사용자가 존재하지 않는 페이지번호를 입력하는 경우
+					currentPageNo = 1;
+			} catch(NumberFormatException e) {
+				currentPageNo = 1;
+			}// end of try catch
+		}// end of if~else
+		
+		front = (currentPageNo-1)*sizePerPage+1;
+		rear = front+sizePerPage-1;
+		parameterMap.put("front", String.valueOf(front));
+		parameterMap.put("rear", String.valueOf(rear));
 
 		for(MemberVO memberVO : memberList) {
 			memberVO.setEmail(aes.decrypt(memberVO.getEmail()));
@@ -57,6 +93,10 @@ public class JGHController {
 		}// end of for
 
 		request.setAttribute("memberList", memberList);
+		
+		String pageBar = "<ul>";
+		pageBar += MyUtil.getPageBarWithSearch(sizePerPage, blockSize, totalPage, currentPageNo, colname, searchWord, null, "memberList.ana")
+				+"</ul>";
 
 		return "member/memberList.tiles1";
 	}// end of list
@@ -138,4 +178,27 @@ public class JGHController {
 
 		return "msg";
 	}// end of updateDeleteMember
+
+	@RequestMapping(value = "recover.ana", method = {RequestMethod.POST})
+	public String updateRecoverMember(HttpServletRequest request, HttpServletResponse response) {
+		String[] idxArray = request.getParameterValues("idx");
+
+		int row = service.recoverMember(idxArray);
+
+		String msg = "";
+		String loc = "";
+		if(row != 1) {
+			msg = "회원복구 일괄처리에 실패하였습니다.";
+			loc = "javascript:history.back();";
+		} else {
+			msg = "회원복구 일괄처리가 성공하였습니다.";
+			loc = "memberList.ana";
+		}// end of if~else
+
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+
+		return "msg";
+	}// end of updateRecoverMember
+
 }

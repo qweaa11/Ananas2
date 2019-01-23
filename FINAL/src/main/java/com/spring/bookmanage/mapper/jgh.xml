@@ -31,7 +31,7 @@
 	
 	<!-- 선택한 회원목록에 따른 계정 활성화(휴면해제) -->
 	<update id="unlockAllByStatus" parameterType="String">
-		update member set status = 0
+		update member set status = 0, lastDate = SYSDATE
 		where idx = #{idx}
 	</update>
 	
@@ -46,4 +46,26 @@
 		update member set status = 3
 		where idx = #{idx}
 	</update>
+	
+	<!-- 선택한 회원목록에 따른 계정 복원 -->
+	<update id="recoverAllByStatus" parameterType="String">
+		update member set status = 0, lastDate = SYSDATE
+		where idx = #{idx}
+		and status in(2,3)
+	</update>
+	
+	<!-- 검색설정에 따른 회원수 조회 -->
+	<select id="countAllMemberWithSearchMap" parameterType="HashMap" resultType="Integer">
+		select count(*)
+		from member
+		where ${colname} like '%'||#{searchWord}||'%'
+		order by idx desc
+	</select>
+	
+	<!-- 검색없이 회원수 조회(전체 회원수 조회) -->
+	<select id="countAllMember" resultType="Integer">
+		select count(*)
+		from member
+	</select>
+
 </mapper>

@@ -1,17 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <style>
-	table, th, td, input, textarea {border: solid gray 1px;}
-   
-   #table {border-collapse: collapse;
-          width: 1000px;
-          }
-   #table th, #table td{padding: 5px;}
-   #table th{width: 120px; background-color: #DDDDDD;}
-   #table td{width: 860px;}
+	
    .long {width: 470px;}
-   .short {width: 120px;}       
+   .short {width: 120px;}     
+   
+   a:hover { 
+  			cursor: pointer;
+			}
+  
 </style>    
 
 <script>
@@ -34,7 +38,7 @@
 			count = 0;
 			
 			var searchWord = $("#searchWord").val();	// 검색어를 searchWord변수에 넣는다.
-			console.log("검색어: "+searchWord);
+			
 			
 			searchPublisher(1, 1000, searchWord );
 			
@@ -52,9 +56,7 @@
 	function searchPublisher(startNo, endNo, searchWord)
 	{	// 담아온 publisher를 부모페이지에 넘기는 함수
 		
-		console.log("startNo: "+ startNo);
-		console.log("검색어확인용: "+searchWord);
-		
+	
 		
 		
 		$.ajax({
@@ -65,7 +67,7 @@
 			success:function(XML){
 				
 				var size = 0;
-				console.log("검색어확인용2: "+searchWord);
+				
 				
 				$(XML).find('row').each(function(){
 					
@@ -143,17 +145,16 @@
 	function sendBack(COMPANY, ADDR, TEL, REG_NUM)
 	{	// 담아온 publisher를 부모페이지에 넘기는 함수
 		
+		if(TEL == null)
+			TEL == " ";
 		
-		$(opener.document).find("#publisher").val(COMPANY);
+		$(opener.document).find("#pubName").val(COMPANY);
 		// 부모페이지에서 id값이 publisher인 것을 찾아 publisher값을 넘긴다.
 		
 		$(opener.document).find("#addr").val(ADDR);
 		$(opener.document).find("#tel").val(TEL);
-		$(opener.document).find("#reg_num").val(REG_NUM);
+		$(opener.document).find("#pubCode_fk").val(REG_NUM);
 		// 부모페이지에서 id값이 publisher인 것을 찾아 publisher값을 넘긴다.
-		
-		alert("ADDR: "+ ADDR);
-		
 		
 		
 		
@@ -189,11 +190,11 @@
 					var REG_NUM = $(this).find('REG_NUM').text();
 					
 					resultHTML += "<tr>" +
-									  "<td>"+cnt+"</td>"+
+									  "<td style='text-align: center;'>"+cnt+"</td>"+
 									  "<td><a onClick='sendBack(\""+COMPANY+"\",\""+ADDR+"\",\""+TEL+"\",\""+REG_NUM+"\");'>"+COMPANY+"</a></td>"+
 					  				   				  // sendBack()함수에 출판사 이름을 담아 넘김
 									  "<td>"+ADDR+"</td>"+
-									  "<td>"+TEL+"</td>"+
+									  "<td style='text-align: center;'>"+TEL+"</td>"+
 									  "<td style='text-align: center;'>"+BIZ_GUBUN+"</td>"+
 								  "</tr>" ;
 					 
@@ -216,7 +217,7 @@
 				
 				
 			 	count++;
-			 	console.log("count: "+count);
+			 	
 				if(size % 1000 == 0){
 					showPublisher(1000*count+1, 1000*count+1000);
 				}
@@ -247,7 +248,7 @@
 	</div>
 
 	<div>
-		<table id="table">
+		<table id="table" class="table table-hover">
 			<thead>
 				<tr>
 					<th style="width: 5%; text-align: center;">No</th>

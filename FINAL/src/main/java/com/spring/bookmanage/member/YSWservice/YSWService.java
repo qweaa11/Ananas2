@@ -10,6 +10,7 @@ import com.spring.bookmanage.library.Yjkmodel.YjkVO;
 import com.spring.bookmanage.member.YSWmodel.InterYSWDAO;
 import com.spring.bookmanage.member.YSWmodel.YSWLibrarianVO;
 import com.spring.bookmanage.member.YSWmodel.YSWMemberVO;
+import com.spring.bookmanage.rental.YSWmodel.YSWRentalVO;
 
 @Service
 public class YSWService implements InterYSWService {
@@ -88,5 +89,8 @@ public class YSWService implements InterYSWService {
 		int result = dao.deleteLibrarian(lIBRARIANIDX);
 		return result;
 	}
+
+
+
 
 }
