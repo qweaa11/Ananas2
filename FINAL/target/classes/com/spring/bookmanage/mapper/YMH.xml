@@ -65,18 +65,16 @@
 	<!-- returned, book, member 테이블을 조인해서 반납목록에 필요한 정보 얻어오기 -->
 	<select id="listReturned" parameterType="HashMap" resultType="com.spring.bookmanage.returned.YMHmodel.ReturnedVO">
 	
-		select idx, memberid, name, phone, bookid, title, author, agecode, returndate, rentaldate
-		from
+		select idx, memberid, name, phone, title, author, returndate, rentaldate
+		from 
 		(
-		select rownum as RNO, b.idx as idx, memberid, name, phone, bookid, title, author, agecode, to_char(returndate,'yyyy-mm-dd') as returndate, to_char(rentaldate,'yyyy-mm-dd') as rentaldate
-		from member a join (
-		                    select b.idx as idx, bookid, title, author, agecode, returndate, rentaldate, memberid_fk
-		                    from book A join returned B
-		                    on a.bookid = b.bookid_fk
-		                    ) b
-		on a.memberid = b.memberid_fk
-		) T 
+			select row_number() over(order by ${SORT}) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			from book A join returned B
+			on a.bookid = b.bookid_fk
+			join member C on c.memberid = b.memberid_fk
+			) T
 		where RNO between #{RNO1} and #{RNO2}
+		
 		
 		
 	</select>
@@ -91,21 +89,18 @@
 	<!-- returned, book, member 테이블을 조인해서 반납목록에 필요한 정보 얻어오기 -->
 	<select id="listReturnedWithSearch" parameterType="HashMap" resultType="com.spring.bookmanage.returned.YMHmodel.ReturnedVO">
 	
-		select idx, memberid, name, phone, bookid, title, author, agecode, returndate, rentaldate
-		from
+		select idx, memberid, name, phone, title, author, returndate, rentaldate
+		from 
 		(
-		select rownum as RNO, b.idx as idx, memberid, name, phone, bookid, title, author, agecode, to_char(returndate,'yyyy-mm-dd') as returndate, to_char(rentaldate,'yyyy-mm-dd') as rentaldate
-		from member a join (
-		                    select b.idx as idx, bookid, title, author, agecode, returndate, rentaldate, memberid_fk
-		                    from book A join returned B
-		                    on a.bookid = b.bookid_fk
-		                    
-		                    ) b
-		on a.memberid = b.memberid_fk
-		where upper(${COLNAME}) like upper('%'|| #{SEARCH} ||'%')
-		) T 
+			select row_number() over(order by ${SORT}) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			from book A join returned B
+			on a.bookid = b.bookid_fk
+			join member C on c.memberid = b.memberid_fk
+			where upper(${COLNAME}) like upper('%'|| #{SEARCH} ||'%')
+			) T
 		where RNO between #{RNO1} and #{RNO2}
-		
+	
+	
 		
 		
 	</select>
@@ -113,13 +108,9 @@
 	<!-- returned 테이블의 총 갯수 구해오기 -->
 	<select id="getReturnedTotalCountWithSearch" resultType="int" parameterType="HashMap">
 		select count(*)
-		from member a join (
-		                    select b.idx as idx, bookid, title, author, agecode, returndate, rentaldate, memberid_fk
-		                    from book A join returned B
-		                    on a.bookid = b.bookid_fk
-		                    
-		                    ) b
-		on a.memberid = b.memberid_fk
+		from book A join returned B
+		on a.bookid = b.bookid_fk
+		join member C on c.memberid = b.memberid_fk
 		where upper(${COLNAME}) like upper('%'|| #{SEARCH} ||'%')
 	</select>
 	

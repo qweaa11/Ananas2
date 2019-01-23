@@ -52,6 +52,9 @@ public class YMHReturnedController
 		List<HashMap<String, Object>> mapList = new ArrayList<HashMap<String,Object>>();
 		
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
+		String sort = request.getParameter("sort");
+		
+		System.out.println("확인용: "+sort);
 		
 		if(currentShowPageNo == null || "".equals(currentShowPageNo))
 		{
@@ -65,6 +68,8 @@ public class YMHReturnedController
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		paraMap.put("RNO1", String.valueOf(rno1));
 		paraMap.put("RNO2", String.valueOf(rno2));
+		paraMap.put("SORT", String.valueOf(sort));
+		
 		
 		List<ReturnedVO> returnedList = service.listReturned(paraMap); 
 		
@@ -126,6 +131,7 @@ public class YMHReturnedController
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		String colname = request.getParameter("COLNAME");
 		String search = request.getParameter("SEARCH");
+		String sort = request.getParameter("SORT");
 		
 		if(currentShowPageNo == null || "".equals(currentShowPageNo))
 		{
@@ -142,9 +148,12 @@ public class YMHReturnedController
 		paraMap.put("SEARCH", search);
 		paraMap.put("RNO1", String.valueOf(rno1));
 		paraMap.put("RNO2", String.valueOf(rno2));
+		paraMap.put("SORT", sort);
 		
-		System.out.println("검색 COLNAME: "+colname);
-		System.out.println("검색 SEARCH: "+search);
+		System.out.println("검색시작1");
+		System.out.println("SORT: "+sort);
+		System.out.println("SORT: "+search);
+		System.out.println("SORT: "+colname);
 		
 		List<ReturnedVO> returnedList = service.listReturnedWithSearch(paraMap);
 		

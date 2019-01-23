@@ -6,7 +6,36 @@
 	$(document).ready(function()
 	{
 		searchKeep();
-		showReturned("1");
+		showReturned("1","idx");
+		
+		var sort = $("#sortname").val();
+		console.log("sort: "+sort);
+		
+		$("#search").keydown(function(event){
+			if(event.keyCode== 13)
+			{
+				goSearch("1");
+			}
+		});
+		
+	
+		
+		$("#sortname").click(function(){
+			if($("#search").val() == "")
+			{// 검색어가 없는경우
+				showReturned("1", sort);
+			}
+			else
+			{// 검색어가 있는경우
+				goSearch("1", sort);
+			}
+		});
+		
+		
+		
+		
+		
+		
 		
 	
 		
@@ -14,9 +43,13 @@
 	
 	
 	
-	function showReturned(currentShowPageNo)
+	function showReturned(currentShowPageNo, sort)
 	{
-		var form_data = {"currentShowPageNo":currentShowPageNo}
+		var sort = $("#sortname").val();
+		console.log("확인용"+sort);
+		
+		var form_data = {"currentShowPageNo":currentShowPageNo,
+						 "sort": sort }
 		
 		$.ajax({
 			url:"<%=request.getContextPath() %>/showReturned.ana",
@@ -37,6 +70,8 @@
 							   "<td style='text-align:center;'>"+entry.rentalDate+"</td>"+
 							   "<td style='text-align:center;'>"+entry.returnDate+"</td>"+
 						   "</tr>";
+						   
+						   
 				});
 				
 				$("#returnedBookDisplay").empty().html(html); 
@@ -106,16 +141,16 @@
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	
-	function goSearch(currentShowPageNo)
+	function goSearch(currentShowPageNo,sort)
 	{
+		var sort = $("#sortname").val();
+		
 		var colname = $("#colname").val();
 		var search = $("#search").val();
 		var form_data = {"currentShowPageNo":currentShowPageNo,
 						 "COLNAME": colname,
-						 "SEARCH": search }
-		
-		console.log("colname: "+ colname);
-		console.log("search: "+ search);
+						 "SEARCH": search,
+						 "SORT":sort}
 		
 		$.ajax({
 			url:"<%=request.getContextPath() %>/showReturnedSearch.ana",
@@ -253,17 +288,19 @@
 		<div class="panel panel-default list-group-panel" style="max-width: 100%; max-height: 90%; overflow: auto;">
         	<div class="panel-body" style="overflow: auto; min-width: 600px;">
         		<div>
-        			<form name="searchFrm" >
+        			<form name="searchFrm" onsubmit="return false">
         				<select name="colname" id="colname" style="height: 26px;">
         					<option value="memberid">회원ID</option>
         					<option value="title">도서명</option>
         					<option value="author">작가명</option>
         				</select>
         				<input type="text" name="search" id="search" size="40" />
+        				<input type="hidden" name="test"></input>
         				<button type="button" onClick="goSearch('1');">검색</button>
+        				
         				정렬:
-        				<select name="colname" id="colname" style="height: 26px; margin-right: 70px;">
-        					<option value="memberid">반납번호</option>
+        				<select name="sortname" id="sortname" style="height: 26px; margin-right: 70px;">
+        					<option value="b.idx">반납번호</option>
         					<option value="memberid">회원ID</option>
         					<option value="title">도서명</option>
         					<option value="author">작가명</option>

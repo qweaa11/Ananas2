@@ -51,7 +51,9 @@ public class YMHReturnedService implements InterYMHReturnedService
 	 * @return List<ReturnedVO>
 	 */
 	@Override
-	public List<ReturnedVO> listReturnedWithSearch(HashMap<String, String> paraMap) {
+	public List<ReturnedVO> listReturnedWithSearch(HashMap<String, String> paraMap) 
+	{
+		System.out.println("검색시작2");
 		List<ReturnedVO> returnedList = dao.listReturnedWithSearch(paraMap);
 		return returnedList;
 	}

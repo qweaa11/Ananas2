@@ -16,6 +16,8 @@ public class YMHReturnedDAO implements InterYMHReturnedDAO
 	@Override
 	public List<ReturnedVO> listReturned(HashMap<String, String> paraMap) {
 		List<ReturnedVO> returnedList =  sqlsession.selectList("YMH.listReturned",paraMap);
+		String sort = paraMap.get("SORT");
+		System.out.println("마지막확인: "+sort);
 		return returnedList;
 	}
 
@@ -43,7 +45,12 @@ public class YMHReturnedDAO implements InterYMHReturnedDAO
 	 */
 	@Override
 	public List<ReturnedVO> listReturnedWithSearch(HashMap<String, String> paraMap) {
+		System.out.println("검색시작3");
 		List<ReturnedVO> returnedList =  sqlsession.selectList("YMH.listReturnedWithSearch",paraMap);
+		
+		String sort = paraMap.get("SORT");
+		System.out.println("마지막확인: "+sort);
+				
 		return returnedList;
 	}
 
