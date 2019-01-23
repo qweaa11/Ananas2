@@ -111,24 +111,24 @@
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a style='color:white;' href='javascript:showReturned(\""+(pageNo-1)+"\");'>[이전]</a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><a style='color:white;' href='javascript:showReturned(\""+(pageNo-1)+"\");'><</a></button>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
 						if(pageNo == currentShowPageNo)
 						{
-							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><span style='color:#ff9999; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span></button>&nbsp;";
+							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><span style='color:#ff9999; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span></button>&nbsp;";
 						}
 						else
 						{
-							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a style='color:white;' href='javascript:showReturned(\""+pageNo+"\");'>"+pageNo+"</a></button>&nbsp;";
+							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><a style='color:white;' href='javascript:showReturned(\""+pageNo+"\");'>"+pageNo+"</a></button>&nbsp;";
 						}
 						loop++;
 						pageNo++;
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a style='color:white;' href='javascript:showReturned(\""+(pageNo)+"\");'>[다음]</a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><a style='color:white;' href='javascript:showReturned(\""+(pageNo)+"\");'>></a></button>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
@@ -214,7 +214,7 @@
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo-1)+"\");'>[이전]</a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo-1)+"\");'><</a></button>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
@@ -231,7 +231,7 @@
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo)+"\");'>[다음]</a></button>&nbsp;";
+						pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><a href='javascript:goSearch(\""+(pageNo)+"\");'>></a></button>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
@@ -292,20 +292,21 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="panel panel-default list-group-panel" style="max-width: 100%; max-height: 90%; overflow: auto;">
-        	<div class="panel-body" style="overflow: auto; min-width: 600px;">
-        		<div>
+        	<div class="panel-body" style="overflow: auto; min-width: 600px; ">
+        		<div style="height: 30px; margin-bottom: 3%;" >
         			<form name="searchFrm" onsubmit="return false">
-        				<select name="colname" id="colname" style="height: 26px;">
+        				<select name="colname" id="colname" style="height: 30px; margin-top: 1px;">
         					<option value="memberid">회원ID</option>
         					<option value="title">도서명</option>
         					<option value="author">작가명</option>
-        				</select>
-        				<input type="text" name="search" id="search" size="40" />
+        				</select>&nbsp;&nbsp;&nbsp;
+        				<input type="text" name="search" id="search" size="40" style="height:30px;" placeholder="검색어를 입력하세요" />
         				<input type="hidden" name="test"></input>
-        				<button type="button" onClick="goSearch('1');">검색</button>
-        				
-        				정렬:
-        				<select name="sortname" id="sortname" style="height: 26px; margin-right: 70px;">
+        				<button type="button" class="search" onClick="goSearch('1');" style="height:30px;">
+							<i class="fa fa-search"></i>
+						</button>
+        				&nbsp;&nbsp;&nbsp;&nbsp;정렬:&nbsp;
+        				<select name="sortname" id="sortname" style="height: 30px; margin-right: 70px; margin-top: 1px;">
         					<option value="b.idx">반납번호</option>
         					<option value="memberid">회원ID</option>
         					<option value="title">도서명</option>

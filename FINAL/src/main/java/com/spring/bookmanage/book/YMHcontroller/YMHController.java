@@ -151,29 +151,25 @@ public class YMHController
 			// 출판사 등록후 book테이블에 등록
 			bookvo.setBookCount(i);
 			
-			
-			
-			
 			System.out.println("도서 등록 시작");
 			p = service.addOneBook(bookvo);
 			System.out.println("도서 등록 완료: " + p);
-			
 			
 			//  book테이블에 등록후 book_Detail 테이블에 등록
 			System.out.println("도서상세 등록 시작");
 			q = service.addOneBook_detail(bookvo);
 			System.out.println("도서상세 등록 완료: " + q);
 			
-			
 		}
 		
 		
 		
-		
+		int result=p*q;
 		String loc = "";
-		if(p*q > 1) 
+		if(p*q >= 1) 
 		{	// 등록에 성공하면
 			loc = request.getContextPath()+"/bookList.ana";
+			
 		}
 		else
 		{	// 등록에 실패한다면
@@ -181,7 +177,7 @@ public class YMHController
 		}
 		
 		request.setAttribute("loc", loc);
-		request.setAttribute("n", n);
+		request.setAttribute("result", result);
 
 		
 		return "book/bookRegisterEnd.tiles1";
