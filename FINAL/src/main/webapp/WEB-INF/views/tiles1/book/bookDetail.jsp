@@ -18,7 +18,7 @@ th, td {
 .table-hover tbody tr:hover td{
 	background-color: #e6e6e6;
 	border-left-color: #cccccc;
-	border-right-color:#cccccc;   
+	border-right-color: #cccccc;   
 }
 /* Tooltip */
   .btnToggle + .tooltip > .tooltip-inner {
@@ -270,15 +270,37 @@ function closeAllEditForm() {
 										</tr>
 										<tr>
 											<th>언어</th>
-											<td><input/></td>
+											<td><select>
+												<c:forEach var="language" items="${languageList }">
+													<option value="${language.LCODE }">${language.LNAME }</option>
+												</c:forEach>
+												</select>
+											</td>
 										</tr>
 										<tr>
 											<th>자료유형</th>
-											<td><input/></td>
+											<td>
+												<select>
+												<c:forEach var="category" items="${categoryList }">
+													<option value="${category.CCODE }">${category.CNAME }</option>
+												</c:forEach>
+												</select>
+											</td>
 										</tr>
 										<tr>
 											<th>장르</th>
-											<td><input/></td>
+											<td>
+												<select>
+												<c:forEach var="field" items="${fieldList }">
+													<option value="${field.FCODE }">${field.FNAME }</option>
+												</c:forEach>
+												</select>
+												<select>
+												<c:forEach var="genre" items="${genreList }">
+													<option value="${genre.GCODE }">${genre.GNAME }</option>
+												</c:forEach>
+												</select>
+											</td>
 										</tr>
 										<tr>
 											<th>이미지 변경</th>

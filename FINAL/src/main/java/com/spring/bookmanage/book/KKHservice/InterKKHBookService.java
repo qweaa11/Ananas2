@@ -23,4 +23,12 @@ public interface InterKKHBookService {
 
 	List<HashMap<String, String>> findAllField();
 
+	List<HashMap<String, String>> findcategory();
+
+	List<HashMap<String, String>> findlanguage();
+
+	List<HashMap<String, String>> findgenre();
+
+	List<HashMap<String, String>> findfield();
+
 }

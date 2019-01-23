@@ -156,7 +156,32 @@
 		from book B join reservation R on B.bookid = R.bookid_fk
 		join member M on R.memberid_fk = M.memberid join book_detail D on B.bookid = D.bookid
 		where substr(R.bookid_fk,1, instr(R.bookid_fk,'-',1,2)-1 ) = #{bookid}
-		order by to_number(substr(R.bookid,instr(R..bookid,'-',1,2))) desc
+		order by to_number(substr(R.bookid_fk,instr(R.bookid_fk,'-',1,2))) desc
 	</select>
-
+	
+	
+	<select id="findCategory" resultMap="category">
+		select ccode,cname
+		from category
+	</select>
+	
+	<select id="findLanguage" resultMap="language">
+		select lcode, lname
+		from language
+	</select>
+	
+	<resultMap type="HashMap" id="genre">
+		<result property="GCODE" column="gcode"/>
+		<result property="GNAME" column="gname"/>
+	</resultMap>
+	<select id="findGenre" resultMap="genre">
+		select gcode,gname
+		from genre
+	</select>
+	
+	<select id="findField" resultMap="field">
+		select fcode,fname
+		from field
+		where fcode in ('000','100','200','300','400','500','600','700','800','900')
+	</select>
 </mapper>

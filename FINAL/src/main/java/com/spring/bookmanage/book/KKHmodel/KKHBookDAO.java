@@ -38,8 +38,6 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		return fieldList;
 	}
 	
-	
-
 	@Override
 	public List<KKHBookVO> findBookBysidebar(HashMap<String, Object> parameterMap) {
 		//System.out.println("library=>"+parameterMap.get("LIBRARY")+",  language=>"+parameterMap.get("LANGUAGE")+",  category=>"+parameterMap.get("CATEGORY")+",  field=>"+parameterMap.get("FIELD"));
@@ -67,6 +65,26 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	public List<HashMap<String,String>> findBookReservateList(String bookid) {
 		List<HashMap<String,String>> bookReservateList =  sqlsession.selectList("KKH.findBookReservation",bookid);
 		return bookReservateList;
+	}
+	@Override
+	public List<HashMap<String, String>> findcategory() {
+		List<HashMap<String,String>> categoryList = sqlsession.selectList("KKH.findCategory");
+		return categoryList;
+	}
+	@Override
+	public List<HashMap<String, String>> findlanguage() {
+		List<HashMap<String,String>> languageList = sqlsession.selectList("KKH.findLanguage");
+		return languageList;
+	}
+	@Override
+	public List<HashMap<String, String>> findgenre() {
+		List<HashMap<String,String>> genreList = sqlsession.selectList("KKH.findGenre");
+		return genreList;
+	}
+	@Override
+	public List<HashMap<String, String>> findfield() {
+		List<HashMap<String,String>> fieldList = sqlsession.selectList("KKH.findField");
+		return fieldList;
 	}
 
 	

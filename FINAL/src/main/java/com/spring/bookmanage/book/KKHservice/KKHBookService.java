@@ -60,6 +60,26 @@ public class KKHBookService implements InterKKHBookService{
 		List<HashMap<String,String>> bookReservateList = bookdao.findBookReservateList(bookid);
 		return bookReservateList;
 	}
+	@Override
+	public List<HashMap<String, String>> findcategory() {
+		List<HashMap<String,String>> categoryList = bookdao.findcategory();
+		return categoryList;
+	}
+	@Override
+	public List<HashMap<String, String>> findlanguage() {
+		List<HashMap<String,String>> languageList = bookdao.findlanguage();
+		return languageList;
+	}
+	@Override
+	public List<HashMap<String, String>> findgenre() {
+		List<HashMap<String,String>> genreList = bookdao.findgenre();
+		return genreList;
+	}
+	@Override
+	public List<HashMap<String, String>> findfield() {
+		List<HashMap<String,String>> fieldList = bookdao.findfield();
+		return fieldList;
+	}
 	
 
 	
