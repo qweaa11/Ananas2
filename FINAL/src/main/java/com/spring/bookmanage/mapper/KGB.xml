@@ -44,10 +44,17 @@
 	<select id="findAllRentalByMemberid" parameterType="String" resultType="int">
 	
 		select count(*)
-		from rental R join book B
-		on R.bookid_fk = B.bookid
-		where status = 1
-		and memberid_fk = #{memberid}
+		from
+		(
+		    select bookid_fk, memberid_fk
+		    from rental R join book B
+		    on R.bookid_fk = B.bookid
+		    where status = 1
+		    UNION
+		    select bookid_fk, memberid_fk
+		    from reservation
+		) 
+		where memberid_fk = #{memberid}
 		
 	</select>
 	
@@ -82,6 +89,16 @@
 		delete reservation
 		where bookid_fk = #{reservebookid}
 	</delete>
+	
+	<!-- 대여 한 책 중 연체된 책이 있을 경우 대여 불가 해주는 메소드 -->
+	<select id="findAllOverdateByMeberid" parameterType="String" resultType="int">
+	
+		select count(*)
+		from rental
+		where trunc(deadline) <![CDATA[<]]> sysdate
+		and memberid_fk = #{memberid}
+	
+	</select>
 	
 	
 	<resultMap type="HashMap" id="rental">
@@ -167,5 +184,11 @@
 		where bookid_fk = #{bookid}
 	
 	</update>
+	
+	
+	<insert id="insertReserveByRentalInfo" parameterType="HashMap">
+		insert into reservation(idx, bookid_fk, memberid_fk, reservedate)
+		values(reserve_seq.nextval, #{BOOKID}, #{MEMBERID}, to_date(#{RESERVEDATE}))
+	</insert>
 
 </mapper>
