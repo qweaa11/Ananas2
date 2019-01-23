@@ -5,8 +5,9 @@ public class YSWRentalVO {
 	private String idx;
 	private String bookid;
 	private String memberid;
-	private String retalDate;
+	private String rentalDate;
     private String deadline;
+    private String delayDate;
     private String renew;
     private String bookTitle;
     private String pubname;
@@ -19,14 +20,15 @@ public class YSWRentalVO {
     
     
     
-	public YSWRentalVO(String idx, String bookid, String memberid, String retalDate, String deadline, String renew,
+	public YSWRentalVO(String idx, String bookid, String memberid, String rentalDate, String deadline, String delayDate, String renew,
 			String bookTitle, String pubname, String bookAuthor, String memberName) {
 		
 		this.idx = idx;
 		this.bookid = bookid;
 		this.memberid = memberid;
-		this.retalDate = retalDate;
+		this.rentalDate = rentalDate;
 		this.deadline = deadline;
+		this.delayDate = delayDate;
 		this.renew = renew;
 		this.bookTitle = bookTitle;
 		this.pubname = pubname;
@@ -34,14 +36,11 @@ public class YSWRentalVO {
 		this.memberName = memberName;
 	}
 
-
 	
 	
-
 	public String getIdx() {
 		return idx;
 	}
-
 
 
 	public void setIdx(String idx) {
@@ -49,11 +48,9 @@ public class YSWRentalVO {
 	}
 
 
-
 	public String getBookid() {
 		return bookid;
 	}
-
 
 
 	public void setBookid(String bookid) {
@@ -61,11 +58,9 @@ public class YSWRentalVO {
 	}
 
 
-
 	public String getMemberid() {
 		return memberid;
 	}
-
 
 
 	public void setMemberid(String memberid) {
@@ -73,29 +68,34 @@ public class YSWRentalVO {
 	}
 
 
-
-	public String getRetalDate() {
-		return retalDate;
+	public String getRentalDate() {
+		return rentalDate;
 	}
 
 
-
-	public void setRetalDate(String retalDate) {
-		this.retalDate = retalDate;
+	public void setRentalDate(String rentalDate) {
+		this.rentalDate = rentalDate;
 	}
-
 
 
 	public String getDeadline() {
 		return deadline;
 	}
-
-
+	
 
 	public void setDeadline(String deadline) {
 		this.deadline = deadline;
 	}
 
+
+	public String getDelayDate() {
+		return delayDate;
+	}
+
+
+	public void setDelayDate(String delayDate) {
+		this.delayDate = delayDate;
+	}
 
 
 	public String getRenew() {
@@ -103,11 +103,9 @@ public class YSWRentalVO {
 	}
 
 
-
 	public void setRenew(String renew) {
 		this.renew = renew;
 	}
-
 
 
 	public String getBookTitle() {
@@ -115,17 +113,14 @@ public class YSWRentalVO {
 	}
 
 
-
 	public void setBookTitle(String bookTitle) {
 		this.bookTitle = bookTitle;
 	}
 	
 
-
 	public String getPubname() {
 		return pubname;
 	}
-
 
 
 	public void setPubname(String pubname) {
@@ -133,11 +128,9 @@ public class YSWRentalVO {
 	}
 
 
-
 	public String getBookAuthor() {
 		return bookAuthor;
 	}
-
 
 
 	public void setBookAuthor(String bookAuthor) {
@@ -145,17 +138,14 @@ public class YSWRentalVO {
 	}
 
 
-
 	public String getMemberName() {
 		return memberName;
 	}
-
-
+	
 
 	public void setMemberName(String memberName) {
 		this.memberName = memberName;
 	}
-    
 
 
 }

@@ -48,7 +48,7 @@
 		from
 		(
 		    select rownum as RNO, A.idx as librarianIDX, libid, pwd, libcode_fk, A.name as librarianName, A.tel as librarianTel, status, imgfilename
-		                  ,libName, B.tel as libTel, addr
+		                  ,libName, B.tel as libTel, addr1||addr2||post as addr
 		    from librarian A JOIN library B
 		    ON A.libcode_fk = B.libcode
 		    where ${sort} like '%'||#{searchWord}||'%'
@@ -67,7 +67,7 @@
 		from
 		(
 		    select rownum as RNO, A.idx as librarianIDX, libid, pwd, libcode_fk, A.name as librarianName, A.tel as librarianTel, status, imgfilename
-		                  ,libName, B.tel as libTel, addr
+		                  ,libName, B.tel as libTel, addr1||addr2||post as addr
 		    from librarian A JOIN library B
 		    ON A.libcode_fk = B.libcode
 		    order by A.idx
@@ -123,16 +123,68 @@
 	<!-- 대출 목록 페이지 보여주기 -->
 	<select id="findRentalList" resultType="com.spring.bookmanage.rental.YSWmodel.YSWRentalVO">
 	
-		select a.idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as retalDate
-				     ,to_char(a.deadline,'yyyy-mm-dd') as deadline, a.renew as renew, b.title as bookTitle, D.pubname as pubname
-				     ,b.author as bookAuthor, c.name as memberName
-				from rental A JOIN book B
-				on A.bookid_fk = B.bookid
-				LEFT JOIN member C
-				on A.memberid_fk = C.memberid
-				LEFT JOIN PUBLISHER D
-				on B.pubcode_fk = D.pubcode
+		select a.idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as rentalDate
+		      ,to_date(sysdate, 'yyyy-mm-dd') - to_date(deadline, 'yyyy-mm-dd') as delayDate
+		      ,to_char(a.deadline,'yyyy-mm-dd') as deadline, a.renew as renew, b.title as bookTitle, D.pubname as pubname
+		      ,b.author as bookAuthor, c.name as memberName
+		from rental A JOIN book B
+		on A.bookid_fk = B.bookid
+		LEFT JOIN member C
+		on A.memberid_fk = C.memberid
+		LEFT JOIN PUBLISHER D
+		on B.pubcode_fk = D.pubcode
 	
 	</select>
+	
+	
+	<!-- 책 반납 -->
+	<insert id="returnBook" parameterType="HashMap">
+	
+		insert into returned(idx, memberid_fk, bookid_fk, returndate, rentaldate)
+		values(returned_seq.nextval, #{memberidList}, #{bookList}, default, #{rentaldateList})
+
+	</insert>
+	
+	
+	<!-- 도서 상태 변경 -->
+	<update id="changeBookStat" parameterType="HashMap">
+	
+		update book set status = 0
+		where bookid = #{bookList}
+	
+	</update>
+	
+	
+	<!-- 책 반납 연체시 회원상태 변경 -->
+	<update id="changeMemberStat" parameterType="HashMap">
+	
+		update member set revokedate = revokedate + #{delayDate}
+						 ,latefee = latefee + #{delayfee}
+						 ,status = 2
+		where memberid = #{memberidList}
+	
+	</update>
+	
+	
+	<!-- 대여 리스트에서 삭제 -->
+	<delete id="deleteBook" parameterType="HashMap">
+	
+		delete from rental
+		where idx = #{idxList}
+	</delete>
+	
+	
+	<!-- 책 대여기간 연장 -->
+	<update id="extendBook" parameterType="HashMap">
+	
+		update rental set renew = 1
+						 ,deadline = deadline+7
+		where  renew = 0 and
+			   idx IN
+		<foreach collection="IDXLIST" index="i" open="(" separator="," close=")">
+				${IDXLIST[i]}
+		</foreach>
+	
+	</update>
 
 </mapper>
