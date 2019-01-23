@@ -77,4 +77,47 @@ public class JGHService {
 
 		return row;
 	}// end of removeMember
+
+	/**
+	 * 회원 복구처리
+	 * @param idxArray
+	 * @return
+	 */
+	public int recoverMember(String[] idxArray) {
+		int row = mapper.recoverAllByStatus(idxArray);
+
+		return row;
+	}// end of recoverMember
+
+	/**
+	 * 검색설정에 따른 회원수 불러오기
+	 * @param parameterMap
+	 * @return
+	 */
+	public int countMemberWithSearchOption(HashMap<String, String> parameterMap) {
+		int count = mapper.countAllMemberWithSearchMap(parameterMap);
+
+		return count;
+	}// end of countMemberListWithSearchWord
+
+	/**
+	 * 검색없이 회원수 불러오기(전체회원수)
+	 * @return
+	 */
+	public int countMemberWithOutSearchOption() {
+		int count = mapper.countAllMember();
+
+		return count;
+	}// end of countMemberWithOutSearchOption
+
+	/**
+	 * 검색한 따른 회원목록 불러오기(페이지네이션 구현)
+	 * @param parameterMap
+	 * @return
+	 */
+	public List<MemberVO> listServiceWithPagination(HashMap<String, String> parameterMap) {
+		List<MemberVO> memberList = mapper.findAllMemberWithPagination(parameterMap);
+
+		return memberList;
+	}// end of listServiceWithPagination
 }

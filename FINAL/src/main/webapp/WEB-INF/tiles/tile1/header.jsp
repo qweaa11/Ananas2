@@ -87,8 +87,8 @@
 						<img src="resources/img/home-logo/home-logo4-mini.png">
 						<span style="margin-left: 10px;">대출/예약/반납</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
-							<li><a href="#">대출/반납</a></li>
-							<li><a href="#">예약</a></li> 
+							<li><a href="r3.ana">대출/반납/예약</a></li>
+							<li><a href="bookReturned.ana">반납목록</a></li>
 						</ul>
 					</li>
 					<li class="dropdown" style="margin-left: 15px;"> 

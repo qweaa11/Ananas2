@@ -23,7 +23,7 @@ public class KKHBookVO {
 	private String libname;	// 도서관 코드 이름
 	private String pubcode_fk;
 	private String pubname;	// 출판사 코드 이름
-	private String ISBN;	// 도서별 ISBN 값
+	private String isbn;	// 도서별 ISBN 값
 	private String intro;	// book_detail 테이블의 책소개 글
 	private String image;	// book_detail 테이블의 책 이미지 값
 	private String price;	// 책가격
@@ -35,7 +35,7 @@ public class KKHBookVO {
 	public KKHBookVO() {}
 	
 	public KKHBookVO(String bookid, int idx, String title, String author, int status, int agecode, String gname,
-			String nname, String lname, String fname, String cname, String libname, String pubname, String iSBN,
+			String nname, String lname, String fname, String cname, String libname, String pubname, String isbn,
 			String intro, String image, String price, String weight, String totalpage, String pdate, String regdate) {
 		this.bookid = bookid;
 		this.idx = idx;
@@ -50,7 +50,7 @@ public class KKHBookVO {
 		this.cname = cname;
 		this.libname = libname;
 		this.pubname = pubname;
-		ISBN = iSBN;
+		this.isbn = isbn;
 		this.intro = intro;
 		this.image = image;
 		this.price = price;
@@ -61,6 +61,14 @@ public class KKHBookVO {
 	}
 	
 	
+	public String getIsbn() {
+		return isbn;
+	}
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+
 	public int getCount() {
 		return count;
 	}
@@ -203,12 +211,7 @@ public class KKHBookVO {
 	public void setPubname(String pubname) {
 		this.pubname = pubname;
 	}
-	public String getISBN() {
-		return ISBN;
-	}
-	public void setISBN(String iSBN) {
-		ISBN = iSBN;
-	}
+	
 	public String getIntro() {
 		return intro;
 	}

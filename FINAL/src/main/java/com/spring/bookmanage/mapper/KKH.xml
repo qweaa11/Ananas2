@@ -3,6 +3,71 @@
 
 <mapper namespace="KKH">
 
+	
+	<resultMap type="HashMap" id="library">
+		<result property="LIBCODE" column="libcode" />
+		<result property="LIBNAME" column="libname" />
+		<result property="COUNT" column="count" />
+	</resultMap>
+	<select id="findAllLibrary" resultMap="library">
+		select libcode, libname, nvl(count,0) as count 
+		from library L left join (
+		
+		select  libcode_fk,count(*) as count
+		from book
+		group by libcode_fk
+		) B on L.libcode = B.libcode_fk
+	</select>
+	
+	<resultMap type="HashMap" id="language">
+		<result property="LCODE" column="lcode" />
+		<result property="LNAME" column="lname" />
+		<result property="COUNT" column="count" />
+	</resultMap>
+	<select id="findAllLanguage" resultMap="language">
+		select lcode,lname, nvl(count,0) as count
+		from language L left join
+		(
+		select lcode_fk, count(*) as count
+		from book
+		group by lcode_fk
+		) B on L.lcode = B.lcode_fk
+	</select>
+	
+	<resultMap type="HashMap" id="category">
+		<result property="CCODE" column="ccode" />
+		<result property="CNAME" column="cname" />
+		<result property="COUNT" column="count" />
+	</resultMap>
+	<select id="findAllCategory" resultMap="category">
+		select ccode, cname, nvl(count,0) as count
+		from category C left join (
+		select ccode_fk, count(*) as count
+		from book
+		group by ccode_fk
+		) B on C.ccode = B.ccode_fk
+	</select>
+	
+	<resultMap type="HashMap" id="field">
+		<result property="FCODE" column="fcode" />
+		<result property="FNAME" column="fname" />
+		<result property="COUNT" column="count" />
+	</resultMap>
+	<select id="findAllField" resultMap="field">
+		    
+    select fcode,fname,nvl(count,0) as count
+    from
+    (
+		select substr(fcode,1,1)as fcode, fname
+		from field
+		where fcode in ('000','100','200','300','400','500','600','700','800','900')
+     ) F left join 
+     (   select substr(fcode_fk,1,1) as fcode_fk, count(*) as count
+         from book
+         group by substr(fcode_fk,1,1) 
+    ) B on substr(F.fcode,1,1) = substr(B.fcode_fk,1,1)
+    order by fcode
+	</select>
 
 	<select id="findBookBysidebar" parameterType="HashMap"
 		resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
@@ -52,18 +117,46 @@
         group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
         ) V
         on substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) = V.bookid
-		 where ${SEARCHTYPE} like '%'||'${SEARCHWORD}'||'%'
+        <if test="SEARCHWORD != ''">
+		 	where LOWER(${SEARCHTYPE}) like '%'||LOWER('${SEARCHWORD}')||'%'
+		 </if>
+		 <if test="SORT == 'count' ">
+			order by ${SORT} desc
+		</if>
+		<if test="SORT != 'count' ">
+			order by ${SORT}
+		</if>
 	</select>
 	
 	
 	<select id="findBookDetail" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		select A.bookid, title, author, agecode	,gcode_fk, gname,ncode_fk, nname,lcode_fk, lname,fcode_fk, fname,ccode_fk, cname
-		,libcode_fk, libname ,pubcode_fk, pubname, isbn, price, intro, D.image, weight, totalpage, D.pdate, D.regdate, A.status
+		,libcode_fk, libname ,pubcode_fk, pubname, isbn, price, intro, D.image, weight, totalpage, to_char(D.pdate,'yyyy-mm-dd') as pdate, to_char(D.regdate,'yyyy-mm-dd') as regdate, A.status, isbn
 		from book A join book_detail D on A.bookid = D.bookid join genre G on A.gcode_fk = G.gcode join nation N on	A.ncode_fk = N.ncode join language L on A.lcode_fk = L.lcode
 		join field F on A.fcode_fk = F.fcode join category C on A.ccode_fk = C.ccode join library LIB on A.libcode_fk = LIB.libcode
 		join publisher P on A.pubcode_fk = P.pubcode
-		where substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) like #{bookid};
+		where substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) = #{bookid}
 		order by A.bookid
+	</select>
+	
+	<resultMap type="HashMap" id="BookReservation">
+		<result property="BOOKID" column="bookid" javaType="String"/>
+		<result property="TITLE" column="title" javaType="String" />
+		<result property="BOOKREGDATE" column="bookregdate" javaType="String"/>
+		<result property="STATUS" column="status" javaType="String" />
+		<result property="ISBN" column="isbn" javaType="String" />
+		<result property="PHONE" column="phone" javaType="String" />
+		<result property="MEMBERREGDATE" column="memberregdate" javaType="String" />
+		<result property="MEMBERID" column="memberid" javaType="String" />
+		<result property="RESERVEDATE" column="reservedate" javaType="String" />
+		<result property="NAME" column="name" javaType="String" />
+	</resultMap>
+	<select id="findBookReservation" parameterType="String" resultMap="BookReservation">
+		select B.bookid, title, isbn, to_char(D.regdate,'yyyy-mm-dd') as bookregdate, M.status,M.phone, to_char(M.regdate, 'yyyy-mm-dd') as memberregdate, memberid,reservedate,M.name
+		from book B join reservation R on B.bookid = R.bookid_fk
+		join member M on R.memberid_fk = M.memberid join book_detail D on B.bookid = D.bookid
+		where substr(R.bookid_fk,1, instr(R.bookid_fk,'-',1,2)-1 ) = #{bookid}
+		order by R.bookid_fk
 	</select>
 
 </mapper>

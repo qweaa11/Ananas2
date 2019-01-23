@@ -13,6 +13,7 @@ public class MemberVO {
 	private String birth;			// 생년월일
 	private String gender;			// 성별코드
 	private int revokeDate;			// 정지기간
+	private int latefee;			// 연체료
 	private String regDate;			// 가입일자
 	private String lastDate;		// 최근접속일자=마지막접속일자
 	private String pwDate;			// 최근 비밀번호변경일자=마지막 비밀번호 변경일자
@@ -21,6 +22,8 @@ public class MemberVO {
 	private int fileSize;			// 파일크기
 
 	private String ages;			// 연령대
+
+	private int rno;
 
 	public MemberVO() { }// end of default constructor
 
@@ -48,6 +51,14 @@ public class MemberVO {
 		this.fileSize = fileSize;
 		this.ages = ages;
 	}// end of constructor
+
+	public int getRno() {
+		return rno;
+	}
+
+	public void setRno(int rno) {
+		this.rno = rno;
+	}
 
 	public int getIdx() {
 		return idx;
@@ -150,6 +161,14 @@ public class MemberVO {
 
 	public String getRegDate() {
 		return regDate;
+	}
+
+	public int getLatefee() {
+		return latefee;
+	}
+
+	public void setLatefee(int latefee) {
+		this.latefee = latefee;
 	}
 
 	public void setRegDate(String regDate) {

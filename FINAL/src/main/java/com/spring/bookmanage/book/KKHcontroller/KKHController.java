@@ -1,7 +1,8 @@
 package com.spring.bookmanage.book.KKHcontroller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.bookmanage.book.KKHmodel.KKHBookVO;
 import com.spring.bookmanage.book.KKHservice.InterKKHBookService;
+import com.spring.bookmanage.common.AES256;
 
 
 @Controller
@@ -26,6 +28,9 @@ public class KKHController {
 	@Autowired
 	private InterKKHBookService service;
 	
+	@Autowired
+	private AES256 aes;
+	
 	@RequestMapping(value="/bookList.ana",method= {RequestMethod.GET})
 	/** bookList.jsp 페이지로 이동하는 메소드
 	 * 
@@ -33,6 +38,15 @@ public class KKHController {
 	 */
 	public String bookList(HttpServletRequest request, HttpServletResponse response) {
 
+		List<HashMap<String,String>> libraryList = service.findAllLibrary();
+		List<HashMap<String,String>> languageList = service.findAllLanguage();
+		List<HashMap<String,String>> categoryList = service.findAllCategory();
+		List<HashMap<String,String>> fieldList = service.findAllField();
+		
+		request.setAttribute("languageList", languageList);
+		request.setAttribute("categoryList", categoryList);
+		request.setAttribute("fieldList", fieldList);
+		request.setAttribute("libraryList", libraryList);
 		return "book/bookList.tiles1";
 	}// end of bookList
 	
@@ -136,11 +150,12 @@ public class KKHController {
 		
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
+		String sort = request.getParameter("sort");
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
 		parameterMap.put("SEARCHTYPE", searchType);
 		parameterMap.put("SEARCHWORD", searchWord);
-		
+		parameterMap.put("SORT", sort);
 		List<KKHBookVO> bookList = service.findBookBySearchbar(parameterMap);
 		
 		for(KKHBookVO bookvo : bookList) {
@@ -177,10 +192,30 @@ public class KKHController {
 	public String bookDetail(HttpServletRequest request, HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		System.out.println("bookid:"+bookid);
+		List<HashMap<String,String>> bookReservateList = new ArrayList<HashMap<String,String>>();
+		List<KKHBookVO> bookDetailList = service.findBookDetail(bookid);
 		
-		List<KKHBookVO> bookDetailList = service.findBookDetail(bookid); 		
-		
+		List<HashMap<String,String>> bookbridgeList =  service.findBookReservateList(bookid);
+		try {
+			for(HashMap<String,String> map : bookbridgeList) {
+				HashMap<String,String> resultMap = new HashMap<String,String>();
+				resultMap.put("BOOKID",map.get("BOOKID"));
+				resultMap.put("TITLE",map.get("TITLE"));
+				resultMap.put("ISBN", map.get("ISBN"));
+				resultMap.put("STATUS", map.get("STATUS"));
+				resultMap.put("MEMBERREGDATE", map.get("MEMBERREGDATE"));
+				resultMap.put("MEMBERID", map.get("MEMBERID"));
+				resultMap.put("RESERVEDATE", map.get("RESERVEDATE"));
+				resultMap.put("NAME", map.get("NAME"));
+				resultMap.put("BOOKREGDATE", map.get("BOOKREGDATE"));
+				resultMap.put("PHONE",aes.decrypt(map.get("PHONE")) );
+				bookReservateList.add(resultMap);
+			}
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
 		request.setAttribute("bookDetailList", bookDetailList);
+		request.setAttribute("bookReservateList", bookReservateList);
 		return "book/bookDetail.tiles1";
 	}
 }

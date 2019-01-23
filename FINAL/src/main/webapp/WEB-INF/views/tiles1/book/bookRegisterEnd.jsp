@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <script type="text/javascript">
 
-	if(${n == 1})
+	if(${result == 1})
 		alert("도서등록 성공!");
 	else
 		alert("도서등록 실패!");

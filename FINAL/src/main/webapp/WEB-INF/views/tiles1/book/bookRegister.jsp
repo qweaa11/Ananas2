@@ -7,8 +7,6 @@
  
     
     
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -29,9 +27,8 @@
 <script>
 	var resultHTML = "";
 
-	$(document).ready(function(){
-		
-		
+	$(document).ready(function()
+	{
 		showLibrary();
 		
 		// field select 이후에 세부 필드 나타내주는 AJAX 만들기
@@ -41,22 +38,173 @@
 			
 			resultHTML = "";
 			showFieldDetail(fieldCode);
-			
 		});	// $("#field").change(function(){});	
 	
+		
+		
+		
+		
+		
 		// 출판사 조회등록 버튼을 누룰때 
 		$("#Submit").click(function(){
+			var regExp_num = new RegExp(/^[0-9]+$/);
+			var regExp_date = new RegExp(/^[0-9]{8}$/);
+			var regExp_ISBN = new RegExp(/^[a-z0-9]{10,13}$/);
+			
+			if( $("#title").val().trim() == "" )
+			{
+				alert("도서명을 입력하세요");
+				return;
+			}
+			if( $("#author").val().trim() == "" )
+			{
+				alert("저자명을 입력하세요");
+				return;
+			}
+			if( $("#pubName").val().trim() == "" )
+			{
+				alert("출판사명을 입력하세요");
+				return;
+			}
+			if( $("#ISBN").val().trim() == "" )
+			{
+				alert("ISBN을 입력하세요");
+				return;
+			}
+			else if($("#ISBN").val().trim() != "")
+			{
+				var bool = regExp_ISBN.test( $("#ISBN").val() );
+				if(!bool)
+				{
+					alert("ISBN은 10자리 혹은 13자리 입니다.");
+					return;
+				}
+			}
+			
+			
+			
+			
+			if( $("#lcode_fk").val().trim() == "" )
+			{
+				alert("언어를 골라주세요");
+				return;
+			}
+			if( $("#ncode_fk").val().trim() == "" )
+			{
+				alert("국가를 골라주세요");
+				return;
+			}
+			if( $("#ccode_fk").val().trim() == "" )
+			{
+				alert("종류를 골라주세요");
+				return;
+			}
+			if( $("#fcode_fk").val().trim() == "" )
+			{
+				alert("분야를 골라주세요");
+				return;
+			}
+			if( $("#gcode_fk").val().trim() == "" )
+			{
+				alert("장르를 골라주세요");
+				return;
+			}
+			if( $("#ageCode").val().trim() == "" )
+			{
+				alert("연령대를 골라주세요");
+				return;
+			}
+			
+			if( $("#price").val().trim() == "" )
+			{
+				alert("가격을 적어주세요");
+				return;
+			}
+			else if($("#price").val().trim() != "")
+			{
+				var bool = regExp_num.test( $("#price").val() );
+				if(!bool)
+				{
+					alert("숫자만 입력해 주세요");
+					return;
+				}	
+				
+				
+			}
+			
+			if( $("#weight").val().trim() == "" )
+			{
+				alert("무게를 적어주세요");
+				return;
+			}
+			else if($("#weight").val().trim() != "")
+			{
+				var bool = regExp_num.test( $("#weight").val() );
+				if(!bool)
+				{
+					alert("숫자만 입력해 주세요");
+					return;
+				}
+			}
+			
+			if( $("#totalPage").val().trim() == "" )
+			{
+				alert("총 페이지 수를 적어주세요");
+				return;
+			}
+			else if($("#totalPage").val().trim() != "")
+			{
+				var bool = regExp_num.test( $("#totalPage").val() );
+				if(!bool)
+				{
+					alert("숫자만 입력해 주세요");
+					return;
+				}
+			}
+			
+			if( $("#pDate").val().trim() == "" )
+			{
+				alert("발행일자를 적어주세요");
+				return;
+			}
+			else if($("#pDate").val().trim() != "")
+			{
+				var bool = regExp_date.test( $("#pDate").val() );
+				if(!bool)
+				{
+					alert("발행일자는 YYYYMMDD 로 숫자 8자리로  입력해 주세요");
+					return;
+				}
+			}
+			
+			if( $("#intro").val().trim() == "" )
+			{
+				alert("책소개를 적어주세요");
+				return;
+			}
+			if( $("#attach").val().trim() == "" )
+			{
+				alert("책의 이미지를 첨부해주세요");
+				return;
+			}
+			
+			
+			
+
+	
+			
+			
+			
 			
 			var signupFrm = document.signup;
 			signupFrm.action = "<%= ctxPath%>/bookRegisterEnd.ana";
 			signupFrm.method="POST";
 			
-		
-			 
 			signupFrm.submit();
-			
-		});// end of $("#Submit").click(function()---------------------------------------------------------
-		
+		});// end of $("#Submit").click(function()----------------------------------------------------------------
+		//---------------------------------------------------------------------------------------------------------
+				
+				
 		
 		// 출판사 조회 버튼을 누룰때 새창으로 출판사 조회하기
 		$("#searchPublisher").click(function(){
@@ -65,7 +213,9 @@
 			window.open(url, "publisher", "left=500px, top=100px, width=1100px, height=600px");
 			
 		});// end of $("#searchPublisher").click(function()---------------------------------------------------------
-		
+		//----------------------------------------------------------------------------------------------------------
+				
+				
 		
 		$("#spinnerCount").spinner({
 			spin: function(event, ui){
@@ -80,7 +230,9 @@
 					return false;
 				}
 			}
-		});// end of spinner------------------------------------------------------------------------------------------------------------------
+		});// end of spinner--------------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------------------------------
+		
 		
 		
 		
@@ -98,7 +250,7 @@
 			dataType:"JSON",
 			success:function(json){
 				resultHTML = "<select id='fcode_fk' name='fcode_fk' class='custom-select' style='width: 200px;'>"+
-							 "<option selected> 세부 주제 </option>";
+							 "<option value=\"\" selected> 세부 주제 </option>";
 				
 				$.each(json, function(entryIndex, entry){
 					
@@ -209,7 +361,7 @@
 	          	<div class="col-md-8 col-sm-9">
 	            	<div class="input-group">
 			        	<span class="input-group-addon"><i class=""></i></span>
-			            <input type="text" class="form-control" name="ISBN " id="ISBN" placeholder="발급받은 ISBN을 적어주세요" value="">
+			            <input type="text" class="form-control" name="ISBN " id="ISBN" placeholder="발급받은 ISBN을 적어주세요" maxlength="">
 	            	</div>  
 	          	</div>
 	        </div>
@@ -219,7 +371,7 @@
 	        	<label class="control-label col-sm-3">  언어  <span class="text-danger">*</span></label>
 					<div class="col-md-8 col-sm-9">
 					    <select id="lcode_fk" name="lcode_fk" class="custom-select" style="width: 200px;">
-						    <option selected>언어</option>
+						    <option value="" selected>언어</option>
 						    <option value="KR">한국어</option>
 						    <option value="EN">영어</option>
 						    <option value="JP">일본어</option>
@@ -246,7 +398,7 @@
 	        	<label class="control-label col-sm-3">  종류  <span class="text-danger">*</span></label>
 					<div class="col-md-8 col-sm-9">
 					    <select id="ccode_fk" name="ccode_fk" class="custom-select" style="width: 200px;">
-						    <option selected>종류</option>
+						    <option value="" selected>종류</option>
 						    <option value="E01">수필</option>
 						    <option value="E02">에세이</option>
 						    <option value="P01">시</option>
@@ -265,7 +417,7 @@
 	        	<label class="control-label col-sm-3">  분야   <span class="text-danger">*</span></label>
 	          	<div class="col-md-8 col-sm-9">
 	            	<select id="field" name="field" class="custom-select" style="width: 200px;">
-						<option selected>분야</option>
+						<option value="" selected>분야</option>
 					    <option value="000">총류</option>
 					    <option value="100">철학</option>
 					    <option value="200">종교</option>
@@ -290,7 +442,7 @@
 	        	<label class="control-label col-sm-3"> 장르  <span class="text-danger">*</span></label>
 	          	<div class="col-md-8 col-sm-9">
 	              	<select id="gcode_fk" name="gcode_fk" class="custom-select" style="width: 200px;">
-					    <option selected>장르</option>
+					    <option value="" selected>장르</option>
 					    <option value="UN">미분류</option>
 					    <option value="RM">로맨스</option>
 					    <option value="TH">스릴러</option>
@@ -312,7 +464,7 @@
 	        	<label class="control-label col-sm-3">연령대 <span class="text-danger">*</span></label>
 	          	<div class="col-md-8 col-sm-9">
 	              	<select id="ageCode" name="ageCode" class="custom-select" style="width: 200px;">
-					    <option selected>연령대</option>
+					    <option value="" selected>연령대</option>
 					    <option value="0">전체</option>
 					    <option value="1">아동</option>
 					    <option value="2">청소년</option>
@@ -360,7 +512,7 @@
 	          	<div class="col-md-8 col-sm-9">
             		<div class="input-group">
 	              		<span class="input-group-addon"><i class=""></i></span>
-	             		<input type="text" class="form-control" name="pDate" id="pDate" placeholder="YYYY/MM/DD" value="">
+	             		<input type="text" class="form-control" name="pDate" id="pDate" placeholder="YYYYMMDD" value="" maxlength="8">
 	            	</div>  
 	          	</div>
 	        </div>

@@ -1,15 +1,17 @@
 package com.spring.bookmanage.board.YJKservice;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.spring.bookmanage.board.YJKmodel.YJKBoardVO;
+import com.spring.bookmanage.board.YJKmodel.YJKReplyVO;
 
 @Service
 public interface InterYJKBoardService {
 
-	List<YJKBoardVO> getboardList(); // 전체글 리스트 가져오기
+	List<YJKBoardVO> getboardList(HashMap<String, String> paraMap); // 전체글 리스트 가져오기
 
 	YJKBoardVO getView(String idx, String libid);
 	// 1개글 보여주기. 글 조회수 증가는 다른 사람의 글을 읽을 때만 증가하도록 한다.
@@ -22,6 +24,26 @@ public interface InterYJKBoardService {
 
 	int boardAdd_withFile(YJKBoardVO boardvo); // 파일 첨부가 있는 글쓰기
 
+	int getTotalCountWithSearch(HashMap<String, String> paraMap); 
+	// 검색조건에 만족하는 총 게시물 건수 알아오기
+
+	int getTotalCountWithNoSearch();
+	// 검색조건이 없는 총 게시물 건수 알아오기
+
+	int boardAddComment(YJKReplyVO replyvo);
+	// 댓글쓰기
+
+	List<YJKReplyVO> listComment(HashMap<String, String> paraMap);
+	// 댓글 내용 가져오기
+
+	int getCommentTotalCount(HashMap<String, String> paraMap);
+	// 댓글 TotalPage 가져오기
+
+	int boardEdit(HashMap<String, String> paraMap);
+	// 글 수정하기
+
+	int boardDel(HashMap<String, String> paraMap) throws Throwable;
+	// 글 삭제하기
 	
 
 	

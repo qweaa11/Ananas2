@@ -6,7 +6,6 @@
 	
  
 
-
 	<!-- 분야(필드)코드를 알아오는 메소드로 대분류의 백의자리수만 잘라와서 비교하여 백의 자리가 같은 중분류만 얻어간다. -->
 	<select id="fieldCodeList" parameterType="String" resultType="com.spring.bookmanage.book.YMHmodel.YMHBookVO">
 	
@@ -25,7 +24,6 @@
 	 
 	</select>
 	
-	
 	<!-- 출판사를 등록하기전 테이블에 같은 출판사가 있는지 알아보고 값을  얻어간다. -->
 	<select id="isExistPublishers" parameterType="com.spring.bookmanage.book.YMHmodel.YMHBookVO" resultType="int">
 		select count(*)
@@ -36,16 +34,9 @@
 	<!-- 출판사가 있는지 먼저 확인한 뒤 없다면 출판사를 등록한다. -->
 	<insert id="addPublisher" parameterType="com.spring.bookmanage.book.YMHmodel.YMHBookVO">
 		insert into publisher(PUBCODE, IDX, PUBNAME, ADDR, TEL)
-		values( #{pubCode_fk}, PUB_SEQ.nextval, #{pubName}, #{addr}, #{tel} )	
-
+		values( #{pubCode_fk}, PUB_SEQ.nextval, #{pubName}, #{addr}, #{tel} )
 	</insert> 
-	
-	
-	
-	
-	
-	
-	
+		
 	<!-- 도서 테이블에 도서 등록하기 -->
 	<insert id="addOneBook" parameterType="com.spring.bookmanage.book.YMHmodel.YMHBookVO">
 		insert into book(bookId, idx, title, author, PUBCODE_FK, STATUS, AGECODE, ISBN,
@@ -56,33 +47,72 @@
 				#{lcode_fk}, #{fcode_fk},  #{ccode_fk}, #{gcode_fk}, #{libcode_fk})
 	</insert> 
 	
-	
 	<!-- 도서상세 테이블에 도서 등록하기 -->
 	<insert id="addOneBook_detail" parameterType="com.spring.bookmanage.book.YMHmodel.YMHBookVO">
 	
 		insert into book_Detail(bookId, idx, intro, image, price, weight, totalpage, pdate, regdate)
 		values( #{bookId} || '-' || #{bookCount}     
 		      , bookd_seq.nextval, #{intro}, #{filename}, #{price}, #{weight}, #{totalPage}, #{pDate}, default)				
-		
 	</insert> 
 	
-	
-	
-	
+	<!-- 도서 시리얼 넘버를 만들기 위해 도서시리얼에서 앞에 15자리를 알아오기 -->
 	<select id="BookIdN" resultType="int" parameterType="String">
-	
 		select count(*)
 		from Book
 		where substr(BOOKID, 1, 15) = #{bookId}
-	 
+	</select>
+	
+	<!-- returned, book, member 테이블을 조인해서 반납목록에 필요한 정보 얻어오기 -->
+	<select id="listReturned" parameterType="HashMap" resultType="com.spring.bookmanage.returned.YMHmodel.ReturnedVO">
+	
+		select idx, memberid, name, phone, title, author, returndate, rentaldate
+		from 
+		(
+			select row_number() over(order by ${SORT}) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			from book A join returned B
+			on a.bookid = b.bookid_fk
+			join member C on c.memberid = b.memberid_fk
+			) T
+		where RNO between #{RNO1} and #{RNO2}
+		
+		
+		
+	</select>
+	
+	<!-- returned 테이블의 총 갯수 구해오기 -->
+	<select id="getReturnedTotalCount" resultType="int" parameterType="HashMap">
+		select count(*)
+		from returned
 	</select>
 	
 	
+	<!-- returned, book, member 테이블을 조인해서 반납목록에 필요한 정보 얻어오기 -->
+	<select id="listReturnedWithSearch" parameterType="HashMap" resultType="com.spring.bookmanage.returned.YMHmodel.ReturnedVO">
+	
+		select idx, memberid, name, phone, title, author, returndate, rentaldate
+		from 
+		(
+			select row_number() over(order by ${SORT}) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			from book A join returned B
+			on a.bookid = b.bookid_fk
+			join member C on c.memberid = b.memberid_fk
+			where upper(${COLNAME}) like upper('%'|| #{SEARCH} ||'%')
+			) T
+		where RNO between #{RNO1} and #{RNO2}
 	
 	
+		
+		
+	</select>
 	
-	
-	
+	<!-- returned 테이블의 총 갯수 구해오기 -->
+	<select id="getReturnedTotalCountWithSearch" resultType="int" parameterType="HashMap">
+		select count(*)
+		from book A join returned B
+		on a.bookid = b.bookid_fk
+		join member C on c.memberid = b.memberid_fk
+		where upper(${COLNAME}) like upper('%'|| #{SEARCH} ||'%')
+	</select>
 	
 	
 	
