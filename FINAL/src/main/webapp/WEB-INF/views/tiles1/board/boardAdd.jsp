@@ -82,7 +82,7 @@
 			<tr>
 				<th>성명</th>
 				<td>
-				    <input type="hidden" name="libid_fk" value="classfor" readonly/>
+				    <input type="hidden" name="libid_fk" value="tester00" readonly/>
 					<input type="text" name="name" value="" class="short" />
 				</td>
 			</tr>

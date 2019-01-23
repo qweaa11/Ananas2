@@ -10,11 +10,11 @@
 <insert id="boardAdd" parameterType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
 	<if test="root.equals('')"> <!-- 원글 -->
 	insert into Board(idx, libid_fk, name, subject, content, pw, readCount, regDate, status, groupno, root, depthno)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, 0, 0)
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, 0, 0)
 	</if>
 	<if test="!root.equals('')"> <!-- 답글 -->
 	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, #{root}, #{depthno}+1)
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{root}, #{depthno}+1)
 	</if>
 </insert>
 
@@ -22,28 +22,54 @@
 <insert id="boardAdd_withFile" parameterType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
 	<if test="root.equals('')"> <!-- 원글 -->
 	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, fileName, orgFileName, fileSize, root, depthno)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, #{fileName}, #{orgFileName}, #{fileSize}, 0, 0)
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{fileName}, #{orgFileName}, #{fileSize}, 0, 0)
 	</if>
 	<if test="!root.equals('')"> <!-- 답글 -->
 	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno, fileName, orgFileName, fileSize)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, default, #{groupno}, #{root}, #{depthno}+1, #{fileName}, #{orgFileName}, #{fileSize})
+	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{root}, #{depthno}+1, #{fileName}, #{orgFileName}, #{fileSize})
 	</if>
 </insert>
 
 <!-- 전체글 목록 가져오기 -->
-<select id="getboardList" resultType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
+<select id="getboardList" parameterType="HashMap" resultType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
 
-	select idx, name, subject, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') AS regdate, fileName, fileSize
+	<!-- select idx, name, subject, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') AS regdate, fileName, fileSize
 	from board
 	where status = 0
-	order by idx desc	
+	order by idx desc	 -->
+	select idx, name, subject, readcount, regdate, commentCount
+			 , groupno, root, depthno
+			 , fileName, orgFileName, fileSize
+		from
+		(
+		    select rownum AS RNO
+		         , idx, name, subject, readcount, regdate, commentCount
+		         , groupno, root, depthno
+		         , fileName, orgFileName, fileSize
+		    from 
+		    (
+		        select idx, name, subject, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') AS regdate
+		        	 , commentCount
+		        	 , groupno, root, depthno
+		        	 , fileName, orgFileName, fileSize
+		        from Board
+		        where status = 0
+		        <if test="SEARCH != null and SEARCH != '' and SEARCH !='null' ">
+		        and ${COLNAME} like '%' || #{SEARCH} || '%'
+		        </if>
+		        start with root = 0
+		        connect by prior idx = root
+		        order siblings by groupno desc, idx asc
+		    )V
+		)T
+		where RNO between #{STARTRNO} and #{ENDRNO}
 
 </select>
 
 <!-- ==== 글 1개를 보여줄 때 조회수(readCount) 1 증가 시키기  ==== -->
 <update id="setAddReadCount" parameterType="String">
 	update Board set readcount = readcount + 1
-	where status = 1 and idx = #{idx}
+	where status = 0 and idx = #{idx}
 </update>
 
 <!-- ==== 파일첨부가 있는 답변형 게시판에서 글 1개를 보여주기 -->
@@ -71,7 +97,96 @@
 	where V.idx = #{idx}
 </select>
 
-<!-- ==== tblBoard 테이블에서 groupno 컬럼의 최대값 알아오기 -->
+<!-- 검색조건에 만족하는 총 게시물 건수 알아오기 -->
+<select id="getTotalCountWithSearch" parameterType="HashMap" resultType="int">
+		select count(*)
+		from Board
+		where status = 0
+		and ${COLNAME} like '%' || #{SEARCH} || '%'
+</select>
+
+<!--  검색조건이 없는 총 게시물 건수 알아오기 -->
+<select id="getTotalCountWithNoSearch" resultType="int">
+	select count(*)
+	from Board
+	where status = 0
+</select>
+
+<!-- 댓글쓰기 -->
+<insert id="boardAddComment" parameterType="com.spring.bookmanage.board.YJKmodel.YJKReplyVO">
+	insert into reply(idx, libid_fk, name, content, regdate, status, parentidx)
+	values(reply_seq.nextval, #{libid_fk}, #{name}, #{content}, sysdate, 0, #{parentidx})
+</insert>
+
+<!-- ==== 댓글쓰기 이후에 댓글의 갯수(commentCount 컬럼) 1증가 시키기 ==== -->
+<update id="updateCommentCount" parameterType="String">
+	update Board set commentCount = commentCount + 1
+	where idx = to_number(#{parentidx})
+</update>
+	
+<!-- ==== 원글에 글번호에 대한 댓글 중 페이지 번호에 해당하는 댓글만 조회해온다. -->
+<select id="listComment" parameterType="HashMap" resultType="com.spring.bookmanage.board.YJKmodel.YJKReplyVO">
+	select name, content, regdate
+		from
+		(
+		    select rownum as RNO, name, content, regdate
+		    from
+		    (
+		        select name, content, to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regdate
+		        from Reply
+		        where parentidx = #{IDX}
+		        order by idx desc
+		    )V
+		)T
+	where RNO between #{RNO1} and #{RNO2}
+</select>
+
+<!-- ==== 글 수정 및 글 삭제 시 암호일치 여부 알아오기 ==== -->
+<select id="checkPW" parameterType="HashMap" resultType="int">
+	select count(*)
+	from Board
+	where idx = #{IDX} and pw = #{PW}
+	
+</select>
+	
+<!-- ==== 글 1개 수정하기 ==== -->
+<update id="updateContent" parameterType="HashMap">
+	update Board set subject = #{SUBJECT}
+					  , content = #{CONTENT}
+	where idx = #{IDX}
+</update>
+
+<!-- ==== 글 1개 삭제하기 ==== -->
+<update id="deleteContent" parameterType="HashMap">
+	update Board set status = 1
+	where idx = #{IDX}
+</update>
+
+<!-- ==== 원글에 글번호에 대한 댓글 중 페이지 번호에 해당하는 총 갯수를 구한다. -->
+<select id="getCommentTotalCount" parameterType="HashMap" resultType="int">
+	select count(*)
+	from Reply
+	where parentidx = #{IDX}
+</select>
+
+<!-- ==== 원 게시글에 딸린 댓글이 있는지 없는지 확인하기 ==== -->
+<select id="isExistsComment" parameterType="HashMap" resultType="int">
+	select count(*)
+	from Reply
+	where parentidx = #{IDX}
+</select>
+
+
+ <!-- ==== 원 게시글에 딸린 댓글들 삭제하기 ==== -->
+<update id="delComment" parameterType="HashMap">
+	update Reply set status = 1
+	where parentidx = #{IDX}
+</update>
+
+
+
+
+<!-- ==== Board 테이블에서 groupno 컬럼의 최대값 알아오기 -->
 <select id="getGroupnoMax" resultType="int">
 	select nvl(max(groupno), 0)
 	from Board
