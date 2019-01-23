@@ -20,7 +20,7 @@
 		
 	
 		
-		$("#sortname").click(function(){
+		$("#sortname").change(function(){
 			if($("#search").val() == "")
 			{// 검색어가 없는경우
 				showReturned("1", sort);
