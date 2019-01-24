@@ -23,6 +23,32 @@ public interface BSBInterBoardDAO {
 
 	BSBboardVO getView(String idx);
 
+	int addComment(BSBcommentVO commentvo);
+
+	int updateCommentCount(String parentidx);
+
+	List<BSBcommentVO> listComment(HashMap<String, String> paraMap);
+
+	int getCommentTotalCount(HashMap<String, String> paraMap);
+
+	boolean checkPW(HashMap<String, String> paraMap);
+
+	int isExistsComment(HashMap<String, String> paraMap);
+
+	int deleteContent(HashMap<String, String> paraMap);
+
+	int delComment(HashMap<String, String> paraMap);
+
+	int getGroupnoMax();
+
+	int add_withFile(BSBboardVO boardvo);
+
+	int commentdel(HashMap<String, String> paraMap);
+	
+	int updateCommentdelCount(String string);
+
+	
+
 	
 	
 

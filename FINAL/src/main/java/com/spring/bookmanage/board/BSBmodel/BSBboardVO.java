@@ -56,7 +56,7 @@ public class BSBboardVO {
  	               3개 컬럼(fileName, orgFilename, fileSize)을 추가한 다음에 아래의 작업을 해야 한다. ===== 
     */
  	private String fileName;     // WAS(톰캣)에 저장될 파일명(20161121324325454354353333432.png)
- 	
+ 	private String orgFilename;  // 진짜 파일명(강아지.png). 사용자가 파일을 업로드 하거나 파일을 다운로드 할때 사용되어지는 파일명
  	private String fileSize;     // 파일크기
  	
  	private MultipartFile attach; // 진짜 파일 ==> WAS(톰캣) 디스크에 저장됨.
@@ -69,7 +69,7 @@ public class BSBboardVO {
 	public BSBboardVO(String idx, String libid_fk, String name, String subject, String content, String pw,
 			int readCount, String regDate, String status, String groupno, String root, String depthno,
 			String commentCount, String previousidx, String previoussubject, String nextidx, String nextsubject,
-			String fileName,  String fileSize, MultipartFile attach) {
+			String fileName, String orgFilename, String fileSize, MultipartFile attach) {
 		super();
 		this.idx = idx;
 		this.libid_fk = libid_fk;
@@ -89,7 +89,7 @@ public class BSBboardVO {
 		this.nextidx = nextidx;
 		this.nextsubject = nextsubject;
 		this.fileName = fileName;
-		
+		this.orgFilename = orgFilename;
 		this.fileSize = fileSize;
 		this.attach = attach;
 	}
@@ -238,6 +238,13 @@ public class BSBboardVO {
 		this.fileName = fileName;
 	}
 	
+	public String getOrgFilename() {
+		return orgFilename;
+	}
+
+	public void setOrgFilename(String orgFilename) {
+		this.orgFilename = orgFilename;
+	}
 
 	public String getFileSize() {
 		return fileSize;

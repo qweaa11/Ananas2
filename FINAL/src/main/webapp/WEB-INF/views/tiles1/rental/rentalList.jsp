@@ -198,9 +198,12 @@ th td {text-align: center;}
 	
 	function rentalPagebar(currentPage, searchWord, sort){
 		
+		var form_data = {"searchWord" :searchWord,
+						 "sort":sort}
+		
 		$.ajax({
-			
 			url:"rentalPagebar.ana",
+			data:form_data,
 			type:"GET",
 			dataType:"JSON",
 			success:function(json){
@@ -229,7 +232,7 @@ th td {text-align: center;}
 					while(!(loop > blockSize || pageNo > totalPage)) {
 					//		1	>	10			1		>	21
 					
-						if(pageNo == currentShowPageNo) {
+						if(pageNo == currentPage) {
 							// 현재 보고 있는 페이지
 							pageBarHTML += "&nbsp;<span style='color:red; font-size: 12pt; font-weight: bold; text-decoration: underline;'>"+pageNo+"</span>&nbsp;";
 						}
@@ -264,7 +267,7 @@ th td {text-align: center;}
 					
 		});// end of $.each(json, function(entryIndex, entry)-----------------
 		
-	}// end of function makeCommentPageBar(currentShowPageNo)
+	}// end of function makeCommentPageBar(currentPage)
 	
 
 
