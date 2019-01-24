@@ -343,7 +343,7 @@
 							<td class="td status">${memberVO.status}</td>
 							<td class="td">${memberVO.regDate}</td>
 							<td class="detail">
-								<input type="text" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
+								<input type="hidden" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
 								<button type="button" class="btn btn-dark"
 									onclick="javascript:location.href='memberDetail.ana?idx=${memberVO.idx}'">
 									<i class="glyphicon glyphicon-user"></i></button>

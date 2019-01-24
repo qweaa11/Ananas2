@@ -194,6 +194,10 @@ public class KKHController {
 		System.out.println("bookid:"+bookid);
 		List<HashMap<String,String>> bookReservateList = new ArrayList<HashMap<String,String>>();
 		List<KKHBookVO> bookDetailList = service.findBookDetail(bookid);
+		List<HashMap<String,String>> categoryList = service.findcategory();
+		List<HashMap<String,String>> languageList = service.findlanguage();
+		List<HashMap<String,String>> genreList = service.findgenre();
+		List<HashMap<String,String>> fieldList = service.findfield();
 		
 		List<HashMap<String,String>> bookbridgeList =  service.findBookReservateList(bookid);
 		try {
@@ -214,6 +218,10 @@ public class KKHController {
 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 			e.printStackTrace();
 		}
+		request.setAttribute("categoryList", categoryList);
+		request.setAttribute("languageList", languageList);
+		request.setAttribute("genreList", genreList);
+		request.setAttribute("fieldList", fieldList);
 		request.setAttribute("bookDetailList", bookDetailList);
 		request.setAttribute("bookReservateList", bookReservateList);
 		return "book/bookDetail.tiles1";
