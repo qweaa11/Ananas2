@@ -49,7 +49,7 @@
 	                        	<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">  
 	                        	
 	                        		<div>  
-	                        			<img class="r3loading" id="loding1" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading1" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>회원 목록</h2>
 						            </div>
 								    <hr>
@@ -165,7 +165,7 @@
 						        <div class="col-lg-offset-1 col-lg-6 col-md-offset-1 col-md-6 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
 						        	
 						            <div>  
-	                        			<img class="r3loading" id="loding2" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading2" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>도서 목록</h2> 
 						            </div>
 								    <hr>
@@ -218,7 +218,7 @@
 								    
 								    <!-- 대여 대기목록 -->
 									<div>  
-	                        			<img class="r3loading" id="loding3" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading3" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>대여 작업</h2>
 						            </div>
 								    <hr>
@@ -276,7 +276,7 @@
 	                        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
 						        	
 						            <div>  
-	                        			<img class="r3loading" id="loding4" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading4" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>대여된 목록</h2>
 						            </div>
 								    <hr>
@@ -356,7 +356,7 @@
 								    
 								    <!-- 반납 대기목록 -->
 									<div>  
-	                        			<img class="r3loading" id="loding5" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading5" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>반납 작업</h2>
 						            </div>
 								    <hr>
@@ -392,7 +392,7 @@
 								    	<button type="button" class="btn btn-info btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="반납" onclick="returned();">
 								    		<i class="glyphicon glyphicon-ok" style="vertical-align: text-top;"></i> 
 								    	</button>
-								    	<button type="button" class="btn btn-success btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="연장" onclick="reservation();">
+								    	<button type="button" class="btn btn-success btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="연장" onclick="renew();">
 								    		<i class="glyphicon glyphicon-plus" style="vertical-align: text-top;"></i>
 								    	</button>
 										<button type="button" class="btn btn-warning btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="리셋" onclick="returnReset();">
@@ -414,7 +414,7 @@
 	                        	<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">  
 	                        		
 						            <div>  
-	                        			<img class="r3loading" id="loding6" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading6" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>회원 목록</h2>
 						            </div>
 								    <hr>
@@ -529,7 +529,7 @@
 						        <div class="col-lg-offset-1 col-lg-6 col-md-offset-1 col-md-6 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
 						        	
 						            <div>  
-	                        			<img class="r3loading" id="loding7" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading7" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>대여 도서 목록</h2>
 						            </div>
 								    <hr>
@@ -609,7 +609,7 @@
 								    
 								    <!-- 예약 대기목록 -->
 									<div>  
-	                        			<img class="r3loading" id="loding8" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<img class="r3loading" id="loading8" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
 	                        			<h2>예약작업</h2>
 						            </div>
 								    <hr>
