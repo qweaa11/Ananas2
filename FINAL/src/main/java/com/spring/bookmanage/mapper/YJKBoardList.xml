@@ -121,7 +121,7 @@
 <!-- ==== 댓글쓰기 이후에 댓글의 갯수(commentCount 컬럼) 1증가 시키기 ==== -->
 <update id="updateCommentCount" parameterType="String">
 	update Board set commentCount = commentCount + 1
-	where idx = to_number(#{parentidx})
+	where idx = #{parentidx}
 </update>
 	
 <!-- ==== 원글에 글번호에 대한 댓글 중 페이지 번호에 해당하는 댓글만 조회해온다. -->

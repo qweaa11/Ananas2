@@ -30,4 +30,6 @@ public interface InterKKHBookDAO {
 
 	List<HashMap<String, String>> findfield();
 
+	List<HashMap<String, String>> findDetailField(String bigfcode);
+
 }

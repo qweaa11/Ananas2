@@ -166,7 +166,7 @@
 	<!-- 연체료와 이용정지기간 등록하기 -->
 	<update id="updateMemberByDeadeline" parameterType="HashMap">
 	
-		update member set latefee = 100 * #{DEADLINECUT}, revokedate = revokedate + #{DEADLINECUT}, status = 2
+		update member set latefee = latefee + (100 * #{DEADLINECUT}), revokedate = revokedate + #{DEADLINECUT}, status = 2
 		where memberid = #{MEMBERID}
 	
 	</update>

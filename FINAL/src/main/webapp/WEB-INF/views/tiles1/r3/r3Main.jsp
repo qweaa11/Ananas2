@@ -7,9 +7,15 @@
 <script type="text/javascript">
 
 	$(document).ready(function(e){
-		if(${bookid != null}) {
-			$("#search_book").val("${bookid}");
+		if(${rentalBookid != null}) {
+			$("#search_book").val("${rentalBookid}");
 			$(".booksearch").click();
+		}
+	
+		if(${returnBookid != null}) {
+			$("#search_rental").val("${returnBookid}");
+			$(".rentalsearch").click();
+			$(".tab2info").click();
 		}
 	});
 	
@@ -27,7 +33,7 @@
 	                <div class="panel-heading"> 
 	                        <ul class="nav nav-tabs">
 	                            <li class="active"><a href="#tab1info" data-toggle="tab">대여</a></li>
-	                            <li><a href="#tab2info" data-toggle="tab">반납</a></li>
+	                            <li><a href="#tab2info" class="tab2info" data-toggle="tab">반납</a></li>
 	                            <li><a href="#tab3info" data-toggle="tab">예약</a></li>
 	                        </ul>
 	                </div>
@@ -41,8 +47,11 @@
 	                        	
 	                        	<!-- 회원 부분 -->
 	                        	<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">  
-	                        		
-						            <h2>회원 목록</h2>  
+	                        	
+	                        		<div>  
+	                        			<img class="r3loading" id="loding1" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>회원 목록</h2>
+						            </div>
 								    <hr>
 	                        		
 	                        		<!-- 회원 검색 -->
@@ -62,6 +71,7 @@
 						                    <button class="btn btn-default membersearch" type="button" onclick="searchMember('1');"><span class="glyphicon glyphicon-search"></span></button>
 						                </span>
 						            </div>
+						            
 						            <!-- /검색 -->
 						             
 								    <!-- 회원 목록 -->
@@ -154,7 +164,10 @@
 						        <!-- 도서 부분 -->
 						        <div class="col-lg-offset-1 col-lg-6 col-md-offset-1 col-md-6 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
 						        	
-						            <h2>도서 목록</h2>
+						            <div>  
+	                        			<img class="r3loading" id="loding2" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>도서 목록</h2> 
+						            </div>
 								    <hr>
 								    
 						            <!-- 도서 검색 -->
@@ -204,7 +217,10 @@
 								    <!-- /도서 목록 -->
 								    
 								    <!-- 대여 대기목록 -->
-									<h2>대여 작업</h2>
+									<div>  
+	                        			<img class="r3loading" id="loding3" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>대여 작업</h2>
+						            </div>
 								    <hr>
 									<div style="color: red; padding-bottom: 10px; text-align: right;">대여기간은 최대 14일 입니다.</div> 
 								    
@@ -234,8 +250,12 @@
 								        </div>
 								    </div>
 								    <div style="float: right; margin-bottom: 30px;">
-								    	<button type="button" class="btn btn-info btn-circle btn-lg" onclick="rental();"><i class="glyphicon glyphicon-ok"></i></button>
-										<button type="button" class="btn btn-warning btn-circle btn-lg" onclick="rentalReset();"><i class="glyphicon glyphicon-remove"></i></button>
+								    	<button type="button" class="btn btn-info btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="대여" onclick="rental();">
+								    		<i class="glyphicon glyphicon-ok" style="vertical-align: text-top;"></i>
+								    	</button>
+										<button type="button" class="btn btn-warning btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="리셋" onclick="rentalReset();">
+											<i class="glyphicon glyphicon-remove" style="vertical-align: text-top;"></i>
+										</button>
 								    </div>
 								    
 								    <!-- /대여 대기목록 -->
@@ -255,7 +275,10 @@
 	                        <div class="tab-pane fade" id="tab2info">
 	                        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
 						        	
-						            <h2>대여된 목록</h2>
+						            <div>  
+	                        			<img class="r3loading" id="loding4" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>대여된 목록</h2>
+						            </div>
 								    <hr>
 								    
 								    <!-- 대여 검색 -->
@@ -332,7 +355,10 @@
 								    <!-- /대여 목록 -->
 								    
 								    <!-- 반납 대기목록 -->
-									<h2>반납 작업</h2>
+									<div>  
+	                        			<img class="r3loading" id="loding5" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>반납 작업</h2>
+						            </div>
 								    <hr>
 								    
 								    <div class="row">
@@ -363,9 +389,15 @@
 								        </div>
 								    </div>
 								    <div style="float: right; margin-bottom: 30px;">
-								    	<button type="button" class="btn btn-info btn-circle btn-lg" onclick="returned();"><i class="glyphicon glyphicon-ok"></i></button>
-								    	<button type="button" class="btn btn-success btn-circle btn-lg" onclick="reservation();"><i class="glyphicon glyphicon-plus"></i></button>
-										<button type="button" class="btn btn-warning btn-circle btn-lg" onclick="returnReset();"><i class="glyphicon glyphicon-remove"></i></button>
+								    	<button type="button" class="btn btn-info btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="반납" onclick="returned();">
+								    		<i class="glyphicon glyphicon-ok" style="vertical-align: text-top;"></i> 
+								    	</button>
+								    	<button type="button" class="btn btn-success btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="연장" onclick="reservation();">
+								    		<i class="glyphicon glyphicon-plus" style="vertical-align: text-top;"></i>
+								    	</button>
+										<button type="button" class="btn btn-warning btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="리셋" onclick="returnReset();">
+											<i class="glyphicon glyphicon-remove" style="vertical-align: text-top;"></i> 
+										</button>
 								    </div>
 								    
 									<!-- /반납 대기목록 -->
@@ -381,7 +413,10 @@
 	                        	<!-- 회원 부분 -->
 	                        	<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">  
 	                        		
-						            <h2>회원 목록</h2>  
+						            <div>  
+	                        			<img class="r3loading" id="loding6" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>회원 목록</h2>
+						            </div>
 								    <hr>
 	                        		
 	                        		<!-- 회원 검색 -->
@@ -493,7 +528,10 @@
 						        <!-- 도서 부분 -->
 						        <div class="col-lg-offset-1 col-lg-6 col-md-offset-1 col-md-6 col-sm-12 col-xs-12 border-radius" style="margin-top: 30px; margin-bottom: 30px;">
 						        	
-						            <h2>대여 도서 목록</h2>
+						            <div>  
+	                        			<img class="r3loading" id="loding7" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>대여 도서 목록</h2>
+						            </div>
 								    <hr>
 								    
 						            <!-- 대여 검색 -->
@@ -570,7 +608,10 @@
 								    <!-- /대여 목록 -->
 								    
 								    <!-- 예약 대기목록 -->
-									<h2>예약 작업</h2>
+									<div>  
+	                        			<img class="r3loading" id="loding8" src="resources/img/r3loading.gif" width="30px" height="30px" style="float: right;"/>
+	                        			<h2>예약작업</h2>
+						            </div>
 								    <hr>
 								    
 								    <div class="row">
@@ -599,8 +640,12 @@
 								        </div>
 								    </div>
 								    <div style="float: right; margin-bottom: 30px;">
-								    	<button type="button" class="btn btn-info btn-circle btn-lg" onclick="reservation();"><i class="glyphicon glyphicon-ok"></i></button>
-										<button type="button" class="btn btn-warning btn-circle btn-lg" onclick="reservationReset();"><i class="glyphicon glyphicon-remove"></i></button>
+								    	<button type="button" class="btn btn-info btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="예약" onclick="reservation();">
+								    		<i class="glyphicon glyphicon-ok" style="vertical-align: text-top;"></i>
+								    	</button>
+										<button type="button" class="btn btn-warning btn-circle btn-lg" data-toggle = "tooltip" data-placement="top" title="리셋" onclick="reservationReset();">
+											<i class="glyphicon glyphicon-remove" style="vertical-align: text-top;"></i>
+										</button>
 								    </div>
 								    
 								    <!-- /예약 대기목록 -->

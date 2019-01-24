@@ -1,5 +1,10 @@
 package com.spring.bookmanage.board.BSBcontroller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,24 +14,44 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.bookmanage.board.BSBmodel.BSBboardVO;
+import com.spring.bookmanage.board.BSBmodel.BSBcommentVO;
+import com.spring.bookmanage.board.BSBmodel.PhotoVO;
 import com.spring.bookmanage.board.BSBservice.BSBInterBoardService;
 import com.spring.bookmanage.common.AES256;
-import com.spring.bookmanage.common.MyUtil;
+import com.spring.bookmanage.common.FileManager;
+import com.spring.bookmanage.common.LargeThumbnailManager;
+import com.spring.bookmanage.common.MyUtil; 
 import com.spring.bookmanage.common.SHA256;
 import com.spring.bookmanage.login.BSBmodel.BSBMemberVO;
 import com.spring.bookmanage.login.BSBservice.BSBInterLoginService;
 
+
+
 @Controller
+@Component
 public class BSBboardController {
 	
 	// =====#35.의존객체 주입하기(DI : Dependency Injection) =====
 			@Autowired
 			private BSBInterBoardService service;
+			
+			// ===== #139. 파일업로드 및 파일다운로드를 해주는 FileManager 클래스 의존객체 주입하기 (DI: Dependency Injection) =====
+			@Autowired
+			private FileManager fileManager;
+			
+			// ===== #스마트에디터3. 스마트에디터 사용시 사진첨부를 할경우 원본 사진의 크기가 아주 클 경우
+			// 이미지 width 의 크기를 적절하게 줄여주는 클래스 객체 의존객체 주입하기(DI: Dependency Injection) =====
+			@Autowired
+			private LargeThumbnailManager largeThumbnailManager;
 			
 			
 	
@@ -154,6 +179,7 @@ public class BSBboardController {
 					  */
 					 String gobackURL = MyUtil.getCurrentURL(req);
 					 
+					 
 					 req.setAttribute("gobackURL", gobackURL);
 		
 		
@@ -187,14 +213,98 @@ public class BSBboardController {
 			
 			// ===== #53. 글쓰기 완료 요청. =====
 			@RequestMapping(value="/addEnd.ana", method={RequestMethod.POST})
-			public String addEnd(BSBboardVO boardvo, HttpServletRequest req) {
+			public String addEnd(BSBboardVO boardvo, MultipartHttpServletRequest req) {
 				
-				System.out.println(boardvo.getLibid_fk());
-			
-				int n = service.add(boardvo);
+				/*
+				   웹페이지에 요청form이 enctype="multipart/form-data" 으로 되어있어서 Multipart 요청(파일처리 요청)이 들어올때 
+				   컨트롤러에서는 HttpServletRequest 대신 MultipartHttpServletRequest 인터페이스를 사용해야 한다.
+				  MultipartHttpServletRequest 인터페이스는 HttpServletRequest 인터페이스와 MultipartRequest 인터페이스를 상속받고있다.
+				   즉, 웹 요청 정보를 얻기 위한 getParameter()와 같은 메소드와 Multipart(파일처리) 관련 메소드를 모두 사용가능하다.
+				 
+				 ===== 사용자가 쓴 글에 파일이 첨부되어 있는 것인지 아니면 파일첨부가 안된것인지 구분을 지어주어야 한다. =====
+				 ========= !!첨부파일이 있는지 없는지 알아오기 시작!! ========= */
 				
+				MultipartFile attach = boardvo.getAttach();
 				
-									
+				if(!attach.isEmpty()) {
+					// attach 가 비어있지 않다면(즉, 첨부파일이 있는 경우라면)
+					
+					/*
+					 1. 사용자가 보낸 파일으 WAS(톰캣)의 특정 폴더에 저장해주어야 한다.
+					 >>>> 파일이 업로드 되어질 특정경로(폴더)지정해주기
+					 우리는 WAS의 webapp/resources/files 라는 폴더로 지정해주겠다.				 
+					 */
+					 
+					
+					// WAS의 webapp 의 절대경로를 알아와야 한다.
+					HttpSession session = req.getSession();
+					String root = session.getServletContext().getRealPath("/");
+					String path = root + "resources" + File.separator + "files" ;
+					// path 가 첨부파일들을 저장할 WAS(톰캣)의 폴더가 된다.
+					
+					System.out.println(">>>> 확인용 path ===> "+path);
+					//>>>> 확인용 path ===> C:\springworkspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Board\resources\files
+					
+					/*
+					 2. 파일첨부를 위한 변수의 설정 및 값을 초기화한 후 파일올리기				 
+					 */
+					String newFileName = "";
+					// WAS(톰캣) 디스크에 저장할 파일명
+					
+					byte[] bytes = null;
+					//첨부파일을 WAS(톰캣) 디스크에 저장할때 사용되는 용도
+					
+					long fileSize = 0;
+					
+					// 파일크기를 읽어오기 위한 용도
+					
+					
+					try {
+						bytes = attach.getBytes();
+						// getBytes() 첨부된 파일을 바이트 단위로 파일을 다 읽어오는 것이다.
+						
+						
+						newFileName =  fileManager.doFileUpload(bytes,attach.getOriginalFilename(), path);
+						// 첨부된 파일을 WAS(톰캣) 디스크로 파일 올리기를 하는 것이다.
+						// 파일을 올린후 예를 들얼 12424534664756.png 와 같은 파일명을 얻어온다.
+						
+						System.out.println(">>>> 확인용 newFileName ==> " + newFileName);
+						// >>>> 확인용 newFileName ==> 201901071126222751657863973746.jpg
+						
+						
+						//3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기
+						boardvo.setFileName(newFileName);
+						boardvo.setOrgFilename(attach.getOriginalFilename());
+						
+						fileSize = attach.getSize();
+						// 첨부한 파일의 크기인데 리턴타입은 long 타입이다.
+						
+						boardvo.setFileSize(String.valueOf(fileSize));					
+						
+					} catch (Exception e) {					
+						e.printStackTrace();
+					}
+					
+					  
+				}// end of if			
+				/*========= !!첨부파일이 있는지 없는지 알아오기 끝!! =========*/
+				
+							
+			//	int n = service.add(boardvo);
+				
+				// ===== #140. 파일첨부가 없는 경우 또는 파일첨부가 있는 경우 Service 단으로 호출하기 =====
+				//       먼저 위의 int n = service.add(boardvo); 을 주석처리한 후 아래처럼 한다.
+				int n = 0;
+				if(attach.isEmpty()) {
+					// 파일첨부가 없다라면
+					n = service.add(boardvo);
+				}
+				
+				else {
+					// 파일첨부가 있다라면
+					n = service.add_withFile(boardvo);				
+				}
+				
 				String loc = "";
 				
 				if(n==1) {
@@ -204,14 +314,71 @@ public class BSBboardController {
 					loc = req.getContextPath()+"/index.ana";
 				}
 				
-				
 				req.setAttribute("n", n);
 				req.setAttribute("loc", loc);
 				
-				
-				
+		
 				return "board/addEnd.tiles1";
 			}
+			
+			 // ==== #149. 첨부파일 다운로드 받기 ====						
+			  @RequestMapping(value="/download.ana", method={RequestMethod.GET})
+			  public void download(HttpServletRequest req, HttpServletResponse res) {
+				  
+				  String idx = req.getParameter("idx");
+				  // 첨부파일이 있는 글번호
+				  
+				  
+				  // 첨부파일이 있는 글번호에서
+				  // 201901071248442756600225890594.jpg 처럼
+				  // 이러한 fileName 값을 DB에서 가져와야 한다.
+				  // 또한 쉐보레전면.jpg 처럼 orgFileName 값도 DB에서 가져와야 한다.
+				  
+				  BSBboardVO boardvo = service.getViewWithNoAddCount(idx);
+				  // 조회수 증가 없이 1개글 가져오기
+				  
+				  String fileName = boardvo.getFileName();
+				  // 201901071248442756600225890594.jpg 와 같은 것을 가져온다.
+				  // 이것이 바로 WAS(톰캣) 디스크에 저장된 파일명이다.
+				  
+				  String orgFilename = boardvo.getOrgFilename();
+				  // 쉐보레전면.jpg 와 같은것을 가져온다.
+				  // 사용자가 파일을 다운받을시 쉐보레전면.jpg 처럼 다운받도록 하는 것이다.
+				  
+		   		  // 첨부파일이 저장되어 있는  WAS의 절대경로를 알아와야 한다.
+				  // 그래야만 첨부파일이 저장되어 있는 곳에서 파일을 다운받을 수 있다.
+				  // 이 경로는 파일을 첨부했을때와 동일한 경로이다.
+				  HttpSession session = req.getSession();
+				  String root = session.getServletContext().getRealPath("/");
+				  String path = root + "resources" + File.separator + "files" ;
+				  // path 가 첨부파일들이 저장된 WAS(톰캣)의 폴더가 된다.
+				  
+				  // === *** 다운로드 하기 *** === //
+				  // 다운로드가 실패할 경우 메시지를 띄워주기 위해서 
+				  // boolean 타입 변수 flag 를 선언한다.
+				  boolean flag = false;
+				  
+				  flag =  fileManager.doFileDownload(fileName, orgFilename, path, res);
+				  // 다운로드가 성공이면 true 를 반환해주고,
+				  // 다운로드가 실패이면 false 를 반환해준다.
+				  
+				  if(!flag) {
+						  // 다운로드가 실패할 경우 메시지를 띄워주겠다.
+						  res.setContentType("text/html; charset=UTF-8");
+						  
+						  try {
+							PrintWriter out = res.getWriter();
+							//PrintWriter out 이 웹브라우저 상에 내용물을 기재(쓰는)해주는 객체이다
+							
+							out.println("<script type='text/javascript'>alert('파일 다운로드가 실패했습니다.');</script>");
+							
+						} catch (IOException e) {				
+							e.printStackTrace();
+						}
+				  }
+				  
+				  
+			  }
 			
 			
 			// ===== #61. 글1개를 보여주는 페이지 요청 ====
@@ -221,13 +388,418 @@ public class BSBboardController {
 				String idx = req.getParameter("idx");
 				
 				BSBboardVO  boardvo = null;
+				String gobackURL = req.getParameter("gobackURL");
+				// 특정 글 제목을 클릭하여 상세내용을 본 이후 페이징 처리된 해당 페이지로 그대로 돌아가기 위해 
+				// 돌아갈 페이지를 위해서 gobackURL을 뷰단으로 넘겨준다.
+				
+			//	System.out.println("gobackURL :"+gobackURL);
+				
 				
 				boardvo = service.getView(idx);
 				
 			req.setAttribute("boardvo", boardvo);
+			req.setAttribute("gobackURL", gobackURL);
 				
 				return "board/BSBview.tiles1";
 			}
+			
+			
+
+			// ===== #85. 댓글쓰기 =====
+			@RequestMapping(value="/addComment.ana", method={RequestMethod.POST})
+			@ResponseBody
+			public HashMap<String, String> addComment(BSBcommentVO commentvo) throws Throwable{
+				
+				HashMap<String, String> returnMap = new HashMap<String, String>();
+				
+				// 댓글쓰기(*** AJAX로 처리함 ***)
+				int n = service.addComment(commentvo);
+				
+				if(n==1) {
+					// 댓글쓰기 및 원게시물(tblBoard 테이블)에 댓글의 갯수(1씩증가)증가가 성공했다라면
+					returnMap.put("NAME", commentvo.getName());
+					returnMap.put("CONTENT", commentvo.getContent());
+					returnMap.put("REGDATE", MyUtil.getNowTime());
+					
+				}
+				
+				
+				return returnMap;
+				
+			}
+			
+			// ===== #92-1. 댓글내용 가져오기(페이징처리를 하므로 특정페이지(1페이지, 2페이지, 3페이지...)에 대한 댓글의 내용을 가져오는것 =====		
+			@RequestMapping(value="/commentList.ana", method={RequestMethod.GET})
+			@ResponseBody
+			public List<HashMap<String, Object>> commentList(HttpServletRequest req){
+				
+					 List<HashMap<String, Object>> mapList = new ArrayList<HashMap<String, Object>>();
+					 
+					 String idx = req.getParameter("idx");
+					 // 원글의 글번호를 받아와서 원글에 딸린 댓글을 보여주려고 한다.
+					 
+					 String currentShowPageNo = req.getParameter("currentShowPageNo");
+					 
+					 if(currentShowPageNo == null || "".equals(currentShowPageNo)) {
+						 currentShowPageNo = "1";
+					 }
+					 
+					 int sizePerPage = 5; // 한페이지당 5개의 댓글을 보여줄 것임.
+					 
+					 int rno1 = Integer.parseInt(currentShowPageNo) * sizePerPage - (sizePerPage-1);   // 공식 !! 
+					 int rno2 =	Integer.parseInt(currentShowPageNo) * sizePerPage;	 // 공식 !!
+					 
+					 /*
+						  페이지번호     rno1     rno2
+						  =======================
+						  1페이지         1        5
+						  2페이지         6       10
+						  3페이지         11      15
+						  .......   ..      .. 
+					  */
+					 
+					 HashMap<String, String> paraMap = new HashMap<String, String>();
+					 paraMap.put("IDX", idx);
+					 paraMap.put("RNO1", String.valueOf(rno1));
+					 paraMap.put("RNO2", String.valueOf(rno2));
+					 
+					 List<BSBcommentVO> commentList = service.listComment(paraMap);
+					 // 원글에 글번호에 대한 댓글중 페이지 번호에 해당하는 댓글만 조회헤온다.
+					 
+					 for(BSBcommentVO cmtvo : commentList) {
+						 HashMap<String, Object> map = new HashMap<String, Object>();						 
+						 map.put("IDX", cmtvo.getidx());
+						 map.put("NAME", cmtvo.getName());
+						 map.put("CONTENT", cmtvo.getContent());
+						 map.put("REGDATE", cmtvo.getRegDate());
+						 
+						 mapList.add(map);
+					 }
+						
+					 return mapList;
+				
+			}
+			
+			
+			// ===== #92-2. 댓글 TotalPage 가져오기 =====		
+						@RequestMapping(value="/getCommentTotalPage.ana", method={RequestMethod.GET})
+						@ResponseBody
+						public HashMap<String, Integer> getCommentTotalPage(HttpServletRequest req){
+							
+							HashMap<String, Integer> returnMap = new HashMap<String, Integer>();
+								 
+								 String idx = req.getParameter("idx");
+								 // 원글의 글번호를 받아와서 원글에 딸린 댓글의 갯수를 알아오려고 한다.
+								 
+								 String sizePerPage = req.getParameter("sizePerPage");
+								 // 한페이지당 보여줄 댓글의 갯수
+								
+								 HashMap<String, String> paraMap = new HashMap<String, String>();
+								 paraMap.put("IDX", idx);
+								 paraMap.put("SIZEPERPAGE", sizePerPage);
+								 
+								// -- 원글 글번호에 해당하는 댓글의 총갯수를 알아오기
+								 int totalCount = service.getCommentTotalCount(paraMap);
+								 
+								 
+								 // -- 총 페이지수 (totalPage) 구하기 
+								 int totalPage = (int)Math.ceil((double)totalCount/Integer.parseInt(sizePerPage));
+								 /*
+								   
+								     57.0(행갯수)/10(sizePerPage) == 5.7 ==> 6.0 ==> 6
+								     57.0(행갯수)/5(sizePerPage) == 11.4 ==> 12.0 ==> 12
+								     57.0(행갯수)/3(sizePerPage) == 19.0 ==> 19.0 ==> 19
+								   
+								  */
+								 
+								 returnMap.put("TOTALPAGE",totalPage);
+								 returnMap.put("TOTALCOUNT",totalCount);
+
+								 
+																	
+								 return returnMap;
+							
+						}
+						
+						// ===== #77. 글삭제 페이지 요청 =====
+						@RequestMapping(value="/del.ana", method={RequestMethod.GET})
+						public String del(HttpServletRequest req, HttpServletResponse res) {
+							
+							// 삭제해야할 글 번호 가져오기
+							String idx = req.getParameter("idx");
+							
+							// 삭제해야할 글전체 내용가져오기
+							BSBboardVO boardvo = service.getViewWithNoAddCount(idx); 
+							// 조회수(readCount) 증가 없이 그냥 글1개 가져오는것
+							
+							HttpSession session = req.getSession();
+							BSBMemberVO loginuser = (BSBMemberVO)session.getAttribute("loginuser");
+							
+							if(!loginuser.getmemberid().equals(boardvo.getLibid_fk())) {
+								String msg = "다른 사용자의 글은 삭제가 불가합니다.";
+								String loc = "javascript:history.back()";
+								
+								req.setAttribute("msg", msg);
+								req.setAttribute("loc", loc);
+								
+								return "msg";
+							}
+							else {
+								// 삭제해야할 글번호를 request 영역에 저장시켜서 view단 페이지로 넘긴다.
+								req.setAttribute("idx", idx);
+								
+								// 글삭제시 글암호를 입력받아 글작성할때 입력한 암호와 비교할 수 있도록
+								// view 단에서 만들어 주어야 한다.
+								
+								return "board/board.tiles1";
+								
+								
+							}
+							
+							
+						}
+						
+						
+						// ===== #78. 글삭제 페이지 완료하기 =====
+						@RequestMapping(value="/delEnd.ana", method={RequestMethod.POST})
+						public String delEnd(HttpServletRequest req)  throws Throwable{
+							
+							
+						
+							
+							// 글 삭제를 하려면 삭제할 글의 글번호와
+							// 사용자가 입력한 글암호를 알아와서 
+							// 삭제할 글의 암호와 사용자가 입력한 글암호와 일치할 경우에만 삭제하도록 한다.
+							String idx = req.getParameter("idx");
+							String pw = req.getParameter("pw");
+							
+							HashMap<String, String> paraMap = new HashMap<String, String>();
+							paraMap.put("IDX", idx);
+							paraMap.put("PW", pw);
+							
+							int result = 0;
+							
+								result = service.del(paraMap);
+							
+							/*
+							 넘겨받은 값이 1이면 글삭제 성공,
+							 넘겨받은 값이 0이면 글삭제 실패(암호가틀리므로)
+							 */
+							
+
+							String msg = "";
+							String loc = "";
+							
+							if(result == 0) {
+								msg = "글 삭제 실패";
+								loc = "javascript:history.back();";
+								
+							}
+							else {
+								msg = "글 삭제 성공";
+								loc = req.getContextPath()+"/board.ana";
+								
+							}
+							
+							req.setAttribute("msg", msg);
+							req.setAttribute("loc", loc);
+							 req.setAttribute("idx", idx);
+									
+							
+							return "msg";
+						}
+						
+						
+						
+						// ===== #78. 댓글삭제 페이지 완료하기 =====
+						@RequestMapping(value="/commentdelEnd.ana", method={RequestMethod.POST})
+						@ResponseBody
+						public HashMap<String, Integer> commentdelEnd(HttpServletRequest req)  throws Throwable{
+							
+							
+						
+							
+							
+							// 글 삭제를 하려면 삭제할 글의 글번호와
+							// 사용자가 입력한 글암호를 알아와서 
+							// 삭제할 글의 암호와 사용자가 입력한 글암호와 일치할 경우에만 삭제하도록 한다.
+							String orgIdx = req.getParameter("orgIdx");
+							String idx = req.getParameter("idx");
+							
+							
+							
+							HashMap<String, String> paraMap = new HashMap<String, String>();
+							paraMap.put("ORGIDX", orgIdx);
+							paraMap.put("IDX", idx);
+							
+							
+								int result = 0;
+								
+								result = service.commentdel(paraMap);
+							
+							/*
+							 넘겨받은 값이 1이면 글삭제 성공,
+							 넘겨받은 값이 0이면 글삭제 실패(암호가틀리므로)
+							 */
+							
+							
+
+							String msg = "";
+							String loc = "";
+							
+							HashMap<String, Integer> json = new HashMap<String, Integer>();
+							
+							json.put("RESULT", result);
+								
+						
+							return json;					
+						}
+						
+						
+						  // =====#스마트에디터1. 단일사진 파일업로드 =====
+						  @RequestMapping(value="/image/photoUpload.ana", method={RequestMethod.POST}) // 파일첨부는 무조건 POST
+						  public String photoUpload(PhotoVO photovo, HttpServletRequest req) {
+							  
+							    String callback = photovo.getCallback();
+							    String callback_func = photovo.getCallback_func();
+							    String file_result = "";
+							    
+								if(!photovo.getFiledata().isEmpty()) {
+									// 파일이 존재한다라면
+									
+									/*
+									   1. 사용자가 보낸 파일을 WAS(톰캣)의 특정 폴더에 저장해주어야 한다.
+									   >>>> 파일이 업로드 되어질 특정 경로(폴더)지정해주기
+									        우리는 WAS 의 webapp/resources/photo_upload 라는 폴더로 지정해준다.
+									 */
+									
+									// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+									HttpSession session = req.getSession();
+									String root = session.getServletContext().getRealPath("/"); 
+									String path = root + "resources"+File.separator+"photo_upload";
+									// path 가 첨부파일들을 저장할 WAS(톰캣)의 폴더가 된다. 
+									
+								//	System.out.println(">>>> 확인용 path ==> " + path); 
+									// >>>> 확인용 path ==> C:\SpringWorkspaceTeach\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Board\resources\photo_upload
+									
+									// 2. 파일첨부를 위한 변수의 설정 및 값을 초기화한 후 파일올리기
+									String newFilename = "";
+									// WAS(톰캣) 디스크에 저장할 파일명 
+									
+									byte[] bytes = null;
+									// 첨부파일을 WAS(톰캣) 디스크에 저장할때 사용되는 용도 
+												
+									try {
+										bytes = photovo.getFiledata().getBytes(); 
+										// getBytes()는 첨부된 파일을 바이트단위로 파일을 다 읽어오는 것이다. 
+										/* 2-1. 첨부된 파일을 읽어오는 것
+											    첨부한 파일이 강아지.png 이라면
+											    이파일을 WAS(톰캣) 디스크에 저장시키기 위해
+											    byte[] 타입으로 변경해서 받아들인다.
+										*/
+										// 2-2. 이제 파일올리기를 한다.
+										String original_name = photovo.getFiledata().getOriginalFilename();
+										//  photovo.getFiledata().getOriginalFilename() 은 첨부된 파일의 실제 파일명(문자열)을 얻어오는 것이다. 
+										newFilename = fileManager.doFileUpload(bytes, original_name, path);
+										
+								//      System.out.println(">>>> 확인용 newFileName ==> " + newFileName); 
+										
+										int width = fileManager.getImageWidth(path+File.separator+newFilename);
+								//		System.out.println("확인용 >>>>>>>> width : " + width);
+										
+										if(width > 600) {
+											width = 600;
+											newFilename = largeThumbnailManager.doCreateThumbnail(newFilename, path);
+										}
+								//		System.out.println("확인용 >>>>>>>> width : " + width);
+										
+										String CP = req.getContextPath();  // board
+										file_result += "&bNewLine=true&sFileName="+newFilename+"&sWidth="+width+"&sFileURL="+CP+"/resources/photo_upload/"+newFilename; 
+										
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+									
+								} else {
+									// 파일이 존재하지 않는다라면
+									file_result += "&errstr=error";
+								}
+							    
+								return "redirect:" + callback + "?callback_func="+callback_func+file_result;
+						  }
+						  
+						// ==== #스마트에디터4. 드래그앤드롭을 사용한 다중사진 파일업로드 ====
+							@RequestMapping(value="/image/multiplePhotoUpload.ana", method={RequestMethod.POST})
+							public void multiplePhotoUpload(HttpServletRequest req, HttpServletResponse res) {
+							    
+								/*
+								   1. 사용자가 보낸 파일을 WAS(톰캣)의 특정 폴더에 저장해주어야 한다.
+								   >>>> 파일이 업로드 되어질 특정 경로(폴더)지정해주기
+								        우리는 WAS 의 webapp/resources/photo_upload 라는 폴더로 지정해준다.
+								 */
+								
+								// WAS 의 webapp 의 절대경로를 알아와야 한다. 
+								HttpSession session = req.getSession();
+								String root = session.getServletContext().getRealPath("/"); 
+								String path = root + "resources"+File.separator+"photo_upload";
+								// path 가 첨부파일들을 저장할 WAS(톰캣)의 폴더가 된다. 
+								
+							//	System.out.println(">>>> 확인용 path ==> " + path); 
+								// >>>> 확인용 path ==> C:\SpringWorkspaceTeach\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Board\resources\photo_upload   
+								
+								File dir = new File(path);
+								if(!dir.exists())
+									dir.mkdirs();
+								
+								String strURL = "";
+								
+								try {
+									if(!"OPTIONS".equals(req.getMethod().toUpperCase())) {
+							    		String filename = req.getHeader("file-name"); //파일명을 받는다 - 일반 원본파일명
+							    		
+							    //		System.out.println(">>>> 확인용 filename ==> " + filename); 
+							    		// >>>> 확인용 filename ==> berkelekle%ED%8A%B8%EB%9E%9C%EB%94%9405.jpg
+							    		
+							    		InputStream is = req.getInputStream();
+							    	/*
+							          	요청 헤더의 content-type이 application/json 이거나 multipart/form-data 형식일 때,
+							          	혹은 이름 없이 값만 전달될 때 이 값은 요청 헤더가 아닌 바디를 통해 전달된다. 
+							          	이러한 형태의 값을 'payload body'라고 하는데 요청 바디에 직접 쓰여진다 하여 'request body post data'라고도 한다.
+
+						               	서블릿에서 payload body는 Request.getParameter()가 아니라 
+						            	Request.getInputStream() 혹은 Request.getReader()를 통해 body를 직접 읽는 방식으로 가져온다. 	
+							    	 */
+							    		String newFilename = fileManager.doFileUpload(is, filename, path);
+							    	
+										int width = fileManager.getImageWidth(path+File.separator+newFilename);
+						       //		System.out.println(">>>> 확인용 width ==> " + width);
+										
+										if(width > 600) {
+											width = 600;
+											newFilename = largeThumbnailManager.doCreateThumbnail(newFilename, path);
+										}
+								//		System.out.println(">>>> 확인용 width ==> " + width);
+										// >>>> 확인용 width ==> 600
+										// >>>> 확인용 width ==> 121
+							    	
+										String CP = req.getContextPath(); // board
+									
+										strURL += "&bNewLine=true&sFileName="; 
+						            	strURL += newFilename;
+						            	strURL += "&sWidth="+width;
+						            	strURL += "&sFileURL="+CP+"/resources/photo_upload/"+newFilename;
+							    	}
+								
+							    	/// 웹브라우저상에 사진 이미지를 쓰기 ///
+									PrintWriter out = res.getWriter();
+									out.print(strURL);
+								} catch(Exception e){
+									e.printStackTrace();
+								}
+								
+							}// end of void multiplePhotoUpload(HttpServletRequest req, HttpServletResponse res)----------------
+							
+							
 	
 	
 }
