@@ -15,14 +15,14 @@ public class YSWRentalDAO implements InterYSWRentalDAO {
 	@Autowired
 	private SqlSessionTemplate sqlsession;
 	
-	
+	/*
 	// 대출 목록 페이지 보여주기
 	@Override
 	public List<YSWRentalVO> findRentalList() {
 		
 		List<YSWRentalVO> rentalList = sqlsession.selectList("YSW.findRentalList");
 		return rentalList;
-	}
+	}*/
 
 
 	// 책 반납
@@ -41,9 +41,9 @@ public class YSWRentalDAO implements InterYSWRentalDAO {
 		
 		int size = bookList.length;
 		
-		System.out.println("size1 : " + bookList.length);
-		System.out.println("size2 : " + memberidList.length);
-		System.out.println("size3 : " + rentaldateList.length);
+		//System.out.println("size1 : " + bookList.length);
+		//System.out.println("size2 : " + memberidList.length);
+		//System.out.println("size3 : " + rentaldateList.length);
 		
 		for(int i=0; i<size; i++) {
 			
@@ -52,9 +52,9 @@ public class YSWRentalDAO implements InterYSWRentalDAO {
 			infoMap.put("memberidList", memberidList[i]);
 			infoMap.put("rentaldateList", rentaldateList[i]);
 			
-			System.out.println("bookList : " + infoMap.get("bookList"));
-			System.out.println("memberidList : " + infoMap.get("memberidList"));
-			System.out.println("rentaldateList : " + infoMap.get("rentaldateList"));
+			//System.out.println("bookList : " + infoMap.get("bookList"));
+			//System.out.println("memberidList : " + infoMap.get("memberidList"));
+			//System.out.println("rentaldateList : " + infoMap.get("rentaldateList"));
 			
 			result += sqlsession.insert("YSW.returnBook", infoMap);
 			infoMap.clear();
@@ -123,7 +123,7 @@ public class YSWRentalDAO implements InterYSWRentalDAO {
 			
 			int delayDate = Integer.parseInt(delayInfoList[i]);
 			
-			System.out.println("delayDate : " + delayDate);
+			//System.out.println("delayDate : " + delayDate);
 			
 			if(delayDate > 0) {
 				
@@ -196,8 +196,41 @@ public class YSWRentalDAO implements InterYSWRentalDAO {
 	}
 
 
+	// 검색어에 따른 대여 목록 결과의 총 페이지 구하기
+	@Override
+	public int findTotalPageWith(HashMap<String, String> paraMap) {
+
+		int page = sqlsession.selectOne("YSW.findTotalPageWith", paraMap);
+		return page;
+	}
+
+
+	// 검색어가 없을 때 나오는 대여 목록의 총 페이지
+	@Override
+	public int findTotalPage() {
+
+		int page = sqlsession.selectOne("YSW.findTotalPage");
+		return page;
+	}
+
 	
+	// 검색어에 따른 대여 목록 검색 
+	@Override
+	public List<YSWRentalVO> findRentalListWith(HashMap<String, Object> optionMap) {
+
+		List<YSWRentalVO> rentalVOList = sqlsession.selectList("YSW.findRentalListWith", optionMap);
+		return rentalVOList;
+	}
 
 
+	// 검색어 없이 대여 목록 검색
+	@Override
+	public List<YSWRentalVO> findRentalList(HashMap<String, Object> optionMap) {
+
+		List<YSWRentalVO> rentalVOList = sqlsession.selectList("YSW.findRentalList", optionMap);
+		return rentalVOList;
+	}
+
+	
 
 }

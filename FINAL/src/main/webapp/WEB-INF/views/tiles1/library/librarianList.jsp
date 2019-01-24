@@ -71,7 +71,7 @@ p{margin:3px;}
   min-height: 100%;
 }
 
-li {
+.modal-body li {
 	list-style:none;
 	padding:2%;
 
