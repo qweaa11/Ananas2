@@ -300,6 +300,23 @@ public class YJKBoardController {
 			
 		}
 		
+		/*// ==== 댓글쓰면 commentCount +1 ====
+		@RequestMapping(value="/updateCommentCount.ana", method={RequestMethod.POST})
+		@ResponseBody
+		public HashMap<String, String> updateCommentCount(YJKReplyVO replyvo) 
+			throws Throwable {
+			
+			HashMap<String, String> returnMap = new HashMap<String, String>();
+			
+			// 댓글쓰면 commentCount + 1(AJAX 처리)
+			returnMap = service.updateCommentCount(replyvo);
+			
+			returnMap.put("", replyvo.getName());
+					
+			return returnMap;
+			
+		} 보류 */
+		
 		// ==== 댓글내용 가져오기 ====
 		@RequestMapping(value="/replyList.ana", method={RequestMethod.GET})
 		@ResponseBody
@@ -344,7 +361,7 @@ public class YJKBoardController {
 		}
 		
 		// ==== 댓글 TotalPage 가져오기 ====
-		@RequestMapping(value="/getCommentTotalPage.ana", method={RequestMethod.GET})
+		@RequestMapping(value="/boardCommentTotalPage.ana", method={RequestMethod.GET})
 		@ResponseBody
 		public HashMap<String, Integer> getCommentTotalPage(HttpServletRequest req) {
 			
@@ -502,8 +519,8 @@ public class YJKBoardController {
 		}
 		
 		// ==== 첨부파일 다운로드 받기 =====
-		@RequestMapping(value="/download.ana", method={RequestMethod.GET})
-		public void download(HttpServletRequest req, HttpServletResponse res) {
+		@RequestMapping(value="/boardDownload.ana", method={RequestMethod.GET})
+		public void boardDownload(HttpServletRequest req, HttpServletResponse res) {
 			
 			String idx = req.getParameter("idx");
 			// 첨부파일이 있는 글번호

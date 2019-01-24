@@ -517,7 +517,7 @@
 	          	<div class="col-md-8 col-sm-9">
 	            	<div class="input-group">
 	              		<span class="input-group-addon"><i class=""></i></span>
-	              		<input type="text" class="form-control" name="intro" id="intro" placeholder="도서소개" value="" style="height: 200px;">
+	            		<textarea rows="" cols="" type="text" class="form-control" name="intro" id="intro" placeholder="도서소개" value="" style="height: 200px;"></textarea>
 	            	</div>  
 	          	</div>
 	        </div>
