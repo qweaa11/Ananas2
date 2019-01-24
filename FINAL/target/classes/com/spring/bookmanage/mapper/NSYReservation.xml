@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ==== mapper 기본 설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- ==== mapper 이름 설정 ==== -->
+<mapper namespace="NSYReservation">
+	
+	<resultMap type="HashMap" id="reservationListResult">
+		<result property="idx" column="idx" javaType="String"/>
+		<result property="reserveDate" column="reserveDate" javaType="String"/>
+		<result property="memberid" column="memberid" javaType="String"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="phone" column="phone" javaType="String"/>
+		<result property="addr1" column="addr1" javaType="String"/>
+		<result property="addr2" column="addr2" javaType="String"/>
+		<result property="post" column="post" javaType="String"/>
+		<result property="bookid" column="bookid" javaType="String"/>
+		<result property="title" column="title" javaType="String"/>
+		<result property="author" column="author" javaType="String"/>
+		<result property="stats" column="stats" javaType="String"/>
+		<result property="pubcode" column="pubcode" javaType="String"/>
+		<result property="pubname" column="pubname" javaType="String"/>
+		<result property="rno" column="rno" javaType="String"/>
+	</resultMap>
+	
+	<select id="getReservationList" parameterType="String" resultMap="reservationListResult">
+		select RNO, idx, reserveDate, memberid, name, phone, addr1, addr2, post, bookid, title, author, status, pubcode, pubname
+		from	
+			(
+			select rownum as RNO, idx, reserveDate, memberid, name, phone, addr1, addr2, post, bookid, title, author, status, pubcode, pubname
+			from 
+				(
+				select A.idx, to_char(A.reserveDate, 'yyyy-mm-dd') AS reserveDate, B.memberid, B.name, B.phone, B.addr1, B.addr2, B.post, C.bookid, C.title, C.author, C.status, D.pubcode, D.pubname 
+				from reservation A 
+				join member B on A.memberid_fk = B.memberid
+				join book C on A.bookid_fk = C.bookid
+				join publisher D on C.pubcode_fk = D.pubcode
+				)V
+			<if test='searchWord != null and searchWord !="" and searchWord != "null"'>
+			where ${colname} like '%'||#{searchWord}||'%'
+			</if>
+			order by RNO	
+			)T		
+		where RNO between #{rno1} and #{rno2}
+		<if test='sort != null and sort !="" and sort != "null"'>
+		order by #{sort}
+		</if>
+		
+	</select>
+	
+	<select id = "getReservationTotalList" parameterType="HashMap" resultType="int">
+		select count(*)
+		from reservation A 
+		join member B on A.memberid_fk = B.memberid
+		join book C on A.bookid_fk = C.bookid
+		join publisher D on C.pubcode_fk = D.pubcode
+		<if test='searchWord != null and searchWord != "" and searchWord != "null" '>
+		where ${colname} like '%'||#{searchWord}||'%'
+		</if>		
+	</select>
+	
+</mapper>

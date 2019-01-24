@@ -5,6 +5,7 @@
 
 	if(${n==1}){
 		alert("도서관정보 수정 성공!!");
+		opener.location.reload();
 		self.close();
 	}	
 	else {
