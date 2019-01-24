@@ -1,12 +1,45 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
+  
+  
 <script type="text/javascript">
 	
 	$(document).ready(function()
 	{
 		searchKeep();
-		showReturned("1");
+		showReturned("1","idx");
+		
+		var sort = $("#sortname").val();
+		console.log("sort: "+sort);
+		
+		$("#search").keydown(function(event){
+			if(event.keyCode== 13)
+			{
+				goSearch("1");
+			}
+		});
+		
+	
+		
+		$("#sortname").change(function(){
+			if($("#search").val() == "")
+			{// 검색어가 없는경우
+				showReturned("1", sort);
+			}
+			else
+			{// 검색어가 있는경우
+				goSearch("1", sort);
+			}
+		});
+		
+		
+		
+		
+		
+		
 		
 	
 		
@@ -14,9 +47,13 @@
 	
 	
 	
-	function showReturned(currentShowPageNo)
+	function showReturned(currentShowPageNo, sort)
 	{
-		var form_data = {"currentShowPageNo":currentShowPageNo}
+		var sort = $("#sortname").val();
+		console.log("확인용"+sort);
+		
+		var form_data = {"currentShowPageNo":currentShowPageNo,
+						 "sort": sort }
 		
 		$.ajax({
 			url:"<%=request.getContextPath() %>/showReturned.ana",
@@ -37,6 +74,8 @@
 							   "<td style='text-align:center;'>"+entry.rentalDate+"</td>"+
 							   "<td style='text-align:center;'>"+entry.returnDate+"</td>"+
 						   "</tr>";
+						   
+						   
 				});
 				
 				$("#returnedBookDisplay").empty().html(html); 
@@ -64,30 +103,30 @@
 				{
 					var totalPage = json.TOTALPAGE;
 					var pageBarHTML = "";
-					var blockSize = 3;
+					var blockSize = 10;
 					var loop = 1;
 					var pageNo = Math.floor((currentShowPageNo - 1)/blockSize)*blockSize+1;
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:showReturned(\""+(pageNo-1)+"\");'>[이전]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<a style='color:white;' href='javascript:showReturned(\""+(pageNo-1)+"\");'><button type='button' class='btn btn-primary btn-circle'><</button></a>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
 						if(pageNo == currentShowPageNo)
 						{
-							pageBarHTML += "&nbsp;<span style='color:red; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span>&nbsp;";
+							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary btn-circle'><span style='color:#ff9999; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span></button>&nbsp;";
 						}
 						else
 						{
-							pageBarHTML += "&nbsp;<a href='javascript:showReturned(\""+pageNo+"\");'>"+pageNo+"</a>&nbsp;";
+							pageBarHTML += "&nbsp;<a style='color:white;' href='javascript:showReturned(\""+pageNo+"\");'><button type='button' class='btn btn-primary btn-circle'>"+pageNo+"</button></a>&nbsp;";
 						}
 						loop++;
 						pageNo++;
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:showReturned(\""+(pageNo)+"\");'>[다음]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<a style='color:white;' href='javascript:showReturned(\""+(pageNo)+"\");'><button type='button' class='btn btn-primary btn-circle'>></button></a>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
@@ -106,16 +145,16 @@
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	
-	function goSearch(currentShowPageNo)
+	function goSearch(currentShowPageNo,sort)
 	{
+		var sort = $("#sortname").val();
+		
 		var colname = $("#colname").val();
 		var search = $("#search").val();
 		var form_data = {"currentShowPageNo":currentShowPageNo,
 						 "COLNAME": colname,
-						 "SEARCH": search }
-		
-		console.log("colname: "+ colname);
-		console.log("search: "+ search);
+						 "SEARCH": search,
+						 "SORT":sort}
 		
 		$.ajax({
 			url:"<%=request.getContextPath() %>/showReturnedSearch.ana",
@@ -173,24 +212,24 @@
 					
 					if(pageNo != 1)
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo-1)+"\");'>[이전]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo-1)+"\");'><button type='button' class='btn btn-primary'><</button></a>&nbsp;";
 					}
 					while(!(loop>blockSize || pageNo>totalPage))
 					{
 						if(pageNo == currentShowPageNo)
 						{
-							pageBarHTML += "&nbsp;<span style='color:red; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span>&nbsp;";
+							pageBarHTML += "&nbsp;<button type='button' class='btn btn-primary'><span style='color:#ff9999; font-size:12pt; font-weight: bold; text-decoration:underline;'>"+pageNo+"</span></button>&nbsp;";
 						}
 						else
 						{
-							pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+pageNo+"\");'>"+pageNo+"</a>&nbsp;";
+							pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+pageNo+"\");'><button type='button' class='btn btn-primary'>"+pageNo+"</button></a>&nbsp;";
 						}
 						loop++;
 						pageNo++;
 					}
 					if(!(pageNo > totalPage))
 					{
-						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo)+"\");'>[다음]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<a href='javascript:goSearch(\""+(pageNo)+"\");'><button type='button' class='btn btn-primary'>></button></a>&nbsp;";
 					}
 					/////////////////////////////////	/////////////////////////////////
 					$("#pageBar").empty().html(pageBarHTML);
@@ -251,19 +290,22 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class="panel panel-default list-group-panel" style="max-width: 100%; max-height: 90%; overflow: auto;">
-        	<div class="panel-body" style="overflow: auto; min-width: 600px;">
-        		<div>
-        			<form name="searchFrm" >
-        				<select name="colname" id="colname" style="height: 26px;">
+        	<div class="panel-body" style="overflow: auto; min-width: 600px; ">
+        		<div style="height: 30px; margin-bottom: 3%;" >
+        			<form name="searchFrm" onsubmit="return false">
+        				<select name="colname" id="colname" style="height: 30px; margin-top: 1px;">
         					<option value="memberid">회원ID</option>
         					<option value="title">도서명</option>
         					<option value="author">작가명</option>
-        				</select>
-        				<input type="text" name="search" id="search" size="40" />
-        				<button type="button" onClick="goSearch('1');">검색</button>
-        				정렬:
-        				<select name="colname" id="colname" style="height: 26px; margin-right: 70px;">
-        					<option value="memberid">반납번호</option>
+        				</select>&nbsp;&nbsp;&nbsp;
+        				<input type="text" name="search" id="search" size="40" style="height:30px;" placeholder="검색어를 입력하세요" />
+        				<input type="hidden" name="test"></input>
+        				<button type="button" class="search btn btn-primary" onClick="goSearch('1');" style="height:30px;">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-search"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</button>
+        				&nbsp;&nbsp;&nbsp;&nbsp;정렬:&nbsp;
+        				<select name="sortname" id="sortname" style="height: 30px; margin-right: 70px; margin-top: 1px;">
+        					<option value="b.idx">반납번호</option>
         					<option value="memberid">회원ID</option>
         					<option value="title">도서명</option>
         					<option value="author">작가명</option>
@@ -289,7 +331,9 @@
 						</thead>
 					<tbody id="returnedBookDisplay"></tbody>
 					</table>
-					<div id="pageBar" style="height: 50px; text-align: center;"></div>
+					<ul>
+					<div id="pageBar"  style="height: 50px; text-align: center;"></div>
+					</ul>
 				</div>
 			</div>
 		</div>

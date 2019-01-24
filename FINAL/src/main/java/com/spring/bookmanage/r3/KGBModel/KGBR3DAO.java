@@ -40,7 +40,7 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		
 		return bookList;
 	}// end of findAllBookBySearchWord()-------------------
-
+	
 	
 	@Override
 	public void findAllRentalByMemberid(HashMap<String, String> paraMap) throws Throwable{
@@ -91,7 +91,7 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		if(limitBook.length() > 0) {
 			limitBook = limitBook.substring(0, limitBook.length()-1);
 			
-			Throwable ex = new Throwable(limitBook + " 회원님의 최대 대여가능 권수를 초과합니다.");
+			Throwable ex = new Throwable(limitBook + " 회원님의 최대 대여/예약 가능 권수를 초과합니다.");
 			
 			throw ex;
 		}
@@ -160,7 +160,7 @@ public class KGBR3DAO implements InterKGBR3DAO {
 
 	
 	@Override
-	public String findAllReservationByBookid(HashMap<String, String> paraMap) throws Throwable{
+	public String findNoteqReservationByBookid(HashMap<String, String> paraMap) throws Throwable{
 		
 		String reservebookid = "";
 		
@@ -169,10 +169,10 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		
 		for(int i=0; i < memberidArr.length; i++ ) {
 			
-			String memberid = sqlsession.selectOne("kgb.findAllReservationByBookid", bookidArr[i]);
+			String memberid = sqlsession.selectOne("kgb.findNoteqReservationByBookid", bookidArr[i]);
 			
 			if(memberid != null && !memberid.equals(memberidArr[i])) {
-				Throwable ex = new Throwable(memberid + "회원에게 예약되어있는 책입니다."); 
+				Throwable ex = new Throwable(bookidArr[i] + " 은" + memberid + "회원에게 예약되어있는 책입니다."); 
 				
 				throw ex;
 			}
@@ -189,21 +189,77 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		return reservebookid;
 		
 	}// end of findAllReservationByBookid()---------------------------
+	
+	
+	@Override
+	public String findAllReservationByBookid(HashMap<String, String> paraMap){
+		
+		String reservebookid = "";
+		
+		String[] memberidArr = paraMap.get("MEMBERIDS").split(",");
+		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		
+		for(int i=0; i < memberidArr.length; i++ ) {
+			
+			int count = sqlsession.selectOne("kgb.findAllReservationByBookid", bookidArr[i]);
+			
+			System.out.println(count + memberidArr[i]);
+			
+			if(count > 0) {
+				reservebookid += bookidArr[i] + ",";
+			}
+			
+			System.out.println(bookidArr[i]);
+			
+		}// end of for-----------------
+		
+		if(reservebookid.length() > 0)
+			reservebookid = reservebookid.substring(0, reservebookid.length()-1);
+		
+		System.out.println(reservebookid);
+		
+		return reservebookid;
+		
+	}// end of findAllReservationByBookid()-------------------------------
 
 	
 	@Override
-	public void deleteReservationByMemberid(String reservebookid) throws Throwable {
+	public void deleteReservationByBookid(String reservebookid) throws Throwable {
 		
-		int n = sqlsession.delete("kgb.deleteReservationByMemberid", reservebookid);
-		System.out.println("asd");
-		if(n == 0) {
-			Throwable ex = new Throwable("대여중 오류가 발생했습니다."); 
+		String[] bookidArr = reservebookid.split(",");
+		
+		int n = 0;
+		
+		for(String bookid : bookidArr) {
+			n = sqlsession.delete("kgb.deleteReservationByBookid", bookid);
 			
-			throw ex;
+			if(n == 0) {
+				Throwable ex = new Throwable("대여중 오류가 발생했습니다.");
+				
+				throw ex;
+			}
 		}
 		
 	}// end of deleteReservationByMemberid()-----------------------
 
+	
+	@Override
+	public void findAllOverdateByMeberid(HashMap<String, String> paraMap) throws Throwable{
+		
+		String[] memberidArr = paraMap.get("MEMBERIDS").split(",");
+		
+		for(String memberid : memberidArr) {
+			int n = sqlsession.selectOne("kgb.findAllOverdateByMeberid", memberid);
+			
+			if(n > 0) {
+				Throwable ex = new Throwable("연체되어 있는 책이 있어 예약/대여 가 불가능 합니다."); 
+				
+				throw ex;
+			}
+		}
+		
+	}// end of findAllOverdateByMeberid()--------------------------------
+	
 	
 	@Override
 	public List<HashMap<String, String>> findAllRentalByCategory(HashMap<String, String> paraMap) {
@@ -245,13 +301,35 @@ public class KGBR3DAO implements InterKGBR3DAO {
 
 	
 	@Override
-	public void updateBookstatusByBookid(HashMap<String, String> paraMap) throws Throwable{
+	public void updateBookstatusByBookid(HashMap<String, String> paraMap, String reserveBookid) throws Throwable{
 		
 		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		String[] reserveBookidArr = reserveBookid.split(",");
+		
+		boolean flag = false;
 		
 		for(String bookid : bookidArr) {
 			
-			int n = sqlsession.update("kgb.updateBookstatusByBookid", bookid);
+			flag = false;
+			
+			if(reserveBookidArr != null && reserveBookidArr.length != 0) {
+				
+				for(String reserve : reserveBookidArr) {
+					if(reserve.equals(bookid))
+						flag = true;
+				}
+				
+			}// end of if------------------
+			int n = 0;
+			
+			if(flag) {
+				n = sqlsession.update("kgb.updateBookstatus2ByBookid", bookid);
+			}
+			else {
+				n = sqlsession.update("kgb.updateBookstatus0ByBookid", bookid);
+			}
+				
+			
 			
 			if(n == 0) {
 				Throwable ex = new Throwable("반납중 오류가 발생했습니다."); 
@@ -318,7 +396,7 @@ public class KGBR3DAO implements InterKGBR3DAO {
 			String reserveName = sqlsession.selectOne("kgb.findAllReservationCountByBookid", bookid);
 			
 			if(reserveName != null && !reserveName.trim().equals("")) {
-				result += reserveName + ",";
+				result += reserveName + "(" + bookid + "),";
 			}
 			
 		}// end of for--------------------------------
@@ -354,6 +432,48 @@ public class KGBR3DAO implements InterKGBR3DAO {
 		
 		
 	}// end of UpdateAllRenewByBookid()--------------------------
+	
+	
+	@Override
+	public List<HashMap<String, String>> findAllReserveRentalByCategory(HashMap<String, String> paraMap) {
+		
+		List<HashMap<String, String>> rentalList = sqlsession.selectList("kgb.findAllReserveRentalByCategory", paraMap);
+		
+		return rentalList;
+		
+	}// end of findAllRentalByCategory()-----------------------
+	
+	
+	@Override
+	public void insertReserveByRentalInfo(HashMap<String, String> paraMap) throws Throwable{
+		
+		String[] bookidArr = paraMap.get("BOOKIDS").split(",");
+		String[] memberidArr = paraMap.get("MEMBERIDS").split(",");
+		String[] reservedateArr = paraMap.get("RESERVEDATES").split(",");
+		
+		for(int i=0; i < bookidArr.length; i++) {
+			
+			HashMap<String, String> map = new HashMap<String, String>();
+			
+			map.put("BOOKID", bookidArr[i]);
+			map.put("MEMBERID", memberidArr[i]);
+			map.put("RESERVEDATE", reservedateArr[i]);
+			
+			int n = sqlsession.update("kgb.insertReserveByRentalInfo", map);
+			
+			if(n == 0) {
+				Throwable ex = new Throwable("예약중 오류가 발생했습니다."); 
+				
+				throw ex;
+			}
+			
+		}// end of for--------------------------------
+		
+	}// end of insertReserveByRentalInfo()-----------------------------------
+
+	
+
+	
 
 	
 }

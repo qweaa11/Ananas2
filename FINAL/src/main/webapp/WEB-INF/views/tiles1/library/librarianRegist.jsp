@@ -80,7 +80,7 @@
 	function adminRegistEnd() {  
 	      
         var frm = document.adimFrm;
-        frm.action = "adminRegistEnd.ana";
+        frm.action = "librarianRegistEnd.ana";
         frm.method = "POST";
         frm.submit();
 	      

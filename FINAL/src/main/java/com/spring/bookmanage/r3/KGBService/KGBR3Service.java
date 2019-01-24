@@ -66,11 +66,12 @@ public class KGBR3Service implements InterKGBR3Service{
 		
 		int n = 0;
 		
-		String reservebookid = r3DAO.findAllReservationByBookid(paraMap);
+		String reservebookid = r3DAO.findNoteqReservationByBookid(paraMap);
 		
 		if(reservebookid.length() > 0)
-			r3DAO.deleteReservationByMemberid(reservebookid);
+			r3DAO.deleteReservationByBookid(reservebookid);
 		
+		r3DAO.findAllOverdateByMeberid(paraMap);
 		int n1 = r3DAO.updateAllBookByBookid(paraMap);
 		int n2 = r3DAO.addAllRentalById(paraMap);
 		r3DAO.findAllRentalByMemberid(paraMap);
@@ -97,8 +98,12 @@ public class KGBR3Service implements InterKGBR3Service{
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
 	public int addReturnByBookid(HashMap<String, String> paraMap) throws Throwable{
 		
+		
 		r3DAO.updateMemberByDeadeline(paraMap);
-		r3DAO.updateBookstatusByBookid(paraMap);
+		
+		String reserveBookid = r3DAO.findAllReservationByBookid(paraMap);
+		
+		r3DAO.updateBookstatusByBookid(paraMap, reserveBookid);
 		r3DAO.insertReturnByRentalInfo(paraMap);
 		r3DAO.deleteRentalByBookid(paraMap);
 		
@@ -116,6 +121,30 @@ public class KGBR3Service implements InterKGBR3Service{
 		return 1;
 		
 	}// end of updateRentalByBookid()----------------
+
+	
+	@Override
+	public List<HashMap<String, String>> findAllReserveRentalByCategory(HashMap<String, String> paraMap) {
+		
+		List<HashMap<String, String>> rentalList = r3DAO.findAllReserveRentalByCategory(paraMap);
+		
+		return rentalList;
+		
+	}// end of findAllRentalByCategory()-----------------------
+	
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int insertReserveByRentalInfo(HashMap<String, String> paraMap) throws Throwable{
+		
+		r3DAO.findAllReservationCountByBookid(paraMap);
+		r3DAO.insertReserveByRentalInfo(paraMap);
+		r3DAO.findAllRentalByMemberid(paraMap);
+		r3DAO.findAllOverdateByMeberid(paraMap);
+		
+		return 1;
+		
+	}// end of findAllReserveRentalByCategory()-------------------------------
 
 	
 

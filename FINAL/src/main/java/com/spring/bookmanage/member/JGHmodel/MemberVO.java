@@ -23,6 +23,8 @@ public class MemberVO {
 
 	private String ages;			// 연령대
 
+	private int rno;
+
 	public MemberVO() { }// end of default constructor
 
 	public MemberVO(int idx, String memberid, String pwd, String name, String email, String phone, String addr1,
@@ -49,6 +51,14 @@ public class MemberVO {
 		this.fileSize = fileSize;
 		this.ages = ages;
 	}// end of constructor
+
+	public int getRno() {
+		return rno;
+	}
+
+	public void setRno(int rno) {
+		this.rno = rno;
+	}
 
 	public int getIdx() {
 		return idx;

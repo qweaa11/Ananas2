@@ -67,5 +67,36 @@
 		select count(*)
 		from member
 	</select>
+	
+	<!-- 검색조건에 따른 회원목록 조회 -->
+	<select id="findAllMemberWithPagination" parameterType="HashMap" resultType="com.spring.bookmanage.member.JGHmodel.MemberVO">
+		select rno, idx, name, memberid, ages, gender, email, phone, status, regDate
+		from
+		    (
+		    select rownum as rno, idx, name, memberid, ages, gender, email, phone, status, regDate
+		    from
+		        (
+		        select idx, name, memberid
+		        	, case when func_age(birth)<![CDATA[<]]>14 then '아동'
+		    		when func_age(birth)<![CDATA[<]]>20 then '청소년'
+		    		else '성인' end as ages, gender, email, phone, status
+		            , to_char(regDate, 'yyyy-mm-dd') as regDate
+		        from member
+	        <if test='searchWord != null and searchWord != "" and searchWord != "null"'>
+		        where ${colname} like '%'||#{searchWord}||'%'
+	        </if>
+	        	order by idx desc
+		        ) V
+		    ) T
+		where rno between #{front} and #{rear}
+	</select>
+	
+	<!--  -->
+	<parameterMap type="HashMap" id="runScheduler_paraMap">
+		<parameter property="row" mode="OUT" jdbcType="VARCHAR"/>
+	</parameterMap>
+	<select id="runScheduler" statementType="CALLABLE" parameterMap="runScheduler_paraMap">
+		{ call pcd_run(?) }
+	</select>
 
 </mapper>

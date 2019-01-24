@@ -190,12 +190,12 @@ public class MyUtil {
 	 * @return
 	 */
 	public static String getCurrentURL(HttpServletRequest request) {
-		String currentURL = request.getRequestURL().toString();// ==> 확인용 currentURL => http://localhost:9090/MyMVC/memberList.do
+		String currentURL = request.getRequestURL().toString();// ==> 확인용 currentURL => http://localhost:9090/bookmanage/memberList.ana
 		String method = request.getMethod();
 
 		if("GET".equalsIgnoreCase(method)) {
 			String queryString = request.getQueryString();
-			// ==> 확인용 queryString => currentShowPageNo=3&sizePerPage=5
+			// ==> 확인용 queryString => currentPageNo=3&sizePerPage=5
 
 			currentURL += "?"+queryString;
 			// ==> ==> 확인용 currentURL =>
@@ -214,4 +214,53 @@ public class MyUtil {
 
 		return currentURL;
 	}// end of getCurrentURL
+
+	public static String createPageBar(int sizePerPage, int blockSize, int totalPage, int currentPageNo,
+			String colname, String searchWord, String url) {
+		String pageBar = "";
+		int loop = 1;
+		int pageNo = ((currentPageNo-1)/blockSize)*blockSize+1;// 공식임!!!
+
+		// currentPageNo 가 1~10 일때 pageNo 는 1
+		// currentPageNo 가 11~20 일때 pageNo 는 11
+		// currentPageNo 가 21~30 일때 pageNo 는 21
+		String str_pageNo = "";
+
+		// prev page
+		if(pageNo == 1) {
+			str_pageNo = "<li class='disabled'><a href='#'>«</a></li>\n";
+		} else {
+			str_pageNo = "<li><a href='"+url+"'?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
+					+"&colname="+colname+"&searchWord="+searchWord+"' >«</a></li>\n";
+		} // end of if~else
+
+		pageBar += str_pageNo;
+
+		while(!(pageNo > totalPage || loop > blockSize)) {
+			if(pageNo == currentPageNo) {
+				str_pageNo = "<li class='active'><a href='#'>"+pageNo+"<span class='sr-only'>(current)</span></a></li>\n";
+			} else {
+				str_pageNo = "<li><a href='"+url+"?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
+						+"&colname="+colname+"&searchWord="+searchWord+"'>"+pageNo+"</a></li>\n";
+			} // end of if~else
+
+			pageBar += str_pageNo;
+			pageNo++;
+			loop++;
+		} // end of while
+
+		// next page
+		if(pageNo > totalPage) {
+			str_pageNo = "<li class='disabled'><a href='#'>»</a></li>\n";
+		} else {
+			str_pageNo = "<li><a href='"+url+"?currentPageNo="+pageNo+"&sizePerPage="+sizePerPage
+					+"&colname="+colname+"&searchWord="+searchWord+"' >»</a></li>\n";
+		} // end of if~else	
+
+		pageBar += str_pageNo;
+
+		// System.out.println(pageBar);
+
+		return pageBar;
+	}// end of createPageBar
 }

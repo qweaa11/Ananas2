@@ -44,7 +44,7 @@
 		frm.idx.value = idx;
 		frm.gobackURL.value = gobackURL;
 		frm.method = "GET";
-		frm.action = "view.ana";
+		frm.action = "boardView.ana";
 		frm.submit();
 		
 	}
@@ -71,8 +71,30 @@
 		
 		<c:forEach items="${boardList}" var="boardvo">
 			<tr>
-				<td>${boardvo.idx}</td>
-				<td class="subject" onclick="goView('${boardvo.idx}','${gobackURL}')">${boardvo.subject}</td>
+				<td align="center">${boardvo.idx}</td>
+				<td>
+				<!-- 원글 -->
+				<c:if test="${boardvo.depthno == 0}">
+					<c:if test="${boardvo.commentCount > 0 }">
+						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');">${boardvo.subject}&nbsp;</span>
+						<span style="font-weight: bold; font-style: italic; font-size: smaller; vertical-align: super; color: red;">[${boardvo.commentCount}]</span>					
+					</c:if>
+					<c:if test="${boardvo.commentCount == 0}">
+						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');">${boardvo.subject}</span>
+					</c:if>
+				</c:if>	
+				<!-- 답변글 -->
+				<c:if test="${boardvo.depthno > 0}">
+					<c:if test="${boardvo.commentCount > 0 }">
+						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">└Re&nbsp;</span>${boardvo.subject}&nbsp;</span>
+						<span style="font-weight: bold; font-style: italic; font-size: smaller; vertical-align: super; color: red;">[${boardvo.commentCount}]</span>					
+					</c:if>
+					<c:if test="${boardvo.commentCount == 0}">
+						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">└Re&nbsp;</span>${boardvo.subject}</span>
+					</c:if>
+				</c:if>	
+				</td>
+				
 				<td align="center">${boardvo.name}</td>
 				<td align="center">${boardvo.regDate}</td>
 				<td align="center">${boardvo.readCount}</td>

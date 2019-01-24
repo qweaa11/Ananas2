@@ -18,6 +18,11 @@
 		text-decoration: none;
 		border: none;
 	}
+	
+	.pagination>li>a, .pagination>li>span {
+		border-radius: 50% !important;
+		margin: 0 5px;
+	}
 
 </style>
 
@@ -55,12 +60,12 @@
 	function allCheckFalse() {
 		var flag = $("input:checkbox[name=check]").prop("checked",false);
 	}// end of allCheck
-	
-	function unlock() {// 계정 휴면해제 함수(활성화)
+
+	function unlock(goBackURL) {// 계정 휴면해제 함수(활성화)
 		var frm = searchFrm;
 		frm.method = "POST";
 		frm.action = "unlock.ana";
-	
+
 		var flag = false;
 		var count = 0;
 		$(".tr-row").each(function() {
@@ -100,6 +105,7 @@
 			if(breakPoint) {
 				alert("선택하신 회원중 휴면상태가 아닌 회원이 존재합니다.");
 			} else {
+				frm.goBackURL.value = goBackURL;
 				frm.submit();
 				return ;
 			}// end of inner if~else
@@ -109,7 +115,7 @@
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of unlock
 	
-	function recover() {// 계정 복원처리
+	function recover(goBackURL) {// 계정 복원처리
 		var frm = searchFrm;
 		frm.method = "POST";
 		frm.action = "recover.ana";
@@ -153,6 +159,7 @@
 			if(breakPoint) {
 				alert("선택하신 회원중 복원불가능한 계정이 포함되어있습니다.(일반, 영구정지) ");
 			} else {
+				frm.goBackURL.value = goBackURL;
 				frm.submit();
 				return ;
 			}// end of inner if~else
@@ -162,7 +169,7 @@
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of recover
 	
-	function remove() {// 계정 탈퇴처리
+	function remove(goBackURL) {// 계정 탈퇴처리
 		var frm = searchFrm;
 		frm.method = "POST";
 		frm.action = "remove.ana";
@@ -206,6 +213,7 @@
 			if(breakPoint) {
 				alert("선택하신 회원중 이미 탈퇴한 회원이 존재합니다.");
 			} else {
+				frm.goBackURL.value = goBackURL;
 				frm.submit();
 				return ;
 			}// end of inner if~else
@@ -215,7 +223,7 @@
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of remove
 	
-	function ban() {// 계정 영구정지
+	function ban(goBackURL) {// 계정 영구정지
 		var frm = searchFrm;
 		frm.method = "POST";
 		frm.action = "ban.ana";
@@ -259,6 +267,7 @@
 			if(breakPoint) {
 				alert("선택하신 회원중 이미 영구정지상태인 회원이 존재합니다.");
 			} else {
+				frm.goBackURL.value = goBackURL;
 				frm.submit();
 				return ;
 			}// end of inner if~else
@@ -267,6 +276,10 @@
 
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of ban
+	
+	function latefeeReset() {
+		
+	}// end of latefeeReset
 	
 </script>
 
@@ -283,6 +296,7 @@
 					</select>
 
 					<input type="text" id="searchWord" name="searchWord" />
+					<input type="hidden" name="goBackURL" />
 					<button type="button" class="btn btn-info" onclick="search();">검색</button>
 				</div>
 
@@ -290,10 +304,11 @@
 					<button type="button" id="lock"class="btn btn-dark" onclick="allCheckFalse();"><i class="glyphicon glyphicon-remove"></i></button>
 				</div>
 				<div style="float: right;">
-					<button type="button" class="btn btn-success" onclick="unlock();">휴면해제<i class="glyphicon glyphicon-ok"></i></button>
-					<button type="button" class="btn btn-dark" onclick="recover();">복원하기<i class="glyphicon glyphicon-refresh"></i></button>
-					<button type="button" class="btn btn-warning" onclick="ban();">영구정지<i class="glyphicon glyphicon-remove"></i></button>
-					<button type="button" class="btn btn-danger" onclick="remove();">탈퇴처리<i class="glyphicon glyphicon-remove"></i></button>
+					<button type="button" class="btn btn-success" onclick="unlock('${goBackURL}');">휴면해제<i class="glyphicon glyphicon-ok"></i></button>
+					<button type="button" class="btn btn-dark" onclick="recover('${goBackURL}');">복원하기<i class="glyphicon glyphicon-refresh"></i></button>
+					<button type="button" class="btn btn-warning" onclick="remove('${goBackURL}');">탈퇴처리<i class="glyphicon glyphicon-trash"></i></button>
+					<button type="button" class="btn btn-danger" onclick="ban('${goBackURL}');">영구정지<i class="glyphicon glyphicon-ban-circle"></i></button>
+					<button type="button" class="btn btn-info" onclick="latefeeReset('${goBackURL}')">납부완료<i class="glyphicon glyphicon-usd"></i></button>
 				</div>
 			
 				<table id="table-member" class="table table-striped table-hover">
@@ -323,7 +338,7 @@
 							<c:forEach var="memberVO" items="${memberList}" varStatus="no">
 						<tr class="tr-row">
 							<td><input type="checkbox" class="check" name="check" /></td>
-							<td class="td">${no.count}</td>
+							<td class="td">${memberVO.rno}</td>
 							<td class="td">${memberVO.name}</td>
 							<td class="td">${memberVO.memberid}</td>
 							<td class="td">${memberVO.ages}</td>
@@ -333,7 +348,7 @@
 							<td class="td status">${memberVO.status}</td>
 							<td class="td">${memberVO.regDate}</td>
 							<td class="detail">
-								<input type="text" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
+								<input type="hidden" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
 								<button type="button" class="btn btn-dark"
 									onclick="javascript:location.href='memberDetail.ana?idx=${memberVO.idx}'">
 									<i class="glyphicon glyphicon-user"></i></button>
@@ -344,9 +359,15 @@
 					</tbody>
 				</table>
 			</form>
+			
 
 		</div>
 
 	</div>
+	
+	<div class="row" align="center">
+		${pageBar}
+	</div>
 
 </div>
+
