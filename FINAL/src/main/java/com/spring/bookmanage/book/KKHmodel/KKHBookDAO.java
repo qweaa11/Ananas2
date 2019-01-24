@@ -86,6 +86,11 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		List<HashMap<String,String>> fieldList = sqlsession.selectList("KKH.findField");
 		return fieldList;
 	}
+	@Override
+	public List<HashMap<String, String>> findDetailField(String bigfcode) {
+		List<HashMap<String,String>> detailFieldList = sqlsession.selectList("KKH.findDetailField", bigfcode);
+		return detailFieldList;
+	}
 
 	
 
