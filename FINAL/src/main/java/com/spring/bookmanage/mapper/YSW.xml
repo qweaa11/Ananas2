@@ -120,7 +120,7 @@
 	</delete>
 	
 	
-	<!-- 대출 목록 페이지 보여주기 -->
+	<!-- 대출 목록 페이지 보여주기
 	<select id="findRentalList" resultType="com.spring.bookmanage.rental.YSWmodel.YSWRentalVO">
 	
 		select a.idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as rentalDate
@@ -134,7 +134,7 @@
 		LEFT JOIN PUBLISHER D
 		on B.pubcode_fk = D.pubcode
 	
-	</select>
+	</select> -->
 	
 	
 	<!-- 책 반납 -->
@@ -186,5 +186,112 @@
 		</foreach>
 	
 	</update>
+	
+	
+	<!-- 검색어에 따른 대여 목록 검색 -->
+	<select id="findTotalPageWith" parameterType="HashMap" resultType="int" >
+	
+		select count(*) as cnt
+		from
+		(
+		    select rownum as RNO, idx, bookId, memberId, rentalDate, delayDate, deadline, renew, bookTitle, pubName, bookAuthor, memberName
+		    from
+		    (
+		    select a.idx as idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as rentalDate
+		          ,to_date(sysdate, 'yyyy-mm-dd') - to_date(deadline, 'yyyy-mm-dd') as delayDate
+		          ,to_char(a.deadline,'yyyy-mm-dd') as deadline, a.renew as renew, b.title as bookTitle, D.pubname as pubname
+		          ,b.author as bookAuthor, c.name as memberName
+		    from rental A JOIN book B
+		    on A.bookid_fk = B.bookid
+		    LEFT JOIN member C
+		    on A.memberid_fk = C.memberid
+		    LEFT JOIN PUBLISHER D
+		    on B.pubcode_fk = D.pubcode
+		    order by idx desc
+		    )V
+		    where ${SORT} = '%'||#{SEARCHWORD}||'%'
+		    order by RNO
+		)T
+	
+	</select>
+	
+	
+	<!-- 검색어가 없을 때 나오는 대여 목록의 총 페이지 -->
+	<select id="findTotalPage" resultType="int" >
+	
+		select count(*) as cnt
+	    from
+	    (
+	    select a.idx as idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as rentalDate
+	          ,to_date(sysdate, 'yyyy-mm-dd') - to_date(deadline, 'yyyy-mm-dd') as delayDate
+	          ,to_char(a.deadline,'yyyy-mm-dd') as deadline, a.renew as renew, b.title as bookTitle, D.pubname as pubname
+	          ,b.author as bookAuthor, c.name as memberName
+	    from rental A JOIN book B
+	    on A.bookid_fk = B.bookid
+	    LEFT JOIN member C
+	    on A.memberid_fk = C.memberid
+	    LEFT JOIN PUBLISHER D
+	    on B.pubcode_fk = D.pubcode
+	    order by idx desc
+	    )V
+	
+	</select>
+	
+	
+	<!-- 검색어에 따른 대여 목록 검색 -->
+	<select id="findRentalListWith" parameterType="HashMap" resultType="com.spring.bookmanage.rental.YSWmodel.YSWRentalVO">
+	
+		select RNO, idx, bookId, memberId, rentalDate, delayDate, deadline, renew, bookTitle, pubname, bookAuthor, memberName
+		from
+		(
+		    select rownum as RNO, idx, bookId, memberId, rentalDate, delayDate, deadline, renew, bookTitle, pubname, bookAuthor, memberName
+		    from
+		    (
+		    select a.idx as idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as rentalDate
+		          ,to_date(sysdate, 'yyyy-mm-dd') - to_date(deadline, 'yyyy-mm-dd') as delayDate
+		          ,to_char(a.deadline,'yyyy-mm-dd') as deadline, a.renew as renew, b.title as bookTitle, D.pubname as pubname
+		          ,b.author as bookAuthor, c.name as memberName
+		    from rental A JOIN book B
+		    on A.bookid_fk = B.bookid
+		    LEFT JOIN member C
+		    on A.memberid_fk = C.memberid
+		    LEFT JOIN PUBLISHER D
+		    on B.pubcode_fk = D.pubcode
+		    order by idx desc
+		    )V
+		    where ${SORT} = '%'||#{SEARCHWORD}||'%'
+		    order by RNO
+		)T
+		where rno between #{STARTNO} and #{ENDNO}
+	
+	</select>
+	
+	
+	<!-- 검색어 없이 대여 목록 검색 -->
+	<select id="findRentalList"  parameterType="HashMap" resultType="com.spring.bookmanage.rental.YSWmodel.YSWRentalVO">
+	
+		select RNO, idx, bookId, memberId, rentalDate, delayDate, deadline, renew, bookTitle, pubname, bookAuthor, memberName
+		from
+		(
+		    select rownum as RNO, idx, bookId, memberId, rentalDate, delayDate, deadline, renew, bookTitle, pubname, bookAuthor, memberName
+		    from
+		    (
+		    select a.idx as idx, a.bookid_fk as bookId, a.memberid_fk as memberId, to_char(a.rentalDate, 'yyyy-mm-dd') as rentalDate
+		          ,to_date(sysdate, 'yyyy-mm-dd') - to_date(deadline, 'yyyy-mm-dd') as delayDate
+		          ,to_char(a.deadline,'yyyy-mm-dd') as deadline, a.renew as renew, b.title as bookTitle, D.pubname as pubname
+		          ,b.author as bookAuthor, c.name as memberName
+		    from rental A JOIN book B
+		    on A.bookid_fk = B.bookid
+		    LEFT JOIN member C
+		    on A.memberid_fk = C.memberid
+		    LEFT JOIN PUBLISHER D
+		    on B.pubcode_fk = D.pubcode
+		    order by idx desc
+		    )V 
+		    order by RNO
+		)T
+		where rno between #{STARTNO} and #{ENDNO}
+	
+	</select>
 
 </mapper>
