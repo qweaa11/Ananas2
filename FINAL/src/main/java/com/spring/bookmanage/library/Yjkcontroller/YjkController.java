@@ -39,18 +39,18 @@ public class YjkController {
 	private FileManager fileManager;
 	
 	// ==== 관리자 등록 페이지 보여주기 ==== //
-	@RequestMapping(value="/adminRegist.ana",method= {RequestMethod.GET})
-	public String adminRegist(HttpServletRequest req) {
+	@RequestMapping(value="/librarianRegist.ana",method= {RequestMethod.GET})
+	public String librarianRegist(HttpServletRequest req) {
 
 		List<LibraryVO> libInfo = service.getliblibrary();
 		
 		req.setAttribute("libInfo", libInfo);
 		
-		return "library/adminRegist.tiles1";
+		return "library/librarianRegist.tiles1";
 	}
 	
 	// ==== 관리자 등록하기 ==== //
-	@RequestMapping(value="/adminRegistEnd.ana",method= {RequestMethod.POST})
+	@RequestMapping(value="/librarianRegistEnd.ana",method= {RequestMethod.POST})
 	public String adminRegistEnd(YjkVO adminvo, MultipartHttpServletRequest req) {
 		
 		int n = 0;

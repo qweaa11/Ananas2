@@ -32,7 +32,7 @@
 		select *
 		from book
 		where ${CATEGORY} like '%' || #{SEARCHWORD} || '%'
-		and status = 0
+		and status in(0, 2)
 		<if test="LIBCODE != null and LIBCODE != ''">
 			and libcode_fk = #{LIBCODE}
 		</if>
@@ -72,22 +72,30 @@
 	<update id="updateAllBookByBookid" parameterType="String">
 		update book set status = 1
 		where bookid = #{bookid}
-		and status = 0
+		and status in(0,2)
 	</update>
 	
 	
-	<!-- 예약 테이블에 예약된 책이 있는지 조회하는 메소드 -->
-	<select id="findAllReservationByBookid" parameterType="String" resultType="String">
+	<!-- 예약 테이블에 예약된 책이 회원아이디와 일치하는지 조회하는 메소드 -->
+	<select id="findNoteqReservationByBookid" parameterType="String" resultType="String">
 		select memberid_fk
 		from reservation
 		where bookid_fk = #{BOOKID}
 	</select>
 	
 	
+	<!-- 예약 테이블에 예약된 책이 있는지 조회하는 메소드 -->
+	<select id="findAllReservationByBookid" parameterType="String" resultType="int">
+		select count(*)
+		from reservation
+		where bookid_fk = #{BOOKID}
+	</select>
+	
+	
 	<!-- 예약 테이블에 예약된 책이 대출이 되어 지우는 메소드 -->
-	<delete id="deleteReservationByMemberid" parameterType="String">
+	<delete id="deleteReservationByBookid" parameterType="String">
 		delete reservation
-		where bookid_fk = #{reservebookid}
+		where bookid_fk = #{bookid}
 	</delete>
 	
 	<!-- 대여 한 책 중 연체된 책이 있을 경우 대여 불가 해주는 메소드 -->
@@ -132,19 +140,51 @@
 	</select>
 	
 	
+	<!-- 예약에 대한 대여된 도서를 가져오는 메소드 -->
+	<select id="findAllReserveRentalByCategory" parameterType="HashMap" resultMap="rental">
+	
+		select memberid, name, title, bookid, rentaldate, to_char(deadline, 'yyyy-mm-dd') as deadline, renew
+			  ,case when deadline <![CDATA[<]]> sysdate 
+		       then to_date(to_char(sysdate, 'yyyy-mm-dd')) - to_date(to_char(deadline, 'yyyy-mm-dd')) 
+		       else 0 end as deadlinecut
+		from rental R join member M
+		on R.memberid_fk = M.memberid
+		join book B
+		on R.bookid_fk = B.bookid
+		left join reservation E
+		on E.bookid_fk = B.bookid
+		where ${CATEGORY} like '%' || #{SEARCHWORD} || '%'
+		and nvl(to_char(E.reservedate, 'yyyy-mm-dd'), ' ') = ' '
+		<if test="LIBCODE != null and LIBCODE != ''">
+			and libcode_fk = #{LIBCODE}
+		</if>
+		order by ${SORT} asc
+	
+	</select>
+	
+	
 	<!-- 연체료와 이용정지기간 등록하기 -->
 	<update id="updateMemberByDeadeline" parameterType="HashMap">
 	
-		update member set latefee = 100 * #{DEADLINECUT}, revokedate = revokedate + #{DEADLINECUT}, status = 2
+		update member set latefee = latefee + (100 * #{DEADLINECUT}), revokedate = revokedate + #{DEADLINECUT}, status = 2
 		where memberid = #{MEMBERID}
 	
 	</update>
 	
 	
 	<!-- 책 상태 일반 상태로 만드는 메소드 -->
-	<update id="updateBookstatusByBookid" parameterType="String">
+	<update id="updateBookstatus0ByBookid" parameterType="String">
 	
 		update book set status = 0
+		where bookid = #{bookid}
+	
+	</update>
+	
+	
+	<!-- 책 상태 예약 상태로 만드는 메소드 -->
+	<update id="updateBookstatus2ByBookid" parameterType="String">
+	
+		update book set status = 2
 		where bookid = #{bookid}
 	
 	</update>

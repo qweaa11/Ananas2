@@ -342,9 +342,8 @@ div.search button:hover {
 				<span style="font-weight:bold; font-size: 24pt; margin-bottom:15px;">도서관리<i class="glyphicon glyphicon-book" style="font-size:22px;"></i> ></span><span style="font-weight:bold; font-size: 21pt; margin-bottom:15px;"> 도서목록</span>
 				<i class="	glyphicon glyphicon-th-list" style="font-size: 19px;"></i>
 	</div>
-		<div class="col-lg-8 col-sm-8">
-			<div class="searchbar col-lg-12"
-				style="margin-left: 20px; margin-top: 5px; float: left;">
+		<div class="col-lg-9 col-sm-9">
+			<div class="searchbar col-lg-12" style="  margin-left: 20px; margin-top: 5px; float: left;">
 				<select id="searchType"
 					style="padding: .2em .4em; font-size: 13pt; background-color: #2196F3; height: 29pt; color: #fff; border-radius: 3px;">
 					<option value="title">도서명</option>
@@ -354,34 +353,35 @@ div.search button:hover {
 				<button type="button" class="search">
 					<i class="fa fa-search"></i>
 				</button>
-			</div>
-			<select style="float: right; height: 15pt;" class="sort">
+				<select style="float: right; height: 15pt; margin-top:15px;" class="sort">
 				<option value="title">도서명</option>
 				<option value="count">권수</option>
 				<option value="bookid">도서번호</option>
 			</select>
+			</div>
+			
 
 		</div>
-		<div class="col-lg-8 col-sm-8">       
-	<table class="table table-striped" id="section1">     
-		<thead>
-			<tr>
-				<th>번호</th>
-				<th>도서 코드</th>
-				<th>도서명</th>
-				<th>분류</th>      
-				<th>저자/역자</th>
-				<th>출판사</th>
-				<th>도서 연령</th>
-				<th>권수</th>
-			</tr>
-		</thead>       
-		<tbody id="displayBookList">
-			
-		</tbody>
-	</table>
-</div>
-<div class="col-lg-offset-1 col-lg-3 col-sm-offset-1 col-sm-3">
+		<div class="col-lg-9 col-sm-9">       
+			<table class="table table-striped" id="section1">     
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>도서 코드</th>
+						<th>도서명</th>
+						<th>분류</th>      
+						<th>저자/역자</th>
+						<th>출판사</th>
+						<th>도서 연령</th>
+						<th>권수</th>
+					</tr>
+				</thead>       
+				<tbody id="displayBookList">
+					
+				</tbody>
+			</table>
+		</div>
+<div class=" col-lg-3  col-sm-3">
 	<div style="font-weight:bold; font-family: 'NanumGothicBold'; border: 0px solid red; color:#0088cc; font-size: 12pt;">조회 조건 
 		<button type="button" id="btnFindBook" style="font-size:10pt;" onClick="findBookListBysidebar();">검색</button>  </div>
 	          

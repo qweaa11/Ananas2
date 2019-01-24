@@ -277,6 +277,10 @@
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of ban
 	
+	function latefeeReset() {
+		
+	}// end of latefeeReset
+	
 </script>
 
 <div class="container">
@@ -302,8 +306,9 @@
 				<div style="float: right;">
 					<button type="button" class="btn btn-success" onclick="unlock('${goBackURL}');">휴면해제<i class="glyphicon glyphicon-ok"></i></button>
 					<button type="button" class="btn btn-dark" onclick="recover('${goBackURL}');">복원하기<i class="glyphicon glyphicon-refresh"></i></button>
-					<button type="button" class="btn btn-warning" onclick="ban('${goBackURL}');">영구정지<i class="glyphicon glyphicon-remove"></i></button>
-					<button type="button" class="btn btn-danger" onclick="remove('${goBackURL}');">탈퇴처리<i class="glyphicon glyphicon-remove"></i></button>
+					<button type="button" class="btn btn-warning" onclick="remove('${goBackURL}');">탈퇴처리<i class="glyphicon glyphicon-trash"></i></button>
+					<button type="button" class="btn btn-danger" onclick="ban('${goBackURL}');">영구정지<i class="glyphicon glyphicon-ban-circle"></i></button>
+					<button type="button" class="btn btn-info" onclick="latefeeReset('${goBackURL}')">납부완료<i class="glyphicon glyphicon-usd"></i></button>
 				</div>
 			
 				<table id="table-member" class="table table-striped table-hover">
@@ -343,7 +348,7 @@
 							<td class="td status">${memberVO.status}</td>
 							<td class="td">${memberVO.regDate}</td>
 							<td class="detail">
-								<input type="text" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
+								<input type="hidden" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
 								<button type="button" class="btn btn-dark"
 									onclick="javascript:location.href='memberDetail.ana?idx=${memberVO.idx}'">
 									<i class="glyphicon glyphicon-user"></i></button>

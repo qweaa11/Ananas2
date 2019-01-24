@@ -90,5 +90,13 @@
 		    ) T
 		where rno between #{front} and #{rear}
 	</select>
+	
+	<!--  -->
+	<parameterMap type="HashMap" id="runScheduler_paraMap">
+		<parameter property="row" mode="OUT" jdbcType="VARCHAR"/>
+	</parameterMap>
+	<select id="runScheduler" statementType="CALLABLE" parameterMap="runScheduler_paraMap">
+		{ call pcd_run(?) }
+	</select>
 
 </mapper>

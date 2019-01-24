@@ -1,5 +1,12 @@
 $(document).ready(function(e){
 		
+		$(".r3loading").hide();
+	
+		// 툴팁 사용을 위해 필요
+		$('[data-toggle="tooltip"]').tooltip({
+	        html:"true"
+	    }); 
+		
 		// 대여 회원 검색 카테고리
 	    $('.search-member').find('a').click(function(e) {
 			e.preventDefault();
@@ -346,9 +353,8 @@ $(document).ready(function(e){
 	    	
 	    	deadline = deadline.split("-");
 	    	
-	    	var dead = new Date(deadline[0], deadline[1], deadline[2]);
-	    	var reservedate = new Date();
-	    	reservedate.setDate(dead.getDate() + 1);
+	    	var reservedate = new Date(deadline[0], Number(deadline[1]) - 1, deadline[2]);
+	    	reservedate.setDate(reservedate.getDate() + 1);
 	    	
 	    	var dd = reservedate.getDate();
 	    	var mm = reservedate.getMonth()+1; //January is 0!
@@ -603,10 +609,19 @@ $(document).ready(function(e){
 		
 		
 		 var data_form = {"searchWord":searchWord, "category":category, "sort":sort}
+		 
+		 var url = "";
+		 
+		 if(type == "1") {
+			 url = "r3searchRental.ana"; // 반납의 도서 대여목록 불러오기
+		 }
+		 else {
+			 url = "r3searchReserveRental.ana"; // 예약의 도서 대여목록 불러오기
+		 }
 		
 		$.ajax({
 			
-			url:"r3searchRental.ana",
+			url:url,
 			type:"GET",
 			data:data_form,
 			dataType:"json",
