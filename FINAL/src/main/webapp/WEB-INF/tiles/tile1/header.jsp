@@ -4,10 +4,22 @@
 
 
 <script>
+
+	var toggled;
+	
 	$(document).ready(function () {
 		$(".menu-toggle, .head-toggle").click(function(e) {
 		    e.preventDefault();
 		    $("#wrapper").toggleClass("toggled");
+		});
+		
+		$(".dropdown-toggle").click(function () {
+			
+			var toggled = $("#wrapper").prop("class");
+			
+			if(toggled == "toggled") {
+				$(".menu-toggle").click();
+			}
 		});
 	})
 	
@@ -57,8 +69,8 @@
 	            <ul class="sidebar-nav" style="margin-left:0;">
 	                <li class="sidebar-brand">
                     
-                        <a href="#menu-toggle"  class="menu-toggle" style="margin-top:20px;float:right;" > 
-                        	<i class="fa fa-bars " style="font-size:20px !Important;" aria-hidden="true" aria-hidden="true"></i> 
+                        <a href="#menu-toggle" class="menu-toggle" style="margin-top:20px;float:right;" > 
+                        	<i class="fa fa-bars" style="font-size:20px !Important;" aria-hidden="true" aria-hidden="true"></i> 
 	                    </a>
 	                </li>
 	                

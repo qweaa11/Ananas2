@@ -29,9 +29,11 @@ public class KGBR3Controller {
 	@RequestMapping(value="/r3.ana", method= {RequestMethod.GET})
 	public String r3Main(HttpServletRequest request, HttpServletResponse response) {
 		
-		String bookid = request.getParameter("bookid");
+		String rentalBookid = request.getParameter("rentalBookid");
+		String returnBookid = request.getParameter("returnBookid");
 		
-		request.setAttribute("bookid", bookid);
+		request.setAttribute("rentalBookid", rentalBookid);
+		request.setAttribute("returnBookid", returnBookid);
 		
 		return "r3/r3Main.tiles1";
 		
