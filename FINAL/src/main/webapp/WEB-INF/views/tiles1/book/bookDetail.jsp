@@ -20,6 +20,12 @@ th, td {
 	border-left-color: #cccccc;
 	border-right-color: #cccccc;   
 }
+.shareInfo th{
+	width:30%;
+}
+.shareInfo td{
+	width:70%;
+}
 /* Tooltip */
   .btnToggle + .tooltip > .tooltip-inner {
     background-color: black; 
@@ -93,6 +99,7 @@ th, td {
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
 }
+
 .form-container select{
   float:left;
   max-width: 60pt;
@@ -212,6 +219,12 @@ th, td {
 		
 		
 		
+		
+		 var fcode_fk = "${bookDetailList.get(0).fcode_fk}";
+		  console.log(fcode_fk);
+		  var bigfcode = fcode_fk.substr(0, 1);
+		 findDetailField(bigfcode);
+		
 });//End of Ready 
 
 function openAllEditForm() {
@@ -223,17 +236,43 @@ function openAllEditForm() {
 	  $("#editLanguage").val("${bookDetailList.get(0).lcode_fk}");
 	  $("#editGenre").val("${bookDetailList.get(0).gcode_fk}");
 	  var fcode_fk = "${bookDetailList.get(0).fcode_fk}";
-	  console.log(fcode_fk);
+	  console.log(fcode_fk); 
 	  var bigfcode = fcode_fk.substr(0, 1);
 	  console.log(bigfcode);
-	  findDetailField(bigfcode);
+	 
 	  $("#bigField").val(bigfcode);
 	  $("#bookid").val("${bookid}");
-	  $("#selectDetailField").val(fcode_fk);
+	  $("select[name=editField]").val(fcode_fk);
 	}
+	
+	
 
 function closeAllEditForm() {     
 	  document.getElementById("allEditForm").style.display = "none";
+	}
+	
+function openDetailEditForm(bookid,isbn,price,weight,totalpage,pdate,libcode){
+	 document.getElementById("detailEditForm").style.display = "block";
+	
+	
+		
+			 $("#editISBN").val(isbn);
+			 $("#editPrice").val(Number(price)); 
+			 $("#editWeight").val(Number(weight));
+			 $("#editTotalPage").val(Number(totalpage));
+			 $("#editPdate").val(pdate);
+			 $("#editLibrary").val(libcode);
+		 	 $("#detailBookid").val(bookid);
+		 	 
+		 
+	 
+	 
+	 
+	 
+	}
+
+function closeDetailEditForm() {     
+	  document.getElementById("detailEditForm").style.display = "none";
 	}
 	
 function findDetailField(fieldcode){
@@ -290,15 +329,15 @@ function findDetailField(fieldcode){
 					
 				</div>
 				<div class="col-lg-offset-1 col-lg-7 col-sm-8" style="margin-top:5px;">
-					<table class="table" style="background-color: #f5f5f5">
+					<table class="table shareInfo" style="background-color: #f5f5f5">
 						<tr>
 							<th>도서명</th>
-							<td>${bookDetailList.get(0).title }</td>
+							<td >${bookDetailList.get(0).title }</td>
 							
 						</tr>
 						<tr>
 							<th>저자/역자</th>
-							<td>${bookDetailList.get(0).author }(${bookDetailList.get(0).lname })</td>
+							<td >${bookDetailList.get(0).author }(${bookDetailList.get(0).lname })</td>
 						</tr>
 						<tr>
 							<th>출판사</th>
@@ -309,7 +348,7 @@ function findDetailField(fieldcode){
 							<td>${bookDetailList.get(0).cname }</td>
 						</tr>
 						<tr>
-							<th>장르</th>
+							<th>분야/장르</th>
 							<td>${bookDetailList.get(0).fname } </br> ${bookDetailList.get(0).gname }</td>
 						</tr>
 						<tr>
@@ -389,7 +428,7 @@ function findDetailField(fieldcode){
 									</a>
 								</c:if>
 								</td>
-								<td><button type="button" style="font-size:9pt;" class="btn btn-default">개별 수정</button>&nbsp;|&nbsp;<button style="font-size:9pt;" type="button" class="btn btn-danger">개별 삭제</button></td>
+								<td><button type="button" style="font-size:9pt;" class="btn btn-default " onClick="openDetailEditForm('${book.bookid}','${book.isbn }','${book.price }','${book.weight }','${book.totalpage }','${book.pdate }','${book.libcode_fk }')">개별 수정</button>&nbsp;|&nbsp;<button style="font-size:9pt;" type="button" class="btn btn-danger">개별 삭제</button></td>
 							</tr>       
 						</c:forEach>
 						</c:if>	
@@ -444,18 +483,22 @@ function findDetailField(fieldcode){
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-4 col-sm-4" style="margin-left:15px;">
-			
+		<div class="col-lg-12 col-sm-12" style="margin-left:15px;">
+			<div class="col-lg-10">
 			<a class="btnToggle" id="toggle2" href="#btn2" data-toggle="tooltip" data-placemnet="top" title="대여중인 책만 가능합니다.">
 				<button type="button" id="btn2" class="btn btn-primary" value="">연장</button>
 			</a>
 			<a class="btnToggle" id="toggle3" href="#btn3" data-toggle="tooltip" data-placemnet="top" title="대여중인 책만 가능합니다.">
 				<button type="button" id="btn3" class="btn btn-info" value="">반납</button>
 			</a>
+			</div>
+			<div class=" col-lg-2">
+			<a href="bookList.ana"><button type="button" class="">목록으로</button></a>
+			</div>
+			
 			
 		</div>
-
-
+		
 
 
 	</div>
@@ -463,6 +506,8 @@ function findDetailField(fieldcode){
 
 </div>
 <!-- /.container -->
+
+			<!--  공용 도서정보 수정 form-popup 페이지 시작 -->
 					<div class="form-popup" id="allEditForm">
 								
 								  <form action="" class="form-container">
@@ -478,16 +523,16 @@ function findDetailField(fieldcode){
 										</tr>
 										<tr>
 											<th>언어</th>
-											<td><select name="editLanguage" id="editLanguage">
+											<td style="padding-left:34px;"><select name="editLanguage" id="editLanguage">
 												<c:forEach var="language" items="${languageList }">
 													<option value="${language.LCODE }">${language.LNAME }</option>
 												</c:forEach>
 												</select>
-											</td>
+											</td>       
 										</tr>
 										<tr>
 											<th>자료유형</th>
-											<td>
+											<td style="padding-left:34px;">
 												<select name="editCategory" id="editCategory">
 												<c:forEach var="category" items="${categoryList }">
 													<option value="${category.CCODE }">${category.CNAME }</option>
@@ -497,7 +542,7 @@ function findDetailField(fieldcode){
 										</tr>
 										<tr>
 											<th>분야</th>
-											<td>
+											<td style="padding-left:34px;">
 												<div id="selectField">
 													<span><select id="bigField">
 													<c:forEach var="field" items="${fieldList }">
@@ -507,7 +552,7 @@ function findDetailField(fieldcode){
 													</span>
 													<span>>></span>
 													<span>
-													<select id="selectDetailField">
+													<select name="editField" id="selectDetailField">
 													
 													</select>
 													</span>
@@ -517,7 +562,7 @@ function findDetailField(fieldcode){
 										</tr>
 										<tr>
 											<th>장르</th>
-											<td>
+											<td style="padding-left:34px;">
 											<select name="editGenre" id="editGenre">
 												<c:forEach var="genre" items="${genreList }">
 													<option value="${genre.GCODE }">${genre.GNAME }</option>
@@ -526,7 +571,7 @@ function findDetailField(fieldcode){
 											</td>
 										</tr>
 										<tr>
-											<th>이미지 변경</th>
+											<th>이미지 변경</th>        
 											<td><input/></td>
 										</tr>
 									</table>
@@ -535,4 +580,50 @@ function findDetailField(fieldcode){
 								    <button type="button" class="btn cancel" onclick="closeAllEditForm()">닫기</button>
 								  </form>
 								</div>
+					<!--  공용 도서정보 수정 form-popup 페이지 끝 -->
+								
+					<!--  개별 도서수정 div 페이지 시작 -->
+						<div class="form-popup" id="detailEditForm">
+								
+								  <form action="" class="form-container">
+								    <h3>개별 정보수정</h3>
+									<table style="margin-bottom:10px;">
+										<tr>
+											<th>ISBN</th>
+											<td><input name="editISBN" style="text-align: right;" id="editISBN"/></td>
+										</tr>
+										<tr>
+											<th>가격</th>
+											<td><input type="number"style="text-align: right;" name="editPrice" id="editPrice"/></td>
+										</tr>
+										<tr>
+											<th>무게</th>
+											<td style="padding-left:15px;"><input style="text-align: right;" type="number" name="editWeight" id="editWeight"/> g</td>
+										</tr>
+										<tr>
+											<th>쪽수</th>
+											<td style="padding-left:38px;"><input style="text-align: right;" type="number" name="editTotalPage" id="editTotalPage"/> page</td>
+										</tr>
+										<tr>
+											<th>발행일자</th>
+											<td align="center"><input type="date" name="editPdate" id="editPdate"/></td>
+										</tr>
+										<tr>
+											<th>위치</th>
+											<td style="padding-left:39px;"><select style="max-width:200px;" name="editLibrary" id="editLibrary">
+												<c:forEach var="library" items="${libraryList }">
+													<option value="${library.LIBCODE }">${library.LIBNAME }</option>
+												</c:forEach>
+												</select>     
+											</td>              
+										</tr>
+										
+									</table>
+									<input type="hidden" name="bookid" id="detailBookid">
+								 	<button type="button" class="btn">수정</button>
+								    <button type="button" class="btn cancel" onclick="closeDetailEditForm()">닫기</button>
+								  </form>
+								</div>
+								
+								<!-- 개별 도서 수정 div 페잊 끝 -->
 

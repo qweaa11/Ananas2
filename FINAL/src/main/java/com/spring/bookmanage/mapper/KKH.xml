@@ -160,16 +160,6 @@
 	</select>
 	
 	
-	<select id="findCategory" resultMap="category">
-		select ccode,cname
-		from category
-	</select>
-	
-	<select id="findLanguage" resultMap="language">
-		select lcode, lname
-		from language
-	</select>
-	
 	<resultMap type="HashMap" id="genre">
 		<result property="GCODE" column="gcode"/>
 		<result property="GNAME" column="gname"/>

@@ -366,15 +366,15 @@ div.search button:hover {
 			<table class="table table-striped" id="section1">     
 				<thead>
 					<tr>
-						<th>번호</th>
-						<th>도서 코드</th>
-						<th>도서명</th>
-						<th>분류</th>      
-						<th>저자/역자</th>
-						<th>출판사</th>
-						<th>도서 연령</th>
-						<th>권수</th>
-					</tr>
+						<th width="7%">번호</th>
+						<th width="13%">도서 코드</th>
+						<th width="25%">도서명</th>
+						<th width="12%">분류</th>      
+						<th width="14%">저자/역자</th>
+						<th width="9%">출판사</th>
+						<th width="12%">도서 연령</th>    
+						<th width="8%">권수</th> 
+					</tr>      
 				</thead>       
 				<tbody id="displayBookList">
 					
