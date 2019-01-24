@@ -277,8 +277,58 @@
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of ban
 	
-	function latefeeReset() {
+	function latefeeReset(goBackURL) {
+		var frm = searchFrm;
+		frm.method = "POST";
+		frm.action = "latefeeReset.ana";
+	
+		var flag = false;
+		var count = 0;
+		$(".tr-row").each(function() {
+			flag = $(this).find(".check").is(":checked");
+			
+			if(!flag) {
+				$(this).find(".idx").attr("disabled", true);
+			} else {
+				count++;
+			}// end of if~else
+		});// end of each
+
+		var choice = confirm(count+"명의 연체료를 모두 납부처리하시겠습니까?");
+		if(count < 1) {
+			alert("1명 이상의 회원을 선택해주세요.");
+			$(".tr-row").find(".idx").attr("disabled", false);
+			
+			return ;
+		}// end of if
 		
+		var latefee = 0;
+		if(choice) {
+			var breakPoint = false;// continue or break
+			$(".tr-row").each(function() {
+				flag = $(this).find(".check").is(":checked");
+				if(flag) {
+					latefee = $(this).find(".latefee").text();
+					if(latefee == 0) {
+						console.log(latefee);
+						breakPoint = true;
+						return false;
+					}// end of inner deep if
+				}// end of if
+
+			});// end of each
+
+			if(breakPoint) {
+				alert("선택하신 회원중 이미 납부한 회원이 존재합니다.");
+			} else {
+				frm.goBackURL.value = goBackURL;
+				frm.submit();
+				return ;
+			}// end of inner if~else
+
+		}// end of outer if
+
+		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of latefeeReset
 	
 </script>
@@ -324,13 +374,14 @@
 							<th style="text-align: center;">연락처</th>
 							<th style="text-align: center;">회원상태</th>
 							<th style="text-align: center;">가입일자</th>
+							<th style="text-align: center;">연체료</th>
 							<th style="text-align: center;">상세정보</th>
 						</tr>
 					</thead>
 					<tbody align="center">
 						<c:if test="${empty memberList}">
 						<tr>
-							<td colspan="11"><span style="color: #ff4d4d; font-weight: bold;">입력된 내용과 일치하는 회원이 존재하지 않습니다.</span></td>
+							<td colspan="12"><span style="color: #ff4d4d; font-weight: bold;">입력된 내용과 일치하는 회원이 존재하지 않습니다.</span></td>
 						</tr>
 						</c:if>
 						
@@ -347,6 +398,7 @@
 							<td class="td">${memberVO.phone}</td>
 							<td class="td status">${memberVO.status}</td>
 							<td class="td">${memberVO.regDate}</td>
+							<td class="td latefee">${memberVO.latefee}</td>
 							<td class="detail">
 								<input type="hidden" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
 								<button type="button" class="btn btn-dark"

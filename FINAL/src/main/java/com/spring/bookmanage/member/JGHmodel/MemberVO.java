@@ -28,7 +28,7 @@ public class MemberVO {
 	public MemberVO() { }// end of default constructor
 
 	public MemberVO(int idx, String memberid, String pwd, String name, String email, String phone, String addr1,
-			String addr2, String post, String birth, String gender, int revokeDate, String regDate, String lastDate,
+			String addr2, String post, String birth, String gender, int revokeDate, int latefee, String regDate, String lastDate,
 			String pwDate, String status, String imgFileName, int fileSize, String ages) {
 		super();
 		this.idx = idx;
@@ -43,6 +43,7 @@ public class MemberVO {
 		this.birth = birth;
 		this.gender = gender;
 		this.revokeDate = revokeDate;
+		this.latefee = latefee;
 		this.regDate = regDate;
 		this.lastDate = lastDate;
 		this.pwDate = pwDate;

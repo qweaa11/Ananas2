@@ -10,7 +10,7 @@
 		    , case when func_age(birth)<![CDATA[<]]>14 then '아동'
 		    when func_age(birth)<![CDATA[<]]>20 then '청소년'
 		    else '성인' end as ages, gender
-		    , email, phone, status
+		    , email, phone, status, latefee
 		    , to_char(regDate,'yyyy-mm-dd') as regDate
 		from member
 		order by idx desc
@@ -22,7 +22,7 @@
 		    , case when func_age(birth)<![CDATA[<]]>14 then '아동'
 		    when func_age(birth)<![CDATA[<]]>20 then '청소년'
 		    else '성인' end as ages, gender
-		    , email, phone, status
+		    , email, phone, status, latefee
 		    , to_char(regDate,'yyyy-mm-dd') as regDate
 		from member
 		where ${colname} like '%'||#{searchWord}||'%'
@@ -54,6 +54,12 @@
 		and status in(2,3)
 	</update>
 	
+	<!-- 선택한 회원목록에 따른 연체료 납부처리 -->
+	<update id="clearLatefee" parameterType="String">
+		update member set latefee = 0
+		where idx = #{idx}
+	</update>
+	
 	<!-- 검색설정에 따른 회원수 조회 -->
 	<select id="countAllMemberWithSearchMap" parameterType="HashMap" resultType="Integer">
 		select count(*)
@@ -70,17 +76,17 @@
 	
 	<!-- 검색조건에 따른 회원목록 조회 -->
 	<select id="findAllMemberWithPagination" parameterType="HashMap" resultType="com.spring.bookmanage.member.JGHmodel.MemberVO">
-		select rno, idx, name, memberid, ages, gender, email, phone, status, regDate
+		select rno, idx, name, memberid, ages, gender, email, phone, status, latefee, regDate
 		from
 		    (
-		    select rownum as rno, idx, name, memberid, ages, gender, email, phone, status, regDate
+		    select rownum as rno, idx, name, memberid, ages, gender, email, phone, status, latefee, regDate
 		    from
 		        (
 		        select idx, name, memberid
 		        	, case when func_age(birth)<![CDATA[<]]>14 then '아동'
 		    		when func_age(birth)<![CDATA[<]]>20 then '청소년'
 		    		else '성인' end as ages, gender, email, phone, status
-		            , to_char(regDate, 'yyyy-mm-dd') as regDate
+		            , latefee, to_char(regDate, 'yyyy-mm-dd') as regDate
 		        from member
 	        <if test='searchWord != null and searchWord != "" and searchWord != "null"'>
 		        where ${colname} like '%'||#{searchWord}||'%'
@@ -91,7 +97,7 @@
 		where rno between #{front} and #{rear}
 	</select>
 	
-	<!--  -->
+	<!-- 스케줄러 강제실행(부하율 너무 큼) -->
 	<parameterMap type="HashMap" id="runScheduler_paraMap">
 		<parameter property="row" mode="OUT" jdbcType="VARCHAR"/>
 	</parameterMap>
