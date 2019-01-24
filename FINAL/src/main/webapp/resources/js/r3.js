@@ -123,6 +123,8 @@ $(document).ready(function(e){
 	    // 대여 회원 상세 정보 표시
 	    $(document).on("click", ".memberselect", function () {
 	    	
+	    	$("#loading1").show();
+	    	
 	    	var memberid = $(this).find(".memberid").text();
 	    	
 	    	var data_form = {"memberid":memberid}
@@ -142,9 +144,12 @@ $(document).ready(function(e){
 					$("#addr2").text(json.ADDR2);
 					$("#phone").text(json.PHONE);
 					
+					$("#loading1").hide();
+					
 				},
 				error: function(request, status, error){
 					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					$("#loading1").hide();
 				}
 				
 			});// end of $.ajax()-------------------------
@@ -154,6 +159,8 @@ $(document).ready(function(e){
 		
 		// 예약 회원 상세 정보 표시
 	    $(document).on("click", ".memberselect2", function () {
+	    	
+	    	$("#loading6").show();
 	    	
 	    	var memberid = $(this).find(".memberid2").text();
 	    	
@@ -174,9 +181,12 @@ $(document).ready(function(e){
 					$("#raddr2").text(json.ADDR2);
 					$("#rphone").text(json.PHONE);
 					
+					$("#loading6").hide();
+					
 				},
 				error: function(request, status, error){
 					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					$("#loading6").hide();
 				}
 				
 			});// end of $.ajax()-------------------------
@@ -384,15 +394,21 @@ $(document).ready(function(e){
 	
 	// 회원목록 표시
 	function searchMember(type) {
-
+		
 		var cateogry = "";
 		var searchWord = "";
 		
 		if(type == "1") {
+			
+			$("#loading1").show();
+			
 			cateogry = $("#membercategory").val();
 			searchWord = $("#search_member").val();
 		}
 		else {
+			
+			$("#loading6").show();
+			
 			cateogry = $("#membercategory2").val();
 			searchWord = $("#search_member2").val();
 		}
@@ -444,9 +460,11 @@ $(document).ready(function(e){
 				}
 				
 				if(type == "1") {
+					$("#loading1").hide();
 					$(".memberList").html(html);
 				}
 				else {
+					$("#loading6").hide();
 					$(".memberList2").html(html);
 				}
 				
@@ -455,6 +473,10 @@ $(document).ready(function(e){
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				
+				$("#loading1").hide();
+				$("#loading6").hide();
+				
 			}
 			
 		});// end of $.ajax()---------------------
@@ -463,6 +485,8 @@ $(document).ready(function(e){
 	
 	// 대여를 위한 도서목록 표시
 	function searchBook() {
+		
+		$("#loading2").show();
 		
 		var cateogry = $("#bookcategory").val();
 		var searchWord = $("#search_book").val();
@@ -504,11 +528,13 @@ $(document).ready(function(e){
 				
 				$(".bookList").html(html);
 				
+				$("#loading2").hide();
 				
 				
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$("#loading2").hide();
 			}
 			
 		});// end of $.ajax()---------------------
@@ -539,6 +565,8 @@ $(document).ready(function(e){
 			alert("목록에 등록해주세요");
 			return;
 		}
+
+		$("#loading3").show();
 		
 		var names = "";
 		
@@ -576,9 +604,13 @@ $(document).ready(function(e){
 					alert(json.MSG);
 				}
 				
+				$("#loading3").hide();
+				
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				
+				$("#loading3").hide();
 			}
 			
 		});// end of $.ajax()-------------------------
@@ -597,11 +629,17 @@ $(document).ready(function(e){
 	function searchRental(type) {
 		
 		if(type == "1"){
+			
+			$("#loading4").show();
+			
 			var category = $("#rentalcategory").val();
 			var searchWord = $("#search_rental").val();
 			var sort = $("#sortrental").val();
 		}
 		else {
+			
+			$("#loading7").show();
+			
 			var category = $("#rentalcategory2").val();
 			var searchWord = $("#search_rental2").val();
 			var sort = $("#sortrental2").val();
@@ -659,9 +697,11 @@ $(document).ready(function(e){
 				
 				if(type == "1"){
 					$(".rentalSearchList").html(html);
+					$("#loading4").hide();
 				}
 				else {
 					$(".rentalSearchList2").html(html);
+					$("#loading7").hide();
 				}
 				
 				
@@ -669,6 +709,8 @@ $(document).ready(function(e){
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$("#loading4").hide();
+				$("#loading7").hide();
 			}
 			
 		});// end of $.ajax()---------------------
@@ -705,6 +747,8 @@ $(document).ready(function(e){
 			alert("목록에 등록해주세요");
 			return;
 		}
+
+		$("#loading5").show();
 		
 		var deadlinecuts = "";
 		
@@ -733,9 +777,12 @@ $(document).ready(function(e){
 					alert(json.MSG);
 				}
 				
+				$("#loading5").hide();
+				
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$("#loading5").hide();
 			}
 			
 		});// end of $.ajax()-------------------------
@@ -744,7 +791,7 @@ $(document).ready(function(e){
 	
 	
 	// 도서 대여 연장
-	function reservation() {
+	function renew() {
 		
 		var bookids = "";
 		
@@ -788,6 +835,8 @@ $(document).ready(function(e){
 			alert("연체되어 있는 책이 있어 연장이 불가능 합니다.");
 			return;
 		}
+
+		$("#loading5").show();
 		
 		var data_form = {"bookids":bookids};
 		
@@ -808,9 +857,14 @@ $(document).ready(function(e){
 					alert(json.MSG);
 				}
 				
+
+				$("#loading5").hide();
+				
+				
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$("#loading5").hide();
 			}
 			
 		});// end of $.ajax()-------------------------
@@ -847,6 +901,8 @@ $(document).ready(function(e){
 			alert("목록에 등록해주세요");
 			return;
 		}
+
+		$("#loading8").show();
 		
 		var reservedates = "";
 		
@@ -876,10 +932,13 @@ $(document).ready(function(e){
 				else {
 					alert(json.MSG);
 				}
+
+				$("#loading8").hide();
 				
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$("#loading8").hide();
 			}
 			
 		});// end of $.ajax()-------------------------
