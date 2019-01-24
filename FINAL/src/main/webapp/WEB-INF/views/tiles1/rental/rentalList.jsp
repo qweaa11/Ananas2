@@ -173,7 +173,7 @@ th td {text-align: center;}
 									            "<td style='width: 7%; height: 3%; text-align: center;'><input type='hidden' name='membername' value='"+entry.MEMBERNAME+"'/>"+entry.MEMBERNAME+"</td>"+   
 									            "<td style='width: 9%; height: 3%; text-align: center;'><input type='hidden' name='rentaldate' value='"+entry.RENTALDATE+"'/>"+entry.RENTALDATE+"</td>"+
 									            "<td style='width: 9%; height: 3%; text-align: center;'><input type='hidden' name='deadline' value='"+entry.DEADLINE+"'/>"+entry.DEADLINE+"</td>"+
-									            "<td style='width: 7%; height: 3%; text-align: center;'><input type='hidden' name='delaydate' value='"+entry.DELAYDATE+"'/>"+entry.DELAYDATE+"</td>"+  
+									            "<td style='width: 8%; height: 3%; text-align: center;'><input type='hidden' name='delaydate' value='"+entry.DELAYDATE+"'/>"+entry.DELAYDATE+"</td>"+  
 							            	 "</tr>";
 					}
 					else{
