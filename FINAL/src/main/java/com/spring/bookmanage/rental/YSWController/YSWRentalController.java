@@ -133,7 +133,7 @@ public class YSWRentalController {
 		String str_currentPage = req.getParameter("currentPage");
 		String searchWord = req.getParameter("searchWord");
 		String sort = req.getParameter("sort");
-		int itemPerPage = 1;
+		int itemPerPage = 10;
 		int currentPage = 0;
 		int startNo = 0;
 		int endNo = 0;
@@ -219,7 +219,7 @@ public class YSWRentalController {
 		
 		String searchWord = req.getParameter("searchWord");
 		String sort = req.getParameter("sort");
-		int itemPerPage = 1;
+		int itemPerPage = 10;
 		int totalCount = 0;
 		int totalPage = 0;
 		
