@@ -80,6 +80,11 @@ public class KKHBookService implements InterKKHBookService{
 		List<HashMap<String,String>> fieldList = bookdao.findfield();
 		return fieldList;
 	}
+	@Override
+	public List<HashMap<String, String>> findDetailField(String bigfcode) {
+		List<HashMap<String,String>> detailFieldList = bookdao.findDetailField(bigfcode);
+		return detailFieldList;
+	}
 	
 
 	

@@ -88,6 +88,8 @@
 						<span style="margin-left: 10px;">대출/예약/반납</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
 							<li><a href="r3.ana">대출/반납/예약</a></li>
+							<li><a href="rentalList.ana">대여목록</a></li>
+							<li><a href="bookReturned.ana">예약목록</a></li>
 							<li><a href="bookReturned.ana">반납목록</a></li>
 						</ul>
 					</li>
@@ -96,8 +98,10 @@
 						<img src="resources/img/home-logo/home-logo1-mini.png">
 						<span style="margin-left: 10px;">도서관 관리</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
-							<li><a href="#">도서관 목록</a></li>
-							<li><a href="#">사서 등록</a></li> 
+								<li><a href="resisterLibrary.ana">도서관 동록</a></li>
+							<li><a href="libraryList.ana">도서관 목록</a></li>
+							<li><a href="librarianRegist.ana">사서 등록</a></li> 
+								<li><a href="librarianList.ana">사서 목록</a></li>
 						</ul>
 					</li>
 					<li class="dropdown" style="margin-left: 15px;"> 
@@ -114,8 +118,8 @@
 						<img src="resources/img/home-logo/home-logo5-mini.png">
 						<span style="margin-left: 10px;">사서게시판</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
-							<li><a href="#">공지 게시판</a></li>
-							<li><a href="#">자유 게시판</a></li>
+							<li><a href="boardList.ana">공지 게시판</a></li>
+							<li><a href="board.ana">자유 게시판</a></li>
 						</ul>
 					</li>
 	                

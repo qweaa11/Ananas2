@@ -31,4 +31,6 @@ public interface InterKKHBookService {
 
 	List<HashMap<String, String>> findfield();
 
+	List<HashMap<String, String>> findDetailField(String bigfcode);
+
 }

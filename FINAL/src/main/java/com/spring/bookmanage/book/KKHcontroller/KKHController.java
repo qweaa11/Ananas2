@@ -111,7 +111,6 @@ public class KKHController {
 		//System.out.println(parameterMap.get("LIBRARY"));
 		List<KKHBookVO> bookList = null;
 		bookList = service.findBookBysidebar(parameterMap);
-		System.out.println("implements 왔다감 by 구현");
 		
 		for(KKHBookVO bookvo : bookList) {
 			HashMap<String,Object> map = new HashMap<String,Object>();
@@ -218,6 +217,7 @@ public class KKHController {
 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 			e.printStackTrace();
 		}
+		request.setAttribute("bookid", bookid);
 		request.setAttribute("categoryList", categoryList);
 		request.setAttribute("languageList", languageList);
 		request.setAttribute("genreList", genreList);
@@ -225,5 +225,17 @@ public class KKHController {
 		request.setAttribute("bookDetailList", bookDetailList);
 		request.setAttribute("bookReservateList", bookReservateList);
 		return "book/bookDetail.tiles1";
+	}
+	
+	@RequestMapping(value="/findDetailField.ana", method= {RequestMethod.GET})
+	@ResponseBody
+	public List<HashMap<String,String>> findDetailField(HttpServletRequest request){
+		
+		String bigfcode = request.getParameter("bigfcode");
+		
+		List<HashMap<String,String>> detailFieldList = service.findDetailField(bigfcode);
+		
+		
+		return detailFieldList;
 	}
 }

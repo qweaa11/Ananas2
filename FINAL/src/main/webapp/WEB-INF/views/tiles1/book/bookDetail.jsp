@@ -50,14 +50,15 @@ th, td {
 
 /* Add styles to the form container */
 .form-container {
-  max-width: 300px;    
+  min-width: 400px;
+  max-width: 800px;    
   padding: 10px;
   background-color: white;
 }
 
 /* Full-width input fields */
 .form-container input[type=text], .form-container input[type=password] {
-  width: 100%;
+  width: 60%;           
   padding: 15px;
   margin: 5px 0 22px 0;
   border: none;
@@ -72,6 +73,7 @@ th, td {
 
 /* Set a style for the submit/login button */
 .form-container .btn {
+  
   background-color: #4CAF50;
   color: white;
   padding: 16px 20px;
@@ -87,10 +89,20 @@ th, td {
   background-color: red;
 }
 
-/* Add some hover effects to buttons */
+/* Add some hover effects to buttons */   
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
 }
+.form-container select{
+  float:left;
+  max-width: 60pt;
+  min-width: 70pt;
+}
+ 
+#selectField span{
+	display: inline-block;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -192,15 +204,66 @@ th, td {
 			if(extendFlag == false)	console.log("click");
 		});
 		
-});//End of Ready
+		$("#bigField").change(function(){
+			
+			var fieldcode = $("#bigField").val();
+			findDetailField(fieldcode);
+		});
+		
+		
+		
+});//End of Ready 
 
 function openAllEditForm() {
 	  document.getElementById("allEditForm").style.display = "block";
+	  
+	  $("#editTitle").val("${bookDetailList.get(0).title}");
+	  $("#editAuthor").val("${bookDetailList.get(0).author}");
+	  $("#editCategory").val("${bookDetailList.get(0).ccode_fk}");
+	  $("#editLanguage").val("${bookDetailList.get(0).lcode_fk}");
+	  $("#editGenre").val("${bookDetailList.get(0).gcode_fk}");
+	  var fcode_fk = "${bookDetailList.get(0).fcode_fk}";
+	  console.log(fcode_fk);
+	  var bigfcode = fcode_fk.substr(0, 1);
+	  console.log(bigfcode);
+	  findDetailField(bigfcode);
+	  $("#bigField").val(bigfcode);
+	  $("#bookid").val("${bookid}");
+	  $("#selectDetailField").val(fcode_fk);
 	}
 
-function closeAllEditForm() {
+function closeAllEditForm() {     
 	  document.getElementById("allEditForm").style.display = "none";
 	}
+	
+function findDetailField(fieldcode){
+	
+	var data_form = {"bigfcode":fieldcode};
+	
+	$.ajax({
+		
+		url:"findDetailField.ana",
+		data:data_form,
+		type:"GET",
+		dataType:"JSON",
+		success:function(json){
+			
+			var html ="";
+			//html += "</br> >><select name='eidtField' id='editField' >";
+			$.each(json,function(fieldIndex, field){
+				html+="<option value='"+field.FCODE+"' >"+field.FNAME+"</option>";
+			});
+			//html +="</select>";
+			
+			$("#selectDetailField").html(html);
+			
+		},error:function(request,status,error){
+		    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		 }
+	
+	});
+	
+}
 
 </script>
 
@@ -256,61 +319,7 @@ function closeAllEditForm() {
 						<tr>
 							<td colspan="2">
 								<button type="button" style="font-size:8pt;" class="btn btn-default open-button" onClick="openAllEditForm();" value="">수정(공용)</button>
-								<div class="form-popup" id="allEditForm">
-								  <form action="" class="form-container">
-								    <h3>공용 정보수정</h3>
-									<table style="margin-bottom:10px;">
-										<tr>
-											<th>도서명</th>
-											<td><input/></td>
-										</tr>
-										<tr>
-											<th>저자/역자</th>
-											<td><input/></td>
-										</tr>
-										<tr>
-											<th>언어</th>
-											<td><select>
-												<c:forEach var="language" items="${languageList }">
-													<option value="${language.LCODE }">${language.LNAME }</option>
-												</c:forEach>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<th>자료유형</th>
-											<td>
-												<select>
-												<c:forEach var="category" items="${categoryList }">
-													<option value="${category.CCODE }">${category.CNAME }</option>
-												</c:forEach>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<th>장르</th>
-											<td>
-												<select>
-												<c:forEach var="field" items="${fieldList }">
-													<option value="${field.FCODE }">${field.FNAME }</option>
-												</c:forEach>
-												</select>
-												<select>
-												<c:forEach var="genre" items="${genreList }">
-													<option value="${genre.GCODE }">${genre.GNAME }</option>
-												</c:forEach>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<th>이미지 변경</th>
-											<td><input/></td>
-										</tr>
-									</table>
-								 	<button type="submit" class="btn">수정</button>
-								    <button type="button" class="btn cancel" onclick="closeAllEditForm()">닫기</button>
-								  </form>
-								</div>
+								
 								<input type="button" style="font-size:8pt;" class="btn btn-danger" value="삭제(전체)"/>
 							</td>
 						</tr>
@@ -331,7 +340,7 @@ function closeAllEditForm() {
 				<li class="active"><a data-toggle="tab" href="#Allbook">도서 현황</a></li>
 				<li><a data-toggle="tab" href="#reservation">예약 현황</a></li>
 			</ul>
-			<div class="tab-content">
+			<div class="tab-content ">
 				<div id="Allbook" class="tab-pane fade in active">
 					
 					<table class="table table-striped bookstatus table-hover"
@@ -454,5 +463,76 @@ function closeAllEditForm() {
 
 </div>
 <!-- /.container -->
-
+					<div class="form-popup" id="allEditForm">
+								
+								  <form action="" class="form-container">
+								    <h3>공용 정보수정</h3>
+									<table style="margin-bottom:10px;">
+										<tr>
+											<th>도서명</th>
+											<td><input name="editTitle" id="editTitle"/></td>
+										</tr>
+										<tr>
+											<th>저자/역자</th>
+											<td><input name="editAuthor" id="editAuthor"/></td>
+										</tr>
+										<tr>
+											<th>언어</th>
+											<td><select name="editLanguage" id="editLanguage">
+												<c:forEach var="language" items="${languageList }">
+													<option value="${language.LCODE }">${language.LNAME }</option>
+												</c:forEach>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<th>자료유형</th>
+											<td>
+												<select name="editCategory" id="editCategory">
+												<c:forEach var="category" items="${categoryList }">
+													<option value="${category.CCODE }">${category.CNAME }</option>
+												</c:forEach>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<th>분야</th>
+											<td>
+												<div id="selectField">
+													<span><select id="bigField">
+													<c:forEach var="field" items="${fieldList }">
+														<option value="${field.FCODE }">${field.FNAME }</option>
+													</c:forEach>
+													</select>
+													</span>
+													<span>>></span>
+													<span>
+													<select id="selectDetailField">
+													
+													</select>
+													</span>
+												</div>
+												
+											</td>
+										</tr>
+										<tr>
+											<th>장르</th>
+											<td>
+											<select name="editGenre" id="editGenre">
+												<c:forEach var="genre" items="${genreList }">
+													<option value="${genre.GCODE }">${genre.GNAME }</option>
+												</c:forEach>
+											</select>
+											</td>
+										</tr>
+										<tr>
+											<th>이미지 변경</th>
+											<td><input/></td>
+										</tr>
+									</table>
+									<input type="hidden" name="bookid" id="bookid">
+								 	<button type="submit" class="btn">수정</button>
+								    <button type="button" class="btn cancel" onclick="closeAllEditForm()">닫기</button>
+								  </form>
+								</div>
 
