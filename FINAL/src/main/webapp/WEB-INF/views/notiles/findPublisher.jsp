@@ -70,14 +70,17 @@
 	
 	
 	
-	function searchPublisher(startNo, endNo, searchWord)
+	function searchPublisher(startNo, endNo, searchWordNoTrim)
 	{	// 담아온 publisher를 부모페이지에 넘기는 함수
 		var size = 0;
+		
+		var searchWord = searchWordNoTrim.trim();
+	
 		if(searchWord == "" || searchWord == null)
 		{// 검색어가 없을시 
 			
 			resultHTML = "<tr>" +
-							  "<td colspan=\"5\" style='text-align: center;'>"+"검색어에 일치하는 출판사가 없습니다"+"</td>"+
+							  "<td colspan=\"5\" style='text-align: center;'>"+"검색어를 입력해 주세요"+"</td>"+
 						  "</tr>"  ;
 			
 			
@@ -138,7 +141,7 @@
 			
 				
 				count++;
-			 	console.log("count: "+count);
+			 	
 			 	
 			 	if(resultHTML=="")
 				{// 검색 결과가 없을시 
@@ -147,8 +150,8 @@
 									  "<td colspan=\"5\" style='text-align: center;'>"+"검색어에 일치하는 출판사가 없습니다"+"</td>"+
 								  "</tr>"  ;
 					
-					if(size% 1000 !=0){
-						$("#publisherDisplay").html(resultHTML); 
+					if(size% 1000 !=0 && $("#publisherDisplay").val == "" ){
+						$("#publisherDisplay").append(resultHTML); 
 					}			  
 				
 					console.log("검색어 없음");
@@ -156,17 +159,24 @@
 					
 				}
 			 
-			 	console.log("size: "+size);
+			 	
 			 	if(size % 1000 == 0)
 			 	{
 			 		console.log("한번 더 돌꺼야");
 			 		searchPublisher(1000*count+1, 1000*count+1000, searchWord);
 				}
+			 	else if(size% 1000 !=0 && $("#publisherDisplay").text() == "" ){
+			 		
+			 		resultHTML = "<tr>" +
+									  "<td colspan=\"5\" style='text-align: center;'>"+"검색어에 일치하는 출판사가 없습니다"+"</td>"+
+								  "</tr>"  ;
+	
+					$("#publisherDisplay").append(resultHTML); 
+				}	
 			 	else if(size % 1000 != 0)
 			 	{
 			 		console.log("한번 더 돌면안돼");
 			 	}
-			
 				
 			},// end of sucess---------------------------------------------------------
 			error: function(request, status, error){
