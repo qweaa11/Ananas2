@@ -209,7 +209,7 @@
 		    on B.pubcode_fk = D.pubcode
 		    order by idx desc
 		    )V
-		    where ${SORT} = '%'||#{SEARCHWORD}||'%'
+		    where ${SORT} like '%'||#{SEARCHWORD}||'%'
 		    order by RNO
 		)T
 	
@@ -259,7 +259,7 @@
 		    on B.pubcode_fk = D.pubcode
 		    order by idx desc
 		    )V
-		    where ${SORT} = '%'||#{SEARCHWORD}||'%'
+		    where ${SORT} like '%'||#{SEARCHWORD}||'%'
 		    order by RNO
 		)T
 		where rno between #{STARTNO} and #{ENDNO}

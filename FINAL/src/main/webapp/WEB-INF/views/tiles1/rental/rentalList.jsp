@@ -134,8 +134,8 @@ th td {text-align: center;}
 		$("#search").click(function(){
 			
 			var currentPage = "1";
-			var searchWord = $("#searchWord").value();
-			var sort = $("#sort").value();
+			var searchWord = $("#searchWord").val();
+			var sort = $("#sort").val();
 			
 			rentalList(currentPage, searchWord, sort);
 			
@@ -225,29 +225,28 @@ th td {text-align: center;}
 					
 					// *** [이전] ***
 					if( pageNo != 1 ) {
-						pageBarHTML += "&nbsp;<a href='javascript:goViewComment(\""+(pageNo-1)+"\")'>[이전]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<a href='javascript:rentalList(\""+(pageNo-1)+"\")'>[이전]</a>&nbsp;";
 					}
 					
 					// 한 페이지에 보여질 페이지 수만큼 loop를 반복 시킨다. 
 					while(!(loop > blockSize || pageNo > totalPage)) {
-					//		1	>	10			1		>	21
-					
+					//		1	>	10	
 						if(pageNo == currentPage) {
 							// 현재 보고 있는 페이지
 							pageBarHTML += "&nbsp;<span style='color:red; font-size: 12pt; font-weight: bold; text-decoration: underline;'>"+pageNo+"</span>&nbsp;";
 						}
 						else {
 							// 페이지 이동
-							pageBarHTML += "&nbsp;<a href='javascript:goViewComment(\""+pageNo+"\")'>"+pageNo+"</a>&nbsp;";
+							pageBarHTML += "&nbsp;<a href='javascript:rentalList(\""+pageNo+"\")'>"+pageNo+"</a>&nbsp;";
 						}
 						
 						loop++;
 						pageNo++;
 					}// end of while
-						
+					
 					// *** [다음] ***
 					if( !(pageNo > totalPage) ) {
-						pageBarHTML += "&nbsp;<a href='javascript:goViewComment(\""+pageNo+"\")'>[다음]</a>&nbsp;";
+						pageBarHTML += "&nbsp;<a href='javascript:rentalList(\""+pageNo+"\")'>[다음]</a>&nbsp;";
 					}
 					
 					////////////////////////////////////////
@@ -276,16 +275,20 @@ th td {text-align: center;}
 <!------ Include the above in your HEAD tag ---------->
 
 <body>
-<div class="container" style="border: 1px solid #D9D9D9;">
+<div class="container" style="border: 1px solid #D9D9D9; margin-bottom: 5%;">
 	<h1> 대여 목록 </h1>
 	<h4>
 		<select name="sort" id="sort" style="margin-top: 3.5px; width: 80px; font-size: 11pt; padding-bottom: 1px;">
         					<option value="">목록</option>
+        					<option value="idx">번호</option>
         					<option value="memberId">회원ID</option>
+        					<option value="memberName">회원명</option>
+        					<option value="rentalDate">대여일</option>
+        					<option value="deadline">반납일</option>
+        					<option value="bookId">책번호</option>
         					<option value="bookTitle">도서명</option>
         					<option value="bookAuthor">저자</option>
-        					<option value="rentalDate">대여일</option>
-        					<option value="bookId">책번호</option>
+        					
        	</select>
        	<input type="text" id="searchWord" name="searchWord" style="margin: 2px; width: 250px; height: 25.5px;" />
        	<button type="button" id="search"><i class="fa fa-search"></i></button>
@@ -315,8 +318,8 @@ th td {text-align: center;}
 	      		
 	      		
 	    	</tbody>
-	    	<tr><td id="pageBar"></td></tr>
 	    </table>
+	    <div id="pageBar" style="margin-left: 550px; align-self: center;"></div>
 	</div>
 </div>
 
