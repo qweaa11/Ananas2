@@ -20,9 +20,8 @@
 	
 	//재귀함수 호출시 링크 인덱스의 처음 값을 설정하기 위한 변수
 	var count = 0;
-	
 	var resultHTML = "";
-	
+	var cnt = 0;
 
 	
 	$(document).ready(function(){
@@ -34,6 +33,7 @@
 			$("#publisherDisplay").empty();
 			resultHTML = "";
 			count = 0;
+			cnt = 0;
 			
 			var searchWord = $("#searchWord").val();	// 검색어를 searchWord변수에 넣는다.
 			
@@ -42,6 +42,25 @@
 			
 		});
 		
+		$("#searchWord").keydown(function(event){
+			if(event.keyCode== 13)
+			{
+				cnt = 0;
+				$("#publisherDisplay").empty();
+				resultHTML = "";
+				count = 0;
+				
+				var searchWord = $("#searchWord").val();	// 검색어를 searchWord변수에 넣는다.
+				
+				searchPublisher(1, 1000, searchWord );
+			}
+		});
+		
+		
+		
+		
+		
+	
 		
 		showPublisher(1, 1000);
 		// 페이지가 열리면 공공 DB에 있는 출판사 정보를 전부 긁어 온다.
@@ -53,10 +72,22 @@
 	
 	function searchPublisher(startNo, endNo, searchWord)
 	{	// 담아온 publisher를 부모페이지에 넘기는 함수
-		
+		var size = 0;
+		if(searchWord == "" || searchWord == null)
+		{// 검색어가 없을시 
+			
+			resultHTML = "<tr>" +
+							  "<td colspan=\"5\" style='text-align: center;'>"+"검색어에 일치하는 출판사가 없습니다"+"</td>"+
+						  "</tr>"  ;
+			
+			
+			console.log("검색어 없음");
+			$("#publisherDisplay").append(resultHTML); 
+			return false;
+			
+		}
 	
-		
-		
+	
 		$.ajax({
 			url:"http://openapi.sdm.go.kr:8088/73664e51596462613931546f536775/xml/SeodaemunPublisherPrintBiz/"+startNo+"/"+endNo,
 		// 	data:form_data,
@@ -64,20 +95,14 @@
 			dataType:"XML",
 			success:function(XML){
 				
-				var size = 0;
-				
+			
+				var endInter = 0;
 				
 				$(XML).find('row').each(function(){
+					size++;	
+					resultHTML = "";
 					
-					
-					if(searchWord == "" || searchWord == null)
-					{// 검색어가 없을시 
-						
-						resultHTML = "<tr>" +
-										  "<td colspan=\"5\" style='text-align: center;'>"+"검색어를 입력하세요"+"</td>"+
-									  "</tr>"  ;
-					}
-					else
+					if(!searchWord == "" || searchWord != null)
 					{// 검색어가 있을시 
 						console.log("검색어확인용3: "+searchWord);
 						
@@ -90,10 +115,7 @@
 							if(COMPANY.indexOf(searchWord) != -1)
 							{
 								cnt++;
-								
-								
-								
-								resultHTML += "<tr>" +
+								resultHTML = "<tr>" +
 												  "<td>"+cnt+"</td>"+
 												  "<td><a onClick='sendBack(\""+COMPANY+"\",\""+ADDR+"\",\""+TEL+"\",\""+REG_NUM+"\");'>"+COMPANY+"</a></td>"+
 								  				  				// sendBack()함수에 출판사 이름을 담아 넘김
@@ -101,28 +123,50 @@
 												  "<td>"+TEL+"</td>"+
 												  "<td style='text-align: center;'>"+BIZ_GUBUN+"</td>"+
 											  "</tr>" ;	  
-								size++;			  
-								
-								
-								
+											  
+								$("#publisherDisplay").append(resultHTML); 		
 							}
-							else{
-								console.log("확인용###############: ");	
-							}
-						
+							
+							
+							
+							
 					} 
 					 
 				});
 				
-				$("#publisherDisplay").append(resultHTML); 
 				
+			
 				
 				count++;
-			 	console.log("count"+count);
-			 	if(size % 1000 == 0){
-					showPublisher(1000*count+1, 1000*count+1000);
-				}
+			 	console.log("count: "+count);
+			 	
+			 	if(resultHTML=="")
+				{// 검색 결과가 없을시 
+					
+					resultHTML = "<tr>" +
+									  "<td colspan=\"5\" style='text-align: center;'>"+"검색어에 일치하는 출판사가 없습니다"+"</td>"+
+								  "</tr>"  ;
+					
+					if(size% 1000 !=0){
+						$("#publisherDisplay").html(resultHTML); 
+					}			  
 				
+					console.log("검색어 없음");
+				
+					
+				}
+			 
+			 	console.log("size: "+size);
+			 	if(size % 1000 == 0)
+			 	{
+			 		console.log("한번 더 돌꺼야");
+			 		searchPublisher(1000*count+1, 1000*count+1000, searchWord);
+				}
+			 	else if(size % 1000 != 0)
+			 	{
+			 		console.log("한번 더 돌면안돼");
+			 	}
+			
 				
 			},// end of sucess---------------------------------------------------------
 			error: function(request, status, error){
@@ -133,7 +177,16 @@
 			
 		});// end of $.ajax()---------------------------------------------------------
 		
-		
+
+		if( $("#publisherDisplay").val == "" )
+		{
+			resultHTML = "<tr>" +
+			  			 "<td colspan=\"5\" style='text-align: center;'>"+"검색어에 일치하는 출판사가 없습니다"+"</td>"+
+		  				 "</tr>"  ;
+			
+			console.log("검색어 없음");
+			$("#publisherDisplay").append(resultHTML); 
+		}
 		
 		
 	}// end of function searchPublisher(startNo, endNo, searchWord)-----------------------------------------------
@@ -161,21 +214,21 @@
 	}// end of function sendBack(publisher)-----------------------------------------------
 	
 	
-	var cnt = 0;
+	
 	
 	function showPublisher(startNo, endNo)
 	{
-		$(".loading").show();
+		$("#loading").show();
+		console.log("로딩바가 돌거야");
+		
 		$.ajax({
 			url:"http://openapi.sdm.go.kr:8088/73664e51596462613931546f536775/xml/SeodaemunPublisherPrintBiz/"+startNo+"/"+endNo,
 		// 	data:form_data,
 			type:"GET",
 			dataType:"XML",
 			success:function(XML){
+				
 				var resultHTML = "";
-				
-				
-				
 				var size = 0;
 				
 				$(XML).find('row').each(function(){
@@ -196,39 +249,30 @@
 									  "<td style='text-align: center;'>"+BIZ_GUBUN+"</td>"+
 								  "</tr>" ;
 					 
-					size++;	  
-					
-					
-				//	console.log("COMPANY: "+ COMPANY);
-				//	console.log("ADDR: "+ADDR);
-				//	console.log("TEL: "+TEL);
-				//	console.log("REG_NUM: "+REG_NUM);
-					
-					
+					size++;	 
 				});
 				
-				
-				
-				
+				if(size != 0)
+				{
+					console.log("로딩바가 멈출거야");
+					$("#loading").hide(); 
+				}
 				
 				$("#publisherDisplay").append(resultHTML); 
-				
-				
 			 	count++;
 			 	
-				if(size % 1000 == 0){
+				if(size % 1000 == 0)
+				{
 					showPublisher(1000*count+1, 1000*count+1000);
 				}
-				$(".loading").hide();
 				
 			},// end of sucess---------------------------------------------------------
-			error: function(request, status, error){
+			error: function(request, status, error)
+			{
+				$("#loading").hide(); 
 			//	alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error );
 			}// end of error---------------------------------------------------------
-			
-			
 		});// end of $.ajax()---------------------------------------------------------
-		
 	}// end of function searchPublisher(startNo, endNo)---------------------------------------------------------
 	
 	
@@ -242,7 +286,7 @@
 
 	<div id="search">
 		<input type="text" id="searchWord" name="searchWord" placeholder="출판사 이름을 적어주세요" style="width: 300px;"/>
-		<button id="searchPublisher">검색</button><img class="loading" style="width: 20px; height: 20px;" src="resources/img/loadingProgressive.gif"/>
+		<button id="searchPublisher">검색</button><img id="loading" class="loading" style="width: 20px; height: 20px;" src="resources/img/loadingProgressive.gif"/>
 	</div>
 
 	<div>
