@@ -1,17 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 <% String ctxPath = request.getContextPath(); %>
 
 <style type="text/css">
-	table, th, td, input, textarea {border: solid gray 1px;}
+
+	table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 70%;
+	}
+	
+	td, th {
+	  border: 1px solid #dddddd;
+	  text-align: left;
+	  padding: 8px;
+	}
+	
+	tr:nth-child(even) {
+	  background-color: #f2f2f2;
+	}
+	
+	ul {
+		padding-left: 0px;
+	}
+
+	/* table, th, td, input, textarea {border: solid gray 1px;} */
 	
 	#table {border-collapse: collapse;
 	 		width: 1000px;
 	 		}
-	#table th, #table td{padding: 5px;}
+	/* #table th, #table td{padding: 5px;}
 	#table th{width: 120px; background-color: #DDDDDD;}
-	#table td{width: 860px;}
+	#table td{width: 860px;} */
 	.long {width: 470px;}
 	.short {width: 120px;} 		
 
@@ -121,8 +146,8 @@
 		<input type="hidden" name="groupno" value="${groupno}" />
 		<input type="hidden" name="depthno" value="${depthno}" /> 
 		
-		<button type="button" id="btnWrite">쓰기</button>
-		<button type="button" onClick="javascript:history.back();">취소</button>
+		<button type="button" class="btn btn-info btn-sm" id="btnWrite">쓰기</button>
+		<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
 	</form>
 
 </div>	

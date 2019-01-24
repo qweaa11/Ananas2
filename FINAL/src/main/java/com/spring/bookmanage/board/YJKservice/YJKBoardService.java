@@ -123,6 +123,7 @@ public class YJKBoardService implements InterYJKBoardService {
 			System.out.println("오니?");
 			System.out.println(replyvo.getParentidx());
 			result = dao.updateCommentCount(replyvo.getParentidx());
+			System.out.println(result);
 		}
 		
 		return result;
