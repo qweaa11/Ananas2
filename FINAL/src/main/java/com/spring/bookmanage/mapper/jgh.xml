@@ -2,8 +2,9 @@
 <!-- ===== #28. mapper 기본 설정 ===== -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- ===== #29. 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
+<!-- ===== #29. 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== -->
 <mapper namespace="jgh">
+
 	<!-- 회원목록 전체조회 -->
 	<select id="findAllMember" resultType="com.spring.bookmanage.member.JGHmodel.MemberVO">
 		select idx, name, memberid
