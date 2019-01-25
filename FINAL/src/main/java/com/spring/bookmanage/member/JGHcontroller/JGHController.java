@@ -103,7 +103,7 @@ public class JGHController {
 		String goBackURL = request.getContextPath()+"/memberList.ana?currentPageNo="+currentPageNo
 				+"&colname="+colname+"&searchWord="+searchWord;
 		System.out.println(goBackURL);
-		request.setAttribute("goBackURL", goBackURL);
+		request.getSession().setAttribute("goBackURL", goBackURL);
 
 		return "member/memberList.tiles1";
 	}// end of list
