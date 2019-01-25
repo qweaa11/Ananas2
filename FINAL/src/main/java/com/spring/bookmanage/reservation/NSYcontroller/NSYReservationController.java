@@ -126,6 +126,49 @@ public class NSYReservationController {
 		returnMap.put("totalPage", totalPage);
 		
 		return returnMap;
-	} 
+	}
+	
+	@RequestMapping(value="rental.ana", method= {RequestMethod.POST})
+	public String rental(HttpServletRequest req, HttpServletResponse res) {
+		
+		String[] rentalValue = req.getParameterValues("rentalValue");
+		//System.out.println("체크박스값 확인하기 : "+ rentalValue[0]);
+		
+		for(int i=0; i<rentalValue.length; i++) {
+			//System.out.println("체크박스값 확인하기 : "+ rentalValue[i]);
+			String[] value = rentalValue[i].split(",");
+			String bookid = value[0];
+			String memberid = value[1];
+			
+			//System.out.println("value값:"+value);
+			System.out.println("value1값:"+bookid);
+			System.out.println("value2값:"+memberid);
+			
+			HashMap<String, String> paraMap = new HashMap<String, String>();
+			paraMap.put("bookid", bookid);
+			paraMap.put("memberid", memberid);
+			
+			System.out.println("value1값 2번째:"+paraMap.get("bookid"));
+			System.out.println("value2값 2번쨰:"+paraMap.get("memberid"));
+			
+			int result = service.reservation_rental(paraMap);
+			
+			if(result ==1) {
+				service.changBookStatus(paraMap);
+				
+				service.deleteReservation(paraMap);
+				
+				String msg ="대여가 완료되었습니다.";
+				String loc ="";
+			}
+			else {
+				String msg ="대여 실패. 관리자에게 문의하세요";
+				String loc ="";
+			}//end of if_else
+			
+		}// end of for문
+		
+		return "reservation/reservationList.tiles1";
+	}// end of String rental()
 	
 }// end of class NSYReservationController

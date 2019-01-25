@@ -18,7 +18,7 @@
 		var colname = $("#colname").val();
 		var sort = $("#sort").val();
 		
-		var data_form = {sort:sort, searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:5};
+		var data_form = {sort:sort, searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:10};
 		
 		$.ajax({
 			url:"getReservationList.ana",
@@ -29,13 +29,17 @@
 				
 				var resultHTML = "";
 				
+				
+				
 				if(json.length > 0) { 
 					
 					$.each(json, function(entryIndex, entry){
 						
-						resultHTML += 
+						if(entry.status == 0 || entry.status == 2){
+							resultHTML += 
 									"<tr>"
-										+"<td><input type='checkbox' value='"+entry.idx+"'></input></td>"
+										//+"<td>"+entry.idx+"</td>"
+										+"<td style='color:blue;'><input type='checkbox' name='rentalValue' value='"+entry.bookid+","+entry.memberid+"'></input>대여가능</td>"
 										+"<td>"+entry.rno+"</td>"
 										+"<td>"+entry.reserveDate+"</td>"
 										+"<td>"+entry.memberid+"</td>"
@@ -46,8 +50,25 @@
 										+"<td>"+entry.author+"</td>"
 										+"<td>"+entry.pubcode+"</td>"
 										+"<td>"+entry.pubname+"</td>"
-									+"</tr>";     
-						
+									+"</tr>";
+						}
+						else{
+							resultHTML +=
+									"<tr>"
+										
+										+"<td style='color:red;'><input type='checkbox' name='idx' value='"+entry.idx+"'disabled></input>대여불가</td>" 
+										+"<td>"+entry.rno+"</td>"
+										+"<td>"+entry.reserveDate+"</td>"
+										+"<td>"+entry.memberid+"</td>"
+										+"<td>"+entry.name+"</td>"
+										+"<td>["+entry.post+"]"+entry.addr1+"("+entry.addr2+")</td>"
+										+"<td>"+entry.bookid+"</td>"
+										+"<td>"+entry.title+"</td>"
+										+"<td>"+entry.author+"</td>"
+										+"<td>"+entry.pubcode+"</td>"
+										+"<td>"+entry.pubname+"</td>"
+									+"</tr>"; 
+						}		
 					}); // end of $.each()
 					
 					$("#result").empty().html(resultHTML);
@@ -74,7 +95,7 @@ function makeBarPage(currentShowPageNo){
 		var searchWord = $("#searchWord").val();
 		var colname = $("#colname").val();
 	
-		var form_data = {searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:5};
+		var form_data = {searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:10};
 		
 		$.ajax({
 			url:"getMakeBarPage_ReservationList.ana",
@@ -143,6 +164,12 @@ function makeBarPage(currentShowPageNo){
 		
 	}// end of function makeBarPage()
 	
+	function goRental(){
+		var frm = document.valueFrm;
+		frm.method = "POST";
+		frm.action = "rental.ana";
+		frm.submit();
+	}
 	
 </script>
 <style type="text/css">
@@ -195,13 +222,13 @@ function makeBarPage(currentShowPageNo){
 			<option value="title">도서명</option>
 			<option value="reserveDate">날짜</option>
 		</select>
-	</form>	
+	
 	<br>
 	
 	<table id="customers" >
 		<thead>
 			<tr>
-				<th></th>
+				<th>상태</th>
 				<th>번호</th>
 				<th>예약날짜</th>
 				<th>회원아이디</th>
@@ -215,14 +242,18 @@ function makeBarPage(currentShowPageNo){
 			</tr>
 		</thead>
 		
+		
 		<tbody id="result">
 		</tbody>
 			
 	</table>
+	</form>	
 	<br>
 	<!-- ==== 페이지바 보여주기   -->
 	<!-- AJAX에서 다음 ul태그 안에 값을 넣어준다  -->
-	<ul class="pagination pagination-lg" id="pageBar" style=""></ul>	
+	<ul class="pagination pagination-lg" id="pageBar" style=""></ul>
+	<div><button type="button" onClick="goRental();">체크항목 대여하기</button>	</div>
+	
 
 </div>
 

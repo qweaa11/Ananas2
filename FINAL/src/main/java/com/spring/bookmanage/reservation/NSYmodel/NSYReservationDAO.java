@@ -25,5 +25,23 @@ public class NSYReservationDAO implements NSYInterReservationDAO{
 		int result = sqlsession.selectOne("NSYReservation.getReservationTotalList",paraMap);
 		return result;
 	}
+
+	@Override
+	public int reservation_rental(HashMap<String, String> paraMap) {
+		int result = sqlsession.insert("NSYReservation.reservation_rental",paraMap);
+		return result;
+	}
+
+	@Override
+	public void changBookStatus(HashMap<String, String> paraMap) {
+		sqlsession.update("NSYReservation.changBookStatus",paraMap);
+		
+	}
+
+	@Override
+	public void deleteReservation(HashMap<String, String> paraMap) {
+		sqlsession.delete("NSYReservation.deleteReservation",paraMap);
+		
+	}
 	
 }

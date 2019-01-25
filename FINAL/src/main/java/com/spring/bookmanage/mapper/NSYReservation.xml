@@ -16,7 +16,7 @@
 		<result property="bookid" column="bookid" javaType="String"/>
 		<result property="title" column="title" javaType="String"/>
 		<result property="author" column="author" javaType="String"/>
-		<result property="stats" column="stats" javaType="String"/>
+		<result property="status" column="status" javaType="String"/>
 		<result property="pubcode" column="pubcode" javaType="String"/>
 		<result property="pubname" column="pubname" javaType="String"/>
 		<result property="rno" column="rno" javaType="String"/>
@@ -58,4 +58,19 @@
 		</if>		
 	</select>
 	
+	<insert id="reservation_rental" parameterType="HashMap">
+		insert into rental(idx, bookid_fk, memberid_fk, rentalDate, deadline, renew)
+		values(rent_seq.nextval, #{bookid}, #{memberid}, default, default, default)
+	</insert>
+	
+	<update id="changBookStatus" parameterType="HashMap">
+		update book set status=1
+		where bookid = #{bookid}
+	</update>
+	
+	<delete id="deleteReservation" parameterType="HashMap">
+		delete from reservation
+		where bookid_fk = #{bookid}
+		and memberid_fk = #{memberid}
+	</delete>
 </mapper>

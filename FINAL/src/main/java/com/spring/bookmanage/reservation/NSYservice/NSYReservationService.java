@@ -25,5 +25,21 @@ public class NSYReservationService implements NSYInterReservationService{
 		int result = dao.getReservationTotalList(paraMap);
 		return result;
 	}
+
+	@Override
+	public int reservation_rental(HashMap<String, String> paraMap) {
+		int result = dao.reservation_rental(paraMap);
+		return result;
+	}
+
+	@Override
+	public void changBookStatus(HashMap<String, String> paraMap) {
+		dao.changBookStatus(paraMap);	
+	}
+
+	@Override
+	public void deleteReservation(HashMap<String, String> paraMap) {
+		dao.deleteReservation(paraMap);	
+	}
 	
 }
