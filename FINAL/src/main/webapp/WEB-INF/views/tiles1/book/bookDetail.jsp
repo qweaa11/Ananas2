@@ -243,6 +243,7 @@ function openAllEditForm() {
 	  $("#bigField").val(bigfcode);
 	  $("#bookid").val("${bookid}");
 	  $("select[name=editField]").val(fcode_fk);
+	  $("#editImage").val("${bookDetailList.get(0).image}");
 	}
 	
 	
@@ -319,7 +320,6 @@ function findDetailField(fieldcode){
 		</div>
 		<!-- Blog Post Content Column -->
 		<div class="col-lg-12 col-sm-12" style="padding: 5px;">
-
 			<div class="col-lg-4 col-sm-4">
 				<div class="col-lg-4 col-sm-4">
 					<!-- Preview Image -->
@@ -510,7 +510,7 @@ function findDetailField(fieldcode){
 			<!--  공용 도서정보 수정 form-popup 페이지 시작 -->
 					<div class="form-popup" id="allEditForm">
 								
-								  <form action="" class="form-container">
+								  <form name="editPublicForm"  class="form-container">
 								    <h3>공용 정보수정</h3>
 									<table style="margin-bottom:10px;">
 										<tr>
@@ -572,11 +572,11 @@ function findDetailField(fieldcode){
 										</tr>
 										<tr>
 											<th>이미지 변경</th>        
-											<td><input/></td>
+											<td><input type="file" name="editImage" id="editImage"/></td>
 										</tr>
 									</table>
 									<input type="hidden" name="bookid" id="bookid">
-								 	<button type="submit" class="btn">수정</button>
+								 	<button type="button" class="btn" onClick="editAllBookInfo()">수정</button>
 								    <button type="button" class="btn cancel" onclick="closeAllEditForm()">닫기</button>
 								  </form>
 								</div>
@@ -626,4 +626,12 @@ function findDetailField(fieldcode){
 								</div>
 								
 								<!-- 개별 도서 수정 div 페잊 끝 -->
-
+<script>
+function editAllBookInfo(){
+	var frm = document.editPublicForm;
+	frm.action = "editPublicBookInfo.ana"; 
+	frm.method = "POST";
+	frm.submit();
+	
+}
+</script>

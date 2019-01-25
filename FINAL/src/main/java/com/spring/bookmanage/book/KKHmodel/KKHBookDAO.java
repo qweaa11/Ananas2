@@ -16,25 +16,25 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	private SqlSessionTemplate sqlsession;
 	
 	@Override
-	public List<HashMap<String, String>> findAllLibrary() {
-		List<HashMap<String,String>> libraryList = sqlsession.selectList("KKH.findAllLibrary");
+	public List<HashMap<String, String>> findAllLibrary(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> libraryList = sqlsession.selectList("KKH.findAllLibrary",libcode);
 		return libraryList;
 	}  
 	@Override
-	public List<HashMap<String, String>> findAllLanguage() {
-		List<HashMap<String,String>> languageList = sqlsession.selectList("KKH.findAllLanguage");
+	public List<HashMap<String, String>> findAllLanguage(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> languageList = sqlsession.selectList("KKH.findAllLanguage",libcode);
 		return languageList;
 	}
 
 	@Override
-	public List<HashMap<String, String>> findAllCategory() {
-		List<HashMap<String,String>> categoryList = sqlsession.selectList("KKH.findAllCategory");
+	public List<HashMap<String, String>> findAllCategory(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> categoryList = sqlsession.selectList("KKH.findAllCategory",libcode);
 		return categoryList;
 	}
 
 	@Override
-	public List<HashMap<String, String>> findAllField() {
-		List<HashMap<String,String>> fieldList = sqlsession.selectList("KKH.findAllField");
+	public List<HashMap<String, String>> findAllField(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> fieldList = sqlsession.selectList("KKH.findAllField",libcode);
 		return fieldList;
 	}
 	
@@ -90,6 +90,11 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	public List<HashMap<String, String>> findDetailField(String bigfcode) {
 		List<HashMap<String,String>> detailFieldList = sqlsession.selectList("KKH.findDetailField", bigfcode);
 		return detailFieldList;
+	}
+	@Override
+	public KKHBookVO findOneBook(String bookid) {
+		KKHBookVO book = sqlsession.selectOne("KKH.findOneBook", bookid);
+		return book;
 	}
 
 	

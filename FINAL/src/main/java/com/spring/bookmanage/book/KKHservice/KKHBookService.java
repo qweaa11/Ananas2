@@ -16,23 +16,23 @@ public class KKHBookService implements InterKKHBookService{
 	private InterKKHBookDAO bookdao;
 	
 	@Override
-	public List<HashMap<String, String>> findAllLibrary() {
-		List<HashMap<String,String>> libraryList = bookdao.findAllLibrary();
+	public List<HashMap<String, String>> findAllLibrary(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> libraryList = bookdao.findAllLibrary(libcode);
 		return libraryList;
 	}
 	@Override
-	public List<HashMap<String, String>> findAllLanguage() {
-		List<HashMap<String,String>> languageList = bookdao.findAllLanguage();
+	public List<HashMap<String, String>> findAllLanguage(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> languageList = bookdao.findAllLanguage(libcode);
 		return languageList;
 	}
 	@Override
-	public List<HashMap<String, String>> findAllCategory() {
-		List<HashMap<String,String>> categoryList = bookdao.findAllCategory();
+	public List<HashMap<String, String>> findAllCategory(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> categoryList = bookdao.findAllCategory(libcode);
 		return categoryList;
 	}
 	@Override
-	public List<HashMap<String, String>> findAllField() {
-		List<HashMap<String,String>> fieldList = bookdao.findAllField();
+	public List<HashMap<String, String>> findAllField(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> fieldList = bookdao.findAllField(libcode);
 		return fieldList;
 	}
 	
@@ -84,6 +84,11 @@ public class KKHBookService implements InterKKHBookService{
 	public List<HashMap<String, String>> findDetailField(String bigfcode) {
 		List<HashMap<String,String>> detailFieldList = bookdao.findDetailField(bigfcode);
 		return detailFieldList;
+	}
+	@Override
+	public KKHBookVO findOneBook(String bookid) {
+		KKHBookVO book = bookdao.findOneBook(bookid);
+		return book;
 	}
 	
 

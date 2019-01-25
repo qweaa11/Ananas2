@@ -383,20 +383,24 @@ div.search button:hover {
 		</div>
 <div class=" col-lg-3  col-sm-3">
 	<div style="font-weight:bold; font-family: 'NanumGothicBold'; border: 0px solid red; color:#0088cc; font-size: 12pt;">조회 조건 
-		<button type="button" id="btnFindBook" style="font-size:10pt;" onClick="findBookListBysidebar();">검색</button>  </div>
+		<button type="button" id="btnFindBook" style="font-size:10pt;" onClick="findBookListBysidebar();">검색</button></div>
 	          
-	<div style="float: left; border: 1px solid gray;" class="sidebar">        
-		<div  >
+	<div style="float: left; border: 1px solid gray;" class="sidebar">
+		<c:if test="${sessionScope.loginAdmin != null }">               
+		<div>
 			<div>
 				<div class="sideHeader" style="">도서관(총 장서수)</div>       
 			</div>    
 			<ul class="sideinfo">
 				<c:forEach var="library" items="${libraryList }">
+				   
 					<li><input type="checkbox"  class="library sideli" value="${library.LIBCODE }"/><a onClick="findBookbyLibrary('${library.LIBCODE}');"  class="sideText">${library.LIBNAME }(${library.COUNT })</a></li>
-				</c:forEach>
+					
+				</c:forEach>    
 			</ul>
 			
 		</div>
+		</c:if>
 		<div>
 			<div>
 				<div class="sideHeader">언어</div>

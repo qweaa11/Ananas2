@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.book.KKHmodel.KKHBookVO;
 import com.spring.bookmanage.book.KKHservice.InterKKHBookService;
 import com.spring.bookmanage.common.AES256;
@@ -37,11 +39,21 @@ public class KKHController {
 	 * @return
 	 */
 	public String bookList(HttpServletRequest request, HttpServletResponse response) {
-
-		List<HashMap<String,String>> libraryList = service.findAllLibrary();
-		List<HashMap<String,String>> languageList = service.findAllLanguage();
-		List<HashMap<String,String>> categoryList = service.findAllCategory();
-		List<HashMap<String,String>> fieldList = service.findAllField();
+		
+		HttpSession session = request.getSession();
+		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		HashMap<String,String> libcode = new HashMap<String,String>();
+		if(librarian != null) {
+			libcode.put("LIBCODE", librarian.getLibcode_fk());
+		}
+		
+		System.out.println(libcode);
+		List<HashMap<String,String>> libraryList = service.findAllLibrary(libcode);
+		List<HashMap<String,String>> languageList = service.findAllLanguage(libcode);
+		List<HashMap<String,String>> categoryList = service.findAllCategory(libcode);
+		List<HashMap<String,String>> fieldList = service.findAllField(libcode);
+		
+		
 		
 		request.setAttribute("languageList", languageList);
 		request.setAttribute("categoryList", categoryList);
@@ -66,12 +78,23 @@ public class KKHController {
 		String category = request.getParameter("category");
 		String field = request.getParameter("field");
 		String sort = request.getParameter("sort");
+		HttpSession session =request.getSession();
+		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		String libcode =""; 
+		if(librarian != null)
+			libcode = librarian.getLibcode_fk();
+		
+		
 		ArrayList<String> libArr = null;
 		ArrayList<String> lanArr = null;
 		ArrayList<String> cateArr = null;
 		ArrayList<String> fieldArr = null;
 		
-		if(library != "") library = "'"+library+"'";
+		if(library != "" && librarian != null) {
+			library = "'"+library+"'";
+		}else {
+			library = "'"+libcode+"'";
+		}
 		if(language != "") language = "'"+language+"'";
 		if(category != "") category = "'"+category+"'";
 		if(field != "") field = "'"+field+"'";
@@ -108,6 +131,7 @@ public class KKHController {
 		parameterMap.put("CATEGORY", category);
 		parameterMap.put("FIELD", field);
 		parameterMap.put("SORT", sort);
+		parameterMap.put("LIBCODE", libcode);
 		//System.out.println(parameterMap.get("LIBRARY"));
 		List<KKHBookVO> bookList = null;
 		bookList = service.findBookBysidebar(parameterMap);
@@ -146,15 +170,21 @@ public class KKHController {
 	@ResponseBody
 	public List<HashMap<String,Object>> findBookBySearchbar(HttpServletRequest request, HttpServletResponse response){
 		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-		
 		String searchType = request.getParameter("searchType");
 		String searchWord = request.getParameter("searchWord");
 		String sort = request.getParameter("sort");
+		String library = "";
+		HttpSession session = request.getSession();
+		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		if(librarian != null) {
+			library = "'"+librarian.getLibcode_fk()+"'"; 
+		}
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
 		parameterMap.put("SEARCHTYPE", searchType);
 		parameterMap.put("SEARCHWORD", searchWord);
 		parameterMap.put("SORT", sort);
+		parameterMap.put("LIBRARY", library);
 		List<KKHBookVO> bookList = service.findBookBySearchbar(parameterMap);
 		
 		for(KKHBookVO bookvo : bookList) {
@@ -191,13 +221,15 @@ public class KKHController {
 	public String bookDetail(HttpServletRequest request, HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		System.out.println("bookid:"+bookid);
+		HashMap<String,String> libcode = new HashMap<String,String>();
+		
 		List<HashMap<String,String>> bookReservateList = new ArrayList<HashMap<String,String>>();
 		List<KKHBookVO> bookDetailList = service.findBookDetail(bookid);
-		List<HashMap<String,String>> categoryList = service.findAllCategory();
-		List<HashMap<String,String>> languageList = service.findAllLanguage();
+		List<HashMap<String,String>> categoryList = service.findAllCategory(libcode);
+		List<HashMap<String,String>> languageList = service.findAllLanguage(libcode);
 		List<HashMap<String,String>> genreList = service.findgenre();
 		List<HashMap<String,String>> fieldList = service.findfield();
-		List<HashMap<String,String>> libraryList = service.findAllLibrary();
+		List<HashMap<String,String>> libraryList = service.findAllLibrary(libcode);
 		
 		List<HashMap<String,String>> bookbridgeList =  service.findBookReservateList(bookid);
 		try {
@@ -239,5 +271,27 @@ public class KKHController {
 		
 		
 		return detailFieldList;
+	}
+	
+	
+	@RequestMapping(value="editPublicBookInfo.ana",method= {RequestMethod.POST})
+	public String editPublicBookInfo(HttpServletRequest request,HttpServletResponse response) {
+		
+		HashMap<String,String> parameterMap = new HashMap<String,String>();
+		String editTitle = request.getParameter("editTitle");
+		String editAuthor = request.getParameter("editAuthor");
+		String editLanguage = request.getParameter("editLanguage");
+		String editCategory = request.getParameter("editCategory");
+		String editField = request.getParameter("editField");
+		String editGenre = request.getParameter("editGenre");
+		String bookid = request.getParameter("bookid");
+		KKHBookVO book = service.findOneBook(bookid);
+		if(!editLanguage.equals(book.getLcode_fk()) || !editCategory.equals(book.getCcode_fk()) || !editField.equals(book.getFcode_fk())|| !editGenre.equals(book.getGcode_fk())) {
+			//코드가 변경된 것이 있을경우
+			
+			
+		}
+		
+		return "book/bookDetail.tiles1";
 	}
 }
