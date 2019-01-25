@@ -28,6 +28,7 @@ public class MemberDAO implements MemberMapper {
 	@Override
 	public int unlockAllByStatus(String[] idxArray) {
 		int row = 0;
+
 		String idx = "";
 		for(int i=0;i<idxArray.length;i++) {
 			idx = idxArray[i];
@@ -40,6 +41,7 @@ public class MemberDAO implements MemberMapper {
 	@Override
 	public int banAllByStatus(String[] idxArray) {
 		int row = 0;
+
 		String idx = "";
 		for(int i=0;i<idxArray.length;i++) {
 			idx = idxArray[i];
@@ -52,6 +54,7 @@ public class MemberDAO implements MemberMapper {
 	@Override
 	public int removeAllByStatus(String[] idxArray) {
 		int row = 0;
+
 		String idx = "";
 		for(int i=0;i<idxArray.length;i++) {
 			idx = idxArray[i];
@@ -64,6 +67,7 @@ public class MemberDAO implements MemberMapper {
 	@Override
 	public int recoverAllByStatus(String[] idxArray) {
 		int row = 0;
+
 		String idx = "";
 		for(int i=0;i<idxArray.length;i++) {
 			idx = idxArray[i];
@@ -72,6 +76,19 @@ public class MemberDAO implements MemberMapper {
 
 		return row;
 	}// end of recoverAllByStatus
+
+	@Override
+	public int clearLatefee(String[] idxArray) {
+		int row = 0;
+
+		String idx = "";
+		for(int i=0;i<idxArray.length;i++) {
+			idx = idxArray[i];
+			row = sqlsession.update("jgh.clearLatefee", idx);
+		}// end of for
+
+		return row;
+	}// end of clearLatefee
 
 	@Override
 	public int countAllMemberWithSearchMap(HashMap<String, String> parameterMap) {

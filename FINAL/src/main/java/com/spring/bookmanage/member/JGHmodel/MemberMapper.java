@@ -45,6 +45,13 @@ public interface MemberMapper {
 	int recoverAllByStatus(String[] idxArray);
 
 	/**
+	 * 연체료 납부처리
+	 * @param idxArray
+	 * @return
+	 */
+	int clearLatefee(String[] idxArray);
+
+	/**
 	 * 검색에 따른 회원수 조회
 	 * @param parameterMap
 	 * @return

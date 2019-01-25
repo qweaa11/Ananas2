@@ -193,7 +193,13 @@ public class YSWRentalController {
 			map.put("MEMBERID", rntvo.getMemberId());
 			map.put("RENTALDATE", rntvo.getRentalDate());
 			map.put("DEADLINE", rntvo.getDeadline());
-			map.put("DELAYDATE", rntvo.getDelayDate());
+			
+			if( 0 > Integer.parseInt(rntvo.getDelayDate()) ) {
+				map.put("DELAYDATE", -Integer.parseInt((rntvo.getDelayDate()))+"일 남음" );
+			}
+			else {
+				map.put("DELAYDATE", Integer.parseInt((rntvo.getDelayDate()))+"일 지남" );
+			}
 			map.put("RENEW", rntvo.getRenew());
 			map.put("BOOKTITLE", rntvo.getBookTitle());
 			map.put("PUBNAME", rntvo.getPubName());

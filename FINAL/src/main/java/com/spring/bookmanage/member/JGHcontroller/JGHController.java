@@ -103,7 +103,7 @@ public class JGHController {
 		String goBackURL = request.getContextPath()+"/memberList.ana?currentPageNo="+currentPageNo
 				+"&colname="+colname+"&searchWord="+searchWord;
 		System.out.println(goBackURL);
-		request.setAttribute("goBackURL", goBackURL);
+		request.getSession().setAttribute("goBackURL", goBackURL);
 
 		return "member/memberList.tiles1";
 	}// end of list
@@ -192,4 +192,21 @@ public class JGHController {
 		return "msg";
 	}// end of updateRecoverMember
 
+	@RequestMapping(value = "latefeeReset.ana", method = {RequestMethod.POST})
+	public String updateLatefeeClearMember(HttpServletRequest request, HttpServletResponse response) {
+		String[] idxArray = request.getParameterValues("idx");
+
+		int row = service.latefeeClearMember(idxArray);
+
+		String msg = "";
+		if(row != 1)
+			msg = "선택하신 회원들의 연체료 납부가 실패하였습니다.";
+		else
+			msg = "선택하신 회원들의 연체료 납부가 성공하였습니다.";
+
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", request.getParameter("goBackURL"));
+
+		return "msg";
+	}// end of updateLatefeeClearMember
 }

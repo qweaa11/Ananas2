@@ -13,7 +13,7 @@
 		    $("#wrapper").toggleClass("toggled");
 		});
 		
-		$(".dropdown-toggle").click(function () {
+		$(".sidetoggle").click(function () {
 			
 			var toggled = $("#wrapper").prop("class");
 			
@@ -32,7 +32,7 @@
 			
 			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="margin-bottom: 10px;"> 
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle head-toggle" data-toggle="collapse" >
+					<button type="button" class="navbar-toggle" data-toggle="collapse" onclick="javascript:location.href='logout.ana'">    
 						<img alt="" src="resources/img/logout.png">
 					</button>
 					<button type="button" class="navbar-toggle head-toggle" data-toggle="collapse">
@@ -46,7 +46,6 @@
 				
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
-						
 						<li><a href="schedulerRun.ana">스케줄러실행<i class="glyphicon glyphicon-hourglass"></i></a></li>
 						<li><a href="logout.ana">로그아웃</a></li>
 					</ul>
@@ -79,7 +78,7 @@
 	                </li>
 	                
 					<li class="dropdown" style="margin-left: 15px;"> 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo2-mini.png">
 						<span style="margin-left: 10px;">도서관리</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
@@ -88,7 +87,7 @@
 						</ul>
 					</li>
 					<li class="dropdown" style="margin-left: 15px;"> 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo3-mini.png">
 						<span style="margin-left: 10px;">회원관리</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
@@ -97,7 +96,7 @@
 						</ul>
 					</li>
 					<li class="dropdown" style="margin-left: 15px;"> 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo4-mini.png">
 						<span style="margin-left: 10px;">대출/예약/반납</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
@@ -108,7 +107,7 @@
 						</ul>
 					</li>
 					<li class="dropdown" style="margin-left: 15px;"> 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo1-mini.png">
 						<span style="margin-left: 10px;">도서관 관리</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
@@ -119,16 +118,16 @@
 						</ul>
 					</li>
 					<li class="dropdown" style="margin-left: 15px;"> 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo6-mini.png">
 						<span style="margin-left: 10px;">통계</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
-							<li><a href="#">통계</a></li>
+							<li><a href="chart.ana">통계</a></li>
 						</ul>
 					</li>
 					
 					<li class="dropdown" style="margin-left: 15px;"> 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo5-mini.png">
 						<span style="margin-left: 10px;">사서게시판</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">

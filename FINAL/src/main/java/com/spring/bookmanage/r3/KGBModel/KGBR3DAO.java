@@ -203,20 +203,15 @@ public class KGBR3DAO implements InterKGBR3DAO {
 			
 			int count = sqlsession.selectOne("kgb.findAllReservationByBookid", bookidArr[i]);
 			
-			System.out.println(count + memberidArr[i]);
-			
 			if(count > 0) {
 				reservebookid += bookidArr[i] + ",";
 			}
 			
-			System.out.println(bookidArr[i]);
 			
 		}// end of for-----------------
 		
 		if(reservebookid.length() > 0)
 			reservebookid = reservebookid.substring(0, reservebookid.length()-1);
-		
-		System.out.println(reservebookid);
 		
 		return reservebookid;
 		
