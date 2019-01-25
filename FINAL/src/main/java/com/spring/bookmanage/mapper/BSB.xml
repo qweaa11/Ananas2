@@ -81,14 +81,125 @@
 			  select  idx, libid_fk, name, subject, content, readCount
 			        ,to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
 			        ,commentCount
+			        ,fileName, orgFilename, fileSize
 			        
 			    from board
 			    where status = 0 and idx = #{idx}
-			
-			
 	
 	</select>
- 	
+	
+	<!-- // ===== #89. 댓글쓰기 ===== -->
+	<insert id="addComment" parameterType="com.spring.bookmanage.board.BSBmodel.BSBcommentVO">
+		
+		insert into reply(idx, libid_fk, name, content, regdate, status, parentidx)
+		values(reply_seq.nextval, #{libid_fk}, #{name}, #{content}, sysdate, 0, #{parentidx})
+	
+	</insert>
+	
+	<!-- // ===== #90. 댓글쓰기 이후에 댓글의 갯수(commentCount 컬럼) 1증가 시키기===== -->
+	<update id="updateCommentCount" parameterType="String">
+	
+		update board set commentCount = commentCount + 1
+		where idx = #{parentidx}
+	
+	</update>
+	
+	
+	<!-- //  ===== #95-1. 원글에 글번호에 대한 댓글중 페이지 번호에 해당하는 댓글만 조회헤온다. ===== -->
+	<select id="listComment" parameterType="HashMap" resultType="com.spring.bookmanage.board.BSBmodel.BSBcommentVO">
+				
+			select idx, name, content, regdate
+			from
+				(
+				    select rownum as rno, idx, name, content, regdate
+				    from
+				    (
+				        select idx, name, content, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') AS regdate
+				        from reply
+				        where parentidx = #{IDX} and status = 0
+				        order by idx desc
+				    )V
+				)T
+			where rno between #{RNO1} and #{RNO2}
+	
+	
+	</select>
+	
+	<!-- //  ===== #95-2. 원글 글번호에 해당하는 댓글의 총갯수를 알아오기 -->
+	<select id="getCommentTotalCount" parameterType="HashMap" resultType="int">
+	
+		select count(*)
+		from reply
+		where parentidx = #{IDX} and status = 0
+		
+	</select>
+	
+	<!-- // ===== #73. 글수정 및 글삭제시 암호일치 여부 알아오기 ===== -->
+	<select id="checkPW" parameterType="HashMap" resultType="int">
+	
+		select count(*)
+		from board
+		where idx = #{IDX} and pw = #{PW}
+	
+	</select>
+	
+	 <!-- // ==== #103. 원글에 딸린 댓글이 있는지 없는지 확인하기 -->
+	<select id="isExistsComment" parameterType="HashMap" resultType="int">
+			
+			select count(*)
+			from reply 
+			where parentidx = #{IDX} and status = 0
+	
+	</select>
+	
+	<!-- // ===== #81. 글 1개 삭제하기(update 로 처리함) ===== -->
+	<update id="deleteContent" parameterType="HashMap">
+	
+		update board set status = 1
+		where idx = #{IDX}
+	
+	</update>
+	
+	<!-- // ==== #104. 원글에 딸린 댓글 삭제하기 ==== -->
+	<update id="delComment" parameterType="HashMap">
+			
+			update reply set status = 1
+			where parentidx = #{IDX}
+			
+	</update>
+	
+	 <!-- // ==== #129. tblBoard 테이블에서 groupno 컬럼의 최대값 알아오기 -->
+	 <select id="getGroupnoMax" resultType="int">
+	 	select nvl(max(groupno), 0)
+	 	from board
+	 </select>
+	 
+	 
+	  <!-- ===== #143. 글쓰기(파일첨부가 있는 글쓰기) ====== -->
+	 <insert id="add_withFile" parameterType="com.spring.bookmanage.board.BSBmodel.BSBboardVO">
+	 
+		insert into board(idx, libid_fk, name, subject, content, pw, readcount, regdate, status, groupno, root, depthno, commentcount, fileName, orgFilename, fileSize)
+		values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw},0, sysdate, 0, 0, 0, 0, 0, #{fileName}, #{orgFilename}, #{fileSize})
+	
+	
+	 </insert>
+	
+	
+	<!-- // ==== # 댓글 삭제하기 ==== -->
+	<update id="commentdel" parameterType="HashMap">
+			
+			update reply set status = 1
+			where parentidx = #{ORGIDX} and idx = #{IDX}
+			
+	</update>
+	
+ 		<!-- // ===== #90. 댓글삭제 이후에 댓글의 갯수(commentCount 컬럼) 1감소 시키기===== -->
+	<update id="updateCommentdelCount" parameterType="String">
+	
+		update board set commentCount = commentCount - 1
+		where idx = #{ORGIDX}
+	
+	</update>
 	
 	
 

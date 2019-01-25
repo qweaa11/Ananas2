@@ -57,9 +57,12 @@
 	
 	<!-- 도서 시리얼 넘버를 만들기 위해 도서시리얼에서 앞에 15자리를 알아오기 -->
 	<select id="BookIdN" resultType="int" parameterType="String">
-		select count(*)
+
+		select count(distinct substr(BOOKID, 1, instr(BOOKID, '-', 1, 2)-1))
 		from Book
 		where substr(BOOKID, 1, 15) = #{bookId}
+
+
 	</select>
 	
 	<!-- returned, book, member 테이블을 조인해서 반납목록에 필요한 정보 얻어오기 -->

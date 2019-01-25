@@ -131,7 +131,7 @@
                     <div class="contact_form">
                     		<h3 class="heading"><strong class="glyphicon glyphicon-pencil"></strong> 글쓰기 <span></span></h3>
                             	<div class="con_form">
-                                <form  name="addFrm">
+                                <form  name="addFrm" enctype = "multipart/form-data">
                                    <input type="hidden" name="libid_fk" value="tester00" />
                                    <input type="hidden" name="name" value="운영자"  /> 
                                     <input type="text" required="" placeholder="제목" name="subject" id="subject" value="" tabindex="1" name="title" class="con_txt">
@@ -139,23 +139,28 @@
                                     
                                     
                                      <textarea placeholder="" id="content" name="content" type="text" class="con_txt_3" tabindex="4"></textarea>
+                                     <table>
                                      <tr>
-									<th>암호</th>
-									<td><input type="password" name="pw" id="pw" class="short" /></td>
-									</tr>
+										<!-- ===== #135. 파일첨부 타입 추가하기 =====-->
+						         		<th>파일첨부 <input type="file" name="attach"/></th>
+						         	</tr>
+						         	<tr>
+						         		<td style="padding-bottom: 10px; padding-top: 10px;">암호 <input type="password" name="pw" id="pw" class="short" /></td>
+						         	</tr>
+						         	</table>
                                     
                                     <button type="button" id="btnWrite" class="con_txt2">작성하기</button>
                                     <button type="button"  class="con_txt2"  onClick="javascript:history.back();">취소하기</button>
                                     
-                                    <input type="hidden" name="readcount"  value="${readcount}" />
+                                    <input type="hidden" name="readcount"  value="${readCount}" />
 									<input type="hidden" name="status" value="${status}" />
 									<input type="hidden" name="groupno" value="${groupno}" />	
 									<input type="hidden" name="root"  value="${root}" />
 									<input type="hidden" name="depthno" value="${depthno}" />
-									<input type="hidden" name="commentcount" value="${commentcount}" />
-									<input type="hidden" name="filename"  value="${filename}" />
-									<input type="hidden" name="orgfilename" value="${orgfilename}" />
-									<input type="hidden" name="filesize" value="${filesize}" />
+									<input type="hidden" name="commentcount" value="${commentCount}" />
+									<input type="hidden" name="filename"  value="${fileName}" />
+									<input type="hidden" name="orgfilename" value="${orgFilename}" />
+									<input type="hidden" name="filesize" value="${fileSize}" />
                                     
                 				</form>
                                 </div>

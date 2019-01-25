@@ -90,6 +90,17 @@ public class JGHService {
 	}// end of recoverMember
 
 	/**
+	 * 회원 연체료
+	 * @param idxArray
+	 * @return
+	 */
+	public int latefeeClearMember(String[] idxArray) {
+		int row = mapper.clearLatefee(idxArray);
+
+		return row;
+	}// end of latefeeClearMember
+
+	/**
 	 * 검색설정에 따른 회원수 불러오기
 	 * @param parameterMap
 	 * @return
@@ -111,7 +122,7 @@ public class JGHService {
 	}// end of countMemberWithOutSearchOption
 
 	/**
-	 * 검색한 따른 회원목록 불러오기(페이지네이션 구현)
+	 * 검색조건에 따른 회원목록 불러오기(페이지네이션 구현)
 	 * @param parameterMap
 	 * @return
 	 */

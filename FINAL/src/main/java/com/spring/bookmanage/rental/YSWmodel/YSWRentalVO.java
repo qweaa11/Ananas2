@@ -3,14 +3,14 @@ package com.spring.bookmanage.rental.YSWmodel;
 public class YSWRentalVO {
 	
 	private String idx;
-	private String bookid;
-	private String memberid;
+	private String bookId;
+	private String memberId;
 	private String rentalDate;
     private String deadline;
     private String delayDate;
     private String renew;
     private String bookTitle;
-    private String pubname;
+    private String pubName;
     private String bookAuthor;
     private String memberName;
     
@@ -20,18 +20,18 @@ public class YSWRentalVO {
     
     
     
-	public YSWRentalVO(String idx, String bookid, String memberid, String rentalDate, String deadline, String delayDate, String renew,
-			String bookTitle, String pubname, String bookAuthor, String memberName) {
+	public YSWRentalVO(String idx, String bookId, String memberId, String rentalDate, String deadline, String delayDate, String renew,
+			String bookTitle, String pubName, String bookAuthor, String memberName) {
 		
 		this.idx = idx;
-		this.bookid = bookid;
-		this.memberid = memberid;
+		this.bookId = bookId;
+		this.memberId = memberId;
 		this.rentalDate = rentalDate;
 		this.deadline = deadline;
 		this.delayDate = delayDate;
 		this.renew = renew;
 		this.bookTitle = bookTitle;
-		this.pubname = pubname;
+		this.pubName = pubName;
 		this.bookAuthor = bookAuthor;
 		this.memberName = memberName;
 	}
@@ -48,23 +48,23 @@ public class YSWRentalVO {
 	}
 
 
-	public String getBookid() {
-		return bookid;
+	public String getBookId() {
+		return bookId;
 	}
 
 
-	public void setBookid(String bookid) {
-		this.bookid = bookid;
+	public void setBookId(String bookId) {
+		this.bookId = bookId;
 	}
 
 
-	public String getMemberid() {
-		return memberid;
+	public String getMemberId() {
+		return memberId;
 	}
 
 
-	public void setMemberid(String memberid) {
-		this.memberid = memberid;
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 
 
@@ -118,13 +118,13 @@ public class YSWRentalVO {
 	}
 	
 
-	public String getPubname() {
-		return pubname;
+	public String getPubName() {
+		return pubName;
 	}
 
 
-	public void setPubname(String pubname) {
-		this.pubname = pubname;
+	public void setPubName(String pubName) {
+		this.pubName = pubName;
 	}
 
 
