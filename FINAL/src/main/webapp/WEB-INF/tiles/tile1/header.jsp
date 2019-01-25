@@ -32,7 +32,7 @@
 			
 			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="margin-bottom: 10px;"> 
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle head-toggle" data-toggle="collapse" >
+					<button type="button" class="navbar-toggle" data-toggle="collapse" onclick="javascript:location.href='logout.ana'">    
 						<img alt="" src="resources/img/logout.png">
 					</button>
 					<button type="button" class="navbar-toggle head-toggle" data-toggle="collapse">
@@ -46,7 +46,6 @@
 				
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
-						
 						<li><a href="schedulerRun.ana">스케줄러실행<i class="glyphicon glyphicon-hourglass"></i></a></li>
 						<li><a href="logout.ana">로그아웃</a></li>
 					</ul>

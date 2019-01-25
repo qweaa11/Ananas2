@@ -2,55 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 
-<style type="text/css">
-.process-step .btn:focus {
-	outline: none
-}
-
-.process {
-	display: table; 
-	width: 100%;
-	position: relative
-}
-
-.process-row {
-	display: table-row
-}
-
-.process-step button[disabled] {
-	opacity: 1 !important;
-	filter: alpha(opacity = 100) !important
-}
-
-.process-row:before {
-	top: 40px;
-	bottom: 0;
-	position: absolute;
-	content: " ";
-	width: 100%;
-	height: 1px;
-	background-color: #ccc;
-	z-order: 0
-}
-
-.process-step {
-	display: table-cell;
-	text-align: center;
-	position: relative
-}
-
-.process-step p {
-	margin-top: 4px
-}
-
-.btn-circle {
-	width: 80px;
-	height: 80px;
-	text-align: center;
-	font-size: 12px;
-	border-radius: 50%
-}
-</style>
+<link rel="stylesheet" type="text/css" href="resources/css/chartStyle.css">
 
 <script type="text/javascript">
 	$(function() {
@@ -131,7 +83,7 @@
 			<div class="tab-content" style="border-radius: 5px; border: 1px solid black; margin-top: 30px;"> 
 			
 				<div id="menu1" class="tab-pane fade active in">
-					<h3>1번탭</h3>
+					<jsp:include page="./chartDetail/KGBChart.jsp"></jsp:include>
 				</div>
 				
 				<div id="menu2" class="tab-pane fade">

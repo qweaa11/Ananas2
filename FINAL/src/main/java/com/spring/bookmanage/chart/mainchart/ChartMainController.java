@@ -1,4 +1,4 @@
-package com.spring.bookmanage.chart;
+package com.spring.bookmanage.chart.mainchart;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
