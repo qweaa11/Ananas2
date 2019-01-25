@@ -82,7 +82,7 @@
 			<!-- 차트 내용 -->
 			<div class="tab-content" style="border-radius: 5px; border: 1px solid black; margin-top: 30px;"> 
 			
-				<div id="menu1" class="tab-pane fade active in">
+				<div id="menu1" class="tab-pane fade active in" style="width: 100%; min-width: 310px; height: 400px; padding: 50px;">
 					<jsp:include page="./chartDetail/KGBChart.jsp"></jsp:include>
 				</div>
 				
