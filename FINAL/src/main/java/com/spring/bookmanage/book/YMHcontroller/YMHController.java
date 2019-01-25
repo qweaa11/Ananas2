@@ -134,7 +134,7 @@ public class YMHController
 		
 		if(bookIdN >= 1)
 		{
-			bookId+= "-" + bookIdN+1 ;
+			bookId+= "-" + (bookIdN+1) ;
 		}
 		else
 		{

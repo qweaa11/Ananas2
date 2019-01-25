@@ -35,6 +35,12 @@
 		});	// $("#field").change(function(){});	
 	
 		
+		if( ${sessionScope.loginLibrarian != null} )
+		{
+			$("#libCode").val("${sessionScope.loginLibrarian.libcode_fk}");
+			
+
+		}
 		
 		
 		
@@ -184,7 +190,7 @@
 			
 			
 			
-
+			console.log( $("#libCode").val() );
 	
 			
 			
@@ -266,27 +272,38 @@
 	
 	function showLibrary()
 	{
-		$.ajax({
-			url:"<%=request.getContextPath()%>/showLibrary.ana",
-			type:"GET",
-			dataType:"JSON",
-			success:function(json){
-				resultHTML = "";
-				
-				$.each(json, function(entryIndex, entry){
+		
+		if( ${sessionScope.loginLibrarian == null} )
+		{
+			$.ajax({
+				url:"<%=request.getContextPath()%>/showLibrary.ana",
+				type:"GET",
+				dataType:"JSON",
+				success:function(json){
+					resultHTML = "";
 					
-					resultHTML += "<option value=\""+entry.LIBCODE+"\">"+entry.LIBNAME+"</option>";
-								
-				}); // end of each()---------------------
-				
-				
-				$("#libCode").append(resultHTML);
-			},
-			error: function(request, status, error){
-				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error );
-			}// end of error---------------------------------------------------------
-				
-		});
+					$.each(json, function(entryIndex, entry){
+						
+						resultHTML += "<option value=\""+entry.LIBCODE+"\">"+entry.LIBNAME+"</option>";
+									
+					}); // end of each()---------------------
+					
+					
+					$("#libCode").append(resultHTML);
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error );
+				}// end of error---------------------------------------------------------
+					
+			});// end of ajax()----------------------------------------------------------
+			
+		}
+		
+		
+		
+		
+		
+		
 		
 	}// end of showLibrary()-----------------------------------------------------------------------------------
 	
@@ -522,7 +539,10 @@
 	          	</div>
 	        </div>
         
-      		<!-- 도서 등록시 도서관명 추가 -->
+        
+        <!-- 총괄관리자일때만 보여주기 -->
+       	<c:if test="${sessionScope.loginLibrarian == null}">
+     			<!-- 도서 등록시 도서관명 추가 -->
 	       	<div class="form-group">
 	       		<label class="control-label col-sm-3">도서관명 <span class="text-danger">*</span></label>
 	          	<div class="col-md-5 col-sm-8">
@@ -531,6 +551,22 @@
 	          	</select>
 	          	</div>
 	        </div>
+       	</c:if>
+        	 <!-- 총괄관리자가 아니면때만 보여주기 -->
+       	<c:if test="${sessionScope.loginLibrarian != null}">
+     			<!-- 도서 등록시 도서관명 추가 -->
+	       	<div class="form-group">
+	       		
+	          
+	          	<input type="hidden" id='libCode' name='libCode' class='custom-select' style='width: 200px;'/>
+	          		
+	     
+	          	
+	        </div>
+       	</c:if>
+        	
+    
+        	
         	
         	<!-- 도서 등록시 이미지 파일 추가 -->
 			<div class="form-group">
