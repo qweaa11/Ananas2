@@ -1,3 +1,4 @@
+
 package com.spring.bookmanage.book.KKHcontroller;
 
 
@@ -17,11 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.book.KKHmodel.KKHBookVO;
 import com.spring.bookmanage.book.KKHservice.InterKKHBookService;
 import com.spring.bookmanage.common.AES256;
+import com.spring.bookmanage.common.FileManager;
 
 
 @Controller
@@ -32,6 +35,9 @@ public class KKHController {
 	
 	@Autowired
 	private AES256 aes;
+	
+	@Autowired
+	private FileManager  fileManager;
 	
 	@RequestMapping(value="/bookList.ana",method= {RequestMethod.GET})
 	/** bookList.jsp 페이지로 이동하는 메소드
@@ -90,10 +96,12 @@ public class KKHController {
 		ArrayList<String> cateArr = null;
 		ArrayList<String> fieldArr = null;
 		
-		if(library != "" && librarian != null) {
-			library = "'"+library+"'";
-		}else {
+		if(librarian != null) {
 			library = "'"+libcode+"'";
+			System.out.println("1111");
+		}else if(library != "" && librarian == null){
+			library = "'"+library+"'";
+			System.out.println("2222");
 		}
 		if(language != "") language = "'"+language+"'";
 		if(category != "") category = "'"+category+"'";
@@ -177,7 +185,7 @@ public class KKHController {
 		HttpSession session = request.getSession();
 		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
 		if(librarian != null) {
-			library = "'"+librarian.getLibcode_fk()+"'"; 
+			library = librarian.getLibcode_fk(); 
 		}
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
@@ -225,6 +233,7 @@ public class KKHController {
 		
 		List<HashMap<String,String>> bookReservateList = new ArrayList<HashMap<String,String>>();
 		List<KKHBookVO> bookDetailList = service.findBookDetail(bookid);
+		int length = bookDetailList.size();
 		List<HashMap<String,String>> categoryList = service.findAllCategory(libcode);
 		List<HashMap<String,String>> languageList = service.findAllLanguage(libcode);
 		List<HashMap<String,String>> genreList = service.findgenre();
@@ -250,6 +259,7 @@ public class KKHController {
 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 			e.printStackTrace();
 		}
+		request.setAttribute("length", length);
 		request.setAttribute("libraryList", libraryList);
 		request.setAttribute("bookid", bookid);
 		request.setAttribute("categoryList", categoryList);
@@ -278,20 +288,54 @@ public class KKHController {
 	public String editPublicBookInfo(HttpServletRequest request,HttpServletResponse response) {
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
+		String editAgecode = request.getParameter("editAgecode");
 		String editTitle = request.getParameter("editTitle");
 		String editAuthor = request.getParameter("editAuthor");
+		String editNation = request.getParameter("editNation");
+		String editLibrary = request.getParameter("editLibrary");
 		String editLanguage = request.getParameter("editLanguage");
 		String editCategory = request.getParameter("editCategory");
 		String editField = request.getParameter("editField");
 		String editGenre = request.getParameter("editGenre");
+		String editImage = request.getParameter("editImage");
+		String length = request.getParameter("bookListLength");
+		int n=0;
+		
+		System.out.println("eidtIma:"+editImage);
 		String bookid = request.getParameter("bookid");
 		KKHBookVO book = service.findOneBook(bookid);
-		if(!editLanguage.equals(book.getLcode_fk()) || !editCategory.equals(book.getCcode_fk()) || !editField.equals(book.getFcode_fk())|| !editGenre.equals(book.getGcode_fk())) {
-			//코드가 변경된 것이 있을경우
+		parameterMap.put("BOOKID", bookid);
+		parameterMap.put("EDITAGECODE", editAgecode);
+		parameterMap.put("LENGTH", length);
+		parameterMap.put("EDITTITLE", editTitle);
+		parameterMap.put("EDITAUTHOR", editAuthor);
+		if(!(editImage =="" || editImage == null)) {
+			parameterMap.put("EDITIMAGE", editImage);
+		}
+		if(!editLibrary.equals(book.getLibcode_fk()) || !editNation.equals(book.getNcode_fk()) || !editLanguage.equals(book.getLcode_fk()) || !editCategory.equals(book.getCcode_fk()) || !editField.equals(book.getFcode_fk())|| !editGenre.equals(book.getGcode_fk())) {
 			
+			parameterMap.put("EDITLIBRARY",editLibrary);
+			parameterMap.put("EDITNATION",editNation);
+			parameterMap.put("EDITLANGUAGE", editLanguage);
+			parameterMap.put("EDITCATEGORY", editCategory);
+			parameterMap.put("EDITFIELD", editField);
+			parameterMap.put("EDITGENRE", editGenre);
+			n = service.editBookPlzChangeBookid(parameterMap,book);
 			
+		}else {
+			n = service.eidtBookNoChangeBookid(parameterMap,book);
 		}
 		
-		return "book/bookDetail.tiles1";
+		if(n != 1) {
+			String msg = "수정 실패";
+			String loc = "javascript:history.back()";
+			
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+			return "msg";
+		}
+		
+		return "book/bookList.tiles1";
 	}
 }

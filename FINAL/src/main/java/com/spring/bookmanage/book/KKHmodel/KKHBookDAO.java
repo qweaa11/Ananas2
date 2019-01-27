@@ -40,7 +40,7 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	
 	@Override
 	public List<KKHBookVO> findBookBysidebar(HashMap<String, Object> parameterMap) {
-		//System.out.println("library=>"+parameterMap.get("LIBRARY")+",  language=>"+parameterMap.get("LANGUAGE")+",  category=>"+parameterMap.get("CATEGORY")+",  field=>"+parameterMap.get("FIELD"));
+		System.out.println("library=>"+parameterMap.get("LIBRARY")+",  language=>"+parameterMap.get("LANGUAGE")+",  category=>"+parameterMap.get("CATEGORY")+",  field=>"+parameterMap.get("FIELD"));
 		List<KKHBookVO> bookList = sqlsession.selectList("KKH.findBookBysidebar", parameterMap);
 		
 		return bookList;
@@ -96,7 +96,48 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		KKHBookVO book = sqlsession.selectOne("KKH.findOneBook", bookid);
 		return book;
 	}
+	@Override
+	public String findNewBook1stNum(String newBookid) {
+		
+		String result = sqlsession.selectOne("KKH.findNewBook1stNum", newBookid);
+		
+		return result;
+	}
+	
+	@Override
+	public List<KKHBookVO> selectAndDelBookDetail(String bookid) {
+		List<KKHBookVO> bookDetailList = sqlsession.selectList("KKH.selectBookDetail", bookid);
+		sqlsession.delete("KKH.deleteBookDetail", bookid);
+		return bookDetailList;
+	}
+	
+	@Override
+	public int updateNewBookid(HashMap<String, String> parameterMap) {
+		System.out.println("111");
+		int n = sqlsession.update("KKH.updateNewBookid",parameterMap);
+		return n;
+	}
+	@Override
+	public int updateNewBookDetail(HashMap<String, String> parameterMap) {
+		System.out.println("222");
+		int n = sqlsession.update("KKH.updateNewBookDetail", parameterMap);
+		return n;
+	}
 
+	
+	@Override
+	public int updateBookDetail(HashMap<String, String> parameterMap) {
+		System.out.println("333");
+		int n = sqlsession.update("KKH.updateBookDetail", parameterMap);
+		return n;
+	}
+	@Override
+	public int updateBookInfo(HashMap<String, String> parameterMap) {
+		System.out.println("444");
+		int n = sqlsession.update("KKH.updateBookInfo", parameterMap);
+		return 0;
+	}
+	
 	
 
 

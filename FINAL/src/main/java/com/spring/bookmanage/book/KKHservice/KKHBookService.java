@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.bookmanage.book.KKHmodel.InterKKHBookDAO;
 import com.spring.bookmanage.book.KKHmodel.KKHBookVO;
@@ -89,6 +92,35 @@ public class KKHBookService implements InterKKHBookService{
 	public KKHBookVO findOneBook(String bookid) {
 		KKHBookVO book = bookdao.findOneBook(bookid);
 		return book;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int editBookPlzChangeBookid(HashMap<String, String> parameterMap, KKHBookVO book) {
+		int result = 0;
+		
+		// LIB+N+L+C+F+G - 큰번호- 개별번호
+		String newBookid = parameterMap.get("EDITLIBRARY")+parameterMap.get("EDITNATION")+parameterMap.get("EDITLANGUAGE")+parameterMap.get("EDITCATEGORY")+parameterMap.get("EDITFIELD")+parameterMap.get("EDITGENRE");
+		String newBookFirstNum = bookdao.findNewBook1stNum(newBookid);
+		newBookid += "-"+newBookFirstNum;
+		parameterMap.put("NEWBOOKID", newBookid);
+		List<KKHBookVO> bookDetailList = bookdao.selectAndDelBookDetail(parameterMap.get("BOOKID"));
+		int n1 = bookdao.updateNewBookid(parameterMap);
+		int n2 = bookdao.updateNewBookDetail(parameterMap);
+		
+		
+	
+		if(n1-n2 == 0) result = 1;
+		return result;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int eidtBookNoChangeBookid(HashMap<String, String> parameterMap, KKHBookVO book) {
+		int result = 0;
+		int n1 = bookdao.updateBookInfo(parameterMap);
+		int n2 = bookdao.updateBookDetail(parameterMap);
+		
+		if(n1-n2 == 0 ) result = 1;
+		return result;
 	}
 	
 

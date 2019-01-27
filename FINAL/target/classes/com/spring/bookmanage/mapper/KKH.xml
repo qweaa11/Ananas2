@@ -144,7 +144,7 @@
         <if test="SEARCHWORD!=''">
 		 	where LOWER(${SEARCHTYPE}) like '%'||LOWER('${SEARCHWORD}')||'%'
 		 </if>
-		 <if test="LIBRARY!=''">
+		 <if test="LIBRARY!='' and LIBRARY!=null">
 		 		and libcode_fk = #{LIBRARY}
 		 </if>
 		 <if test="SORT=='count'">
@@ -211,8 +211,49 @@
 	</select>
 	
 	<select id="findOneBook" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
-		select lcode_fk, gcode_fk, fcode_fk, ccode_fk
+		select lcode_fk, gcode_fk, fcode_fk, ccode_fk,libcode_fk,ncode_fk
 		from book
-		where bookid like '%'||${bookid}||'%'
+		where bookid like '%'||#{bookid}||'-1'
 	</select>
+	
+	<select id="findNewBook1stNum" parameterType="String" resultType="String">
+		select substr(max(substr(bookid,instr(bookid,'-',1,1)+1 ) ),1,1)+1 as result
+		from book
+		where bookid like #{newBookid}
+	</select>
+	
+	<select id="selectBookDetail" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select bookid, idx, intro, image, price, weight, totalpage,pdate,regdate
+		from book_detail
+		where bookid like '%'||#{bookid}||'%'
+	</select>
+	
+	<delete id="deleteBookDetail" parameterType="String">
+		delete from book_detail where bookid like '%'||#{bookid}||'%'
+	</delete>
+	
+	<update id="updateNewBookid" parameterType="HashMap">
+		update book set libcode_fk = #{EDITLIBRARY}, ncode_fk = #{EDITNATION}, lcode_fk = #{EDITLANGUAGE}
+						,ccode_fk = #{EDITCATEGORY}, fcode_fk = #{EDITFIELD}, gcode_fk = #{EDITGENRE}
+						,title = #{EDITTITLE}, author = #{EDITAUTHOR}
+						,bookid = #{NEWBOOKID}||substr(bookid,instr(bookid,'-',1,2)) , agecode = #{EDITAGECODE}
+		where bookid like '%'||#{BOOKID}||'%'
+	</update>
+	
+	<update id="updateNewBookDetail" parameterType="HashMap">
+		update book_detail set image = #{EDITIMAGE}, bookid =  #{NEWBOOKID}||substr(bookid,instr(bookid,'-',1,2)) , regdate = sysdate
+		where bookid like'%'||#{BOOKID}||'%'
+	</update>
+	
+	<update id="updateBookInfo" parameterType="HashMap">
+		update book set title = #{EDITTITLE}, author = #{EDITAUTHOR}, agecode = #{EDITAGECODE}
+		where bookid like '%'||#{BOOKID}||'%'
+	</update>
+	
+	<update id="updateBookDetail" parameterType="HashMap">
+		update book_detail set image = #{EDITIMAGE}
+		where bookid like'%'||#{BOOKID}||'%'
+	</update>
+	
+	
 </mapper>

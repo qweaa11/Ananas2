@@ -227,7 +227,7 @@ div.search button:hover {
 	function goBook(){
 		
 		var form_data= $("#sidebarFrm").serialize();
-		
+		console.log($("#libraryFrm").val());
 		$.ajax({
 			
 			url:"KKHfindBookBySidebar.ana",
@@ -252,6 +252,7 @@ div.search button:hover {
 							"<td>"+book.FNAME+"-"+book.GNAME+"</td>"+
 							"<td>"+book.AUTHOR+"</td>"+       
 							"<td>"+book.PUBNAME+"</td>"+
+							"<td>"+book.LIBNAME+"</td>"+
 							"<td>"+book.AGECODE+"</td>"+
 							"<td>"+book.COUNT+"</td>"+
 						"</tr>";
@@ -303,6 +304,7 @@ div.search button:hover {
 							"<td>"+book.FNAME+"-"+book.GNAME+"</td>"+
 							"<td>"+book.AUTHOR+"</td>"+       
 							"<td>"+book.PUBNAME+"</td>"+
+							"<td>"+book.LIBNAME+"</td>"+
 							"<td>"+book.AGECODE+"</td>"+
 							"<td>"+book.COUNT+"</td>"+
 						"</tr>";
@@ -367,12 +369,13 @@ div.search button:hover {
 				<thead>
 					<tr>
 						<th width="7%">번호</th>
-						<th width="13%">도서 코드</th>
-						<th width="25%">도서명</th>
-						<th width="12%">분류</th>      
-						<th width="14%">저자/역자</th>
-						<th width="9%">출판사</th>
-						<th width="12%">도서 연령</th>    
+						<th width="12%">도서 코드</th>
+						<th width="20%">도서명</th>
+						<th width="11%">분류</th>      
+						<th width="12%">저자/역자</th>
+						<th width="8%">출판사</th>
+						<th width="11%">위치</th>
+						<th width="11%">도서 연령</th>    
 						<th width="8%">권수</th> 
 					</tr>      
 				</thead>       
