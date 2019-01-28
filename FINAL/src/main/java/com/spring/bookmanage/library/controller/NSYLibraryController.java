@@ -251,14 +251,7 @@ public class NSYLibraryController {
 		String addr2 = req.getParameter("addr2");
 		String y = req.getParameter("y");
 		String x = req.getParameter("x");
-		String oldFileName = req.getParameter("fileName");
-		
-		System.out.println(idx);
-		System.out.println(libname);
-		System.out.println(tel);
-		System.out.println(post);
-		System.out.println(addr1);
-		System.out.println(addr2);
+		String oldFileName = req.getParameter("fileName");	
 		
 		libraryvo.setIdx(idx);
 		libraryvo.setLibname(libname);

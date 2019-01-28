@@ -64,7 +64,6 @@
 					});// $.each(data, function(entryIndex, entry)
 							
 					$("#result").empty().html(resultHTML);
-					console.log("goSearch(currentShowPageNo) :" +currentShowPageNo);
 					makeBarPage(currentShowPageNo);
 					
 				}//if_1 
@@ -229,7 +228,7 @@
 				<option value="addr1">주소</option>
 				<option value="libname">도서관명</option>
 			</select>
-			<input type="text" name="searchWord" id="searchWord" placeholder="Search.."style="height:30px; border:solid blue 0px;"/>
+			<input type="text" name="searchWord" id="searchWord" placeholder="Search.." style="height:30px; border:solid blue 0px;"/>
 			<button type="button" onClick="goSearch('1');" style="height:30px">Search</button>
 			<!-- 엔터키 리로드 방지용 (같은 form안에 input태그가 2개 이상 있어야 한다)-->
 			<input type="text" style="display:none;"/>
@@ -252,7 +251,7 @@
 		</table>
 		<br>
 			
-		<!-- ==== #121. 페이지바 보여주기   -->
+		<!-- ==== 페이지바 보여주기   -->
 		<!-- AJAX에서 다음 ul태그 안에 값을 넣어준다  -->
 		<ul class="pagination pagination-lg" id="pageBar" style=""></ul>	
 	</div><!-- end of div class="container"  --> 

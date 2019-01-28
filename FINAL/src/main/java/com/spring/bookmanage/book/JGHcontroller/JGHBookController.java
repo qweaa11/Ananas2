@@ -1,5 +1,8 @@
 package com.spring.bookmanage.book.JGHcontroller;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.spring.bookmanage.book.JGHmodel.DeleteBookVO;
 import com.spring.bookmanage.book.JGHservice.JGHBookService;
 
 @Controller
@@ -15,9 +19,30 @@ public class JGHBookController {
 
 	@Autowired private JGHBookService service;
 
-	@RequestMapping(value = "deleteBookLog.ana", method = {RequestMethod.GET})
+	@RequestMapping(value = "deleteLog.ana", method = {RequestMethod.GET})
 	public String deleteLog(HttpServletRequest request, HttpServletResponse response) {
+		List<DeleteBookVO> deleteBookList = null;
 
-		return "";
+		String colname = request.getParameter("colname");
+		String searchWord = request.getParameter("searchWord");
+		request.setAttribute("colname", colname);
+		request.setAttribute("searchWord", searchWord);
+
+		HashMap<String, String> parameterMap = new HashMap<>();
+		parameterMap.put("colname", colname);
+		parameterMap.put("searchWord", searchWord);
+
+		if(searchWord != null && !searchWord.trim().equals("")) {// 검색이 있는경우(페이징 처리 미구현)
+			deleteBookList = service.searchList(parameterMap);
+
+			request.setAttribute("colname", colname);// view단에서 검색어를 유지시키기 위해 보낸것.
+			request.setAttribute("searchWord", searchWord);
+		} else {// 검색이 없는경우(페이징 처리 미구현)
+			deleteBookList = service.noSearchList();
+		}// end of if~else
+
+		request.setAttribute("deleteBookList", deleteBookList);
+
+		return "book/deleteLog.tiles1";
 	}// end of deleteBookLog
 }

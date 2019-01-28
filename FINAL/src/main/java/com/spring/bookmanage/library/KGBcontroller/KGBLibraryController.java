@@ -21,6 +21,13 @@ public class KGBLibraryController {
 		return "library/index.tiles1";
 	}// end of index
 
+	/**
+	 * 스케줄러 실행
+	 * @param request
+	 * @param response
+	 * @return
+	 * @author 구현
+	 */
 	@RequestMapping(value = "schedulerRun.ana", method = {RequestMethod.GET})
 	public String schedulerRun(HttpServletRequest request, HttpServletResponse response) {
 		int row = service.schedulerRunService();
