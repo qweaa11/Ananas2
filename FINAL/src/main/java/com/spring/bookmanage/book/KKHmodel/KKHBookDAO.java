@@ -16,31 +16,31 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	private SqlSessionTemplate sqlsession;
 	
 	@Override
-	public List<HashMap<String, String>> findAllLibrary() {
-		List<HashMap<String,String>> libraryList = sqlsession.selectList("KKH.findAllLibrary");
+	public List<HashMap<String, String>> findAllLibrary(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> libraryList = sqlsession.selectList("KKH.findAllLibrary",libcode);
 		return libraryList;
 	}  
 	@Override
-	public List<HashMap<String, String>> findAllLanguage() {
-		List<HashMap<String,String>> languageList = sqlsession.selectList("KKH.findAllLanguage");
+	public List<HashMap<String, String>> findAllLanguage(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> languageList = sqlsession.selectList("KKH.findAllLanguage",libcode);
 		return languageList;
 	}
 
 	@Override
-	public List<HashMap<String, String>> findAllCategory() {
-		List<HashMap<String,String>> categoryList = sqlsession.selectList("KKH.findAllCategory");
+	public List<HashMap<String, String>> findAllCategory(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> categoryList = sqlsession.selectList("KKH.findAllCategory",libcode);
 		return categoryList;
 	}
 
 	@Override
-	public List<HashMap<String, String>> findAllField() {
-		List<HashMap<String,String>> fieldList = sqlsession.selectList("KKH.findAllField");
+	public List<HashMap<String, String>> findAllField(HashMap<String,String> libcode) {
+		List<HashMap<String,String>> fieldList = sqlsession.selectList("KKH.findAllField",libcode);
 		return fieldList;
 	}
 	
 	@Override
 	public List<KKHBookVO> findBookBysidebar(HashMap<String, Object> parameterMap) {
-		//System.out.println("library=>"+parameterMap.get("LIBRARY")+",  language=>"+parameterMap.get("LANGUAGE")+",  category=>"+parameterMap.get("CATEGORY")+",  field=>"+parameterMap.get("FIELD"));
+		System.out.println("library=>"+parameterMap.get("LIBRARY")+",  language=>"+parameterMap.get("LANGUAGE")+",  category=>"+parameterMap.get("CATEGORY")+",  field=>"+parameterMap.get("FIELD"));
 		List<KKHBookVO> bookList = sqlsession.selectList("KKH.findBookBysidebar", parameterMap);
 		
 		return bookList;
@@ -91,7 +91,53 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		List<HashMap<String,String>> detailFieldList = sqlsession.selectList("KKH.findDetailField", bigfcode);
 		return detailFieldList;
 	}
+	@Override
+	public KKHBookVO findOneBook(String bookid) {
+		KKHBookVO book = sqlsession.selectOne("KKH.findOneBook", bookid);
+		return book;
+	}
+	@Override
+	public String findNewBook1stNum(String newBookid) {
+		
+		String result = sqlsession.selectOne("KKH.findNewBook1stNum", newBookid);
+		
+		return result;
+	}
+	
+	@Override
+	public List<KKHBookVO> selectAndDelBookDetail(String bookid) {
+		List<KKHBookVO> bookDetailList = sqlsession.selectList("KKH.selectBookDetail", bookid);
+		sqlsession.delete("KKH.deleteBookDetail", bookid);
+		return bookDetailList;
+	}
+	
+	@Override
+	public int updateNewBookid(HashMap<String, String> parameterMap) {
+		System.out.println("111");
+		int n = sqlsession.update("KKH.updateNewBookid",parameterMap);
+		return n;
+	}
+	@Override
+	public int updateNewBookDetail(HashMap<String, String> parameterMap) {
+		System.out.println("222");
+		int n = sqlsession.update("KKH.updateNewBookDetail", parameterMap);
+		return n;
+	}
 
+	
+	@Override
+	public int updateBookDetail(HashMap<String, String> parameterMap) {
+		System.out.println("333");
+		int n = sqlsession.update("KKH.updateBookDetail", parameterMap);
+		return n;
+	}
+	@Override
+	public int updateBookInfo(HashMap<String, String> parameterMap) {
+		System.out.println("444");
+		int n = sqlsession.update("KKH.updateBookInfo", parameterMap);
+		return 0;
+	}
+	
 	
 
 

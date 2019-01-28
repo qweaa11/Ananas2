@@ -9,12 +9,18 @@
 		<result property="LIBNAME" column="libname" />
 		<result property="COUNT" column="count" />
 	</resultMap>
-	<select id="findAllLibrary" resultMap="library">
+	<select id="findAllLibrary" parameterType="HashMap" resultMap="library">
 		select libcode, libname, nvl(count,0) as count 
 		from library L left join (
 		
 		select  libcode_fk,count(*) as count
-		from book
+		from 
+		<if test="LIBCODE!=null and LIBCODE!=''">
+		 (select libcode_fk from book where libcode_fk = #{LIBCODE})
+		</if>
+		<if test="LIBCODE==null or LIBCODE==''">
+		 book
+		</if>
 		group by libcode_fk
 		) B on L.libcode = B.libcode_fk
 	</select>
@@ -24,12 +30,18 @@
 		<result property="LNAME" column="lname" />
 		<result property="COUNT" column="count" />
 	</resultMap>
-	<select id="findAllLanguage" resultMap="language">
+	<select id="findAllLanguage" parameterType="HashMap" resultMap="language">
 		select lcode,lname, nvl(count,0) as count
 		from language L left join
 		(
 		select lcode_fk, count(*) as count
-		from book
+		from 
+		<if test="LIBCODE!=null and LIBCODE!=''">
+		 (select lcode_fk from book where libcode_fk = #{LIBCODE})
+		</if>
+		<if test="LIBCODE==null or LIBCODE==''">
+		 book
+		</if>
 		group by lcode_fk
 		) B on L.lcode = B.lcode_fk
 	</select>
@@ -39,11 +51,17 @@
 		<result property="CNAME" column="cname" />
 		<result property="COUNT" column="count" />
 	</resultMap>
-	<select id="findAllCategory" resultMap="category">
+	<select id="findAllCategory" parameterType="HashMap" resultMap="category">
 		select ccode, cname, nvl(count,0) as count
 		from category C left join (
 		select ccode_fk, count(*) as count
-		from book
+		from
+		<if test="LIBCODE!=null and LIBCODE!=''">
+		 (select ccode_fk from book where libcode_fk = #{LIBCODE})
+		</if>
+		<if test="LIBCODE==null or LIBCODE==''">
+		 book
+		</if>
 		group by ccode_fk
 		) B on C.ccode = B.ccode_fk
 	</select>
@@ -53,7 +71,7 @@
 		<result property="FNAME" column="fname" javaType="String"/>
 		<result property="COUNT" column="count" javaType="String"/>
 	</resultMap>
-	<select id="findAllField" resultMap="field">
+	<select id="findAllField" parameterType="HashMap" resultMap="field">
 		    
     select fcode,fname,nvl(count,0) as count
     from
@@ -63,7 +81,13 @@
 		where fcode in ('000','100','200','300','400','500','600','700','800','900')
      ) F left join 
      (   select substr(fcode_fk,1,1) as fcode_fk, count(*) as count
-         from book
+         from 
+        <if test="LIBCODE!=null and LIBCODE!=''">
+		 (select fcode_fk from book where libcode_fk = #{LIBCODE})
+		</if>
+		<if test="LIBCODE==null or LIBCODE==''">
+		 book
+		</if>
          group by substr(fcode_fk,1,1) 
     ) B on substr(F.fcode,1,1) = substr(B.fcode_fk,1,1)
     order by fcode
@@ -84,23 +108,23 @@
         on substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) = V.bookid
 		where 1=1
 		
-		<if test="LIBRARY != '' and LIBRARY != null">
+		<if test="LIBRARY!='' and LIBRARY!=null">
 			and libcode_fk in (${LIBRARY})
 		</if>
-		 <if test="CATEGORY != '' and CATEGORY != null">
+		 <if test="CATEGORY!='' and CATEGORY!=null">
 			and ccode_fk in	(${CATEGORY})
 			
 		</if>
-		<if test="LANGUAGE != '' and LANGUAGE != null">
+		<if test="LANGUAGE!='' and LANGUAGE!=null">
 			and lcode_fk in (${LANGUAGE})
 		</if>
-		<if test="FIELD != '' and FIELD != null">
+		<if test="FIELD!='' and FIELD!=null">
 			and substr(fcode_fk,1,1) in (${FIELD})
 		</if> 
-		<if test="SORT == 'count' ">
+		<if test="SORT=='count'">
 			order by ${SORT} desc
 		</if>
-		<if test="SORT != 'count' ">
+		<if test="SORT!='count'">
 			order by ${SORT}
 		</if>
 	</select>
@@ -117,13 +141,16 @@
         group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
         ) V
         on substr(A.bookid,1, instr(A.bookid,'-',1,2)-1 ) = V.bookid
-        <if test="SEARCHWORD != ''">
+        <if test="SEARCHWORD!=''">
 		 	where LOWER(${SEARCHTYPE}) like '%'||LOWER('${SEARCHWORD}')||'%'
 		 </if>
-		 <if test="SORT == 'count' ">
+		 <if test="LIBRARY!='' and LIBRARY!=null">
+		 		and libcode_fk = #{LIBRARY}
+		 </if>
+		 <if test="SORT=='count'">
 			order by ${SORT} desc
 		</if>
-		<if test="SORT != 'count' ">
+		<if test="SORT!='count'">
 			order by ${SORT}
 		</if>
 	</select>
@@ -182,4 +209,51 @@
 		where substr(fcode,1,1) = #{bigfcode}
         order by fcode
 	</select>
+	
+	<select id="findOneBook" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select lcode_fk, gcode_fk, fcode_fk, ccode_fk,libcode_fk,ncode_fk
+		from book
+		where bookid like '%'||#{bookid}||'-1'
+	</select>
+	
+	<select id="findNewBook1stNum" parameterType="String" resultType="String">
+		select substr(max(substr(bookid,instr(bookid,'-',1,1)+1 ) ),1,1)+1 as result
+		from book
+		where bookid like #{newBookid}
+	</select>
+	
+	<select id="selectBookDetail" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select bookid, idx, intro, image, price, weight, totalpage,pdate,regdate
+		from book_detail
+		where bookid like '%'||#{bookid}||'%'
+	</select>
+	
+	<delete id="deleteBookDetail" parameterType="String">
+		delete from book_detail where bookid like '%'||#{bookid}||'%'
+	</delete>
+	
+	<update id="updateNewBookid" parameterType="HashMap">
+		update book set libcode_fk = #{EDITLIBRARY}, ncode_fk = #{EDITNATION}, lcode_fk = #{EDITLANGUAGE}
+						,ccode_fk = #{EDITCATEGORY}, fcode_fk = #{EDITFIELD}, gcode_fk = #{EDITGENRE}
+						,title = #{EDITTITLE}, author = #{EDITAUTHOR}
+						,bookid = #{NEWBOOKID}||substr(bookid,instr(bookid,'-',1,2)) , agecode = #{EDITAGECODE}
+		where bookid like '%'||#{BOOKID}||'%'
+	</update>
+	
+	<update id="updateNewBookDetail" parameterType="HashMap">
+		update book_detail set image = #{EDITIMAGE}, bookid =  #{NEWBOOKID}||substr(bookid,instr(bookid,'-',1,2)) , regdate = sysdate
+		where bookid like'%'||#{BOOKID}||'%'
+	</update>
+	
+	<update id="updateBookInfo" parameterType="HashMap">
+		update book set title = #{EDITTITLE}, author = #{EDITAUTHOR}, agecode = #{EDITAGECODE}
+		where bookid like '%'||#{BOOKID}||'%'
+	</update>
+	
+	<update id="updateBookDetail" parameterType="HashMap">
+		update book_detail set image = #{EDITIMAGE}
+		where bookid like'%'||#{BOOKID}||'%'
+	</update>
+	
+	
 </mapper>
