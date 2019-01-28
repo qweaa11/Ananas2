@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.book.JGHmodel.DeleteBookVO;
 import com.spring.bookmanage.book.JGHservice.JGHBookService;
 
@@ -21,6 +23,13 @@ public class JGHBookController {
 
 	@RequestMapping(value = "deleteLog.ana", method = {RequestMethod.GET})
 	public String deleteLog(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		HashMap<String,String> libcode = new HashMap<String,String>();
+		if(librarian != null) {
+			libcode.put("LIBCODE", librarian.getLibcode_fk());
+		}// end of if
+
 		List<DeleteBookVO> deleteBookList = null;
 
 		String colname = request.getParameter("colname");
