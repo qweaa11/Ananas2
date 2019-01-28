@@ -54,4 +54,11 @@ public class JGHBookController {
 
 		return "book/deleteLog.tiles1";
 	}// end of deleteBookLog
+
+	@RequestMapping(value = "deleteLog.ana", method = {RequestMethod.POST})
+	public String getBack(HttpServletRequest request, HttpServletResponse response) {
+		String[] delidSet = request.getParameterValues("");
+
+		return "";
+	}// end of getBack
 }
