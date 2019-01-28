@@ -81,6 +81,7 @@
 		
 	}// end of goSearch
 	
+	// 페이지바 만들기 
 	function makeBarPage(currentShowPageNo){
 		
 		var searchWord = $("#searchWord").val();
@@ -173,18 +174,34 @@
 	// ==== 파업창을 열어 특정도서관정보 수정 페이지를 보여주는 기능 ====
 	function editLibraryInfo(idx){
 		
-		var frm = document.idxFrm;
-		var url = "editLibraryInfo.ana";
-		var option = "width="+700+",height="+800;
-		window.open("","도서관정보수정",option);
+		var finalconfirm = prompt( '관리자 암호를 넣어주세요.(1234)', '비밀번호' );
 		
-		frm.action = url;
-		frm.idx.value = idx;
-		frm.target = "도서관정보수정";
-		frm.method = "GET";
-		frm.submit();
+		if(finalconfirm == "1234"){
+			confirm("정말 정보 수정을 진행하시겠습니까?");
+			
+			if(confirm){
+				
+				var frm = document.idxFrm;
+				var url = "editLibraryInfo.ana";
+				var option = "width="+700+",height="+800;
+				window.open("","도서관정보수정",option);
+				
+				frm.action = url;
+				frm.idx.value = idx;
+				frm.target = "도서관정보수정";
+				frm.method = "GET";
+				frm.submit();
+			}// end of if(confirm)
+			
+		}
+		else {
+			
+			alert("수정은 관리자 비밀번호가 반드시 필요합니다.")
+		}// end of if_else
+
 		
 	}// end of function editLibraryInfo(idx)
+	
 	
 </script>
 
@@ -219,11 +236,11 @@
 </head>
 
 <body>
-	<div class="container" style="text-align:center;">
+	<div class="container">
 		<h1>도서관 목록</h1>
 		<br>
 		
-		<form name="searchFrm" style="border:solid green 0px; text-align:right;">
+		<form name="searchFrm" style="border:solid green 0px; text-align:left;">
 			<select name="colname" id="colname" style="height:30px; border:solid red 0px;">
 				<option value="addr1">주소</option>
 				<option value="libname">도서관명</option>
@@ -253,7 +270,9 @@
 			
 		<!-- ==== 페이지바 보여주기   -->
 		<!-- AJAX에서 다음 ul태그 안에 값을 넣어준다  -->
-		<ul class="pagination pagination-lg" id="pageBar" style=""></ul>	
+		<div style="text-align:center;">
+			<ul class="pagination pagination-lg" id="pageBar" style=""></ul>
+		</div>	
 	</div><!-- end of div class="container"  --> 
 	
 	<!-- 특정도서관 상세정보를 보기위해 값을 form에 저장하여 넘겨준다 -->

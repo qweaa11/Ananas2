@@ -18,7 +18,7 @@
 		var colname = $("#colname").val();
 		var sort = $("#sort").val();
 		
-		var data_form = {sort:sort, searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:10};
+		var data_form = {searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:10};
 		
 		$.ajax({
 			url:"getReservationList.ana",
@@ -215,15 +215,8 @@ function makeBarPage(currentShowPageNo){
 		</select>
 		<input id="searchWord" name="searchWord" style="height:30px;" placeholder="Search..">
 		<button type="button" onClick="goSearch('1');" style="height:30px;">검색</button>
-		<span style="margin-left:50%; font-size:14pt; font-weight:bold;">정렬</span>
-		<select id="sort" name="sort" style="height:30px; align:right;">
-			<option value="">전체</option>
-			<option value="name">회원명</option>
-			<option value="title">도서명</option>
-			<option value="reserveDate">날짜</option>
-		</select>
-	
-	<br>
+		<br/>
+		<br/>
 	
 	<table id="customers" >
 		<thead>
@@ -242,7 +235,6 @@ function makeBarPage(currentShowPageNo){
 			</tr>
 		</thead>
 		
-		
 		<tbody id="result">
 		</tbody>
 			
@@ -251,10 +243,15 @@ function makeBarPage(currentShowPageNo){
 	<br>
 	<!-- ==== 페이지바 보여주기   -->
 	<!-- AJAX에서 다음 ul태그 안에 값을 넣어준다  -->
-	<ul class="pagination pagination-lg" id="pageBar" style=""></ul>
-	<div><button type="button" onClick="goRental();">체크항목 대여하기</button>	</div>
+	<!-- <div style="border:solid 1px red;"> -->
+		<table style="width:100%; text-align:right;">
+			<tr>
+				<td style="width:50%;"><div class="pagination pagination-lg" id="pageBar"></div></td>
+				<td ><button type="button" onClick="goRental();" style="height:30px;">체크항목 대여하기</button></td>
+			</tr>
+		</table>	
+	<!-- </div> -->
 	
-
 </div>
 
 <form name="idxFrm">

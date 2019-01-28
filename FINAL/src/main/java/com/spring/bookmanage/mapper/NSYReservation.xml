@@ -63,7 +63,7 @@
 		values(rent_seq.nextval, #{bookid}, #{memberid}, default, default, default)
 	</insert>
 	
-	<update id="changBookStatus" parameterType="HashMap">
+	<update id="changeBookStatus" parameterType="HashMap">
 		update book set status=1
 		where bookid = #{bookid}
 	</update>
