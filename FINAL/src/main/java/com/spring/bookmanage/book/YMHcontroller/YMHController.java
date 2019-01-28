@@ -64,8 +64,8 @@ public class YMHController
 		if(!attach.isEmpty())
 		{// 첨부파일이 있다면
 			HttpSession session = request.getSession();
-			String root = session.getServletContext().getRealPath("/");
-			String path = root + "resources" + File.separator + "files";
+			String root = "/FINAL/src/main/webapp/";
+			String path = root + "resources" + File.separator + "img";
 			// path 가 첨부파일을 저장할 WAS의 폴더가 된다.
 			
 			System.out.println("확인용 : path => "+path);

@@ -475,8 +475,7 @@
 	        	<label class="control-label col-sm-3">연령대 <span class="text-danger">*</span></label>
 	          	<div class="col-md-8 col-sm-9">
 	              	<select id="ageCode" name="ageCode" class="custom-select" style="width: 200px;">
-					    <option value="" selected>연령대</option>
-					    <option value="0">전체</option>
+					    <option value="0" selected>전체</option>
 					    <option value="1">아동</option>
 					    <option value="2">청소년</option>
 					    <option value="3">성인</option>
