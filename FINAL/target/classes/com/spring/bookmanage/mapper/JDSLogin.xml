@@ -17,7 +17,7 @@
 	
 	<!--  ===== 관리자 로그인 여부 알아보기 ===== -->
 	<select id="getLoginAdmin" parameterType="HashMap" resultType="com.spring.bookmanage.JDSmodel.AdminVO">
-		select idx, adminid , name
+		select idx, adminid, name
 		from ADMIN
 		where adminid = #{ADMINID} and
 		    pwd = #{PWD}
