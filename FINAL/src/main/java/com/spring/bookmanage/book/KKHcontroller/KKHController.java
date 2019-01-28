@@ -458,6 +458,7 @@ public class KKHController {
 	public String AddBook(HttpServletRequest request,HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		String count_str = request.getParameter("count");
+		System.out.println("bookid1:"+bookid);
 	/*	try {
 		count = Integer.parseInt(count_str);
 		}catch(NumberFormatException e) {
@@ -468,14 +469,28 @@ public class KKHController {
 			
 			return "msg";
 		}*/
+		int startBookNum = service.findStartBookNum(bookid); 
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
 		parameterMap.put("BOOKID", bookid);
 		parameterMap.put("COUNT", count_str);
-		
+		parameterMap.put("STARTBOOKNUM", String.valueOf(startBookNum));
 		KKHBookVO bookInfoSample = service.findBookInfoSample(bookid);
 		
+		int n = service.insertAdditionalBook(bookInfoSample,parameterMap);
 		
-		
+		if(n != 1) {
+			String msg = "추가 실패";
+			String loc = "javascript:history.back()";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		}else {
+			String msg = "추가 성공";
+			String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		}
 		return "msg";
 	
 	}

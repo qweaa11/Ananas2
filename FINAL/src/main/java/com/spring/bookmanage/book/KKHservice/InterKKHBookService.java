@@ -45,4 +45,8 @@ public interface InterKKHBookService {
 
 	KKHBookVO findBookInfoSample(String bookid);
 
+	int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap);
+
+	int findStartBookNum(String bookid);
+
 }

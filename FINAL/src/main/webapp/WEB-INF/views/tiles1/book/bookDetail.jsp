@@ -317,16 +317,20 @@ function findDetailField(fieldcode){
 function openAddForm(){
 	var reg = new RegExp('^[0-9]+$');
 	var count = prompt("추가하실 권수를 입력해주세요. 추가되는 책은 기존의 정보로 입력됩니다.", "ex) 3");
+	
 	if(reg.test(count)){
 		var flag = confirm(count+"권만큼 추가하시겠습니까?");
 		if(flag == true){
 			var frm = document.addBookForm;
 			frm.count.value = count;
-			frm.bookid.value = ${bookid};
+			frm.bookid.value = "${bookid}";
 			frm.action = "AddBook.ana";
 			frm.method = "POST";
 			frm.submit();
 		}
+	}else{
+		alert("숫자만 입력 가능합니다.");
+		return;
 	}
 }
 </script>
@@ -679,12 +683,12 @@ function openAddForm(){
 								<!-- 개별 도서 수정 div 페잊 끝 -->
 								
 								<form name="deleteForm">
-									<input name="bookid"/>
+									<input type="hidden" name="bookid"/>
 								</form>
 								
 								<form name="addBookForm">
-									<input name="bookid"/>
-									<input name="count"/>
+									<input type="hidden" name="bookid"/>
+									<input type="hidden" name="count"/>
 								</form>
 <script>
 function editAllBookInfo(){

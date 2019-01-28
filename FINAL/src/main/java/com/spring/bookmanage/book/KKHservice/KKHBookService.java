@@ -144,11 +144,13 @@ public class KKHBookService implements InterKKHBookService{
 		return result;
 	}
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
 	public int editIndivBookInfo(HashMap<String, String> parameterMap) {
 		int n = bookdao.editIndivBookInfo(parameterMap);
 		return n;
 	}
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
 	public int deleteIndivBook(String bookid) {
 		int n= bookdao.deleteIndivBook(bookid);
 		return n;
@@ -156,7 +158,19 @@ public class KKHBookService implements InterKKHBookService{
 	@Override
 	public KKHBookVO findBookInfoSample(String bookid) {
 		KKHBookVO bookInfoSample= bookdao.findBookInfoSample(bookid);
+		
 		return bookInfoSample;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap) {
+		int n = bookdao.insertAdditionalBook(bookInfoSample,parameterMap);
+		return n;
+	}
+	@Override
+	public int findStartBookNum(String bookid) {
+		int startBookNum = bookdao.findStartBookNum(bookid);
+		return startBookNum;
 	}
 	
 

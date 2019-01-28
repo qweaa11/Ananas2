@@ -170,7 +170,32 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		List<KKHBookVO> bookSampleList = sqlsession.selectList("KKH.findBookSampleList", bookid);
 		List<KKHBookVO> bookDetailSampleList = sqlsession.selectList("KKH.findBookDetailSampleList",bookid);
 		KKHBookVO bookInfoSample = bookSampleList.get(0);
+		bookInfoSample.setIntro(bookDetailSampleList.get(0).getIntro());
+		bookInfoSample.setImage(bookDetailSampleList.get(0).getImage());
+		bookInfoSample.setPrice(bookDetailSampleList.get(0).getPrice());
+		bookInfoSample.setWeight(bookDetailSampleList.get(0).getWeight());
+		bookInfoSample.setTotalpage(bookDetailSampleList.get(0).getTotalpage());
+		bookInfoSample.setPdate(bookDetailSampleList.get(0).getPdate());
 		return bookInfoSample;
+	}
+	@Override
+	public int findStartBookNum(String bookid) {
+		int startBookNum = sqlsession.selectOne("KKH.findStartBookNum", bookid);
+		return startBookNum;
+	}
+	@Override
+	public int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap) {
+		int count = Integer.parseInt(parameterMap.get("COUNT"));
+		int n1 = 0;
+		int n2 = 0;
+		for(int i=0; i<count; i++) {
+			bookInfoSample.setBookid(parameterMap.get("BOOKID")+"-"+(Integer.parseInt(parameterMap.get("STARTBOOKNUM"))+i ));
+			System.out.println("addBookid:"+bookInfoSample.getBookid());
+			n1 +=sqlsession.insert("KKH.insertAdditionalBookInfo", bookInfoSample);
+			n2 +=sqlsession.insert("KKH.insertAdditionalBookDetailInfo", bookInfoSample);
+		}
+		if(n1-n2 == 0) return 1;
+		else return 0;
 	}
 	
 	

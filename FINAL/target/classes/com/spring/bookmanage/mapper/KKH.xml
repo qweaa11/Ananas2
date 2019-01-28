@@ -217,7 +217,7 @@
 	</select>
 	
 	<select id="findNewBook1stNum" parameterType="String" resultType="int">
-		select nvl(substr(max(substr(bookid,instr(bookid,'-',1,1)+1 ) ),1,1)+1,1) as result
+		select nvl(max(to_number(substr(bookid,instr(bookid,'-',1,1)+1,length(substr(bookid,1,instr(bookid,'-',1,2) ) )-length(substr(bookid,1, instr(bookid,'-',1,1 )+1) ) ) ) )+1,1) as firstNum
 		from book
 		where bookid like '%'||#{value}||'%'
 	</select>
@@ -288,13 +288,33 @@
 		select bookid,title,author,pubcode_fk,agecode,isbn,ncode_fk,lcode_fk,fcode_fk,ccode_fk,gcode_fk,libcode_fk
 		from book
 		where bookid like '%'||#{bookid}||'%'
-		order by to_number(substr(R.bookid_fk,instr(R.bookid_fk,'-',1,2))) desc
+		order by to_number(substr(bookid,instr(bookid,'-',1,2))) desc
 	</select>
 	
 	<select id="findBookDetailSampleList" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		select intro,image,price,weight,totalpage,pdate,regdate
 		from book_detail
 		where bookid like '%'||#{bookid}||'%'
-		order by to_number(substr(R.bookid_fk,instr(R.bookid_fk,'-',1,2))) desc
+		order by to_number(substr(bookid,instr(bookid,'-',1,2))) desc
 	</select>
+	
+	
+	<select id="findStartBookNum" parameterType="String" resultType="int">
+		select max(to_number(substr(bookid,instr(bookid,'-',1,2)+1 )) )+1 as startBookNum
+		from book
+		where bookid like '%'||#{bookid}||'%'
+	</select>
+	
+	
+	<insert id="insertAdditionalBookInfo" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		insert into book(bookid, idx, title, author, PUBCODE_FK, STATUS, AGECODE, ISBN,
+						 NCODE_FK, LCODE_FK, FCODE_FK, CCODE_FK, GCODE_FK, LIBCODE_FK)
+		values( #{bookid}, book_seq.nextval, #{title}, #{author}, #{pubcode_fk}, default, #{agecode}, #{isbn}, #{ncode_fk},
+				#{lcode_fk}, #{fcode_fk},  #{ccode_fk}, #{gcode_fk}, #{libcode_fk})
+	</insert>
+	
+	<insert id="insertAdditionalBookDetailInfo" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		insert into book_detail(bookid,idx,intro,image,price,weight,totalpage,pdate,regdate)
+		values(#{bookid},bookd_seq.nextval,#{intro},#{image},to_number(#{price}),#{weight},to_number(#{totalpage}),to_date(#{pdate},'yyyy-mm-dd hh24:mi:ss'),default)
+	</insert>
 </mapper>

@@ -55,6 +55,12 @@ public interface InterKKHBookDAO {
 
 	KKHBookVO findBookInfoSample(String bookid);
 
+	int findStartBookNum(String bookid);
+
+	int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap);
+
+
+
 	
 
 
