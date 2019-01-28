@@ -5,14 +5,16 @@ public class AdminVO {
 	private int idx;            // 인덱스
 	private String adminid;     // 아이디
 	private String pwd;         // 비밀번호
+	private String name;		// 이름
 	
 	public AdminVO() { }
 	
-	public AdminVO(int idx, String adminid, String pwd) {
+	public AdminVO(int idx, String adminid, String pwd, String name) {
 		
 		this.idx = idx;
 		this.adminid = adminid;
 		this.pwd = pwd;
+		this.name = name;
 	}
 
 
@@ -49,6 +51,15 @@ public class AdminVO {
 
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
+	}
+
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 
