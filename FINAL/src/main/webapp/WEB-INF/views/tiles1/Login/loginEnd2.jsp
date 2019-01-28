@@ -8,7 +8,7 @@
 	var gobackURL = "${requestScope.gobackURL}";
 	
 	if(loginAdmin != null && loginAdmin != "" && (gobackURL == null || gobackURL == "") ) {
-		alert("로그인 성공 !!");
+		//alert("로그인 성공 !!");
 		location.href="<%=ctxPath%>/index.ana";
 	}
 	

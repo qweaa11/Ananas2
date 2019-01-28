@@ -213,7 +213,7 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="button" name="LGform1" class="btnContactSubmit" id="btnLOGIN1" value="Login" />
-								            <input type="checkbox" id="saveid1" name="saveid1" value="saveid1"><label for="idcheck">아이디 저장</label>
+								            <input type="checkbox" id="saveid1" name="saveid1" value="saveid1"><label for="saveid1">아이디 저장</label>
 								            
                                             <%-- <a href="<%=ctxPath%>/idFind.ana" name="libid" id="libid" class="btnForgetUserid" value="Login">Forget Userid?</a>
                                             <a href="/Login/pwdFind.jsp" name="pwd" id="pwd" class="btnForgetPwd" value="Login">Forget Password?</a> --%>
@@ -236,7 +236,7 @@
                                         <div class="form-group">
                                             <input type="submit" name="LGform2" class="btnContactSubmit" id="btnLOGIN2" value="Login" />
 
-                                            <input type="checkbox" id="saveid2" name="saveid2" value="saveid2"><label for="idcheck">아이디 저장</label> 
+                                            <input type="checkbox" id="saveid2" name="saveid2" value="saveid2"><label for="saveid2">아이디 저장</label> 
                                             
                                            <!--  <a href="ForgetUserid.php" name="adminid" id="adminid" class="btnForgetUserid" value="Login">Forget Userid?</a>
                                             <a href="ForgetPassword.php" name="pwd" id="pwd" class="btnForgetPwd" value="Login">Forget Password?</a> -->

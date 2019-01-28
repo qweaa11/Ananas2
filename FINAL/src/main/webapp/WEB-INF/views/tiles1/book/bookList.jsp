@@ -227,7 +227,7 @@ div.search button:hover {
 	function goBook(){
 		
 		var form_data= $("#sidebarFrm").serialize();
-		
+		console.log($("#libraryFrm").val());
 		$.ajax({
 			
 			url:"KKHfindBookBySidebar.ana",
@@ -252,6 +252,7 @@ div.search button:hover {
 							"<td>"+book.FNAME+"-"+book.GNAME+"</td>"+
 							"<td>"+book.AUTHOR+"</td>"+       
 							"<td>"+book.PUBNAME+"</td>"+
+							"<td>"+book.LIBNAME+"</td>"+
 							"<td>"+book.AGECODE+"</td>"+
 							"<td>"+book.COUNT+"</td>"+
 						"</tr>";
@@ -303,6 +304,7 @@ div.search button:hover {
 							"<td>"+book.FNAME+"-"+book.GNAME+"</td>"+
 							"<td>"+book.AUTHOR+"</td>"+       
 							"<td>"+book.PUBNAME+"</td>"+
+							"<td>"+book.LIBNAME+"</td>"+
 							"<td>"+book.AGECODE+"</td>"+
 							"<td>"+book.COUNT+"</td>"+
 						"</tr>";
@@ -367,12 +369,13 @@ div.search button:hover {
 				<thead>
 					<tr>
 						<th width="7%">번호</th>
-						<th width="13%">도서 코드</th>
-						<th width="25%">도서명</th>
-						<th width="12%">분류</th>      
-						<th width="14%">저자/역자</th>
-						<th width="9%">출판사</th>
-						<th width="12%">도서 연령</th>    
+						<th width="12%">도서 코드</th>
+						<th width="20%">도서명</th>
+						<th width="11%">분류</th>      
+						<th width="12%">저자/역자</th>
+						<th width="8%">출판사</th>
+						<th width="11%">위치</th>
+						<th width="11%">도서 연령</th>    
 						<th width="8%">권수</th> 
 					</tr>      
 				</thead>       
@@ -383,20 +386,24 @@ div.search button:hover {
 		</div>
 <div class=" col-lg-3  col-sm-3">
 	<div style="font-weight:bold; font-family: 'NanumGothicBold'; border: 0px solid red; color:#0088cc; font-size: 12pt;">조회 조건 
-		<button type="button" id="btnFindBook" style="font-size:10pt;" onClick="findBookListBysidebar();">검색</button>  </div>
+		<button type="button" id="btnFindBook" style="font-size:10pt;" onClick="findBookListBysidebar();">검색</button></div>
 	          
-	<div style="float: left; border: 1px solid gray;" class="sidebar">        
-		<div  >
+	<div style="float: left; border: 1px solid gray;" class="sidebar">
+		<c:if test="${sessionScope.loginAdmin != null }">               
+		<div>
 			<div>
 				<div class="sideHeader" style="">도서관(총 장서수)</div>       
 			</div>    
 			<ul class="sideinfo">
 				<c:forEach var="library" items="${libraryList }">
+				   
 					<li><input type="checkbox"  class="library sideli" value="${library.LIBCODE }"/><a onClick="findBookbyLibrary('${library.LIBCODE}');"  class="sideText">${library.LIBNAME }(${library.COUNT })</a></li>
-				</c:forEach>
+					
+				</c:forEach>    
 			</ul>
 			
 		</div>
+		</c:if>
 		<div>
 			<div>
 				<div class="sideHeader">언어</div>

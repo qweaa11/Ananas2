@@ -14,13 +14,13 @@ public interface InterKKHBookDAO {
 
 	List<HashMap<String,String>> findBookReservateList(String bookid);
 
-	List<HashMap<String, String>> findAllLibrary();
+	List<HashMap<String, String>> findAllLibrary(HashMap<String,String> libcode);
 
-	List<HashMap<String, String>> findAllLanguage();
+	List<HashMap<String, String>> findAllLanguage(HashMap<String,String> libcode);
 
-	List<HashMap<String, String>> findAllCategory();
+	List<HashMap<String, String>> findAllCategory(HashMap<String,String> libcode);
 
-	List<HashMap<String, String>> findAllField();
+	List<HashMap<String, String>> findAllField(HashMap<String,String> libcode);
 
 	List<HashMap<String, String>> findcategory();
 
@@ -31,5 +31,19 @@ public interface InterKKHBookDAO {
 	List<HashMap<String, String>> findfield();
 
 	List<HashMap<String, String>> findDetailField(String bigfcode);
+
+	KKHBookVO findOneBook(String bookid);
+
+	String findNewBook1stNum(String newBookid);
+
+	int updateNewBookid(HashMap<String, String> parameterMap);
+
+	int updateBookDetail(HashMap<String, String> parameterMap);
+
+	int updateBookInfo(HashMap<String, String> parameterMap);
+
+	int updateNewBookDetail(HashMap<String, String> parameterMap);
+
+	List<KKHBookVO> selectAndDelBookDetail(String bookid);
 
 }
