@@ -238,7 +238,7 @@
 	
 	
 	<resultMap type="HashMap" id="genreChartMap">
-		<result column="gname" property="GNAME" javaType="String"/>
+		<result column="gcode" property="GCODE" javaType="String"/>
 		<result column="rentalmonth" property="RENTALMONTH" javaType="String"/>
 		<result column="cnt" property="CNT" javaType="String"/>
 		<result column="percent" property="PERCENT" javaType="String"/>
