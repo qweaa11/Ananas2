@@ -144,7 +144,21 @@ public class BSBboardDAO implements BSBInterBoardDAO {
 			int result = sqlsession.update("BSB.updateCommentdelCount", paraMap);		
 			return result;
 		}
-	
+
+		@Override
+		public int updateContent(HashMap<String, String> paraMap) {
+			int result = sqlsession.update("BSB.updateContent", paraMap);
+			
+			return result;
+		}
+
+		@Override
+		public void setAddReadCount(String idx) {
+			sqlsession.update("BSB.setAddReadCount", idx);
+			
+		}
+		
+		
 
 
 	

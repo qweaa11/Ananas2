@@ -10,6 +10,9 @@
 	margin-bottom: 0px;
 }
 
+.move  {cursor: pointer;}
+.moveColor {color: #660029; font-weight: bold;}
+
 .comment-list .panel .panel-heading {
 	padding: 4px 15px;
 	position: absolute;
@@ -561,15 +564,15 @@ body .no-padding {
 			              "<div class='panel panel-default arrow left'>"+
 			                "<div class='panel-body'>"+
 			                  "<header class='text-left'>"+
-			                    "<div class='comment-user'><i class='fa fa-user'></i>"+entry.NAME+"</div>"+
-			                   "<time class='comment-date' datetime="+entry.REGDATE+"><i class='fa fa-clock-o'></i>"+entry.REGDATE+"</time>"+
+			                    
+			                   "<time class='comment-date' datetime="+entry.REGDATE+"><i class='fa fa-clock-o'></i>&nbsp;"+entry.REGDATE+"</time>"+
 			                  "</header>"+
 			                  "<div class='comment-post'>"+
 			                    "<p>"+
 			                    entry.CONTENT+
 			                    "</p>"+
 			                  "</div>"+
-			                  "<p class='text-right'><a href='#'  id='btnDel' class='btn btn-default btn-sm' onClick='delComment(\"${boardvo.idx}\", \"" + entry.IDX + "\")'><i class='fa fa-reply'></i> 댓글삭제</a></p>"+
+			                  "<p class='text-right'><a href='#'  id='btnDel' class='btn btn-default btn-sm' onClick='delComment(\"${boardvo.idx}\", \"" + entry.IDX + "\")'><i class='glyphicon glyphicon-trash'></i> 댓글삭제</a></p>"+
 			                "</div>"+
 			              "</div>"+
 			              "</form>"+
@@ -764,10 +767,9 @@ body .no-padding {
 
 <div class="container">
 	<div class="row">
-		<h2>
-			<img alt="boardlist" src="resources/img/boardlist.png" width="30px;"
-				height="30px;">&nbsp;<span style="font-weight: bolder;">자유
-				게시판</span>
+		<h2 style="margin-bottom: 30px;">
+			<img alt="boardlist" src="resources/img/boardlist.png" width="25px;"
+				height="25px;">&nbsp;<span style="font-size: 15pt; font-weight: bolder;">글번호 : ${boardvo.idx}</span>
 		</h2>
 		<div class="">
 			<div class="one-post">
@@ -839,30 +841,17 @@ body .no-padding {
 
 							</table>
 						</div>
+
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pd">
 							<ul class="nav list-unstyled">
 								<li>
 									<div class="icondisplay pull-right">
 										<a data-toggle="collapse" href="#collapseExample"
-											aria-expanded="false" aria-controls="collapseExample"> <svg
-												class="svgIcon-use" width="23" height="23"
-												viewBox="0 0 25 25">
-                                    <path
-													d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z"
-													fill-rule="evenodd"></path>
-                                    </svg>
-										</a> <span>55</span>
-										<div class="line"></div>
-										<a data-toggle="collapse" href="#collapseExample"
-											aria-expanded="false" aria-controls="collapseExample"> <svg
-												class="svgIcon-use" width="23" height="23"
-												viewBox="0 0 25 25">
-                                    <path
-													d="M12.5 21a.492.492 0 0 1-.327-.122c-.278-.24-.61-.517-.978-.826-2.99-2.5-7.995-6.684-7.995-10.565C3.2 6.462 5.578 4 8.5 4c1.55 0 3 .695 4 1.89a5.21 5.21 0 0 1 4-1.89c2.923 0 5.3 2.462 5.3 5.487 0 3.97-4.923 8.035-7.865 10.464-.42.35-.798.66-1.108.93a.503.503 0 0 1-.327.12zM8.428 4.866c-2.414 0-4.378 2.05-4.378 4.568 0 3.475 5.057 7.704 7.774 9.975.243.2.47.39.676.56.245-.21.52-.43.813-.68 2.856-2.36 7.637-6.31 7.637-9.87 0-2.52-1.964-4.57-4.377-4.57-1.466 0-2.828.76-3.644 2.04-.1.14-.26.23-.43.23-.18 0-.34-.09-.43-.24-.82-1.27-2.18-2.03-3.65-2.03z"
-													fill-rule="evenodd"></path>
-                                    </svg>
-										</a> <span>55</span>
-
+											aria-expanded="false" aria-controls="collapseExample"> </a>다음글
+										:&nbsp;
+										<sapn class="move"
+											onClick="javascript:location.href='BSBview.ana?idx=${boardvo.previousidx}'">
+										${boardvo.previoussubject} </sapn>
 
 
 
@@ -870,22 +859,54 @@ body .no-padding {
 								</li>
 							</ul>
 						</div>
+
+
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pd">
+							<ul class="nav list-unstyled">
+								<li>
+									<div class="icondisplayy pull-right">
+										<a data-toggle="collapse" href="#collapseExample"
+											aria-expanded="false" aria-controls="collapseExample"> </a>
+										<div style="margin-top: 10px;">
+											이전글 :&nbsp;<span class="move"
+												onClick="javascript:location.href='BSBview.ana?idx=${boardvo.nextidx}'">${boardvo.nextsubject}</span>
+										</div>
+
+
+
+									</div>
+								</li>
+							</ul>
+						</div>
+
+
+
+
+
 						<div class="clearfix"></div>
 					</div>
 				</div>
-			
+				
 
 				<div style="margin-top: 30px;">
 					<button class="btn btn-primary btn-xs" data-title="board"
 						data-target="#board" style="float: left; vertical-align: middle; "
-						onClick="javascript:location.href='<%=request.getContextPath()%>/${gobackURL}'">
+						onClick="javascript:location.href='<%=request.getContextPath()%>/edit.ana?idx=${boardvo.idx}'">
 						<span class="glyphicon glyphicon-pencil">&nbsp;글수정</span>
+						
+					</button>
+					
+						<button class="btn btn-primary btn-xs" data-title="board"
+						data-target="#board" style="margin-left:5px; float: left; vertical-align: middle; "
+						onClick="javascript:location.href='<%=request.getContextPath()%>/add.ana?root=${boardvo.idx}&groupno=${boardvo.groupno}&depthno=${boardvo.depthno}'">
+						<span class="glyphicon glyphicon-edit">&nbsp;답글쓰기</span>
+						
 					</button>
 				
 				
 					<button class="btn btn-primary btn-xs" data-title="board"
 						data-target="#board" style="float: right;"
-						onClick="javascript:location.href='<%=request.getContextPath()%>/${gobackURL}'">
+						onClick="javascript:location.href='<%=request.getContextPath()%>/${sessionScope.listgobackURL}'">
 						<span class="glyphicon glyphicon-menu-hamburger">&nbsp;목록보기</span>
 					</button>
 				</div>
@@ -937,8 +958,8 @@ body .no-padding {
 							<div class="widget-area no-padding blank">
 								<div class="status-upload">
 									<form name="addWriteFrm">
-										<input type="hidden" name="libid_fk" value="tester00" readonly />
-										성명 : <input type="text" name="name" value="테스터" class="short"
+										<input type="hidden" name="libid_fk" value="${sessionScope.loginLibrarian.libid}" readonly />
+										성명 : <input type="text" name="name" value="${sessionScope.loginLibrarian.name}" class="short"
 											readonly />
 										<textarea name="content" placeholder="내용입력"></textarea>
 

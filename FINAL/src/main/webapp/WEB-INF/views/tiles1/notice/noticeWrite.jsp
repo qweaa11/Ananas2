@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <% String ctxPath = request.getContextPath(); %>
 
 <style type="text/css">
@@ -51,6 +53,16 @@
 	    	
             //폼 submit
 	        var addFrm = document.addFrm;
+	        
+	        if(addFrm.subject.value.trim() == ""){
+	        	alert("제목을 입력해주세요.");
+	        	return addFrm.subject.focus();
+	        }	        
+	        if(addFrm.pw.value.trim() == ""){
+	        	alert("암호를 입력해주세요.");
+	        	return addFrm.pw.focus();
+	        }
+	        
 			addFrm.action = "<%=ctxPath%>/noticeWriteEnd.ana";
 			addFrm.method = "POST";
 			addFrm.submit();
@@ -61,18 +73,25 @@
 </script>
 
 <div style="padding-left: 10%; margin-bottom: 0.2%; border: solid 0px red;">
-	<h1>글쓰기</h1>
-	<!-- ===== 파일 첨부하기 
-	          먼저 위의 문장을 주석처리한 후 아래와 같이 한다. 
-	     enctype="multipart/form-data" 을 해주어야만 파일첨부가 된다. =====
-	-->
+	<h1>공지사항 작성</h1>
+	<!-- ===== 파일 첨부하기 enctype="multipart/form-data" 을 해주어야만 파일첨부가 된다. ===== -->
 	<form name="addFrm" enctype="multipart/form-data">
 		<table id="table">
 			<tr>
-				<th>성명</th>
+				<th>ID</th>
 				<td>
-				    <input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly />
-					<input type="text" name="name" value="${sessionScope.loginuser.name}" class="short" readonly />
+				    <%-- <input type="hidden" name="fk_userid" value="${sessionScope.loginuser.userid}" readonly /> --%>
+				    <c:if test="${sessionScope.loginAdmin.adminid ne null}">
+				    	<input type="hidden" name="adminid_fk" value="${sessionScope.loginAdmin.adminid}" class="short" readonly />
+				    	<input type="hidden" name="name" value="${sessionScope.loginAdmin.name}" readonly />
+				    	<span style="font-weight: bold;">${sessionScope.loginAdmin.adminid}(${sessionScope.loginAdmin.name})</span>		    	
+				    </c:if>
+				    <c:if test="${sessionScope.loginLibrarian.status eq 1}">				
+						<input type="hidden" name="libid_fk" value="${sessionScope.loginLibrarian.libid}" class="short" readonly />
+						<input type="hidden" name="name" value="${sessionScope.loginLibrarian.name}" readonly />
+						<span style="font-weight: bold;">${sessionScope.loginLibrarian.libid}(${sessionScope.loginLibrarian.name})</span>
+						<input type="hidden" name="libcode" value="${sessionScope.loginLibrarian.libcode_fk}">
+					</c:if>
 				</td>
 			</tr>
 			<tr>

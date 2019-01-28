@@ -145,20 +145,42 @@ function searchKeep(){
 						<th>조회수</th>
 						<th>삭제</th>
 					</thead>
+					
+					<c:if test="${ empty boardList }">
+					<tboay>
+						<td colspan="6" style="font-weight: bold; text-align: center;">글이 존재하지 않습니다. </td>
+					</tboay>
+					</c:if>
 
 					<tbody>
 						<c:forEach var="boardvo" items="${boardList}">
 							<tr>
 								<td class="boardidx">${boardvo.idx}</td>
-								<c:if test="${boardvo.commentCount > 0}">
-									<td><span class="subject"
-										onClick="goView('${boardvo.idx}','${gobackURL}');">${boardvo.subject}&nbsp;<span
-											style="color: red; font-weight: bold; font-style: italic; font-size: xx-small; vertical-align: super;">[${boardvo.commentCount}]</span></span></td>
-								</c:if>
-								<c:if test="${boardvo.commentCount == 0}">
-									<td><span class="subject"
-										onClick="goView('${boardvo.idx}','${gobackURL}');">${boardvo.subject}</span></td>
-								</c:if>
+								
+								
+								<td>
+					<!-- 원글인 경우 -->
+					<c:if test="${boardvo.depthno == 0}">
+						<c:if test="${boardvo.commentCount > 0}">
+							<span class="subject" onClick="goView('${boardvo.idx}','${gobackURL}');">${boardvo.subject}&nbsp;<span style="color: red; font-weight: bold; font-style: italic; font-size: xx-small; vertical-align: super;">[${boardvo.commentCount}]</span></span>
+						</c:if>
+						<c:if test="${boardvo.commentCount == 0}">
+							<span class="subject" onClick="goView('${boardvo.idx}','${gobackURL}');">${boardvo.subject}</span>
+						</c:if>
+					</c:if>
+					
+					<!-- 답변글인 경우 -->
+					<c:if test="${boardvo.depthno > 0}">
+						<c:if test="${boardvo.commentCount > 0}">
+							<span class="subject" onClick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 10}px;"><i class="glyphicon glyphicon-share"></i>&nbsp;</span>${boardvo.subject}&nbsp;<span style="color: red; font-weight: bold; font-style: italic; font-size: xx-small; vertical-align: super;">[${boardvo.commentCount}]</span></span>
+						</c:if>
+						<c:if test="${boardvo.commentCount == 0}">
+							<span class="subject" onClick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 10}px;"><i class="glyphicon glyphicon-share"></i>&nbsp;</span>${boardvo.subject}</span>
+						</c:if>		
+					</c:if>							
+				</td>
+								
+								
 								<td>${boardvo.regDate}</td>
 								<td>${boardvo.name}</td>
 								<td>${boardvo.readCount}</td>
@@ -249,6 +271,7 @@ function searchKeep(){
 
 
 
+
 <div class="modal fade" id="delete" tabindex="-1" role="dialog"
 	aria-labelledby="edit" aria-hidden="true">
 	<div class="modal-dialog">
@@ -265,11 +288,11 @@ function searchKeep(){
 
 					<div class="alert alert-danger">
 						<span class="glyphicon glyphicon-warning-sign"></span>정말 삭제하시겠습니까?
-					</div>
-					<table id="table">
+						<table id="table">
 						<tr>
+						
 							<th>암호</th>
-							<td><input type="password" name="pw" class="short" /> <input
+							<td><input type="password" name="pw" class="short" style="width: 130px;" /> <input
 								type="hidden" name="idx" id="idx" value="${idx}" /> <!-- 삭제해야할 글번호와 함께 사용자가 입력한 암호를 전송하도록 한다. -->
 
 							</td>
@@ -277,6 +300,8 @@ function searchKeep(){
 						</tr>
 
 					</table>
+					</div>
+					
 
 				</div>
 				<div class="modal-footer ">
@@ -293,4 +318,6 @@ function searchKeep(){
 	</div>
 	<!-- /.modal-dialog -->
 </div>
+
+
 
