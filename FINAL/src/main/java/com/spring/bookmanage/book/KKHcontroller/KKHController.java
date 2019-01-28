@@ -2,6 +2,7 @@
 package com.spring.bookmanage.book.KKHcontroller;
 
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.bookmanage.JDSmodel.LibrarianVO;
@@ -259,7 +261,7 @@ public class KKHController {
 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
 			e.printStackTrace();
 		}
-		request.setAttribute("length", length);
+		request.setAttribute("length", length);    
 		request.setAttribute("libraryList", libraryList);
 		request.setAttribute("bookid", bookid);
 		request.setAttribute("categoryList", categoryList);
@@ -285,7 +287,7 @@ public class KKHController {
 	
 	
 	@RequestMapping(value="editPublicBookInfo.ana",method= {RequestMethod.POST})
-	public String editPublicBookInfo(HttpServletRequest request,HttpServletResponse response) {
+	public String editPublicBookInfo(KKHBookVO bookvo,MultipartHttpServletRequest request,HttpServletResponse response) {
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
 		String editAgecode = request.getParameter("editAgecode");
@@ -300,6 +302,54 @@ public class KKHController {
 		String editImage = request.getParameter("editImage");
 		String length = request.getParameter("bookListLength");
 		int n=0;
+		MultipartFile attach = bookvo.getEditImage();
+		
+		if(!attach.isEmpty()) {// 파일이 있으면 참(true), 없으면 거짓(false)
+			
+			/* 1 사용자가 보낸 파일을 WAS(톰캣)의 특정 폴더에 저장해주어야 한다.
+			 >>>> 파일이 업로드 되어질 특정 경로(폴더)지정해주기
+			 	우리는 WAS의 webapp/resources/files 폴더에 저장하겠다.*/
+			
+			//WAS의 webapp의 절대 경로를 알아와야 한다.
+			HttpSession session = request.getSession();
+			String root = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\";
+					
+			String path = root +"resources"+File.separator+"files";
+			//path 가 첨부파일\들을 저장할 WAS(톰캣)의 폴더가 된다.
+			
+			System.out.println("path:"+path);
+			//확인용 C:\springworkspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Board\resources\files
+			
+			
+			//2. 파일 첨부를 위한 변수의 설정 및 값을 초기화한 후 파일 올리기
+			String newFileName = "";
+			//WAS(톰캣) 디스크에 저장할 파일명 
+			
+			byte[]bytes = null;
+			//첨부파일을 WAS 디스크에 저장할때 사용되는 용도
+			long fileSize = 0;
+			//파일 크기를 알아오는 용도
+			
+			try {
+				bytes = attach.getBytes();
+				// getBytes() 는 첨부된 파일을 바이트 단위로 다 읽어오는 것이다.
+				newFileName = fileManager.doFileUpload(bytes,attach.getOriginalFilename(), path);
+				//첨부된 파일을 WAS의 디스크로 파일업로드를 한다.
+				//파일을 업로드한후, 20190107091234536463453.png 이런식으로 파일이름을 받아온다.
+				System.out.println("newFileName:"+newFileName);
+				
+				//3.BoardVO boardvo 에 fileName, orgFileName, fileSize 값을 넣어줘야 한다.
+				// (왜냐면 add.jsp에서 넘긴값이 attach밖에 없기때문)
+				bookvo.setFileName(newFileName);
+				fileSize = attach.getSize();
+				bookvo.setFileSize(String.valueOf(fileSize));
+						
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		
 		System.out.println("eidtIma:"+editImage);
 		String bookid = request.getParameter("bookid");
@@ -329,13 +379,104 @@ public class KKHController {
 		if(n != 1) {
 			String msg = "수정 실패";
 			String loc = "javascript:history.back()";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
 			
+			
+			
+		}else {
+			String msg = "수정 성공";
+			String loc = "/bookmanage/bookList.ana";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		}
+		return "msg";
+	}
+	
+	@RequestMapping(value="editIndivBookInfo.ana", method= {RequestMethod.POST})
+	public String editIndivBookInfo(HttpServletRequest request,HttpServletResponse response) {
+		String editISBN = request.getParameter("editISBN");
+		String editPrice = request.getParameter("editPrice");
+		String editWeight = request.getParameter("editWeight");
+		String editTotalPage = request.getParameter("editTotalPage");
+		String editPdate = request.getParameter("editPdate");
+		String bookid = request.getParameter("bookid");
+		
+		HashMap<String,String> parameterMap = new HashMap<String,String>();
+		parameterMap.put("EDITISBN", editISBN);
+		parameterMap.put("EDITPRICE", editPrice);
+		parameterMap.put("EDITWEIGHT", editWeight);
+		parameterMap.put("EDITTOTALPAGE", editTotalPage);
+		parameterMap.put("EDITPDATE", editPdate);
+		parameterMap.put("BOOKID", bookid);
+		
+		int n = service.editIndivBookInfo(parameterMap);
+		
+		if(n != 1) {
+			String msg = "수정 실패";
+			String loc = "javascript:history.back()";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+			
+			
+		}else {
+			String msg = "수정 성공";
+			String loc = "/bookmanage/bookDetail.ana?bookid="+bookid.substring(0,bookid.indexOf("-",16));
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		}
+		return "msg";
+	}
+	
+	@RequestMapping(value="deleteIndivBook.ana",method= {RequestMethod.POST})
+	public String deleteIndivBook(HttpServletRequest request,HttpServletResponse response) {
+		String bookid = request.getParameter("bookid");
+		int n = service.deleteIndivBook(bookid);
+		if(n != 1) {
+			String msg = "수정 실패";
+			String loc = "javascript:history.back()";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+			
+			
+		}else {
+			String msg = "수정 성공";
+			String loc = "/bookmanage/bookDetail.ana?bookid="+bookid.substring(0,bookid.indexOf("-",16));
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		}
+		return "msg";
+		
+	}
+	
+	@RequestMapping(value="AddBook.ana",method= {RequestMethod.POST})
+	public String AddBook(HttpServletRequest request,HttpServletResponse response) {
+		String bookid = request.getParameter("bookid");
+		String count_str = request.getParameter("count");
+	/*	try {
+		count = Integer.parseInt(count_str);
+		}catch(NumberFormatException e) {
+			String msg = "추가 실패";
+			String loc = "javascript:history.back()";
 			request.setAttribute("msg", msg);
 			request.setAttribute("loc", loc);
 			
 			return "msg";
-		}
+		}*/
+		HashMap<String,String> parameterMap = new HashMap<String,String>();
+		parameterMap.put("BOOKID", bookid);
+		parameterMap.put("COUNT", count_str);
 		
-		return "book/bookList.tiles1";
+		KKHBookVO bookInfoSample = service.findBookInfoSample(bookid);
+		
+		
+		
+		return "msg";
+	
 	}
 }

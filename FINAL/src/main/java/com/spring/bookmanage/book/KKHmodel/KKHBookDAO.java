@@ -93,21 +93,25 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	}
 	@Override
 	public KKHBookVO findOneBook(String bookid) {
-		KKHBookVO book = sqlsession.selectOne("KKH.findOneBook", bookid);
+		List<KKHBookVO> bookList = sqlsession.selectList("KKH.findOneBook", bookid);
+		KKHBookVO book= bookList.get(0);
 		return book;
 	}
 	@Override
 	public String findNewBook1stNum(String newBookid) {
 		
-		String result = sqlsession.selectOne("KKH.findNewBook1stNum", newBookid);
+		int result = sqlsession.selectOne("KKH.findNewBook1stNum", newBookid);
 		
-		return result;
+		return String.valueOf(result);
 	}
 	
 	@Override
 	public List<KKHBookVO> selectAndDelBookDetail(String bookid) {
+		
 		List<KKHBookVO> bookDetailList = sqlsession.selectList("KKH.selectBookDetail", bookid);
+		System.out.println("select로 가져옴");
 		sqlsession.delete("KKH.deleteBookDetail", bookid);
+		System.out.println("삭제됨");
 		return bookDetailList;
 	}
 	
@@ -117,6 +121,16 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		int n = sqlsession.update("KKH.updateNewBookid",parameterMap);
 		return n;
 	}
+	
+	@Override
+	public void insertNewBookDetail(List<KKHBookVO> bookDetailList) {
+		for(KKHBookVO bookvo : bookDetailList) {
+			System.out.println("bookid:"+bookvo.getBookid()+", idx:"+bookvo.getIdx()+",image:"+bookvo.getImage()+",price:"+bookvo.getPrice()+",weight:"+bookvo.getWeight()+",totalpage:"+bookvo.getTotalpage()+",pdate:"+bookvo.getPdate());
+		 sqlsession.insert("KKH.inserNewBookDetail", bookvo);
+		}
+	}
+	
+	
 	@Override
 	public int updateNewBookDetail(HashMap<String, String> parameterMap) {
 		System.out.println("222");
@@ -135,7 +149,28 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	public int updateBookInfo(HashMap<String, String> parameterMap) {
 		System.out.println("444");
 		int n = sqlsession.update("KKH.updateBookInfo", parameterMap);
-		return 0;
+		return n;
+	}
+	@Override
+	public int editIndivBookInfo(HashMap<String, String> parameterMap) {
+		int n1 = sqlsession.update("KKH.editIndivBookInfo", parameterMap);
+		int n2 = sqlsession.update("KKH.editIndivBookISBN",parameterMap);
+		if(n1*n2 == 1) return 1;
+		else return 0;	
+	}
+	@Override
+	public int deleteIndivBook(String bookid) {
+		int n1 = sqlsession.delete("KKH.deleteIndivBookDetail", bookid);
+		int n2 = sqlsession.delete("KKH.deleteIndivBook", bookid);
+		if(n1*n2 == 1) return 1;
+		else return 0;
+	}
+	@Override
+	public KKHBookVO findBookInfoSample(String bookid) {
+		List<KKHBookVO> bookSampleList = sqlsession.selectList("KKH.findBookSampleList", bookid);
+		List<KKHBookVO> bookDetailSampleList = sqlsession.selectList("KKH.findBookDetailSampleList",bookid);
+		KKHBookVO bookInfoSample = bookSampleList.get(0);
+		return bookInfoSample;
 	}
 	
 	

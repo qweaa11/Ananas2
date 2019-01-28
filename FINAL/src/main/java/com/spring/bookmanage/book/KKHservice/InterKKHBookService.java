@@ -39,4 +39,10 @@ public interface InterKKHBookService {
 
 	int eidtBookNoChangeBookid(HashMap<String, String> parameterMap, KKHBookVO book);
 
+	int editIndivBookInfo(HashMap<String, String> parameterMap);
+
+	int deleteIndivBook(String bookid);
+
+	KKHBookVO findBookInfoSample(String bookid);
+
 }

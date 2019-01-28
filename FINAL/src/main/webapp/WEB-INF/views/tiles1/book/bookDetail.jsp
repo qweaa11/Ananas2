@@ -114,7 +114,7 @@ th, td {
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		
+		console.log("${length}");
 		var rentalFlag = false;
 		var reserveFlag = false;
 		var extendFlag = false;
@@ -314,6 +314,21 @@ function findDetailField(fieldcode){
 	
 }
 
+function openAddForm(){
+	var reg = new RegExp('^[0-9]+$');
+	var count = prompt("추가하실 권수를 입력해주세요. 추가되는 책은 기존의 정보로 입력됩니다.", "ex) 3");
+	if(reg.test(count)){
+		var flag = confirm(count+"권만큼 추가하시겠습니까?");
+		if(flag == true){
+			var frm = document.addBookForm;
+			frm.count.value = count;
+			frm.bookid.value = ${bookid};
+			frm.action = "AddBook.ana";
+			frm.method = "POST";
+			frm.submit();
+		}
+	}
+}
 </script>
 
 <!-- Page Content -->
@@ -332,8 +347,8 @@ function findDetailField(fieldcode){
 			<div class="col-lg-4 col-sm-4">
 				<div class="col-lg-4 col-sm-4">
 					<!-- Preview Image -->
-					<img class="img-responsive" style="width: auto; height:auto;"   
-						src="resources/img/loadingProgressive.gif"
+					<img  style="width: 100%; height:auto;"   
+						src="resources/img/${bookDetailList.get(0).image}"
 						alt="도서 이미지">
 					
 				</div>
@@ -370,6 +385,7 @@ function findDetailField(fieldcode){
 						</tr>
 						<tr>
 							<td colspan="2">
+								<button type="button" style="font-size:8pt;" class="btn btn-primary open-button" onClick="openAddForm();">추가</button>
 								<button type="button" style="font-size:8pt;" class="btn btn-default open-button" onClick="openAllEditForm();">수정(공용)</button>
 								
 								<input type="button" style="font-size:8pt;" class="btn btn-danger" value="삭제(전체)"/>
@@ -439,7 +455,9 @@ function findDetailField(fieldcode){
 									</a>
 								</c:if>
 								</td>
-								<td><button type="button" style="font-size:9pt;" class="btn btn-default " onClick="openDetailEditForm('${book.bookid}','${book.isbn }','${book.price }','${book.weight }','${book.totalpage }','${book.pdate }','${book.libcode_fk }','${book.status }')">개별 수정</button>&nbsp;|&nbsp;<button style="font-size:9pt;" type="button" class="btn btn-danger">개별 삭제</button></td>
+								<td><button type="button" style="font-size:9pt;" class="btn btn-default " onClick="openDetailEditForm('${book.bookid}','${book.isbn }','${book.price }','${book.weight }','${book.totalpage }','${book.pdate }','${book.libcode_fk }','${book.status }')">개별 수정</button>
+								&nbsp;|&nbsp;
+								<button style="font-size:9pt;" type="button" class="btn btn-danger" onClick="deleteIndivBook('${book.bookid}','${book.status }')">개별 삭제</button></td>
 							</tr>       
 						</c:forEach>
 						</c:if>	
@@ -521,7 +539,7 @@ function findDetailField(fieldcode){
 			<!--  공용 도서정보 수정 form-popup 페이지 시작 -->
 					<div class="form-popup" id="allEditForm">
 								
-								  <form name="editPublicForm"  class="form-container">
+								  <form name="editPublicForm"  class="form-container" enctype="multipart/form-data">
 								    <h3>공용 정보수정</h3>
 									<table style="margin-bottom:10px;">
 										<tr>
@@ -618,7 +636,7 @@ function findDetailField(fieldcode){
 										</tr>
 									</table>
 									<input type="hidden" name="bookid" id="bookid">
-									<input type="hidden" name="bookListLength" val="${length }"/>
+									<input type="hidden" name="bookListLength" value="${length }"/>
 								 	<button type="button" class="btn" onClick="editAllBookInfo()">수정</button>
 								    <button type="button" class="btn cancel" onclick="closeAllEditForm()">닫기</button>
 								  </form>
@@ -652,13 +670,22 @@ function findDetailField(fieldcode){
 											<td align="center"><input type="date" name="editPdate" id="editPdate"/></td>
 										</tr>
 									</table>
+									<input type="hidden" name="status" id="editStatus"/>
 									<input type="hidden" name="bookid" id="detailBookid">
 								 	<button type="button" class="btn" onClick="editIndivBookInfo();">수정</button>
 								    <button type="button" class="btn cancel" onclick="closeDetailEditForm()">닫기</button>
 								  </form>
 								</div>
-								
 								<!-- 개별 도서 수정 div 페잊 끝 -->
+								
+								<form name="deleteForm">
+									<input name="bookid"/>
+								</form>
+								
+								<form name="addBookForm">
+									<input name="bookid"/>
+									<input name="count"/>
+								</form>
 <script>
 function editAllBookInfo(){
 	var flag  = false;
@@ -690,6 +717,23 @@ function editIndivBookInfo(){
 	var frm = document.editIndivForm;
 	frm.action = "editIndivBookInfo.ana";
 	frm.method = "POST";
+	frm.submit();
+}
+
+function deleteIndivBook(bookid,status){
+	if(status != 0){
+		alert("반납된(기본상태)인 책만 삭제가 가능합니다.");
+		return;
+	}
+		
+	var flag = confirm("삭제하시겠습니까(DB에서 영구 삭제됩니다.)?");
+	if(flag == false){
+		return;
+	}
+	var frm = document.deleteForm;
+	frm.bookid.value=bookid;
+	frm.action = "deleteIndivBook.ana",
+	frm.method="POST";
 	frm.submit();
 }
 </script>
