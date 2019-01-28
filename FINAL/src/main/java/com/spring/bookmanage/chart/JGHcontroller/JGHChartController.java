@@ -1,4 +1,4 @@
-package com.sping.bookmanage.chart.JGHcontroller;
+package com.spring.bookmanage.chart.JGHcontroller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
