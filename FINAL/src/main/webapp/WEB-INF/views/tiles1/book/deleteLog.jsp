@@ -5,7 +5,14 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
+		searchKeep();
 		
+		// 한 행을 클릭할 경우 체크박스 선택, 해제
+		$(".td").click(function() {
+			var flag = $(this).parent().find(".check").is(":checked");
+			$(this).parent().find(".check").prop("checked",!flag);
+		});// end of tr click
+
 		$("#searchWord").keydown(function(event) {
 	         if(event.keyCode == 13) {
 	        	 search();
@@ -28,6 +35,10 @@
 		}// end of if
 	}// end of searchKeep
 	
+	function allCheckFalse() {
+		var flag = $("input:checkbox[name=check]").prop("checked",false);
+	}// end of allCheck
+
 	function recover() {
 		
 	}// end of 
@@ -50,12 +61,32 @@
 					<input type="hidden" name="goBackURL" />
 					<button type="button" class="btn btn-info" onclick="search();">검색</button>
 				</div>
-
-				<div style="float: left;">
-					<button type="button" id="lock"class="btn btn-dark" onclick="allCheckFalse();"><i class="glyphicon glyphicon-remove"></i></button>
-				</div>
+				
+				<br/>
 				<div style="float: right;">
-					<button type="button" class="btn btn-dark" onclick="recover('${goBackURL}');">복원하기<i class="glyphicon glyphicon-refresh"></i></button>
+					<div class="collapse navbar-collapse" id="bs-slide-dropdown">
+				        <ul class="nav navbar-nav navbar-right">
+				            <li class="dropdown">
+				              <i class="dropdown-toggle glyphicon glyphicon-th-list" data-toggle="dropdown" style="cursor: pointer;"></i>
+				              <ul class="dropdown-menu" role="menu">
+				                <li><a href="#">도서일련번호 오름차순</a></li>
+				                <li><a href="#">도서명 오름차순</a></li>
+				                <li><a href="#">작가명 오름차순</a></li>
+				              </ul>
+				            </li>
+				        </ul>
+					</div>
+				</div>
+				<br/>
+				
+				<div style="margin-bottom: 2%; margin-top: 2%;">
+					<div style="float: left;">
+						<button type="button" id="lock"class="btn btn-dark" onclick="allCheckFalse();"><i class="glyphicon glyphicon-remove"></i></button>
+					</div>
+					
+					<div style="float: right;">
+						<button type="button" class="btn btn-success" onclick="recover('${goBackURL}');">복원<i class="glyphicon glyphicon-refresh"></i></button>
+					</div>
 				</div>
 
 				<table id="table-member" class="table table-striped table-hover">
@@ -82,7 +113,7 @@
 						</c:if>
 
 							<c:forEach var="deleteBookVO" items="${deleteBookList}">
-						<tr class="tr-row">
+						<tr class="tr-row" style="cursor: pointer;">
 							<td><input type="checkbox" class="check" name="check" /></td>
 							<td class="td">${deleteBookVO.rno}</td>
 							<td class="td">${deleteBookVO.bookid}</td>
