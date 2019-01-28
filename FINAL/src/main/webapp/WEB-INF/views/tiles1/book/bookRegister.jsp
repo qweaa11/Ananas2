@@ -388,6 +388,7 @@
 						    <option value="JP">일본어</option>
 						    <option value="CH">중국어</option>
 						    <option value="FR">프랑스어</option>
+						    <option value="GM">독일어</option>
 						    
 						</select>
 					</div>
