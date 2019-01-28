@@ -14,8 +14,8 @@ public interface NSYInterReservationDAO {
 
 	int reservation_rental(HashMap<String, String> paraMap); // 예약된책을 대여하는 기능
 
-	void changBookStatus(HashMap<String, String> paraMap); // 예약된책을 대여하면서 스테이터값을 대여값 1로 변경
+	void changeBookStatus(HashMap<String, String> paraMap); // 예약된책을 대여하면서 스테이터값을 대여값 1로 변경
 
-	void deleteReservation(HashMap<String, String> paraMap); // 예약된책목록을 대여하면서 지워주는 기능
+	void deleteReservation(HashMap<String, String> paraMap); // 예약된책목록을 대여하면서 예약목록을 지워주는 기능
 	
 }
