@@ -115,11 +115,14 @@
 		  	   }
 		    	 
             //폼 submit
-	        var addFrm = document.addFrm;
-		addFrm.action = "<%=ctxPath%>/addEnd.ana";
-		addFrm.method = "POST";
-		addFrm.submit();
-	    });
+	        var editFrm = document.editFrm;
+	        editFrm.subject.value = $("#subject").val();
+	        editFrm.content.value = $("#content").val();
+	        editFrm.pw.value = $("#pw").val();
+			editFrm.action = "<%=ctxPath%>/editEnd.ana";
+			editFrm.method = "POST";
+			editFrm.submit();
+		    });
 	 		
 	}); // end of ready()-------------------------------------------
 		
@@ -129,16 +132,16 @@
 	<div class="row">
 	<div class="col-md-7">
                     <div class="contact_form">
-                    		<h3 class="heading"><strong class="glyphicon glyphicon-pencil"></strong> 글쓰기 <span></span></h3>
+                    		<h3 class="heading"><strong class="glyphicon glyphicon-pencil"></strong> 글수정 <span></span></h3>
                             	<div class="con_form">
-                                <form  name="addFrm" enctype = "multipart/form-data">
-                                   <input type="hidden" name="libid_fk" value="${sessionScope.loginLibrarian.libid}" />
-                                   <input type="hidden" name="name" value="${sessionScope.loginLibrarian.name}"  /> 
-                                    <input type="text" required="" placeholder="제목" name="subject" id="subject" value="" tabindex="1" name="title" class="con_txt">
+                                <form  name="editFrm" enctype = "multipart/form-data">
+                                   <input type="hidden" name="libid_fk" value="tester00" />
+                                   <input type="hidden" name="name" value="운영자"  /> 
+                                    <input type="text" required="" placeholder="제목"  id="subject" name="subject" value="${boardvo.subject}" tabindex="1" name="title" class="con_txt">
                                     
                                     
                                     
-                                     <textarea placeholder="" id="content" name="content" type="text" class="con_txt_3" tabindex="4"></textarea>
+                                     <textarea placeholder="" id="content" name="content" type="text" class="con_txt_3" tabindex="4">${boardvo.content }</textarea>
                                      <table>
                                      <tr>
 										<!-- ===== #135. 파일첨부 타입 추가하기 =====-->
@@ -149,7 +152,7 @@
 						         	</tr>
 						         	</table>
                                     
-                                    <button type="button" id="btnWrite" class="con_txt2">작성하기</button>
+                                    <button type="button" id="btnWrite" class="con_txt2">수정하기</button>
                                     <button type="button"  class="con_txt2"  onClick="javascript:history.back();">취소하기</button>
                                     
                                     <input type="hidden" name="readcount"  value="${readCount}" />
@@ -159,15 +162,19 @@
 									<input type="hidden" name="depthno" value="${depthno}" />
 									<input type="hidden" name="commentcount" value="${commentCount}" />
 									<input type="hidden" name="filename"  value="${fileName}" />
-									<input type="hidden" name="orgFilename" value="${orgFilename}" />
+									<input type="hidden" name="orgfilename" value="${orgFilename}" />
 									<input type="hidden" name="filesize" value="${fileSize}" />
+									<input type="hidden" name="idx" value="${boardvo.idx}"/>
+									
+									
+									
                                     
                 				</form>
                                 </div>
                     	
                     </div>
-                
-               
+              
+			               
                 </div>
 	</div>
 </div>

@@ -42,24 +42,26 @@
 	 </select>
 	 
 	  <select id="boardListPaging" parameterType="HashMap" resultType="com.spring.bookmanage.board.BSBmodel.BSBboardVO"> 
- 			select RNO, idx, name, subject, readCount, regDate, commentCount
+ 			select RNO, idx, name, subject, readCount, regDate, commentCount, groupno, root, depthno
 			from
 			(
 			    select rownum AS RNO
-	                   ,idx, name, subject, readCount, regDate, commentCount
+	                   ,idx, name, subject, readCount, regDate, commentCount, groupno, root, depthno
 	                   
 	    		from
    				(
 		    	    select  idx, name, subject, readCount
 	                       ,to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
-	                       ,commentCount
+	                       ,commentCount, groupno, root, depthno
 	                       
 			        from board
 			        where status = 0
 			        <if test='SEARCH != null and SEARCH !="" and SEARCH != "null" '>
 			        and ${COLNAME} like '%'|| #{SEARCH} ||'%'
 			        </if>
-	 				order by idx desc
+	 				start with root = 0
+			        connect by prior idx = root
+			        order siblings by groupno desc, idx desc
 			       			        
 			    )V
 			)T
@@ -69,22 +71,40 @@
 	 
 	  <!-- ===== #56. 글쓰기(파일첨부가 없는 글쓰기) ==== -->
 	  <insert id="add" parameterType="com.spring.bookmanage.board.BSBmodel.BSBboardVO">
-			insert into board(idx, libid_fk, name,  subject, content, pw, readcount, regdate, status
-			, groupno, root, depthno, commentcount, filename,  filesize)
-			values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, 0, sysdate, 0
-			,0,0,0,0,null,0)
+		  <if test="root.equals('')"> <!-- 원글 -->
+		insert into Board(idx, libid_fk, name, subject, content, pw, readCount, regDate, status, groupno, root, depthno)
+		values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, 0, 0)
+		</if>
+		<if test="!root.equals('')"> <!-- 답글 -->
+		insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno)
+		values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{root}, #{depthno}+1)
+		</if>
 	
 	</insert>  
 	
 	<select id="getView" parameterType="String" resultType="com.spring.bookmanage.board.BSBmodel.BSBboardVO">
 					
-			  select  idx, libid_fk, name, subject, content, readCount
+			  select previousidx, previoussubject, idx, libid_fk, name, subject, content, readCount, regDate ,commentCount
+			        ,fileName, orgFilename, fileSize, groupno, root, depthno, nextidx, nextsubject
+			  from
+			  (
+			  select  
+			  
+			  		lag(idx,1)over(order by idx desc) as previousidx
+			        , lag(subject,1)over(order by idx desc) as previoussubject	
+			        		        
+			  		,idx, libid_fk, name, subject, content, readCount
 			        ,to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
 			        ,commentCount
-			        ,fileName, orgFilename, fileSize
+			        ,fileName, orgFilename, fileSize, groupno, root, depthno
+			        
+			        , lead(idx,1)over(order by idx desc) as nextidx
+			        , lead(subject,1)over(order by idx desc) as nextsubject
 			        
 			    from board
-			    where status = 0 and idx = #{idx}
+			    where status = 0
+			    )V 
+                where V.idx = #{idx}
 	
 	</select>
 	
@@ -177,11 +197,14 @@
 	 
 	  <!-- ===== #143. 글쓰기(파일첨부가 있는 글쓰기) ====== -->
 	 <insert id="add_withFile" parameterType="com.spring.bookmanage.board.BSBmodel.BSBboardVO">
-	 
-		insert into board(idx, libid_fk, name, subject, content, pw, readcount, regdate, status, groupno, root, depthno, commentcount, fileName, orgFilename, fileSize)
-		values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw},0, sysdate, 0, 0, 0, 0, 0, #{fileName}, #{orgFilename}, #{fileSize})
-	
-	
+		 <if test="root.equals('')"> <!-- 원글 -->
+		insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, fileName, orgFilename, fileSize, root, depthno)
+		values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{fileName}, #{orgFilename}, #{fileSize}, 0, 0)
+		</if>
+		<if test="!root.equals('')"> <!-- 답글 -->
+		insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno, fileName, orgFilename, fileSize)
+		values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{root}, #{depthno}+1, #{fileName}, #{orgFilename}, #{fileSize})
+		</if>		
 	 </insert>
 	
 	
@@ -200,6 +223,25 @@
 		where idx = #{ORGIDX}
 	
 	</update>
+	
+	<update id="updateContent" parameterType="HashMap">
+	
+		update board set subject = #{SUBJECT}
+		                   ,content = #{CONTENT}
+		where idx = #{IDX}
+	
+	
+	</update>
+	
+	<!-- // ===== #65. 글1개를 보여줄때 조회수(readCount) 1증가 시키기 ==== -->
+	<update id="setAddReadCount" parameterType="String">
+		update board set readcount = readcount + 1
+		where status = 0 and idx = #{idx}
+	
+	</update>
+	
+	
+	
 	
 	
 

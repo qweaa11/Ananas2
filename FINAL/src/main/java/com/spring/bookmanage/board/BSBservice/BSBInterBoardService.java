@@ -21,7 +21,7 @@ public interface BSBInterBoardService {
 
 	int add(BSBboardVO boardvo);
 
-	BSBboardVO getView(String idx);
+	BSBboardVO getView(String idx, String memberid);
 
 	int addComment(BSBcommentVO commentvo) throws Throwable;
 
@@ -36,6 +36,8 @@ public interface BSBInterBoardService {
 	int add_withFile(BSBboardVO boardvo);
 
 	int commentdel(HashMap<String, String> paraMap) throws Throwable;
+
+	int edit(HashMap<String, String> paraMap);
 
 	
 
