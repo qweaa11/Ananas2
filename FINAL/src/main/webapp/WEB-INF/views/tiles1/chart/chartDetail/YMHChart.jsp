@@ -1,23 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<style type="text/css">
-#menu1 {
-	width: 100px;
-	height: 100px;
-	background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* Chrome 10+, Saf5.1+ */
-	background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* FF3.6+ */
-	background: -ms-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* IE10 */
-	background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* Opera 11.10+ */
-	background: linear-gradient(90deg, #16222A 10%, #3A6073 90%); /* W3C */
-	font-family: 'Raleway', sans-serif;
-}
-</style>
-
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
@@ -40,16 +23,16 @@
 				
 				$.each(json, function(entryIndex, entry){
 					labraryArr.push({
-						"name": entry.name,
+						"name": entry.LIBNAME,
 						"y": parseFloat(entry.PERCENTAGE),
-						"drilldown": entry.name,
+						"drilldown": entry.LIBNAME,
 						
 					});
 				}); // end of $.each(json, function(entryIndex, entry)-----------------------
 						
 						
 				var overdueRateArr = [];			
-						
+			<%-- 			
 				$.each(json, function(){
 					$.getJSON("<%=request.getContextPath() %>/overdueOfLibrary.ana"),
 						function(json2){
@@ -69,7 +52,7 @@
 							});	
 					});
 				});	// end of 	$.each(json, function(){}------------------------------------
-						
+				 --%>		
 						
 				// create the chart
 				$('#YMHcontainer').Highcharts({
