@@ -153,6 +153,13 @@ th, td {
 			$("a#toggle2[data-toggle='tooltip']").tooltip("hide");
 	});
 		
+		$("#btn2").click(function(){
+			if(extendFlag == false)	{
+				$("input.bookChk:checkbox:checked").each(function(){
+					
+				}
+			}
+		});
 		
 		$("#btn3").hover(function(){
 			var status = -1;
@@ -207,9 +214,7 @@ th, td {
 	});
 		
 		
-		$("#btn2").click(function(){
-			if(extendFlag == false)	console.log("click");
-		});
+		
 		
 		$("#bigField").change(function(){
 			

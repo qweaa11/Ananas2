@@ -13,6 +13,9 @@ public class YSWMemberVO {
 	private String addr1; // �ּ�
 	private String addr2; // ���ּ�
 	private String post; // �����ȣ
+	private String yyyy;
+	private String mm;
+	private String dd;
 	private String birth; // �������
 	private int gender; // ����
 	private String regDate; // �������(��������)
@@ -27,7 +30,7 @@ public class YSWMemberVO {
 	
 
 	public YSWMemberVO(String memberid, int idx, String pwd, String name, String email, String phone, String addr1,
-					   String addr2, String post, String birth, int gender, String regDate,
+					   String addr2, String post, String yyyy, String mm, String dd, String birth, int gender, String regDate,
 					   String lastDate, String pwDate, int status, String profilePicture, String imgFileName, long fileSize) 
 	{
 		this.memberid = memberid;
@@ -39,6 +42,9 @@ public class YSWMemberVO {
 		this.addr1 = addr1;
 		this.addr2 = addr2;
 		this.post = post;
+		this.yyyy = yyyy;
+		this.mm = mm;
+		this.dd = dd;
 		this.birth = birth;
 		this.gender = gender;
 		this.regDate = regDate;
@@ -141,11 +147,17 @@ public class YSWMemberVO {
 
 
 	public String getBirth() {
+		
+		birth = yyyy+mm+dd;
+		
 		return birth;
 	}
 
 
 	public void setBirth(String birth) {
+		
+		birth = yyyy+mm+dd;
+		
 		this.birth = birth;
 	}
 
@@ -197,6 +209,36 @@ public class YSWMemberVO {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+
+	public String getYyyy() {
+		return yyyy;
+	}
+
+
+	public void setYyyy(String yyyy) {
+		this.yyyy = yyyy;
+	}
+
+
+	public String getMm() {
+		return mm;
+	}
+
+
+	public void setMm(String mm) {
+		this.mm = mm;
+	}
+
+
+	public String getDd() {
+		return dd;
+	}
+
+
+	public void setDd(String dd) {
+		this.dd = dd;
 	}
 
 

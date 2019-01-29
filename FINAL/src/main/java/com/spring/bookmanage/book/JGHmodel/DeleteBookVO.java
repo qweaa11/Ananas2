@@ -2,10 +2,6 @@ package com.spring.bookmanage.book.JGHmodel;
 
 public class DeleteBookVO {
 
-	/* 테이블에 존재하지 않는 필드 */
-	private int rno;// 행번호
-	private int count;// 삭제된 동일도서의 총 권수
-
 	/* 도서 테이블 */
 	private int idx;				// 인덱스
 	private String bookid; 			// 도서일련번호
@@ -43,10 +39,6 @@ public class DeleteBookVO {
 	private String addr; 			// 도서관 주소
 	private String tel; 			// 도서관 전화번호
 
-	/* 삭제된 도서테이블의 컬럼 */
-	private String deldate;			// 삭제일자
-	private String cleanerid;		// 처리자아이디
-
 	public DeleteBookVO() { }// end of default constructor
 
 	public DeleteBookVO(int idx, String bookid, String title, String author, int status, int agecode, String ISBN,
@@ -75,22 +67,6 @@ public class DeleteBookVO {
 		this.pdate = pdate;
 		this.regdate = regdate;
 	}// end of DeleteBookVO
-
-	public int getRno() {
-		return rno;
-	}
-
-	public void setRno(int rno) {
-		this.rno = rno;
-	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
 
 	public int getIdx() {
 		return idx;
@@ -152,8 +128,8 @@ public class DeleteBookVO {
 		return ISBN;
 	}
 
-	public void setISBN(String ISBN) {
-		this.ISBN = ISBN;
+	public void setISBN(String iSBN) {
+		ISBN = iSBN;
 	}
 
 	public String getPubcode_fk() {
@@ -339,44 +315,4 @@ public class DeleteBookVO {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
-
-	public String getDeldate() {
-		return deldate;
-	}
-
-	public void setDeldate(String deldate) {
-		this.deldate = deldate;
-	}
-
-	public String getCleanerid() {
-		return cleanerid;
-	}
-
-	public void setCleanerid(String cleanerid) {
-		this.cleanerid = cleanerid;
-	}
-
-	public String getAgecode_trans() {
-		String agerange = "";
-
-		switch (agecode) {
-		case 0:
-			agerange = "전체";
-			break;
-
-		case 1:
-			agerange = "아동";
-			break;
-
-		case 2:
-			agerange = "청소년";
-			break;
-
-		case 3:
-			agerange = "성인";
-			break;
-		}// end of switch
-
-		return agerange;
-	}// end of getAgecode_trans
 }

@@ -44,7 +44,7 @@
 <div class="container">
 	<div class="row">
 
-		<div class="container border" style="height: 50%; width: 100%; align-content: center; overflow: auto;">
+		<div class="container border" style="height: 50%; width: 100%; align-content: center;">
 
 			<form name="searchFrm" onsubmit="return false">
 				<div>
@@ -86,7 +86,7 @@
 					</div>
 				</div>
 
-				<table id="table-member" class="table table-striped table-hover" style="min-width: 100%;">
+				<table id="table-member" class="table table-striped table-hover">
 					<thead>
 						<tr>
 							<th style="text-align: center;">선택</th>
@@ -96,6 +96,7 @@
 							<th style="text-align: center;">작가</th>
 							<th style="text-align: center;">출판사</th>
 							<th style="text-align: center;">연령대</th>
+							<th style="text-align: center;">ISBN</th>
 							<th style="text-align: center;">권수</th>
 							<th style="text-align: center;">삭제일자</th>
 							<th style="text-align: center;">처리자</th>
@@ -117,6 +118,7 @@
 							<td class="td">${deleteBookVO.author}</td>
 							<td class="td">${deleteBookVO.pubname}</td>
 							<td class="td">${deleteBookVO.agecode}</td>
+							<td class="td">${deleteBookVO.iSBN}</td>
 							<td class="td">${deleteBookVO.count}</td>
 							<td class="td">${deleteBookVO.deldate}</td>
 							<td class="td">${deleteBookVO.cleanerid}</td>

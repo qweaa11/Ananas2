@@ -85,15 +85,10 @@ public class YSWController {
 			String addr1 = req.getParameter("addr1");
 			String addr2 = req.getParameter("addr2");
 			String post = req.getParameter("post");
-			String setMyBirth = req.getParameter("setMyBirth"); // 데이터 피커 사용으로 생년월일이 1999-10-13 요렇게 옴
+			String yyyy = req.getParameter("yyyy");
+			String mm = req.getParameter("mm");
+			String dd = req.getParameter("dd");
 			String gender = req.getParameter("gender");
-			
-			System.out.println("setMyBirth : " + setMyBirth);// setMyBirth : 1999-10-13
-			String[] setMyBirthArr = setMyBirth.split("-"); // - 로 잘랐다
-			System.out.println(setMyBirthArr[0]);// 결과물 1999 
-			
-			String birth = setMyBirthArr[0].substring(2, 4) +"/"+setMyBirthArr[1]+"/"+setMyBirthArr[2];
-			System.out.println("birth : " + birth);// 합쳤다 결과물 99/10/13
 			
 			/*
 			System.out.println("memberid :"+memberid);
@@ -104,6 +99,9 @@ public class YSWController {
 			System.out.println("addr1 :"+addr1);
 			System.out.println("addr2 :"+addr2);
 			System.out.println("post :"+post);
+			System.out.println("yyyy :"+yyyy);
+			System.out.println("mm :"+mm);
+			System.out.println("dd :"+dd);
 			System.out.println("gender :"+gender);
 			*/
 			
@@ -164,8 +162,12 @@ public class YSWController {
 			membervo.setAddr1(addr1);
 			membervo.setAddr2(addr2);
 			membervo.setPost(post);
-			membervo.setBirth(birth);
+			membervo.setYyyy(yyyy);
+			membervo.setMm(mm);
+			membervo.setDd(dd);
 			membervo.setGender(Integer.parseInt(gender));
+			
+			//System.out.println("birth :"+membervo.getBirth());
 			
 			result = service.memberRegistEnd(membervo);
 		
@@ -186,7 +188,7 @@ public class YSWController {
 		else {
 			
 			String msg = "회원가입 되었습니다.";
-			String loc = "index.ana";
+			String loc = "login.ana";
 			
 			req.setAttribute("msg", msg);
 			req.setAttribute("loc", loc);

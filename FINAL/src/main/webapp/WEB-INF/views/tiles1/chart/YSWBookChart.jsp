@@ -132,7 +132,7 @@
 						            type: 'column'
 						        },
 						        title: {
-						            text: '도서 장르별 점유율'
+						            text: '제품별 판매 점유율'
 						        },
 						        subtitle: {
 						           // text: 'Click the columns to view versions. Source: <a href="http://netmarketshare.com">netmarketshare.com</a>.'
