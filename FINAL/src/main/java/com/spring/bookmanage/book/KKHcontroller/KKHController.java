@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.spring.bookmanage.JDSmodel.AdminVO;
 import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.book.KKHmodel.KKHBookVO;
 import com.spring.bookmanage.book.KKHservice.InterKKHBookService;
@@ -230,7 +231,7 @@ public class KKHController {
 	@RequestMapping(value="/bookDetail.ana",method= {RequestMethod.GET})
 	public String bookDetail(HttpServletRequest request, HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
-		System.out.println("bookid:"+bookid);
+		System.out.println("bookid:"+bookid); 
 		HashMap<String,String> libcode = new HashMap<String,String>();
 		
 		List<HashMap<String,String>> bookReservateList = new ArrayList<HashMap<String,String>>();
@@ -286,7 +287,7 @@ public class KKHController {
 	}
 	
 	
-	@RequestMapping(value="editPublicBookInfo.ana",method= {RequestMethod.POST})
+	@RequestMapping(value="/editPublicBookInfo.ana",method= {RequestMethod.POST})
 	public String editPublicBookInfo(KKHBookVO bookvo,MultipartHttpServletRequest request,HttpServletResponse response) {
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
@@ -394,7 +395,7 @@ public class KKHController {
 		return "msg";
 	}
 	
-	@RequestMapping(value="editIndivBookInfo.ana", method= {RequestMethod.POST})
+	@RequestMapping(value="/editIndivBookInfo.ana", method= {RequestMethod.POST})
 	public String editIndivBookInfo(HttpServletRequest request,HttpServletResponse response) {
 		String editISBN = request.getParameter("editISBN");
 		String editPrice = request.getParameter("editPrice");
@@ -431,7 +432,7 @@ public class KKHController {
 		return "msg";
 	}
 	
-	@RequestMapping(value="deleteIndivBook.ana",method= {RequestMethod.POST})
+	@RequestMapping(value="/deleteIndivBook.ana",method= {RequestMethod.POST})
 	public String deleteIndivBook(HttpServletRequest request,HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		int n = service.deleteIndivBook(bookid);
@@ -454,7 +455,7 @@ public class KKHController {
 		
 	}
 	
-	@RequestMapping(value="AddBook.ana",method= {RequestMethod.POST})
+	@RequestMapping(value="/AddBook.ana",method= {RequestMethod.POST})
 	public String AddBook(HttpServletRequest request,HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		String count_str = request.getParameter("count");
@@ -493,5 +494,38 @@ public class KKHController {
 		}
 		return "msg";
 	
+	}
+	
+	@RequestMapping(value="/deleteAllBook.ana",method= {RequestMethod.POST})
+	public String deleteAllBook(HttpServletRequest request, HttpServletResponse response) {
+		String bookid = request.getParameter("bookid");
+		String cleanerid = "";
+		HttpSession session = request.getSession();
+		if(session.getAttribute("loginLibrarian")!= null) {
+			LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+			cleanerid = loginLibrarian.getLibid();
+		}else if(session.getAttribute("loginAdmin")!= null) {
+			AdminVO loginAdmin = (AdminVO)session.getAttribute("loginAdmin");
+			cleanerid = loginAdmin.getAdminid();
+		}
+		List<KKHBookVO> deleteBookList = service.findDeleteBook(bookid);
+		int n = service.insertAndDeleteBookList(deleteBookList,bookid,cleanerid);
+		
+		if(n != 1) {
+			String msg = "삭제 실패";
+			String loc = "javascript:history.back()";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+			
+		}else {
+			String msg = "삭제 성공";
+			String loc = "/bookmanage/bookList.ana";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		}
+		
+		return "msg";
 	}
 }

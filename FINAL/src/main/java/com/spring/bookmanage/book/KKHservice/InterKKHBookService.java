@@ -20,7 +20,7 @@ public interface InterKKHBookService {
 	List<HashMap<String, String>> findAllLanguage(HashMap<String,String> libcode);
 
 	List<HashMap<String, String>> findAllCategory(HashMap<String,String> libcode);
-
+ 
 	List<HashMap<String, String>> findAllField(HashMap<String,String> libcode);
 
 	List<HashMap<String, String>> findcategory();
@@ -48,5 +48,9 @@ public interface InterKKHBookService {
 	int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap);
 
 	int findStartBookNum(String bookid);
+
+	List<KKHBookVO> findDeleteBook(String bookid);
+
+	int insertAndDeleteBookList(List<KKHBookVO> deleteBookList,String bookid,String cleanerid);
 
 }

@@ -35,7 +35,7 @@ public interface InterKKHBookDAO {
 	KKHBookVO findOneBook(String bookid);
 
 	String findNewBook1stNum(String newBookid);
-
+ 
 	int updateNewBookid(HashMap<String, String> parameterMap);
 	
 	List<KKHBookVO> selectAndDelBookDetail(String bookid);
@@ -58,6 +58,12 @@ public interface InterKKHBookDAO {
 	int findStartBookNum(String bookid);
 
 	int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap);
+
+	List<KKHBookVO> findDeleteBook(String bookid);
+
+	int insertDelete_BookList(List<KKHBookVO> deleteBookList,String cleanerid);
+
+	int deleteBookAndBookDetail(String bookid);
 
 
 

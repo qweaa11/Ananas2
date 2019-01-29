@@ -350,7 +350,7 @@ div.search button:hover {
 					style="padding: .2em .4em; font-size: 13pt; background-color: #2196F3; height: 29pt; color: #fff; border-radius: 3px;">
 					<option value="title">도서명</option>
 					<option value="author">저자</option>
-					<option value="pubname">출판사</option>
+					<option value="pubname">출판사</option> 
 				</select> <input id="searchWord" type="text" placeholder="Search.." name="search2">
 				<button type="button" class="search">
 					<i class="fa fa-search"></i>

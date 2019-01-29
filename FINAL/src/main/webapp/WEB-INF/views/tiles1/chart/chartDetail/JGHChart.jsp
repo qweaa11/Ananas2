@@ -28,80 +28,224 @@
 <script type="text/javascript">
 
 	$(document).ready(function () {
-		Highcharts.chart('field', {
-		    chart: {
-		        type: 'column'
-		    },
-		    title: {
-		        text: '연간 도서관별 최다대여 분야 분포도'
-		    },
-		    subtitle: {
-		        text: 'Source: WorldClimate.com'
-		    },
-		    xAxis: {
-		        categories: [
-		            'Jan',
-		            'Feb',
-		            'Mar',
-		            'Apr',
-		            'May',
-		            'Jun',
-		            'Jul',
-		            'Aug',
-		            'Sep',
-		            'Oct',
-		            'Nov',
-		            'Dec'
-		        ],
-		        crosshair: true
-		    },
-		    yAxis: {
-		        min: 0,
-		        title: {
-		            text: 'Rainfall (mm)'
-		        }
-		    },
-		    tooltip: {
-		        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-		        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-		            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-		        footerFormat: '</table>',
-		        shared: true,
-		        useHTML: true
-		    },
-		    plotOptions: {
-		        column: {
-		            pointPadding: 0.2,
-		            borderWidth: 0
-		        }
-		    },
-		    series: [{
-		        name: '강남도서관',
-		        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0]
+		
+		var data_form = {"currentYear":0};
+		
+		$.ajax({
+			
+			url:"bestBook.ana",
+			type:"GET",
+			data:data_form,
+			dataType:"json",
+			success:function(json) {
+				
+				var rm = new Array();	// 로맨스
+				var th = new Array();	// 스릴러
+				var sc = new Array();	// 공포
+				var de = new Array();	// 추리
+				var fn = new Array();	// 판타지
+				var sf = new Array();	// 공상과학
+				var dr = new Array();	// 드라마
+				var cm = new Array();	// 코미디
+				var ma = new Array();	// 무협
+				var ac = new Array();	// 액션
+				var un = new Array();	// 미분류
+				
+				var chartDater = new Array();
+				
+				chartDater.push(rm);
+				chartDater.push(th);
+				chartDater.push(sc);
+				chartDater.push(de);
+				chartDater.push(fn);
+				chartDater.push(sf);
+				chartDater.push(dr);
+				chartDater.push(cm);
+				chartDater.push(ma);
+				chartDater.push(ac);
+				chartDater.push(un);
+				
+				$.each(json, function (entryIndex, entry) {
+			
+					if(entry.CHART.length > 0) {
+						
+						$.each(entry.CHART, function(chartIndex, chart){
+							
+							var percent = Number(chart.PERCENT);
+							
+							console.log(percent);
+							
+							switch (chart.GCODE) {
+							case "RM":
+								chartDater[0].push(percent != null? percent:0);
+								break;
+							case "TH":
+								chartDater[1].push(percent != null? percent:0);
+								break;
+							case "SC":
+								chartDater[2].push(percent != null? percent:0);
+								break;
+							case "DE":
+								chartDater[3].push(percent != null? percent:0);
+								break;
+							case "FN":
+								chartDater[4].push(percent != null? percent:0);
+								break;
+							case "SF":
+								chartDater[5].push(percent != null? percent:0);
+								break;
+							case "DR":
+								chartDater[6].push(percent != null? percent:0);
+								break;
+							case "CM":
+								chartDater[7].push(percent != null? percent:0);
+								break;
+							case "MA":
+								chartDater[8].push(percent != null? percent:0);
+								break;
+							case "AC":
+								chartDater[9].push(percent != null? percent:0);
+								break;
+							case "UN":
+								chartDater[10].push(percent != null? percent:0);
+								break;
 
-		    }, {
-		        name: '을지로도서관',
-		        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5]
+							default:
+								break;
+							}// end of switch()-------------------------
+							
+							
+						});// end of each 내부-------------------------------------
+					
+						
+						for(var i=0; i<11; i++) { 
+							if(chartDater[i].length != entryIndex+1) {
+								chartDater[i].push(0);
+							}  
+						}
+						
+					}
+					else { 
+						for(var i=0; i<11; i++) { 
+							chartDater[i].push(0);  
+						}
+					}
+					
+				});// end of each 외부--------------------------
 
-		    }, {
-		        name: '당산도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+				for(var i=0; i<11; i++) {
+					console.log(chartDater[i]);
+				}
+				
+		 		if(json.length > 0){
+					Highcharts.chart('genre', {
+					    chart: {
+					        type: 'column'
+					    },
+					    title: {
+					        text: '장르별 도서 인기'
+					    },
+					    subtitle: {
+					        text: '출처 : 데이터베이스'
+					    },
+					    xAxis: {
+					        categories: [
+					            '1월',
+					            '2월',
+					            '3월',
+					            '4월',
+					            '5월',
+					            '6월',
+					            '7월',
+					            '8월',
+					            '9월',
+					            '10월',
+					            '11월',
+					            '12월'
+					        ],
+					        crosshair: true
+					    },
+					    yAxis: {
+					        min: 0,
+					        title: {
+					            text: '대여 비율'
+					        }
+					    },
+					    tooltip: {
+					        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+					        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+					            '<td style="padding:0"><b>{point.y:.0f} %</b></td></tr>',  
+					        footerFormat: '</table>',
+					        shared: true,
+					        useHTML: true
+					    },
+					    plotOptions: {
+					        column: {
+					            pointPadding: 0.2,
+					            borderWidth: 0
+					        }
+					    },
+					    series: [{
+					        name: '로맨스',
+					        data: chartDater[0]
 
-		    }, {
-		        name: '김포도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+					    }, {
+					        name: '스릴러',
+					        data: chartDater[1]
 
-		    }, {
-		        name: '부산도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+					    }, {
+					        name: '공포',
+					        data: chartDater[2]
 
-		    }, {
-		        name: '성남도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
-		    }]
-		});
-	});
+					    }, {
+					        name: '추리',
+					        data: chartDater[3]
 
+					    }, {
+					        name: '판타지',
+					        data: chartDater[4]
+
+					    }, {
+					        name: '공상과학',
+					        data: chartDater[5]
+
+					    }, {
+					        name: '드라마',
+					        data: chartDater[6]
+
+					    }, {
+					        name: '코미디',
+					        data: chartDater[7]
+
+					    }, {
+					        name: '무협',
+					        data: chartDater[8]
+
+					    }
+					    , {
+					        name: '액션',
+					        data: chartDater[9]
+
+					    }
+					    , {
+					        name: '미분류',
+					        data: chartDater[10]
+
+					    }]// end of series
+					});// Highcharts.chart
+
+				} else {
+					$("#genre").html("결과가 없습니다.");
+				}// end of if~else
+
+			}, error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$("#loading1").hide();
+			}// end of success~error
+
+		});// end of $.ajax
+		
+	});// end of document ready
 
 </script>
 
