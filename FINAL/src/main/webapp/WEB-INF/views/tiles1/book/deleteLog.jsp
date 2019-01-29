@@ -118,7 +118,7 @@
 							<td class="td">${deleteBookVO.author}</td>
 							<td class="td">${deleteBookVO.pubname}</td>
 							<td class="td">${deleteBookVO.agecode}</td>
-							<td class="td">${deleteBookVO.iSBN}</td>
+							<td class="td">${deleteBookVO.ISBN}</td>
 							<td class="td">${deleteBookVO.count}</td>
 							<td class="td">${deleteBookVO.deldate}</td>
 							<td class="td">${deleteBookVO.cleanerid}</td>
