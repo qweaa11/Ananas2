@@ -52,36 +52,14 @@ public class BSBboardService implements BSBInterBoardService {
 		@Override
 		public int add(BSBboardVO boardvo) {
 		
-		/* === #127. 글쓰기가 원글쓰기인지 답변글쓰기인지를 구분하여
-        board 테이블에 insert 를 해주어야 한다.
-                  원글쓰기 이라면 board 테이블 groupno 컬럼의 값은 
-        groupno 컬럼의 최대값(max)+1 로 해서 insert 해주어야 한다.
-        
-                  답변글쓰기 이라면 넘겨받은 값을 그대로 insert 해주어야 한다. 
-		*/
-		// ==== 원글쓰기인지, 답변글쓰기인지 구분하기 ====
-		if(boardvo.getRoot() == null || 
-				boardvo.getRoot().trim().isEmpty() ) {
-			// 원글쓰기인 경우
-			int groupno = dao.getGroupnoMax()+1;
-			boardvo.setGroupno(String.valueOf(groupno));			
-		}
-		
-		int n = dao.add(boardvo);
-		
-		return n;
+			int n = dao.add(boardvo);
+			
+			return n;
 		}
 
 		@Override
-		public BSBboardVO getView(String idx, String memberid) {
+		public BSBboardVO getView(String idx) {
 			BSBboardVO boardvo = dao.getView(idx);
-			if(memberid != null && 
-					!boardvo.getLibid_fk().equals(memberid)) {
-					// 조회수 증가는 로그인 되어져 있는 상태에서
-					// 다른사람이 작성한 글을 읽었을때만 조회수 증가하도록 한다.
-					dao.setAddReadCount(idx);
-					 boardvo = dao.getView(idx);
-				}
 			return boardvo;
 		}
 
@@ -160,8 +138,8 @@ public class BSBboardService implements BSBInterBoardService {
 		*/
 		
 		// ==== 원글쓰기인지, 답변글쓰기인지 구분하기 ====
-		if(boardvo.getRoot() == null || 
-			boardvo.getRoot().trim().isEmpty() ) {
+		if(boardvo.getIdx() == null || 
+			boardvo.getIdx().trim().isEmpty() ) {
 		// 원글쓰기인 경우
 			int groupno = dao.getGroupnoMax()+1;
 			boardvo.setGroupno(String.valueOf(groupno));			
@@ -192,23 +170,6 @@ public class BSBboardService implements BSBInterBoardService {
 			return result;
 			
 			
-		
-		}
-
-		@Override
-		public int edit(HashMap<String, String> paraMap) {
-			boolean checkpw = dao.checkPW(paraMap);
-			
-			// 글번호의 대한 암호가 사용자가 입력한 암호와 일치하면 true 반환
-			// 글번호의 대한 암호가 사용자가 입력한 암호와 일치하지않으면 false 반환
-			
-			int result = 0;
-			
-			if(checkpw == true) {
-				result = dao.updateContent(paraMap);// 글 1개 수정하기
-			}
-			
-			return result;
 		
 		}
 	

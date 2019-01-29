@@ -66,38 +66,6 @@
 	    background-color: #D73814;
 	}
 	
-	.button {
-    background-color: transparent;
-    text-align: center;
-    display: inline-block;
-    text-decoration: none;
-    border: 1px solid;
-    -webkit-transition: all 0.2s ease-in;
-    -moz-transition: all 0.2s ease-in;
-    -o-transition: all 0.2s ease-in;
-    transition: all 0.2s ease-in;
-    padding: 10px 30px 8px;
-    font-size: 16px;
-    font-family: "proxima-nova", sans-serif;
-    font-weight: 300;
-    letter-spacing: 0.2rem;
-    line-height: 1;
-    text-transform: uppercase;
-	}
-	.button:hover{
-	    text-decoration: none;
-	    cursor: pointer;
-	    color: #000;
-	}
-	
-	.button-neutral{
-	    color: #000;
-	    border-color: #000;
-	}
-	.button-neutral:hover{
-	    color: #fff;
-	    background-color: #000;
-	}
 	
 </style>
 
@@ -105,8 +73,6 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		
-		
 		
 	});// end of $(document).ready()---------------
 	
@@ -219,17 +185,13 @@
 
 <c:if test="${\"활동\".equals(pmgMemberVO.status)}">
 	<div class="container">	        		        
-		<button type="button" class="btn btn-danger btn-lg btn3d" onClick="goStatusEdit3('${pmgMemberVO.idx }')"><span class="glyphicon glyphicon-remove"></span> 탈퇴</button>       
+		<button type="button" class="btn btn-danger btn-lg btn3d" onClick="goStatusEdit3('${pmgMemberVO.idx }')"><span class="glyphicon glyphicon-remove"></span> 탈퇴</button>
+		<button type="button" class="btn btn-success btn-lg btn3d" onClick="goStatusEdit4('${pmgMemberVO.idx }')"><span class="glyphicon glyphicon-ok"></span> 영구정지</button>       
 	</div>
 </c:if>
 <c:if test="${\"휴면\".equals(pmgMemberVO.status)}">
 	<div class="container">
 		<button type="button" class="btn btn-primary btn-lg btn3d" onClick="goStatusEdit1('${pmgMemberVO.idx }')"><span class="glyphicon glyphicon-cloud"></span> 휴면해제</button>	               	
-	</div>
-</c:if>
-<c:if test="${\"정지\".equals(pmgMemberVO.status)}">
-	<div class="container">
-		<button type="button" class="btn3d btn btn-white btn-lg" onClick="goStatusEdit0('${pmgMemberVO.idx }')"><span class="glyphicon glyphicon-tag"></span> 활동</button>	               	
 	</div>
 </c:if>
 <c:if test="${\"탈퇴\".equals(pmgMemberVO.status)}">
@@ -239,7 +201,7 @@
 </c:if>
 <c:if test="${\"영구정지\".equals(pmgMemberVO.status)}">
 	<div class="container">
-		<%-- <button type="button" class="btn3d btn btn-white btn-lg" onClick="goStatusEdit0('${pmgMemberVO.idx }')"><span class="glyphicon glyphicon-tag"></span> 활동</button> --%>	               	
+		<button type="button" class="btn3d btn btn-white btn-lg" onClick="goStatusEdit0('${pmgMemberVO.idx }')"><span class="glyphicon glyphicon-tag"></span> 활동</button>	               	
 	</div>
 </c:if>
 <!-- 
@@ -525,9 +487,8 @@
 <br/>
 <br/>
 
-<div class="container" align="center">
-	<button class="button button-neutral" type="button" onClick="javascript:location.href='${gobackURL}'">회원목록</button>
-</div>
+
+
 
 
 

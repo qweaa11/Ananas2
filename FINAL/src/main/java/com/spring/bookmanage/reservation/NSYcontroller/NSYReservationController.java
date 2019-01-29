@@ -25,14 +25,12 @@ public class NSYReservationController {
 	@Autowired
 	private AES256 aes;
 	
-	// 예약목록 페이지를 불러오는 메소드
 	@RequestMapping(value="reservationList.ana",method= {RequestMethod.GET})
 	public String reservationList(HttpServletRequest req, HttpServletResponse res) {
 		
 		return "reservation/reservationList.tiles1";
 	}
 	
-	// 예약모록을 불러오는 기능 (검색, 페이징 처리 )
 	@RequestMapping(value="getReservationList.ana",method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, Object>> getReservationList (HttpServletRequest req, HttpServletResponse res) {
@@ -59,6 +57,7 @@ public class NSYReservationController {
 		paraMap.put("rno2", String.valueOf(rno2));
 		paraMap.put("colname", colname);
 		paraMap.put("searchWord", searchWord);
+		paraMap.put("sort", sort);
 		
 		List<HashMap<String, Object>> reservationList = service.getReservationList(paraMap);
 		
@@ -99,7 +98,6 @@ public class NSYReservationController {
 		
 	}
 	
-	// 예약모록의 페이지바 생성하기 
 	@RequestMapping(value="getMakeBarPage_ReservationList.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public HashMap<String, Integer> getMakeBarPage_ReservationList(HttpServletRequest req, HttpServletResponse res){
@@ -130,53 +128,47 @@ public class NSYReservationController {
 		return returnMap;
 	}
 	
-	// 예약목록에 예약되어진 책을 대여하는 기능
 	@RequestMapping(value="rental.ana", method= {RequestMethod.POST})
 	public String rental(HttpServletRequest req, HttpServletResponse res) {
 		
 		String[] rentalValue = req.getParameterValues("rentalValue");
-		String msg = "";
-		String loc = "";
+		//System.out.println("체크박스값 확인하기 : "+ rentalValue[0]);
 		
-		if(rentalValue!= null) {
+		for(int i=0; i<rentalValue.length; i++) {
+			//System.out.println("체크박스값 확인하기 : "+ rentalValue[i]);
+			String[] value = rentalValue[i].split(",");
+			String bookid = value[0];
+			String memberid = value[1];
 			
-			for(int i=0; i<rentalValue.length; i++) {
-				
-				String[] value = rentalValue[i].split(",");
-				String bookid = value[0];
-				String memberid = value[1];
-		
-				HashMap<String, String> paraMap = new HashMap<String, String>();
-				paraMap.put("bookid", bookid);
-				paraMap.put("memberid", memberid);
+			//System.out.println("value값:"+value);
+			System.out.println("value1값:"+bookid);
+			System.out.println("value2값:"+memberid);
 			
-				int result = service.reservation_rental(paraMap);
-				
-				if(result ==1) {
-					service.changeBookStatus(paraMap);
-					
-					service.deleteReservation(paraMap);
-					
-					msg ="대여가 완료되었습니다.";
-					loc ="reservationList.ana";
-				}
-				else {
-					msg ="대여 실패. 관리자에게 문의하세요";
-					loc ="reservationList.ana";
-				}//end of if_else
-				
-			}// end of for문
-		}
-		else {
-			msg = "체크된 항목이 없습니다.";
-			loc = "reservationList.ana";
+			HashMap<String, String> paraMap = new HashMap<String, String>();
+			paraMap.put("bookid", bookid);
+			paraMap.put("memberid", memberid);
 			
-		}// end of if_else
+			System.out.println("value1값 2번째:"+paraMap.get("bookid"));
+			System.out.println("value2값 2번쨰:"+paraMap.get("memberid"));
+			
+			int result = service.reservation_rental(paraMap);
+			
+			if(result ==1) {
+				service.changBookStatus(paraMap);
+				
+				service.deleteReservation(paraMap);
+				
+				String msg ="대여가 완료되었습니다.";
+				String loc ="";
+			}
+			else {
+				String msg ="대여 실패. 관리자에게 문의하세요";
+				String loc ="";
+			}//end of if_else
+			
+		}// end of for문
 		
-		req.setAttribute("msg", msg);
-		req.setAttribute("loc", loc);
-		
-		return "msg";
+		return "reservation/reservationList.tiles1";
 	}// end of String rental()
 	
 }// end of class NSYReservationController

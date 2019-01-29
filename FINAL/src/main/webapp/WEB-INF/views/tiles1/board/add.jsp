@@ -132,8 +132,8 @@
                     		<h3 class="heading"><strong class="glyphicon glyphicon-pencil"></strong> 글쓰기 <span></span></h3>
                             	<div class="con_form">
                                 <form  name="addFrm" enctype = "multipart/form-data">
-                                   <input type="hidden" name="libid_fk" value="${sessionScope.loginLibrarian.libid}" />
-                                   <input type="hidden" name="name" value="${sessionScope.loginLibrarian.name}"  /> 
+                                   <input type="hidden" name="libid_fk" value="tester00" />
+                                   <input type="hidden" name="name" value="운영자"  /> 
                                     <input type="text" required="" placeholder="제목" name="subject" id="subject" value="" tabindex="1" name="title" class="con_txt">
                                     
                                     
@@ -159,7 +159,7 @@
 									<input type="hidden" name="depthno" value="${depthno}" />
 									<input type="hidden" name="commentcount" value="${commentCount}" />
 									<input type="hidden" name="filename"  value="${fileName}" />
-									<input type="hidden" name="orgFilename" value="${orgFilename}" />
+									<input type="hidden" name="orgfilename" value="${orgFilename}" />
 									<input type="hidden" name="filesize" value="${fileSize}" />
                                     
                 				</form>

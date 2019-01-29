@@ -47,11 +47,7 @@ public interface BSBInterBoardDAO {
 	
 	int updateCommentdelCount(String string);
 
-	int updateContent(HashMap<String, String> paraMap);
-
-	void setAddReadCount(String idx);
-
-
+	
 
 	
 	

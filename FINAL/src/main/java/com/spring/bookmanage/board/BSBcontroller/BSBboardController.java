@@ -22,14 +22,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.spring.bookmanage.JDSmodel.AdminVO;
-import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.board.BSBmodel.BSBboardVO;
 import com.spring.bookmanage.board.BSBmodel.BSBcommentVO;
 import com.spring.bookmanage.board.BSBmodel.PhotoVO;
 import com.spring.bookmanage.board.BSBservice.BSBInterBoardService;
 import com.spring.bookmanage.common.AES256;
-import com.spring.bookmanage.common.BSBUtil;
 import com.spring.bookmanage.common.FileManager;
 import com.spring.bookmanage.common.LargeThumbnailManager;
 import com.spring.bookmanage.common.MyUtil; 
@@ -146,8 +143,20 @@ public class BSBboardController {
 				//	System.out.println(search);
 					
 					// ===== #120. 페이지바 만들기 =====
-					String pagebar = "<ul class='pagination pull-center'  >";			
-					pagebar += "<li>"+BSBUtil.getPageBarWithSearch(sizePerPage, blockSize, totalPage, currentShowPageNo, colname, search, null, "board.ana")+"</li>";			
+					String pagebar = "<ul class=\'pagination pull-right\' style=\'margin-right: 60%;\'>"
+					               + "<li class=''><a href='/bookmanage/board.ana?currentShowPageNo="+(startRno)+"'><span class='glyphicon glyphicon-chevron-left'></span></a></li>";	         
+					if((currentShowPageNo-1) != 0)
+						
+						pagebar += "<li class=''><a href='/bookmanage/board.ana?currentShowPageNo="+(currentShowPageNo-1)+"'>"+(currentShowPageNo-1)+"</a></li>";
+					
+						pagebar += "<li class='active'><a href='/bookmanage/board.ana?currentShowPageNo="+currentShowPageNo+"'>"+currentShowPageNo+"</a></li>";
+					
+					if((currentShowPageNo+1) <= totalPage)
+						pagebar +="<li class=''><a href='/bookmanage/board.ana?currentShowPageNo="+(currentShowPageNo+1)+"'>"+(currentShowPageNo+1)+"</a></li>";
+					
+													          
+						          pagebar+= "<li><a href='/bookmanage/board.ana?currentShowPageNo="+(endRno)+"'><span class='glyphicon glyphicon-chevron-right'></span></a></li>";			
+					/*pagebar += MyUtil.getPageBarWithSearch(sizePerPage, blockSize, totalPage, currentShowPageNo, colname, search, null, "board.ana");*/			
 					pagebar += "</ul>";
 					
 					// ===== #68. 글조회수(readCount)증가 (DML문 update)는
@@ -168,10 +177,14 @@ public class BSBboardController {
 					  특정 글 제목을 클릭하여 상세내용을 본 이후 페이징 처리된 해당 페이지로 그대로 돌아가기 위해 
 					  돌아갈 페이지를 위해서 gobackURL을 뷰단으로 넘겨준다.
 					  */
-					 
 					 String gobackURL = MyUtil.getCurrentURL(req);
 					 
-					 session.setAttribute("listgobackURL", gobackURL);
+					 
+					 req.setAttribute("gobackURL", gobackURL);
+		
+		
+		
+		
 
 		return "board/board.tiles1";
 	}
@@ -180,35 +193,15 @@ public class BSBboardController {
 			@RequestMapping(value="/add.ana", method={RequestMethod.GET})
 			public String add(HttpServletRequest req, HttpServletResponse res ) { // requireLogin 로그인 해야만 가능하다
 				
-				HttpSession session = req.getSession();
-				
-				AdminVO loginAdmin = (AdminVO)session.getAttribute("loginAdmin");
-				
-				System.out.println(loginAdmin);
-				// 로그인 되어진 사용자 정보를 가져온다.
-				if(loginAdmin != null) {
-					
-					String msg = "관리자는 글쓰기 권한이 없습니다.";
-					String loc = "javascript:history.back()";
-					
-					req.setAttribute("msg", msg);
-					req.setAttribute("loc", loc);
-					  
-					  
-					  return "msg";
-					
-					
-				}
-				
 				
 				
 				// ===== #125. 답변글 쓰기가 추가된 경우 시작. =====
-				String root  = req.getParameter("root");
+				String fk_seq  = req.getParameter("fk_seq");
 				String groupno = req.getParameter("groupno");
 				String depthno = req.getParameter("depthno");
 				
 				
-				req.setAttribute("root", root);
+				req.setAttribute("fk_seq", fk_seq);
 				req.setAttribute("groupno", groupno);
 				req.setAttribute("depthno", depthno);
 				
@@ -318,7 +311,7 @@ public class BSBboardController {
 					loc = req.getContextPath()+"/board.ana";
 				}
 				else {
-					loc = req.getContextPath()+"/add.ana";
+					loc = req.getContextPath()+"/index.ana";
 				}
 				
 				req.setAttribute("n", n);
@@ -377,14 +370,11 @@ public class BSBboardController {
 							PrintWriter out = res.getWriter();
 							//PrintWriter out 이 웹브라우저 상에 내용물을 기재(쓰는)해주는 객체이다
 							
-							out.println("<script type='text/javascript'>alert('파일 다운로드가 실패했습니다.');"
-									+ 	"location.href=history.back();</script>");
-							
+							out.println("<script type='text/javascript'>alert('파일 다운로드가 실패했습니다.');</script>");
 							
 						} catch (IOException e) {				
 							e.printStackTrace();
 						}
-						  
 				  }
 				  
 				  
@@ -395,71 +385,20 @@ public class BSBboardController {
 			@RequestMapping(value="/BSBview.ana", method={RequestMethod.GET})
 			public String view(HttpServletRequest req) {
 				
-				String idx = req.getParameter("idx");				
-				// 글번호 받아오기
+				String idx = req.getParameter("idx");
 				
+				BSBboardVO  boardvo = null;
 				String gobackURL = req.getParameter("gobackURL");
 				// 특정 글 제목을 클릭하여 상세내용을 본 이후 페이징 처리된 해당 페이지로 그대로 돌아가기 위해 
 				// 돌아갈 페이지를 위해서 gobackURL을 뷰단으로 넘겨준다.
 				
 			//	System.out.println("gobackURL :"+gobackURL);
-				req.setAttribute("gobackURL", gobackURL);
-				
-				BSBboardVO boardvo = null; // 글1개를 저장할 객체
-				
-				HttpSession session = req.getSession();
-				
-				LibrarianVO loginuser = (LibrarianVO)session.getAttribute("loginLibrarian");
-				// 로그인 되어진 사용자 정보를 가져온다.
-				
-				System.out.println(loginuser);
-				
-				// ===== #67. 글조회수(readCount)증가 (DML문 update)는
-				/*            반드시 해당 글제목을 클릭했을 경우에만 글조회수가 증가되고 
-				                         이전글보기, 다음글보기를 했을 경우나 웹브라우저에서 새로고침(F5)을 했을 경우에는 증가가 안되도록 한다.===== */
-				
-				String readCountPermission = (String)session.getAttribute("readCountPermission");
-							
-				
-				String memberid = null;
-				
-				if(readCountPermission != null && 
-						"yes".equals(readCountPermission)) {
-						// 글 1개를 보기위해 
-						// http://localhost:9090/board/list.action(목록보기)을 거친후
-						// 들어온 경우
-					if(loginuser != null) {
-						// 로그인 한 경우에만 userid 변수에 로그인한 사용자 ID값을 넣어준다.
-							memberid = loginuser.getLibid();
-							
-						}
-					
-					System.out.println(readCountPermission);
-					System.out.println(memberid);
-					System.out.println(loginuser);
-						
-						boardvo = service.getView(idx, memberid);
-						
-						/*!! 즁요함 !!
-						  글 1개를 보기 위해 글목록을 거쳐온 경우이라면
-						  확인후 세션에서 제거한다.*/
-						
-						session.removeAttribute("readCountPermission");
-					
-				}
-				else {
-					// 특정글 1개를 본 이후 새로고침(F5)을 한 경우나 
-					// 또는 특정글 1개를 본 이후 이전글보기, 다음글보기를 한 경우이다.
-					// 이럴경우 우리는 굴조회수 증가없는 그냥 1개글만 보여주도록 한다.
-					
-					boardvo = service.getViewWithNoAddCount(idx);
-					// 조회수(readCount)증가 없이 그냥 글 1개만 가져오는 것
-					
-				}
 				
 				
-				req.setAttribute("boardvo", boardvo);
+				boardvo = service.getView(idx);
 				
+			req.setAttribute("boardvo", boardvo);
+			req.setAttribute("gobackURL", gobackURL);
 				
 				return "board/BSBview.tiles1";
 			}
@@ -634,26 +573,6 @@ public class BSBboardController {
 							String idx = req.getParameter("idx");
 							String pw = req.getParameter("pw");
 							
-							// 삭제해야할 글전체 내용가져오기
-							BSBboardVO boardvo = service.getViewWithNoAddCount(idx); 
-							// 조회수(readCount) 증가 없이 그냥 글1개 가져오는것
-							
-							HttpSession session = req.getSession();
-							LibrarianVO loginuser = (LibrarianVO)session.getAttribute("loginLibrarian");
-							
-							if(!loginuser.getLibid().equals(boardvo.getLibid_fk())) {
-								String msg = "다른 사용자의 글은 삭제가 불가합니다.";
-								String loc = "javascript:history.back()";
-								
-								req.setAttribute("msg", msg);
-								req.setAttribute("loc", loc);
-								
-								return "msg";
-							}
-							else {
-							
-							
-							
 							HashMap<String, String> paraMap = new HashMap<String, String>();
 							paraMap.put("IDX", idx);
 							paraMap.put("PW", pw);
@@ -686,7 +605,7 @@ public class BSBboardController {
 							req.setAttribute("loc", loc);
 							 req.setAttribute("idx", idx);
 									
-							}
+							
 							return "msg";
 						}
 						
@@ -879,85 +798,6 @@ public class BSBboardController {
 								}
 								
 							}// end of void multiplePhotoUpload(HttpServletRequest req, HttpServletResponse res)----------------
-							
-							
-							// ===== #70. 글수정 페이지 요청 =====
-							@RequestMapping(value="/edit.ana", method={RequestMethod.GET})
-							public String edit(HttpServletRequest req, HttpServletResponse res) {
-								
-								
-								// 글 수정해야할 글번호 가져오기
-								String idx = req.getParameter("idx");
-								
-								// 글 수정해야할 글전체 내용 가져오기
-								BSBboardVO boardvo = service.getViewWithNoAddCount(idx); 
-								// 조회수(readCount) 증가 없이 그냥 글1개 가져오는것
-								
-								HttpSession session = req.getSession();
-								LibrarianVO loginuser = (LibrarianVO)session.getAttribute("loginLibrarian");
-								
-								System.out.println("글수정아이디"+loginuser);
-								
-								if(!loginuser.getLibid().equals(boardvo.getLibid_fk())) {
-									String msg = "다른 사용자의 글은 수정이 불가합니다.";
-									String loc = "javascript:history.back()";
-									
-									req.setAttribute("msg", msg);
-									req.setAttribute("loc", loc);
-									
-									return "msg";
-								}
-								else {
-									// 가져온 1개글을 request 영역에 저장시켜서 view 단 페이지로 넘긴다.
-									req.setAttribute("boardvo", boardvo);				
-									
-									return "board/edit.tiles1";
-									
-									
-								}
-								
-								
-								
-							}
-							
-							// ===== #71. 글수정 페이지 완료하기 =====
-							@RequestMapping(value="/editEnd.ana", method={RequestMethod.POST})
-							public String editEnd(BSBboardVO boardvo, HttpServletRequest req) {
-								
-								HashMap<String, String> paraMap = new HashMap<String, String>();
-								
-								paraMap.put("IDX", boardvo.getIdx());
-								paraMap.put("PW", boardvo.getPw());
-								paraMap.put("SUBJECT", boardvo.getSubject());
-								paraMap.put("CONTENT", boardvo.getContent());
-								
-								int result = service.edit(paraMap);
-								// 넘겨받은 값이 1이면 update 성공
-								// 넘겨받은 값이 0이면 update 실패(암호가 틀리므로)
-								System.out.println(result);
-								
-								String msg = "";
-								String loc = "";
-								
-								if(result == 0) {
-									msg = "글 수정 실패";
-									loc = "javascript:history.back();";
-									
-								}
-								else {
-									msg = "글 수정 성공";
-									loc = req.getContextPath()+"/BSBview.ana?idx="+boardvo.getIdx();
-									
-								}
-								
-								req.setAttribute("msg", msg);
-								req.setAttribute("loc", loc);
-								
-										
-								
-								return "msg";
-								
-							}
 							
 							
 	

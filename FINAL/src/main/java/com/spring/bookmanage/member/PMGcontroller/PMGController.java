@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.bookmanage.common.AES256;
-import com.spring.bookmanage.common.MyUtil;
 import com.spring.bookmanage.member.PMGmodel.PMGMemberVO;
 import com.spring.bookmanage.member.PMGservice.PMGService;
 
@@ -33,9 +32,6 @@ public class PMGController {
 	public String member(PMGMemberVO pmgMemberVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		String idx = request.getParameter("idx");
-		
-		String gobackURL = (String)request.getSession().getAttribute("goBackURL");		
-		request.setAttribute("gobackURL", gobackURL);
 		
 		pmgMemberVO = service.findOneMemberByIdx(idx);
 		try {
@@ -74,7 +70,7 @@ public class PMGController {
 		///////////////////////////////////////////////
 
 		request.setAttribute("pmgMemberVO", pmgMemberVO);
-		
+
 		return "member/memberDetail.tiles1";
 	}// end of member
 	
