@@ -22,6 +22,7 @@ public class ChartKGBController {
 	
 	
 	@RequestMapping(value="/kgbChartYear.ana", method= {RequestMethod.GET})
+	@ResponseBody
 	public HashMap<String, Integer> kgbChartYear(HttpServletRequest request, HttpServletResponse response) {
 		
 		int cnt = service.findAllreturnTerm();

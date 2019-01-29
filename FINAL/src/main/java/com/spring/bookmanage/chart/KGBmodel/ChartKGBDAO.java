@@ -26,7 +26,7 @@ public class ChartKGBDAO implements ChartKGBInterDAO {
 			
 			result = sqlsession.selectOne("kgb.findAllreturnTerm", count);
 			
-			if(result > 0)
+			if(result == 0)
 				break;
 			
 			count++;
