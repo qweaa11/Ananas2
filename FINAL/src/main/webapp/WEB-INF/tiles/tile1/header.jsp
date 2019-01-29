@@ -47,7 +47,7 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
 						<c:if test="${sessionScope.loginLibrarian != null }">
-						<li>${sessionScope.loginLibrarian.libid }(${sessionScope.oginLibrarian.name })</li>
+						<li>${sessionScope.loginLibrarian.libid }(${sessionScope.loginLibrarian.name })</li>
 						</c:if>
 						<c:if test="${sessionScope.loginAdmin != null }">
 							<li>${sessionScope.loginAdmin.adminid }(${sessionScope.loginAdmin.name })</li>
