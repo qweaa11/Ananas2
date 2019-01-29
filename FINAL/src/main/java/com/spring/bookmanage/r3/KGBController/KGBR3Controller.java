@@ -30,10 +30,10 @@ public class KGBR3Controller {
 	public String r3Main(HttpServletRequest request, HttpServletResponse response) {
 		
 		String rentalBookid = request.getParameter("rentalBookid");
-		String returnBookid = request.getParameter("returnBookid");
+		String reserveBookid = request.getParameter("reserveBookid");
 		
 		request.setAttribute("rentalBookid", rentalBookid);
-		request.setAttribute("returnBookid", returnBookid);
+		request.setAttribute("reserveBookid", reserveBookid);
 		
 		return "r3/r3Main.tiles1";
 		
