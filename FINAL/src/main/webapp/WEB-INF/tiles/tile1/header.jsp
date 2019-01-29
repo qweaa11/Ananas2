@@ -56,7 +56,7 @@
 						</c:if>
 
 						<c:if test="${sessionScope.loginAdmin != null}">
-							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginAdmin.adminid }(${sessionScope.loginAdmin.name})[관리자]</li>
+							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginAdmin.adminid }[관리자]</li>
 						</c:if>
 						
 						<li><a href="schedulerRun.ana">스케줄러실행<i class="glyphicon glyphicon-hourglass"></i></a></li>
