@@ -14,6 +14,17 @@ public class ChartKGBService implements ChartKGBInterService {
 	@Autowired
 	private ChartKGBInterDAO dao;
 
+	
+	@Override
+	public int findAllreturnTerm() {
+		
+		int cnt = dao.findAllreturnTerm();
+		
+		return cnt;
+		
+	}// end of findAllreturnTerm()------------------------------
+	
+	
 	@Override
 	public List<HashMap<String, Object>> findAllReturnGenreChart(String currentyear) {
 		
@@ -21,5 +32,7 @@ public class ChartKGBService implements ChartKGBInterService {
 		
 		return genreChart;
 	}// end of findAllReturnGenreChart()----------------------------------------
+
+	
 	
 }

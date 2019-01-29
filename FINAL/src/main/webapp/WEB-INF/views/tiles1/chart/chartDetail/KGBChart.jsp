@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-
 <link rel="stylesheet" type="text/css" href="resources/css/kgbChartStyle.css"/>
 
 
@@ -12,6 +8,22 @@
 <script type="text/javascript">
 
 	$(document).ready(function () {
+		
+		/* $.ajax({
+			
+			url:"kgbChartYear.ana",
+			type:"GET",
+			data:data_form,
+			dataType:"json",
+			success:function(json) {
+				console.log(json.CNT);
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$("#loading1").hide();
+			}
+			
+		});// end of $.ajax()------------------------- */
 		
 		$(".btn-select").each(function (e) {
 	        var value = $(this).find("ul li.selected").html();
@@ -98,7 +110,7 @@
 							
 							var percent = Number(chart.PERCENT);
 							
-							console.log(percent);
+						//	console.log(percent);
 							
 							switch (chart.GCODE) {
 							case "RM":
@@ -158,9 +170,9 @@
 					
 				});// end of each 외부--------------------------
 
-				for(var i=0; i<11; i++) {
+				/* for(var i=0; i<11; i++) {
 					console.log(chartDater[i]);
-				}
+				} */
 				
 		 		if(json.length > 0){
 					Highcharts.chart('genre', {

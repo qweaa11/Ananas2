@@ -237,6 +237,16 @@
 	<!-- /////////////////////////////////// 차트 //////////////////////////////////////////////// -->
 	
 	
+	<select id="findAllreturnTerm" parameterType="int" resultType="int">
+	
+		select count(*)
+		from returned 
+		where rentaldate <![CDATA[>=]]> func_startyearcal(#{count})
+		and rentaldate <![CDATA[<]]> func_startyearcal(to_number(#{count})-1)
+	
+	</select>
+	
+	
 	<resultMap type="HashMap" id="genreChartMap">
 		<result column="gcode" property="GCODE" javaType="String"/>
 		<result column="rentalmonth" property="RENTALMONTH" javaType="String"/>
