@@ -157,7 +157,7 @@ public class KKHBookService implements InterKKHBookService{
 	}
 	@Override
 	public KKHBookVO findBookInfoSample(String bookid) {
-		KKHBookVO bookInfoSample= bookdao.findBookInfoSample(bookid);
+		KKHBookVO bookInfoSample= bookdao.findBookInfoSample(bookid); 
 		
 		return bookInfoSample;
 	}
@@ -171,6 +171,21 @@ public class KKHBookService implements InterKKHBookService{
 	public int findStartBookNum(String bookid) {
 		int startBookNum = bookdao.findStartBookNum(bookid);
 		return startBookNum;
+	}
+	@Override
+	public List<KKHBookVO> findDeleteBook(String bookid) {
+		List<KKHBookVO> deleteBookList = bookdao.findDeleteBook(bookid);
+		return deleteBookList;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int insertAndDeleteBookList(List<KKHBookVO> deleteBookList,String bookid,String cleanerid) {
+		int n1 = bookdao.insertDelete_BookList(deleteBookList,cleanerid);
+		int n2 = bookdao.deleteBookAndBookDetail(bookid);
+		if(n1 == n2 ) return 1;
+		else return 0;
+		
+		
 	}
 	
 

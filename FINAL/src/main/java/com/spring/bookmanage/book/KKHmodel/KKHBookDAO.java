@@ -6,6 +6,9 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Repository
@@ -191,10 +194,35 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		for(int i=0; i<count; i++) {
 			bookInfoSample.setBookid(parameterMap.get("BOOKID")+"-"+(Integer.parseInt(parameterMap.get("STARTBOOKNUM"))+i ));
 			System.out.println("addBookid:"+bookInfoSample.getBookid());
-			n1 +=sqlsession.insert("KKH.insertAdditionalBookInfo", bookInfoSample);
+			n1 +=sqlsession.insert("KKH.insertAdditionalBookInfo", bookInfoSample); 
 			n2 +=sqlsession.insert("KKH.insertAdditionalBookDetailInfo", bookInfoSample);
 		}
 		if(n1-n2 == 0) return 1;
+		else return 0;
+	}
+	@Override
+	public List<KKHBookVO> findDeleteBook(String bookid) {
+		List<KKHBookVO> deleteBookList = sqlsession.selectList("KKH.deleteBookList", bookid);
+		return deleteBookList;
+	}
+	
+	@Override
+	public int insertDelete_BookList(List<KKHBookVO> deleteBookList,String cleanerid) {
+		int n = 0;
+		int delid = sqlsession.selectOne("KKH.selectDelid");
+		for(KKHBookVO bookvo : deleteBookList) {
+			bookvo.setDelid(delid);
+			bookvo.setCleanerid(cleanerid);
+			n += sqlsession.insert("KKH.insertDelete_Book", bookvo);
+		}
+		
+		return n;
+	}
+	@Override
+	public int deleteBookAndBookDetail(String bookid) {
+		int n2 = sqlsession.delete("KKH.deleteBook_Detail",bookid);
+		int n1 = sqlsession.delete("KKH.deleteBook", bookid);
+		if(n1 == n2) return n1;
 		else return 0;
 	}
 	
