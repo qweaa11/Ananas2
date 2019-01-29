@@ -21,6 +21,7 @@
 	
 	function search() {
 		var searchFrm = document.searchFrm;
+		var searchWord = $("#searchWord").val();
 		searchFrm.method = "GET";
 		searchFrm.action = "deleteLog.ana";
 		searchFrm.submit();
@@ -110,7 +111,10 @@
 
 							<c:forEach var="deleteBookVO" items="${deleteBookList}">
 						<tr class="tr-row" style="cursor: pointer;">
-							<td><input type="checkbox" class="check" name="check" /></td>
+							<td>
+								<input type="checkbox" class="check" name="check" />
+								<input type="text" class="delid" name="delid" value="${deleteBookVO.delid}"/>
+							</td>
 							<td class="td">${deleteBookVO.rno}</td>
 							<td class="td">${deleteBookVO.bookid}</td>
 							<td class="td">${deleteBookVO.title}</td>

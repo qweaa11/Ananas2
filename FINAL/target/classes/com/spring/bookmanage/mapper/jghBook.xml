@@ -8,11 +8,12 @@
 
 	<!-- 검색조건에 따른 삭제도서 목록 조회 -->
 	<select id="findAllDeleteBookBySearchOption" parameterType="HashMap" resultType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
-		select rownum as rno, bookid, title, author, pubname, agecode, count, deldate, cleanerid
+		select rownum as rno, bookid, title, author, pubname, agecode, count, delid, deldate, cleanerid
 		from
 			(
 			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
-				, title, author, pubname, agecode, count, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
+				, title, author, pubname, agecode, count, delid
+				, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
 			from delete_book D join publisher P
 			on D.pubcode = P.pubcode
 			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
@@ -26,11 +27,12 @@
 	
 	<!-- 검색조건없는 삭제도서 목록 조회(도서삭제 목록 전체조회) -->
 	<select id="findAllDeleteBook" resultType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
-		select rownum as rno, bookid, title, author, pubname, agecode, count, deldate, cleanerid
+		select rownum as rno, bookid, title, author, pubname, agecode, count, delid, deldate, cleanerid
 		from
 			(
 			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
-				, title, author, pubname, agecode, count, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
+				, title, author, pubname, agecode, count, delid
+				, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
 			from delete_book D join publisher P
 			on D.pubcode = P.pubcode
 			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
