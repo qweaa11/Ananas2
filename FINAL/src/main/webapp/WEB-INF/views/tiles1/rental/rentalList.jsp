@@ -43,6 +43,7 @@ th td {text-align: center;}
 			var bookidArr = new Array();
 			var memberidArr = new Array();
 			var rentaldateArr = new Array();
+			var deadlineArr = new Array();
 			var delaydateArr = new Array();
 			 
 			var rentalInfo = $("input[name=rentalInfo]:checked");
@@ -60,12 +61,17 @@ th td {text-align: center;}
 				var bookid = td.eq(2).text();
 				var memberid = td.eq(6).text();
 				var rentaldate = td.eq(8).text();
+				var deadline = td.eq(9).text();
 				var delaydate = td.eq(10).text();
+				delaydate = delaydate.substring(0,2);
+				
+				console.log(delaydate);
 				
 				idxArr.push(idx);
 				bookidArr.push(bookid);
 				memberidArr.push(memberid);
 				rentaldateArr.push(rentaldate);
+				deadlineArr.push(deadline);
 				delaydateArr.push(delaydate);
 				
 				if(idx != null && idx != "") {
@@ -75,6 +81,7 @@ th td {text-align: center;}
 					frm.bookid.value = bookidArr;
 					frm.memberid.value = memberidArr;
 					frm.rentaldate.value = rentaldateArr;
+					frm.deadline.value = deadlineArr;
 					frm.delaydate.value = delaydateArr;
 					frm.action = "returned.ana";
 					frm.method = "POST";
@@ -328,6 +335,7 @@ th td {text-align: center;}
 	<input type="hidden" name="bookid" value="" />
 	<input type="hidden" name="memberid" value="" />
 	<input type="hidden" name="rentaldate" value="" />
+	<input type="hidden" name="deadline" value="" />
 	<input type="hidden" name="delaydate" value="" />
 </form>
 

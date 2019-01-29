@@ -34,6 +34,8 @@ public interface InterYSWDAO {
 	// 사서 정보 삭제(Real Delete)
 	int deleteLibrarian(String lIBRARIANIDX);
 
+
+
 	
 	
 
