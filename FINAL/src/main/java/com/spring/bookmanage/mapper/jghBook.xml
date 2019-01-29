@@ -12,8 +12,8 @@
 		from
 			(
 			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
-				, title, author, pubname, agecode, count, deldate, cleanerid
-			from delete_book D join publisher P 
+				, title, author, pubname, agecode, count, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
+			from delete_book D join publisher P
 			on D.pubcode = P.pubcode
 			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
 			        from delete_book group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
@@ -30,7 +30,7 @@
 		from
 			(
 			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
-				, title, author, pubname, agecode, count, deldate, cleanerid
+				, title, author, pubname, agecode, count, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
 			from delete_book D join publisher P
 			on D.pubcode = P.pubcode
 			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
