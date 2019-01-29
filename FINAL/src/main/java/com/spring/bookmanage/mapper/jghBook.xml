@@ -8,27 +8,37 @@
 
 	<!-- 검색조건에 따른 삭제도서 목록 조회 -->
 	<select id="findAllDeleteBookBySearchOption" parameterType="HashMap" resultType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
-		select distinct rownum as rno, substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
-			, title, author, pubname, agecode, isbn, count, deldate, cleanerid
-		from delete_book D join publisher P 
-		on D.pubcode = P.pubcode
-		join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
-		        from delete_book group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
-		      ) V
-		on substr(D.bookid, 1, instr(D.bookid,'-',1,2)-1 ) = V.bookid
-		where ${colname} like '%'||#{searchWord}||'%'
+		select rownum as rno, bookid, title, author, pubname, agecode, count, deldate, cleanerid
+		from
+			(
+			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
+				, title, author, pubname, agecode, count, deldate, cleanerid
+			from delete_book D join publisher P 
+			on D.pubcode = P.pubcode
+			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
+			        from delete_book group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
+			      ) V
+			on substr(D.bookid, 1, instr(D.bookid,'-',1,2)-1 ) = V.bookid
+			where ${colname} like '%'||#{searchWord}||'%'
+			) T
+		order by rno asc
 	</select>
 	
 	<!-- 검색조건없는 삭제도서 목록 조회(도서삭제 목록 전체조회) -->
 	<select id="findAllDeleteBook" resultType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
-		select distinct rownum as rno, substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
-			, title, author, pubname, agecode, isbn, count, deldate, cleanerid
-		from delete_book D join publisher P
-		on D.pubcode = P.pubcode
-		join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
-		        from delete_book group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
-		     ) V
-		on substr(D.bookid, 1, instr(D.bookid,'-',1,2)-1 ) = V.bookid
+		select rownum as rno, bookid, title, author, pubname, agecode, count, deldate, cleanerid
+		from
+			(
+			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
+				, title, author, pubname, agecode, count, deldate, cleanerid
+			from delete_book D join publisher P
+			on D.pubcode = P.pubcode
+			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
+			        from delete_book group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
+			     ) V
+			on substr(D.bookid, 1, instr(D.bookid,'-',1,2)-1 ) = V.bookid
+			) T
+		order by rno asc
 	</select>
 
 </mapper>
