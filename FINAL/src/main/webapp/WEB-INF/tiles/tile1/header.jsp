@@ -45,18 +45,11 @@
 				</div>  
 				
 				<div class="navbar-collapse collapse">
-<<<<<<< HEAD
 					<ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
 
-						<c:if test="${sessionScope.loginLibrarian != null}">
-							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginLibrarian.libid }(${sessionScope.loginLibrarian.name}) 
-=======
-					<ul class="nav navbar-nav navbar-right" style="margin-right: 20px; ">   
 						<c:if test="${sessionScope.loginLibrarian != null }">
-						<li>${sessionScope.loginLibrarian.libid }(${sessionScope.loginLibrarian.name })</li>
 							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginLibrarian.libid }(${sessionScope.loginLibrarian.name }) 
-							<c:if test="${sessionScope.loginLibrarian.status}">[]</c:if></li>
->>>>>>> branch 'master' of https://github.com/qweaa11/Ananas2.git
+
 								<c:if test="${sessionScope.loginLibrarian.status == 0}">[사서]</c:if>
 								<c:if test="${sessionScope.loginLibrarian.status == 1}">[도서관장]</c:if>
 							</li>
