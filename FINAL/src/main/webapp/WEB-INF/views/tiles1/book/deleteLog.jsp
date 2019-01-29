@@ -1,20 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- @nine9ash Sign out
-0
-0 0 qweaa11/Ananas2
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
-Ananas2/FINAL/src/main/webapp/WEB-INF/views/tiles1/book/deleteLog.jsp
-8d13acc  23 hours ago
- user1 deleteLog.jsp update(button, view)
-      
-139 lines (116 sloc)  4.75 KB
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
