@@ -10,7 +10,7 @@ public class KKHBookVO {
 	private int idx;		// book 테이블의 index 값
 	private String title;	// book 테이블의 도서명
 	private String author;	// book 테이블의 저자
-	private int status;		// book 테이블의 도서 상태값
+	private int status;		// book 테이블의 도서 상태값 
 	private int agecode;	// book 테이블의 도서연령
 	private int count; 		// 해당 도서번호를 가진 같은 책의 도서권수
 	private String gcode_fk;
@@ -39,6 +39,8 @@ public class KKHBookVO {
 	private String fileName;     // WAS(톰캣)에 저장될 파일명(20161121324325454354353333432.png)
 	private MultipartFile editImage;
  	private String fileSize;     // 파일크기
+ 	private int delid;			//삭제테이블에 들어갈 일련번호
+ 	private String cleanerid;
  	
 	
 	public KKHBookVO() {}
@@ -70,6 +72,24 @@ public class KKHBookVO {
 	}
 	
 	
+	
+
+	public String getCleanerid() {
+		return cleanerid;
+	}
+
+	public void setCleanerid(String cleanerid) {
+		this.cleanerid = cleanerid;
+	}
+
+	public int getDelid() {
+		return delid;
+	}
+
+	public void setDelid(int delid) {
+		this.delid = delid;
+	}
+
 	public String getFileName() {
 		return fileName;
 	}

@@ -218,6 +218,31 @@ th, td {
 		});
 		
 		
+		$(".rental").click(function(){
+			if(rentalFlag == false){
+				alert("대여가 불가능한 책입니다.");
+				return;
+			}
+			var bookid = $(this).val();
+			var frm = document.rentalBookForm; 
+			frm.rentalBookid.value = bookid;  
+			frm.action = "r3.ana";
+			frm.method = "GET";
+			frm.submit();
+		});
+		
+		$(".reserve").click(function(){
+			if(reserveFlag == false){
+				alert("예약이 불가능한 책입니다.");
+				return;
+			}
+			var bookid = $(this).val();
+			var frm = document.reservBookForm;
+			frm.reservBookid.value = bookid;
+			frm.action = "r3.ana";
+			frm.method = "GET";
+			frm.submit();
+		});
 		
 		
 		 var fcode_fk = "${bookDetailList.get(0).fcode_fk}";
@@ -328,9 +353,51 @@ function openAddForm(){
 			frm.method = "POST";
 			frm.submit();
 		}
-	}else{
+	}else if(reg.test(count) == false){
 		alert("숫자만 입력 가능합니다.");
 		return;
+	}
+}
+
+function deleteAllBook(bookid){
+	var flag1  = false;
+	<c:forEach var="book" items="${bookDetailList}">
+		if(${book.status != 0}){
+			flag1 = true;
+		}
+	</c:forEach>
+	if(flag1 == true) {
+		alert("모든 책이 반납된 상태(기본)일때만 삭제가 가능합니다.");
+		return;
+	}
+	
+	var approval = false;
+	var flag = confirm("삭제된 도서정보는 삭제목록에 저장됩니다. 정말로 삭제하시겠습니까?");
+	if(flag == true){
+		var id = prompt("관리자 아이디를 입력해주세요.");
+		if(${sessionScope.loginLibrarian != null}){
+			if(id == "${sessionScope.loginLibrarian.libid}"){
+				approval = true;
+			}
+		}else if(${sessionScope.loginAdmin != null}){
+			if(id == "${sessionScope.loginAdmin.adminid}"){
+				approval = true;
+			}
+		}
+		
+		if(approval == true){
+			
+			var frm  = document.deleteForm;
+			frm.bookid.value = bookid;
+			frm.action = "deleteAllBook.ana";
+			frm.method = "POST";
+			frm.submit();
+			
+		}else{
+			alert("현재 로그인한 아이디를 입력해 주세요.")
+			return;
+		}
+		
 	}
 }
 </script>
@@ -392,7 +459,7 @@ function openAddForm(){
 								<button type="button" style="font-size:8pt;" class="btn btn-primary open-button" onClick="openAddForm();">추가</button>
 								<button type="button" style="font-size:8pt;" class="btn btn-default open-button" onClick="openAllEditForm();">수정(공용)</button>
 								
-								<input type="button" style="font-size:8pt;" class="btn btn-danger" value="삭제(전체)"/>
+								<button type="button" style="font-size:8pt;" class="btn btn-danger" onClick="deleteAllBook('${bookid}')">삭제(전체)</button>
 							</td>
 						</tr>
 					</table>
@@ -413,7 +480,7 @@ function openAddForm(){
 				<li><a data-toggle="tab" href="#reservation">예약 현황</a></li>
 			</ul>
 			<div class="tab-content ">
-				<div id="Allbook" class="tab-pane fade in active">
+				<div id="Allbook" class="tab-pane fade in active" style="overflow-y:scroll; max-height:420px;">       
 					
 					<table class="table table-striped bookstatus table-hover"
 						style="border: 1px solid #ddd;" id="section1">
@@ -469,7 +536,7 @@ function openAddForm(){
 						</tbody>
 					</table>
 				</div>
-				<div id="reservation" class="tab-pane fade">
+				<div id="reservation" class="tab-pane fade" style="overflow-y:scroll; max-height:420px;">
 					<table class="table table-striped bookstatus table-hover"
 						style="border: 1px solid #ddd;" id="section1">   
 						<thead>
@@ -516,7 +583,7 @@ function openAddForm(){
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-12 col-sm-12" style="margin-left:15px;">
+		<div class="col-lg-12 col-sm-12" style="margin-left:15px; margin-top:15px;">
 			<div class="col-lg-10">
 			<a class="btnToggle" id="toggle2" href="#btn2" data-toggle="tooltip" data-placemnet="top" title="대여중인 책만 가능합니다.">
 				<button type="button" id="btn2" class="btn btn-primary" value="">연장</button>
@@ -690,6 +757,13 @@ function openAddForm(){
 									<input type="hidden" name="bookid"/>
 									<input type="hidden" name="count"/>
 								</form>
+								
+								<form name="rentalBookForm">
+									<input type="hidden" name="rentalBookid"/>
+								</form>
+								<from name="reservBookForm">
+									<input type="hidden" name="reservBookid"/>
+								</from>
 <script>
 function editAllBookInfo(){
 	var flag  = false;
