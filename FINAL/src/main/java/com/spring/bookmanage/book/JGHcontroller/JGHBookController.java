@@ -23,13 +23,6 @@ public class JGHBookController {
 
 	@RequestMapping(value = "deleteLog.ana", method = {RequestMethod.GET})
 	public String deleteLog(HttpServletRequest request, HttpServletResponse response) {
-		HttpSession session = request.getSession();
-		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
-		HashMap<String,String> libcode = new HashMap<String,String>();
-		if(librarian != null) {
-			libcode.put("LIBCODE", librarian.getLibcode_fk());
-		}// end of if
-
 		List<DeleteBookVO> deleteBookList = null;
 
 		String colname = request.getParameter("colname");
