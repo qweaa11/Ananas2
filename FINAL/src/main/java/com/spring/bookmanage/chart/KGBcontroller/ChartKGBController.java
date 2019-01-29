@@ -20,6 +20,21 @@ public class ChartKGBController {
 	@Autowired
 	private ChartKGBInterService service;
 	
+	
+	@RequestMapping(value="/kgbChartYear.ana", method= {RequestMethod.GET})
+	public HashMap<String, Integer> kgbChartYear(HttpServletRequest request, HttpServletResponse response) {
+		
+		int cnt = service.findAllreturnTerm();
+		
+		HashMap<String, Integer> json = new HashMap<String, Integer>();
+		
+		json.put("CNT", cnt);
+		
+		return json;
+		
+	}// end of kgbChartYear()--------------------------------------
+	
+	
 	@RequestMapping(value="/genre.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, Object>> genre(HttpServletRequest request, HttpServletResponse response) {
