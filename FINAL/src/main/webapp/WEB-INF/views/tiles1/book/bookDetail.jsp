@@ -157,7 +157,7 @@ th, td {
 			if(extendFlag == false)	{
 				$("input.bookChk:checkbox:checked").each(function(){
 					
-				}
+				});
 			}
 		});
 		
@@ -380,11 +380,11 @@ function deleteAllBook(bookid){
 	var flag = confirm("삭제된 도서정보는 삭제목록에 저장됩니다. 정말로 삭제하시겠습니까?");
 	if(flag == true){
 		var id = prompt("관리자 아이디를 입력해주세요.");
-		if(${sessionScope.loginLibrarian != null}){
+		if(${sessionScope.loginLibrarian != null}) {
 			if(id == "${sessionScope.loginLibrarian.libid}"){
 				approval = true;
 			}
-		}else if(${sessionScope.loginAdmin != null}){
+		} else if(${sessionScope.loginAdmin != null}) {
 			if(id == "${sessionScope.loginAdmin.adminid}"){
 				approval = true;
 			}
