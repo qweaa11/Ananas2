@@ -53,4 +53,6 @@ public interface InterKKHBookService {
 
 	int insertAndDeleteBookList(List<KKHBookVO> deleteBookList,String bookid,String cleanerid);
 
+	String[] updateDeadline(String[] extendBookArr);
+
 }

@@ -1,6 +1,7 @@
 package com.spring.bookmanage.book.KKHservice;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -185,7 +186,20 @@ public class KKHBookService implements InterKKHBookService{
 		if(n1 == n2 ) return 1;
 		else return 0;
 		
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public String[] updateDeadline(String[] extendBookArr) {
+		String[] extendSuccessBook = new String[extendBookArr.length];
+		for(int i=0; i<extendBookArr.length;i++) {
+			int n = bookdao.updateDeadline(extendBookArr[i]);
+			if(n == 1) {
+				extendSuccessBook[i] = extendBookArr[i];
+			}
+				
+		}
 		
+		return extendSuccessBook;
 	}
 	
 

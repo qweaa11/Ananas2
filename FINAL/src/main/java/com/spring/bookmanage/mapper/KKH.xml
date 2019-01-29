@@ -344,4 +344,14 @@
 	<delete id="deleteBook_Detail" parameterType="String">
 		delete from  book_detail where bookid like '%'||#{bookid}||'%'
 	</delete>
+	
+	<update id="updateDeadline" parameterType="String">
+		update rental set deadline = deadline+7,renew = renew+1
+        where bookid_fk = #{extendBookid} 
+            and renew != 3
+            and  (select count(*)
+            from reservation 
+            where bookid_fk = #{extendBookid}) = 0
+	</update>
+	
 </mapper>

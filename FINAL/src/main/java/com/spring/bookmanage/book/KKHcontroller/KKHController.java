@@ -528,4 +528,36 @@ public class KKHController {
 		
 		return "msg";
 	}
+	
+	
+	@RequestMapping(value="/extendBookList.ana",method = {RequestMethod.POST})
+	public String extendBookList(HttpServletRequest request, HttpServletResponse response) {
+		String extendBookid = request.getParameter("extendBookid");
+		String[] extendBookArr = extendBookid.split(",");
+		System.out.println(extendBookArr[0]);
+		
+		String[] extendSuccessBook = service.updateDeadline(extendBookArr);
+		if(extendSuccessBook.length < 1) { 
+			String msg = "연장 실패";
+			String loc = "javascript:history.back()";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+			
+		}else {
+			String msg = "";
+			for(int i=0; i<extendSuccessBook.length;i++) {
+				System.out.println(extendSuccessBook[i]);
+				if(!extendSuccessBook[i].isEmpty())	msg += extendSuccessBook[i]+",";
+			}
+			msg = msg.substring(0, msg.length()-1)+" 도서 연장 성공!!";
+			String loc = "/bookmanage/bookDetail.ana?bookid="+extendBookArr[0].substring(0, extendBookArr[0].indexOf("-", 16));
+			System.out.println(extendBookArr[0].substring(0, extendBookArr[0].indexOf("-", 16)));
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		}
+		return "msg";
+	}
+
 }

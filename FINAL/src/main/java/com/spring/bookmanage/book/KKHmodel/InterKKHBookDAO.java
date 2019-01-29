@@ -65,6 +65,8 @@ public interface InterKKHBookDAO {
 
 	int deleteBookAndBookDetail(String bookid);
 
+	int updateDeadline(String extendBookid);
+
 
 
 	
