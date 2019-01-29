@@ -1,8 +1,5 @@
 package com.spring.bookmanage.chart.JGHcontroller;
 
-import java.util.HashMap;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,10 +17,6 @@ public class JGHChartController {
 
 	@RequestMapping(value = "", method = {RequestMethod.GET})
 	public String chart(HttpServletRequest request, HttpServletResponse response) {
-
-		List<HashMap<String, String>> bestListByLibrary = null;
-
-		HashMap<String, String> 
 
 		return "";
 	}// end of chart

@@ -52,8 +52,8 @@
 					</div>
 					
 					<div class="process-step">
-						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu2">
-							<i class="fa fa-file-text-o fa-3x"></i>
+						<button type="button" class="btn btn-warning btn-circle" data-toggle="tab" href="#menu2">
+							<span style="font-size: 20pt;">뭐함</span>
 						</button>
 					</div>
 					
@@ -87,7 +87,7 @@
 				</div>
 				
 				<div id="menu2" class="tab-pane fade">
-					<h3>2번탭</h3>
+					<jsp:include page="./chartDetail/JGHChart.jsp"></jsp:include>
 				</div>
 				
 				<div id="menu3" class="tab-pane fade">
