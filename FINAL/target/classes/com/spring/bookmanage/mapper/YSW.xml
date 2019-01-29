@@ -140,8 +140,8 @@
 	<!-- 책 반납 -->
 	<insert id="returnBook" parameterType="HashMap">
 	
-		insert into returned(idx, memberid_fk, bookid_fk, returndate, rentaldate)
-		values(returned_seq.nextval, #{memberidList}, #{bookList}, default, #{rentaldateList})
+		insert into returned(idx, memberid_fk, bookid_fk, returndate, rentaldate, deadline)
+		values(returned_seq.nextval, #{memberidList}, #{bookList}, default, #{rentaldateList}, #{deadlineList})
 
 	</insert>
 	
@@ -293,5 +293,72 @@
 		where rno between #{STARTNO} and #{ENDNO}
 	
 	</select>
-
+	
+	
+	<resultMap type="HashMap" id="categorytMap">
+		<!-- set 다음에 나오는 이름을 쓴다! -->
+		<result property="CCODE" column="ccode" javaType="String"/>
+		<result property="CNAME" column="cname" javaType="String"/>
+	</resultMap>
+	
+	
+	<!-- 도서 카테고리를 가져오기	 
+	<select id="findBookCategory" resultMap="categorytMap">
+	
+		select  ccode, cname
+		from category
+	
+	</select>-->
+	
+	
+	<resultMap type="HashMap" id="chartMap">
+		<!-- set 다음에 나오는 이름을 쓴다! -->
+		<result property="PERCENTAGE" column="percentage" javaType="String"/>
+		<result property="CNT" column="cnt" javaType="String"/>
+		<result property="CNAME" column="cname" javaType="String"/>
+	</resultMap>
+	
+	
+	<!-- 책 카테고리 선택시 차트 불러오기 -->
+	<select id="findBookChart" resultMap="chartMap">
+	
+		select trunc( cnt/(select count(*) from BOOK) * 100, 1)||'%' as percentage
+		      ,cnt, cname
+		    from       
+		    (      
+		    select count(*) as CNT, b.cname as cname
+		    from BOOK A JOIN  CATEGORY B
+		    on A.ccode_fk = B.ccode
+		    group by cname
+		    )V
+	
+	</select>
+	
+	
+	<resultMap type="HashMap" id="detailChartMap">
+		<!-- set 다음에 나오는 이름을 쓴다! -->
+		<result property="PERCENTAGE" column="PERCENTAGE" javaType="String"/>
+		<result property="CNT" column="CNT" javaType="String"/>
+		<result property="GNAME" column="GNAME" javaType="String"/>
+	</resultMap>
+	
+	
+	<select id="findDetailBookChart"  parameterType="String" resultMap="detailChartMap">
+	
+		select trunc(CNT/(select count(*) from book where ccode_fk = (select ccode from CATEGORY where cname=#{CNAME}))*100, 1) as PERCENTAGE, CNT, GNAME
+		from
+		(
+		    select count(*) as CNT, gname
+		    from book A JOIN GENRE B
+		    on A.gcode_fk = B.gcode
+		    left JOIN CATEGORY C
+		    on A.ccode_fk = C.ccode
+		    where ccode_fk in (select ccode from CATEGORY where cname = #{CNAME})
+		    group by gname
+		)V
+	
+	</select>
+	
+	
+	
 </mapper>

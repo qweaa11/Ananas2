@@ -33,10 +33,13 @@ public class YSWRentalDAO implements InterYSWRentalDAO {
 		
 		String bookInfo = (String)paraMap.get("bookid");
 		String memberidInfo = (String)paraMap.get("memberid");
+		String deadline = (String)paraMap.get("deadline");
+		System.out.println("deadline : " + deadline);
 		String rentaldateInfo = (String)paraMap.get("rentaldate");
 		
 		String[] bookList = bookInfo.split(",");
 		String[] memberidList = memberidInfo.split(",");
+		String[] deadlineList = deadline.split(",");
 		String[] rentaldateList = rentaldateInfo.split(",");
 		
 		int size = bookList.length;
@@ -50,6 +53,7 @@ public class YSWRentalDAO implements InterYSWRentalDAO {
 			HashMap<String, Object> infoMap = new HashMap<String, Object>();
 			infoMap.put("bookList", bookList[i]);
 			infoMap.put("memberidList", memberidList[i]);
+			infoMap.put("deadlineList", deadlineList[i]);
 			infoMap.put("rentaldateList", rentaldateList[i]);
 			
 			//System.out.println("bookList : " + infoMap.get("bookList"));
