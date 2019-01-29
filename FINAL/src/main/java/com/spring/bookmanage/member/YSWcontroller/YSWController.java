@@ -89,7 +89,7 @@ public class YSWController {
 			String gender = req.getParameter("gender");
 			
 			System.out.println("setMyBirth : " + setMyBirth);// setMyBirth : 1999-10-13
-			String[] setMyBirthArr = setMyBirth.split("-"); // - 로 자른다
+			String[] setMyBirthArr = setMyBirth.split("-"); // - 로 잘랐다
 			System.out.println(setMyBirthArr[0]);// 결과물 1999 
 			
 			String birth = setMyBirthArr[0].substring(2, 4) +"/"+setMyBirthArr[1]+"/"+setMyBirthArr[2];
