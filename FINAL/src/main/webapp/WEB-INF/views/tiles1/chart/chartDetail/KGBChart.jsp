@@ -1,33 +1,58 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<style type="text/css">
-#menu1 {
-	background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* Chrome 10+, Saf5.1+ */
-	background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* FF3.6+ */
-	background: -ms-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* IE10 */
-	background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-	/* Opera 11.10+ */
-	background: linear-gradient(90deg, #16222A 10%, #3A6073 90%); /* W3C */
-	font-family: 'Raleway', sans-serif;
-}
-
-.highcharts-credits {
-	display: none;
-}
-</style>
-
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<link rel="stylesheet" type="text/css" href="resources/css/kgbChartStyle.css"/>
+
 
 
 <script type="text/javascript">
 
 	$(document).ready(function () {
+		
+		$(".btn-select").each(function (e) {
+	        var value = $(this).find("ul li.selected").html();
+	        if (value != undefined) {
+	            $(this).find(".btn-select-input").val(value);
+	            $(this).find(".btn-select-value").html(value);
+	        }
+	    });
+		
+		
+		$(document).on('click', '.btn-select', function (e) {
+		    e.preventDefault();
+		    var ul = $(this).find("ul");
+		    if ($(this).hasClass("active")) {
+		        if (ul.find("li").is(e.target)) {
+		            var target = $(e.target);
+		            target.addClass("selected").siblings().removeClass("selected");
+		            var value = target.val();
+		            var name = target.html();
+		            $(this).find(".btn-select-input").val(value);
+		            $(this).find(".btn-select-value").html(name);
+		        }
+		        ul.hide();
+		        $(this).removeClass("active");
+		    }
+		    else {
+		        $('.btn-select').not(this).each(function () {
+		            $(this).removeClass("active").find("ul").hide();
+		        });
+		        ul.slideDown(300);
+		        $(this).addClass("active");
+		    }
+		});
+
+		$(document).on('click', function (e) {
+		    var target = $(e.target).closest(".btn-select");
+		    if (!target.length) {
+		        $(".btn-select").removeClass("active").find("ul").hide();
+		    }
+		});
+		
 		
 		var data_form = {"currentyear":0};
 		
@@ -257,5 +282,34 @@
 </script> 
 
 <div>
-	<div id="genre" style="margin: 0 auto; border-radius: 5px;"></div>
+	<div class="col-xs-12">
+	
+		<div class="col-xs-2">
+			<a class="btn btn-info btn-select btn-select-light">
+				<input type="hidden" class="btn-select-input" id="termval" name="term" value="" />
+				<span class="btn-select-value">선택</span>
+				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
+				<ul id="term">
+					<li value="0">2019년</li>
+					<li value="1">2018년</li>
+					<li>Option 3</li>
+					<li>Option 4</li>
+				</ul>
+			</a>
+			 
+			<a class="btn btn-info btn-select btn-select-light">
+				<input type="hidden" class="btn-select-input" id="" name="" value="" />
+				<span class="btn-select-value">선택</span>
+				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
+				<ul>
+					<li>Option 1</li>
+					<li>Option 2</li>
+					<li>Option 3</li>
+					<li>Option 4</li>
+				</ul>
+			</a>
+		</div>
+	
+	</div>
+	<div id="genre" style="margin: 0 auto; border-radius: 5px; clear: both;"></div>
 </div>
