@@ -1,5 +1,7 @@
 package com.spring.bookmanage.book.KKHmodel;
 
+import java.sql.Date;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public class KKHBookVO {
@@ -8,7 +10,7 @@ public class KKHBookVO {
 	private int idx;		// book 테이블의 index 값
 	private String title;	// book 테이블의 도서명
 	private String author;	// book 테이블의 저자
-	private int status;		// book 테이블의 도서 상태값
+	private int status;		// book 테이블의 도서 상태값 
 	private int agecode;	// book 테이블의 도서연령
 	private int count; 		// 해당 도서번호를 가진 같은 책의 도서권수
 	private String gcode_fk;
@@ -32,12 +34,14 @@ public class KKHBookVO {
 	private String weight;	// 책 무게
 	private String totalpage;// 총 페이지수
 	private String pdate;	// 출판날짜
+	private Date pdate_date; //sql Date형식의 pdate
 	private String regdate;	// 도서 등록날짜
 	private String fileName;     // WAS(톰캣)에 저장될 파일명(20161121324325454354353333432.png)
- 	private String orgFilename;  // 진짜 파일명(강아지.png). 사용자가 파일을 업로드 하거나 파일을 다운로드 할때 사용되어지는 파일명
+	private MultipartFile editImage;
  	private String fileSize;     // 파일크기
+ 	private int delid;			//삭제테이블에 들어갈 일련번호
+ 	private String cleanerid;
  	
- 	private MultipartFile attach; 
 	
 	public KKHBookVO() {}
 	
@@ -68,6 +72,24 @@ public class KKHBookVO {
 	}
 	
 	
+	
+
+	public String getCleanerid() {
+		return cleanerid;
+	}
+
+	public void setCleanerid(String cleanerid) {
+		this.cleanerid = cleanerid;
+	}
+
+	public int getDelid() {
+		return delid;
+	}
+
+	public void setDelid(int delid) {
+		this.delid = delid;
+	}
+
 	public String getFileName() {
 		return fileName;
 	}
@@ -75,13 +97,23 @@ public class KKHBookVO {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	
+	
 
-	public String getOrgFilename() {
-		return orgFilename;
+	public Date getPdate_date() {
+		return pdate_date;
 	}
 
-	public void setOrgFilename(String orgFilename) {
-		this.orgFilename = orgFilename;
+	public void setPdate_date(Date pdate_date) {
+		this.pdate_date = pdate_date;
+	}
+
+	public MultipartFile getEditImage() {
+		return editImage;
+	}
+
+	public void setEditImage(MultipartFile editImage) {
+		this.editImage = editImage;
 	}
 
 	public String getFileSize() {
@@ -90,14 +122,6 @@ public class KKHBookVO {
 
 	public void setFileSize(String fileSize) {
 		this.fileSize = fileSize;
-	}
-
-	public MultipartFile getAttach() {
-		return attach;
-	}
-
-	public void setAttach(MultipartFile attach) {
-		this.attach = attach;
 	}
 
 	public String getIsbn() {

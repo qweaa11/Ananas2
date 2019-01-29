@@ -53,7 +53,7 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-warning btn-circle" data-toggle="tab" href="#menu2">
-							<span style="font-size: 20pt;">뭐함</span><!-- 구현 -->
+							<span style="font-size: 20pt;">뭐함</span>
 						</button>
 					</div>
 					
@@ -82,7 +82,7 @@
 			<!-- 차트 내용 -->
 			<div class="tab-content" style="border-radius: 5px; border: 1px solid black; margin-top: 30px;"> 
 			
-				<div id="menu1" class="tab-pane fade active in" style="padding: 50px;">
+				<div id="menu1" class="tab-pane fade active in" style="width: 100%; padding: 50px;">
 					<jsp:include page="./chartDetail/KGBChart.jsp"></jsp:include>
 				</div>
 				

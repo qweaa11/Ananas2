@@ -188,7 +188,7 @@ public class YSWController {
 		else {
 			
 			String msg = "회원가입 되었습니다.";
-			String loc = "loginform.ana";
+			String loc = "login.ana";
 			
 			req.setAttribute("msg", msg);
 			req.setAttribute("loc", loc);

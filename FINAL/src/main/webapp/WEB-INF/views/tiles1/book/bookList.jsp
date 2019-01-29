@@ -350,7 +350,7 @@ div.search button:hover {
 					style="padding: .2em .4em; font-size: 13pt; background-color: #2196F3; height: 29pt; color: #fff; border-radius: 3px;">
 					<option value="title">도서명</option>
 					<option value="author">저자</option>
-					<option value="pubname">출판사</option>
+					<option value="pubname">출판사</option> 
 				</select> <input id="searchWord" type="text" placeholder="Search.." name="search2">
 				<button type="button" class="search">
 					<i class="fa fa-search"></i>
@@ -364,7 +364,7 @@ div.search button:hover {
 			
 
 		</div>
-		<div class="col-lg-9 col-sm-9">       
+		<div class="col-lg-9 col-sm-9"  style="overflow-y:scroll; max-height:700px; margin-top:15px;">       
 			<table class="table table-striped" id="section1">     
 				<thead>
 					<tr>
@@ -379,12 +379,12 @@ div.search button:hover {
 						<th width="8%">권수</th> 
 					</tr>      
 				</thead>       
-				<tbody id="displayBookList">
+				<tbody id="displayBookList" >
 					
 				</tbody>
 			</table>
 		</div>
-<div class=" col-lg-3  col-sm-3">
+<div class=" col-lg-3  col-sm-3" style="">
 	<div style="font-weight:bold; font-family: 'NanumGothicBold'; border: 0px solid red; color:#0088cc; font-size: 12pt;">조회 조건 
 		<button type="button" id="btnFindBook" style="font-size:10pt;" onClick="findBookListBysidebar();">검색</button></div>
 	          

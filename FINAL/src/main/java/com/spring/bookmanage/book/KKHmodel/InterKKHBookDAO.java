@@ -35,15 +35,40 @@ public interface InterKKHBookDAO {
 	KKHBookVO findOneBook(String bookid);
 
 	String findNewBook1stNum(String newBookid);
-
+ 
 	int updateNewBookid(HashMap<String, String> parameterMap);
+	
+	List<KKHBookVO> selectAndDelBookDetail(String bookid);
 
+	
+	int updateNewBookDetail(HashMap<String, String> parameterMap);
+	
 	int updateBookDetail(HashMap<String, String> parameterMap);
 
 	int updateBookInfo(HashMap<String, String> parameterMap);
 
-	int updateNewBookDetail(HashMap<String, String> parameterMap);
+	void insertNewBookDetail(List<KKHBookVO> bookDetailList);
 
-	List<KKHBookVO> selectAndDelBookDetail(String bookid);
+	int editIndivBookInfo(HashMap<String, String> parameterMap);
+
+	int deleteIndivBook(String bookid);
+
+	KKHBookVO findBookInfoSample(String bookid);
+
+	int findStartBookNum(String bookid);
+
+	int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap);
+
+	List<KKHBookVO> findDeleteBook(String bookid);
+
+	int insertDelete_BookList(List<KKHBookVO> deleteBookList,String cleanerid);
+
+	int deleteBookAndBookDetail(String bookid);
+
+
+
+	
+
+
 
 }

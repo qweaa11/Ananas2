@@ -213,24 +213,24 @@
 	<select id="findOneBook" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		select lcode_fk, gcode_fk, fcode_fk, ccode_fk,libcode_fk,ncode_fk
 		from book
-		where bookid like '%'||#{bookid}||'-1'
+		where bookid like '%'||#{value}||'%'
 	</select>
 	
-	<select id="findNewBook1stNum" parameterType="String" resultType="String">
-		select substr(max(substr(bookid,instr(bookid,'-',1,1)+1 ) ),1,1)+1 as result
+	<select id="findNewBook1stNum" parameterType="String" resultType="int">
+		select nvl(max(to_number(substr(bookid,instr(bookid,'-',1,1)+1,length(substr(bookid,1,instr(bookid,'-',1,2) ) )-length(substr(bookid,1, instr(bookid,'-',1,1 )+1) ) ) ) )+1,1) as firstNum
 		from book
-		where bookid like #{newBookid}
+		where bookid like '%'||#{value}||'%'
 	</select>
 	
 	<select id="selectBookDetail" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		select bookid, idx, intro, image, price, weight, totalpage,pdate,regdate
 		from book_detail
-		where bookid like '%'||#{bookid}||'%'
+		where bookid like '%'||#{value}||'%'
 	</select>
 	
-	<delete id="deleteBookDetail" parameterType="String">
-		delete from book_detail where bookid like '%'||#{bookid}||'%'
-	</delete>
+	 <delete id="deleteBookDetail" parameterType="String">
+		delete from book_detail where bookid like '%'||#{value}||'%'
+	</delete> 
 	
 	<update id="updateNewBookid" parameterType="HashMap">
 		update book set libcode_fk = #{EDITLIBRARY}, ncode_fk = #{EDITNATION}, lcode_fk = #{EDITLANGUAGE}
@@ -240,10 +240,19 @@
 		where bookid like '%'||#{BOOKID}||'%'
 	</update>
 	
+	<insert id="inserNewBookDetail" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+			insert into book_detail(bookid,idx,intro,image,price,weight,totalpage,pdate,regdate)
+			values(#{bookid},to_number(#{idx}),#{intro},#{image},to_number(#{price}),#{weight},to_number(#{totalpage}),to_date(#{pdate},'yyyy-mm-dd hh24:mi:ss'),default)
+	</insert>
+	
 	<update id="updateNewBookDetail" parameterType="HashMap">
-		update book_detail set image = #{EDITIMAGE}, bookid =  #{NEWBOOKID}||substr(bookid,instr(bookid,'-',1,2)) , regdate = sysdate
-		where bookid like'%'||#{BOOKID}||'%'
+		update book_detail set 
+		<if test="EDITIMAGE!=null">
+		image = #{EDITIMAGE},
+		</if>
+		where bookid like'%'||#{NEWBOOKID}||'%'
 	</update>
+	
 	
 	<update id="updateBookInfo" parameterType="HashMap">
 		update book set title = #{EDITTITLE}, author = #{EDITAUTHOR}, agecode = #{EDITAGECODE}
@@ -255,5 +264,84 @@
 		where bookid like'%'||#{BOOKID}||'%'
 	</update>
 	
+	<update id="editIndivBookInfo" parameterType="HashMap">
+		update book_detail set  price = #{EDITPRICE}, weight=#{EDITWEIGHT}, totalpage = #{EDITTOTALPAGE}, pdate = to_date(#{EDITPDATE},'yyyy-mm-dd hh24:mi:ss')
+		where bookid  = #{BOOKID}
+	</update>
 	
+	<update id="editIndivBookISBN" parameterType="HashMap">
+		update book set isbn = #{EDITISBN}
+		where bookid = #{BOOKID}
+	</update>
+	
+	<delete id="deleteIndivBookDetail" parameterType="String">
+		delete from book_detail where bookid = #{bookid}
+		
+	</delete>
+	
+	<delete id="deleteIndivBook" parameterType="String">
+		delete from book where bookid = #{bookid}
+		
+	</delete>
+	
+	<select id="findBookSampleList" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select bookid,title,author,pubcode_fk,agecode,isbn,ncode_fk,lcode_fk,fcode_fk,ccode_fk,gcode_fk,libcode_fk
+		from book
+		where bookid like '%'||#{bookid}||'%'
+		order by to_number(substr(bookid,instr(bookid,'-',1,2))) desc
+	</select>
+	
+	<select id="findBookDetailSampleList" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select intro,image,price,weight,totalpage,pdate,regdate
+		from book_detail
+		where bookid like '%'||#{bookid}||'%'
+		order by to_number(substr(bookid,instr(bookid,'-',1,2))) desc
+	</select>
+	
+	
+	<select id="findStartBookNum" parameterType="String" resultType="int">
+		select max(to_number(substr(bookid,instr(bookid,'-',1,2)+1 )) )+1 as startBookNum
+		from book
+		where bookid like '%'||#{bookid}||'%'
+	</select>
+	
+	
+	<insert id="insertAdditionalBookInfo" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		insert into book(bookid, idx, title, author, PUBCODE_FK, STATUS, AGECODE, ISBN,
+						 NCODE_FK, LCODE_FK, FCODE_FK, CCODE_FK, GCODE_FK, LIBCODE_FK) 
+		values( #{bookid}, book_seq.nextval, #{title}, #{author}, #{pubcode_fk}, default, #{agecode}, #{isbn}, #{ncode_fk},
+				#{lcode_fk}, #{fcode_fk},  #{ccode_fk}, #{gcode_fk}, #{libcode_fk})
+	</insert>
+	
+	<insert id="insertAdditionalBookDetailInfo" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		insert into book_detail(bookid,idx,intro,image,price,weight,totalpage,pdate,regdate)
+		values(#{bookid},bookd_seq.nextval,#{intro},#{image},to_number(#{price}),#{weight},to_number(#{totalpage}),to_date(#{pdate},'yyyy-mm-dd hh24:mi:ss'),default)
+	</insert>
+	
+	<select id="deleteBookList" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		select B.bookid,title,author,pubcode_fk,status,agecode,isbn,libcode_fk, ncode_fk, lcode_fk, fcode_fk, ccode_fk, gcode_fk, intro,image,price,weight,totalpage,pdate,regdate
+		from book B join book_detail D
+		on 	B.bookid = D.bookid
+		where B.bookid like '%'||#{bookid}||'%'
+	</select>
+	
+	<select id="selectDelid" resultType="int">
+		select delid_seq.nextval
+		from dual
+	</select>
+	
+	<insert id="insertDelete_Book" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
+		insert into delete_book(idx,bookid,title,author,pubcode,status,agecode,isbn,libcode,ncode,lcode,fcode,ccode,gcode,intro,image,price,weight,totalpage,pdate,regdate,deldate,cleanerid,delid)
+		values(delbook_seq.nextval, #{bookid}, #{title}, #{author}, #{pubcode_fk}, #{status}, #{agecode}, #{isbn}
+				,#{libcode_fk}, #{ncode_fk}, #{lcode_fk}, #{fcode_fk}, #{ccode_fk}, #{gcode_fk}
+				,#{intro}, #{image}, #{price}, #{weight}, #{totalpage}, to_date(#{pdate},'yyyy-mm-dd hh24:mi:ss'), to_date(#{regdate},'yyyy-mm-dd hh24:mi:ss'), sysdate, #{cleanerid}, #{delid})
+	</insert>
+	
+	<delete id="deleteBook" parameterType="String">
+		delete from  book where bookid like '%'||#{bookid}||'%'
+	</delete>
+	
+	<delete id="deleteBook_Detail" parameterType="String">
+		delete from  book_detail where bookid like '%'||#{bookid}||'%'
+	</delete>
 </mapper>

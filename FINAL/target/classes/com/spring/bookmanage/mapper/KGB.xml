@@ -123,7 +123,7 @@
 	<!-- 대여된 목록을 가져오는 메소드 -->
 	<select id="findAllRentalByCategory" parameterType="HashMap" resultMap="rental">
 	
-		select memberid, name, title, bookid, rentaldate, to_char(deadline, 'yyyy-mm-dd') as deadline, renew
+		select memberid, name, title, bookid, to_char(rentaldate, 'yyyy-mm-dd') as rentaldate, to_char(deadline, 'yyyy-mm-dd') as deadline, renew
 			  ,case when deadline <![CDATA[<]]> sysdate 
 		       then to_date(to_char(sysdate, 'yyyy-mm-dd')) - to_date(to_char(deadline, 'yyyy-mm-dd')) 
 		       else 0 end as deadlinecut
@@ -143,7 +143,7 @@
 	<!-- 예약에 대한 대여된 도서를 가져오는 메소드 -->
 	<select id="findAllReserveRentalByCategory" parameterType="HashMap" resultMap="rental">
 	
-		select memberid, name, title, bookid, rentaldate, to_char(deadline, 'yyyy-mm-dd') as deadline, renew
+		select memberid, name, title, bookid, to_char(rentaldate, 'yyyy-mm-dd') as rentaldate, to_char(deadline, 'yyyy-mm-dd') as deadline, renew
 			  ,case when deadline <![CDATA[<]]> sysdate 
 		       then to_date(to_char(sysdate, 'yyyy-mm-dd')) - to_date(to_char(deadline, 'yyyy-mm-dd')) 
 		       else 0 end as deadlinecut
@@ -193,8 +193,8 @@
 	<!-- 대여에 있던 정보를 반납에 넣어주는 메소드  -->
 	<insert id="insertReturnByRentalInfo" parameterType="HashMap">
 	
-		insert into returned(idx, memberid_fk, bookid_fk, returndate, rentaldate)
-		values(returned_seq.nextval, #{MEMBERID}, #{BOOKID}, sysdate, (select rentaldate from rental where bookid_fk = #{BOOKID}))
+		insert into returned(idx, memberid_fk, bookid_fk, returndate, rentaldate, deadline)
+		values(returned_seq.nextval, #{MEMBERID}, #{BOOKID}, sysdate, (select rentaldate from rental where bookid_fk = #{BOOKID}), (select deadline from rental where bookid_fk = #{BOOKID}))
 	
 	</insert>
 	
@@ -230,5 +230,39 @@
 		insert into reservation(idx, bookid_fk, memberid_fk, reservedate)
 		values(reserve_seq.nextval, #{BOOKID}, #{MEMBERID}, to_date(#{RESERVEDATE}))
 	</insert>
+
+
+	
+	
+	<!-- /////////////////////////////////// 차트 //////////////////////////////////////////////// -->
+	
+	
+	<resultMap type="HashMap" id="genreChartMap">
+		<result column="gcode" property="GCODE" javaType="String"/>
+		<result column="rentalmonth" property="RENTALMONTH" javaType="String"/>
+		<result column="cnt" property="CNT" javaType="String"/>
+		<result column="percent" property="PERCENT" javaType="String"/>
+	</resultMap>
+	
+	<select id="findAllReturnGenreChart" parameterType="HashMap" resultMap="genreChartMap">
+	
+		select *
+		from
+		(
+		    select gcode, to_number(to_char(rentaldate, 'mm')) as rentalmonth , count(*) as cnt
+		         , round(count(*)/(select count(*) from returned where rentaldate <![CDATA[>=]]> func_startyearcal(#{CURRENTYEAR})
+		           and rentaldate <![CDATA[<]]> func_startyearcal(to_number(#{CURRENTYEAR})-1) and to_number(to_char(rentaldate, 'mm')) = #{RENTALMONTH} )*100, 1) as percent
+		    from returned R join book B
+		    on R.bookid_fk = B.bookid
+		    join genre G
+		    on B.gcode_fk = G.gcode
+		    where R.rentaldate <![CDATA[>=]]> func_startyearcal(0)
+		    and R.rentaldate <![CDATA[<]]> func_startyearcal(to_number(#{CURRENTYEAR})-1)
+		    group by grouping sets( (G.gcode, to_char(rentaldate, 'mm')) )
+		    order by rentalmonth, gcode
+		) V
+		where rentalmonth = #{RENTALMONTH}
+	
+	</select>
 
 </mapper>

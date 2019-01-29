@@ -12,7 +12,7 @@
 			$(".booksearch").click();
 		}
 	
-		if(${returnBookid != null}) {
+		if(${reserveBookid != null}) {
 			$("#search_rental").val("${returnBookid}");
 			$(".rentalsearch").click();
 			$(".tab2info").click();

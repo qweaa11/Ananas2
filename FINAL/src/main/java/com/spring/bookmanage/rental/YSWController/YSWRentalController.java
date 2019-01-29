@@ -43,7 +43,10 @@ public class YSWRentalController {
 		String bookid = req.getParameter("bookid");
 		String memberid = req.getParameter("memberid");
 		String rentaldate = req.getParameter("rentaldate");
+		String deadline = req.getParameter("deadline");
 		String delaydate = req.getParameter("delaydate");
+		
+		System.out.println("delaydate : " + delaydate);
 				
 /*		
   		System.out.println("idx : " + idx);
@@ -56,6 +59,7 @@ public class YSWRentalController {
 		paraMap.put("bookid", bookid);
 		paraMap.put("memberid", memberid);
 		paraMap.put("rentaldate", rentaldate);
+		paraMap.put("deadline", deadline);
 		paraMap.put("delaydate", delaydate);
 		
 		int result = service.returnAndDelete(paraMap);

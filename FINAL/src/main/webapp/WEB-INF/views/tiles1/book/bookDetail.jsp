@@ -114,7 +114,7 @@ th, td {
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		
+		console.log("${length}");
 		var rentalFlag = false;
 		var reserveFlag = false;
 		var extendFlag = false;
@@ -153,6 +153,13 @@ th, td {
 			$("a#toggle2[data-toggle='tooltip']").tooltip("hide");
 	});
 		
+		$("#btn2").click(function(){
+			if(extendFlag == false)	{
+				$("input.bookChk:checkbox:checked").each(function(){
+					
+				}
+			}
+		});
 		
 		$("#btn3").hover(function(){
 			var status = -1;
@@ -207,9 +214,7 @@ th, td {
 	});
 		
 		
-		$("#btn2").click(function(){
-			if(extendFlag == false)	console.log("click");
-		});
+		
 		
 		$("#bigField").change(function(){
 			
@@ -218,6 +223,31 @@ th, td {
 		});
 		
 		
+		$(".rental").click(function(){
+			if(rentalFlag == false){
+				alert("대여가 불가능한 책입니다.");
+				return;
+			}
+			var bookid = $(this).val();
+			var frm = document.rentalBookForm; 
+			frm.rentalBookid.value = bookid;  
+			frm.action = "r3.ana";
+			frm.method = "GET";
+			frm.submit();
+		});
+		
+		$(".reserve").click(function(){
+			if(reserveFlag == false){
+				alert("예약이 불가능한 책입니다.");
+				return;
+			}
+			var bookid = $(this).val();
+			var frm = document.reservBookForm;
+			frm.reservBookid.value = bookid;
+			frm.action = "r3.ana";
+			frm.method = "GET";
+			frm.submit();
+		});
 		
 		
 		 var fcode_fk = "${bookDetailList.get(0).fcode_fk}";
@@ -314,6 +344,67 @@ function findDetailField(fieldcode){
 	
 }
 
+function openAddForm(){
+	var reg = new RegExp('^[0-9]+$');
+	var count = prompt("추가하실 권수를 입력해주세요. 추가되는 책은 기존의 정보로 입력됩니다.", "ex) 3");
+	
+	if(reg.test(count)){
+		var flag = confirm(count+"권만큼 추가하시겠습니까?");
+		if(flag == true){
+			var frm = document.addBookForm;
+			frm.count.value = count;
+			frm.bookid.value = "${bookid}";
+			frm.action = "AddBook.ana";
+			frm.method = "POST";
+			frm.submit();
+		}
+	}else if(reg.test(count) == false){
+		alert("숫자만 입력 가능합니다.");
+		return;
+	}
+}
+
+function deleteAllBook(bookid){
+	var flag1  = false;
+	<c:forEach var="book" items="${bookDetailList}">
+		if(${book.status != 0}){
+			flag1 = true;
+		}
+	</c:forEach>
+	if(flag1 == true) {
+		alert("모든 책이 반납된 상태(기본)일때만 삭제가 가능합니다.");
+		return;
+	}
+	
+	var approval = false;
+	var flag = confirm("삭제된 도서정보는 삭제목록에 저장됩니다. 정말로 삭제하시겠습니까?");
+	if(flag == true){
+		var id = prompt("관리자 아이디를 입력해주세요.");
+		if(${sessionScope.loginLibrarian != null}){
+			if(id == "${sessionScope.loginLibrarian.libid}"){
+				approval = true;
+			}
+		}else if(${sessionScope.loginAdmin != null}){
+			if(id == "${sessionScope.loginAdmin.adminid}"){
+				approval = true;
+			}
+		}
+		
+		if(approval == true){
+			
+			var frm  = document.deleteForm;
+			frm.bookid.value = bookid;
+			frm.action = "deleteAllBook.ana";
+			frm.method = "POST";
+			frm.submit();
+			
+		}else{
+			alert("현재 로그인한 아이디를 입력해 주세요.")
+			return;
+		}
+		
+	}
+}
 </script>
 
 <!-- Page Content -->
@@ -332,8 +423,8 @@ function findDetailField(fieldcode){
 			<div class="col-lg-4 col-sm-4">
 				<div class="col-lg-4 col-sm-4">
 					<!-- Preview Image -->
-					<img class="img-responsive" style="width: auto; height:auto;"   
-						src="resources/img/loadingProgressive.gif"
+					<img  style="width: 100%; height:auto;"   
+						src="resources/img/${bookDetailList.get(0).image}"
 						alt="도서 이미지">
 					
 				</div>
@@ -370,9 +461,10 @@ function findDetailField(fieldcode){
 						</tr>
 						<tr>
 							<td colspan="2">
+								<button type="button" style="font-size:8pt;" class="btn btn-primary open-button" onClick="openAddForm();">추가</button>
 								<button type="button" style="font-size:8pt;" class="btn btn-default open-button" onClick="openAllEditForm();">수정(공용)</button>
 								
-								<input type="button" style="font-size:8pt;" class="btn btn-danger" value="삭제(전체)"/>
+								<button type="button" style="font-size:8pt;" class="btn btn-danger" onClick="deleteAllBook('${bookid}')">삭제(전체)</button>
 							</td>
 						</tr>
 					</table>
@@ -393,7 +485,7 @@ function findDetailField(fieldcode){
 				<li><a data-toggle="tab" href="#reservation">예약 현황</a></li>
 			</ul>
 			<div class="tab-content ">
-				<div id="Allbook" class="tab-pane fade in active">
+				<div id="Allbook" class="tab-pane fade in active" style="overflow-y:scroll; max-height:420px;">       
 					
 					<table class="table table-striped bookstatus table-hover"
 						style="border: 1px solid #ddd;" id="section1">
@@ -439,7 +531,9 @@ function findDetailField(fieldcode){
 									</a>
 								</c:if>
 								</td>
-								<td><button type="button" style="font-size:9pt;" class="btn btn-default " onClick="openDetailEditForm('${book.bookid}','${book.isbn }','${book.price }','${book.weight }','${book.totalpage }','${book.pdate }','${book.libcode_fk }','${book.status }')">개별 수정</button>&nbsp;|&nbsp;<button style="font-size:9pt;" type="button" class="btn btn-danger">개별 삭제</button></td>
+								<td><button type="button" style="font-size:9pt;" class="btn btn-default " onClick="openDetailEditForm('${book.bookid}','${book.isbn }','${book.price }','${book.weight }','${book.totalpage }','${book.pdate }','${book.libcode_fk }','${book.status }')">개별 수정</button>
+								&nbsp;|&nbsp;
+								<button style="font-size:9pt;" type="button" class="btn btn-danger" onClick="deleteIndivBook('${book.bookid}','${book.status }')">개별 삭제</button></td>
 							</tr>       
 						</c:forEach>
 						</c:if>	
@@ -447,7 +541,7 @@ function findDetailField(fieldcode){
 						</tbody>
 					</table>
 				</div>
-				<div id="reservation" class="tab-pane fade">
+				<div id="reservation" class="tab-pane fade" style="overflow-y:scroll; max-height:420px;">
 					<table class="table table-striped bookstatus table-hover"
 						style="border: 1px solid #ddd;" id="section1">   
 						<thead>
@@ -494,7 +588,7 @@ function findDetailField(fieldcode){
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-12 col-sm-12" style="margin-left:15px;">
+		<div class="col-lg-12 col-sm-12" style="margin-left:15px; margin-top:15px;">
 			<div class="col-lg-10">
 			<a class="btnToggle" id="toggle2" href="#btn2" data-toggle="tooltip" data-placemnet="top" title="대여중인 책만 가능합니다.">
 				<button type="button" id="btn2" class="btn btn-primary" value="">연장</button>
@@ -521,7 +615,7 @@ function findDetailField(fieldcode){
 			<!--  공용 도서정보 수정 form-popup 페이지 시작 -->
 					<div class="form-popup" id="allEditForm">
 								
-								  <form name="editPublicForm"  class="form-container">
+								  <form name="editPublicForm"  class="form-container" enctype="multipart/form-data">
 								    <h3>공용 정보수정</h3>
 									<table style="margin-bottom:10px;">
 										<tr>
@@ -618,7 +712,7 @@ function findDetailField(fieldcode){
 										</tr>
 									</table>
 									<input type="hidden" name="bookid" id="bookid">
-									<input type="hidden" name="bookListLength" val="${length }"/>
+									<input type="hidden" name="bookListLength" value="${length }"/>
 								 	<button type="button" class="btn" onClick="editAllBookInfo()">수정</button>
 								    <button type="button" class="btn cancel" onclick="closeAllEditForm()">닫기</button>
 								  </form>
@@ -652,13 +746,29 @@ function findDetailField(fieldcode){
 											<td align="center"><input type="date" name="editPdate" id="editPdate"/></td>
 										</tr>
 									</table>
+									<input type="hidden" name="status" id="editStatus"/>
 									<input type="hidden" name="bookid" id="detailBookid">
 								 	<button type="button" class="btn" onClick="editIndivBookInfo();">수정</button>
 								    <button type="button" class="btn cancel" onclick="closeDetailEditForm()">닫기</button>
 								  </form>
 								</div>
-								
 								<!-- 개별 도서 수정 div 페잊 끝 -->
+								
+								<form name="deleteForm">
+									<input type="hidden" name="bookid"/>
+								</form>
+								
+								<form name="addBookForm">
+									<input type="hidden" name="bookid"/>
+									<input type="hidden" name="count"/>
+								</form>
+								
+								<form name="rentalBookForm">
+									<input type="hidden" name="rentalBookid"/>
+								</form>
+								<from name="reservBookForm">
+									<input type="hidden" name="reservBookid"/>
+								</from>
 <script>
 function editAllBookInfo(){
 	var flag  = false;
@@ -690,6 +800,23 @@ function editIndivBookInfo(){
 	var frm = document.editIndivForm;
 	frm.action = "editIndivBookInfo.ana";
 	frm.method = "POST";
+	frm.submit();
+}
+
+function deleteIndivBook(bookid,status){
+	if(status != 0){
+		alert("반납된(기본상태)인 책만 삭제가 가능합니다.");
+		return;
+	}
+		
+	var flag = confirm("삭제하시겠습니까(DB에서 영구 삭제됩니다.)?");
+	if(flag == false){
+		return;
+	}
+	var frm = document.deleteForm;
+	frm.bookid.value=bookid;
+	frm.action = "deleteIndivBook.ana",
+	frm.method="POST";
 	frm.submit();
 }
 </script>

@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script type="text/javascript">
-
 	$(document).ready(function() {
 		searchKeep();
 		
@@ -12,7 +11,6 @@
 			var flag = $(this).parent().find(".check").is(":checked");
 			$(this).parent().find(".check").prop("checked",!flag);
 		});// end of tr click
-
 		$("#searchWord").keydown(function(event) {
 	         if(event.keyCode == 13) {
 	        	 search();
@@ -38,7 +36,6 @@
 	function allCheckFalse() {
 		var flag = $("input:checkbox[name=check]").prop("checked",false);
 	}// end of allCheck
-
 	function recover() {
 		
 	}// end of 
@@ -99,7 +96,6 @@
 							<th style="text-align: center;">작가</th>
 							<th style="text-align: center;">출판사</th>
 							<th style="text-align: center;">연령대</th>
-							<th style="text-align: center;">ISBN</th>
 							<th style="text-align: center;">권수</th>
 							<th style="text-align: center;">삭제일자</th>
 							<th style="text-align: center;">처리자</th>
@@ -108,7 +104,7 @@
 					<tbody align="center">
 						<c:if test="${empty deleteBookList}">
 						<tr>
-							<td colspan="11"><span style="color: #ff4d4d; font-weight: bold;">도서가 존재하지 않습니다.</span></td>
+							<td colspan="10"><span style="color: #ff4d4d; font-weight: bold;">도서가 존재하지 않습니다.</span></td>
 						</tr>
 						</c:if>
 
@@ -121,7 +117,6 @@
 							<td class="td">${deleteBookVO.author}</td>
 							<td class="td">${deleteBookVO.pubname}</td>
 							<td class="td">${deleteBookVO.agecode}</td>
-							<td class="td">${deleteBookVO.iSBN}</td>
 							<td class="td">${deleteBookVO.count}</td>
 							<td class="td">${deleteBookVO.deldate}</td>
 							<td class="td">${deleteBookVO.cleanerid}</td>

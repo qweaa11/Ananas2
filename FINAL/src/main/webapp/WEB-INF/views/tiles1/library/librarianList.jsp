@@ -219,7 +219,7 @@ p{margin:3px;}
 	     
 	     for(var i in infoSpliter){
 	    	if(i == 6){
-				$(".modal-body #faceImgInUpdate").attr("src", "resources/img/"+infoSpliter[i]);
+				$(".modal-body #faceImgInUpdate").attr("src", "resources/librarian/"+infoSpliter[i]);
 			}else{
 				$(".modal-body .personalInfo"+i+"").val(infoSpliter[i]);
 			}
@@ -242,7 +242,7 @@ p{margin:3px;}
 			 
 			if(i == 6){
 				
-				$(".modal-body #faceImgInDetail").attr("src", "resources/img/"+infoSpliter[i]);
+				$(".modal-body #faceImgInDetail").attr("src", "resources/librarian/"+infoSpliter[i]);
 				console.log($(".modal-body #faceImgInDetail").attr("src"));
 			}else{
 				

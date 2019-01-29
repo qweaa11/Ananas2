@@ -1,5 +1,6 @@
 package com.spring.bookmanage.book.KKHservice;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -97,16 +98,30 @@ public class KKHBookService implements InterKKHBookService{
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
 	public int editBookPlzChangeBookid(HashMap<String, String> parameterMap, KKHBookVO book) {
 		int result = 0;
-		
+		int n2 = 0;
 		// LIB+N+L+C+F+G - 큰번호- 개별번호
 		String newBookid = parameterMap.get("EDITLIBRARY")+parameterMap.get("EDITNATION")+parameterMap.get("EDITLANGUAGE")+parameterMap.get("EDITCATEGORY")+parameterMap.get("EDITFIELD")+parameterMap.get("EDITGENRE");
 		String newBookFirstNum = bookdao.findNewBook1stNum(newBookid);
+		//System.out.println("firstNum:"+newBookFirstNum);
 		newBookid += "-"+newBookFirstNum;
 		parameterMap.put("NEWBOOKID", newBookid);
 		List<KKHBookVO> bookDetailList = bookdao.selectAndDelBookDetail(parameterMap.get("BOOKID"));
+		for(int i=0; i<bookDetailList.size();i++) {
+			String oldBookid = bookDetailList.get(i).getBookid();
+			//System.out.println("oldBookid:"+oldBookid);
+			newBookid = parameterMap.get("NEWBOOKID")+oldBookid.substring(oldBookid.indexOf("-",16));
+			bookDetailList.get(i).setBookid(newBookid);
+			
+			//System.out.println("bookid:"+newBookid);
+			
+		}
 		int n1 = bookdao.updateNewBookid(parameterMap);
-		int n2 = bookdao.updateNewBookDetail(parameterMap);
-		
+		bookdao.insertNewBookDetail(bookDetailList);
+		if(parameterMap.get("EDITIMAGE")!=null) {
+			n2 = bookdao.updateNewBookDetail(parameterMap);
+		}else {
+			n2 = Integer.parseInt(parameterMap.get("LENGTH"));
+		}
 		
 	
 		if(n1-n2 == 0) result = 1;
@@ -117,10 +132,60 @@ public class KKHBookService implements InterKKHBookService{
 	public int eidtBookNoChangeBookid(HashMap<String, String> parameterMap, KKHBookVO book) {
 		int result = 0;
 		int n1 = bookdao.updateBookInfo(parameterMap);
-		int n2 = bookdao.updateBookDetail(parameterMap);
-		
+		int n2 = 0;
+		if(parameterMap.get("EDITIMAGE")!=null) {
+			n2 = bookdao.updateBookDetail(parameterMap);
+		}else {
+			n2 =Integer.parseInt(parameterMap.get("LENGTH"));
+		}
+		System.out.println("n1:"+n1+",n2:"+n2);
 		if(n1-n2 == 0 ) result = 1;
+		
 		return result;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int editIndivBookInfo(HashMap<String, String> parameterMap) {
+		int n = bookdao.editIndivBookInfo(parameterMap);
+		return n;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int deleteIndivBook(String bookid) {
+		int n= bookdao.deleteIndivBook(bookid);
+		return n;
+	}
+	@Override
+	public KKHBookVO findBookInfoSample(String bookid) {
+		KKHBookVO bookInfoSample= bookdao.findBookInfoSample(bookid); 
+		
+		return bookInfoSample;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap) {
+		int n = bookdao.insertAdditionalBook(bookInfoSample,parameterMap);
+		return n;
+	}
+	@Override
+	public int findStartBookNum(String bookid) {
+		int startBookNum = bookdao.findStartBookNum(bookid);
+		return startBookNum;
+	}
+	@Override
+	public List<KKHBookVO> findDeleteBook(String bookid) {
+		List<KKHBookVO> deleteBookList = bookdao.findDeleteBook(bookid);
+		return deleteBookList;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int insertAndDeleteBookList(List<KKHBookVO> deleteBookList,String bookid,String cleanerid) {
+		int n1 = bookdao.insertDelete_BookList(deleteBookList,cleanerid);
+		int n2 = bookdao.deleteBookAndBookDetail(bookid);
+		if(n1 == n2 ) return 1;
+		else return 0;
+		
+		
 	}
 	
 
