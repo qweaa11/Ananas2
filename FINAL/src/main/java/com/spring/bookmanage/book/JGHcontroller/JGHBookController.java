@@ -43,15 +43,21 @@ public class JGHBookController {
 
 		if(searchWord != null && !searchWord.trim().equals("")) {// 검색이 있는경우(페이징 처리 미구현)
 			deleteBookList = service.searchList(parameterMap);
-
-			request.setAttribute("colname", colname);// view단에서 검색어를 유지시키기 위해 보낸것.
 			request.setAttribute("searchWord", searchWord);
 		} else {// 검색이 없는경우(페이징 처리 미구현)
 			deleteBookList = service.noSearchList();
 		}// end of if~else
 
+		request.setAttribute("colname", colname);// view단에서 검색어를 유지시키기 위해 보낸것.
+
 		request.setAttribute("deleteBookList", deleteBookList);
 
 		return "book/deleteLog.tiles1";
 	}// end of deleteBookLog
+	
+	@RequestMapping(value = "restore.ana", method = {RequestMethod.POST})
+	public String restore(HttpServletRequest request, HttpServletResponse response) {
+
+		return "";
+	}// end of restore
 }

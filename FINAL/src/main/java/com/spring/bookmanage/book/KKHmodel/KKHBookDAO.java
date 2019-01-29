@@ -225,6 +225,11 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		if(n1 == n2) return n1;
 		else return 0;
 	}
+	@Override
+	public int updateDeadline(String extendBookid) {
+		int n = sqlsession.update("KKH.updateDeadline", extendBookid);
+		return n;
+	}
 	
 	
 

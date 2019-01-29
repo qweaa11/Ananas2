@@ -44,6 +44,7 @@ public class DeleteBookVO {
 	private String tel; 			// 도서관 전화번호
 
 	/* 삭제된 도서테이블의 컬럼 */
+	private int delid;				// 삭제도서 그룹번호
 	private String deldate;			// 삭제일자
 	private String cleanerid;		// 처리자아이디
 
@@ -338,6 +339,14 @@ public class DeleteBookVO {
 
 	public void setTel(String tel) {
 		this.tel = tel;
+	}
+
+	public int getDelid() {
+		return delid;
+	}
+
+	public void setDelid(int delid) {
+		this.delid = delid;
 	}
 
 	public String getDeldate() {

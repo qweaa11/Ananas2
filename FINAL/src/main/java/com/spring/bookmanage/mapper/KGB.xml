@@ -237,6 +237,16 @@
 	<!-- /////////////////////////////////// 차트 //////////////////////////////////////////////// -->
 	
 	
+	<select id="findAllreturnTerm" parameterType="int" resultType="int">
+	
+		select count(*)
+		from returned 
+		where rentaldate <![CDATA[>=]]> func_startyearcal(#{count})
+		and rentaldate <![CDATA[<]]> func_startyearcal(to_number(#{count})-1)
+	
+	</select>
+	
+	
 	<resultMap type="HashMap" id="genreChartMap">
 		<result column="gcode" property="GCODE" javaType="String"/>
 		<result column="rentalmonth" property="RENTALMONTH" javaType="String"/>
@@ -256,7 +266,7 @@
 		    on R.bookid_fk = B.bookid
 		    join genre G
 		    on B.gcode_fk = G.gcode
-		    where R.rentaldate <![CDATA[>=]]> func_startyearcal(0)
+		    where R.rentaldate <![CDATA[>=]]> func_startyearcal(#{CURRENTYEAR})
 		    and R.rentaldate <![CDATA[<]]> func_startyearcal(to_number(#{CURRENTYEAR})-1)
 		    group by grouping sets( (G.gcode, to_char(rentaldate, 'mm')) )
 		    order by rentalmonth, gcode

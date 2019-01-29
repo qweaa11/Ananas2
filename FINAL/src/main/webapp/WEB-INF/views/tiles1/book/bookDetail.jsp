@@ -154,10 +154,23 @@ th, td {
 	});
 		
 		$("#btn2").click(function(){
+			var bookid = "";
 			if(extendFlag == false)	{
 				$("input.bookChk:checkbox:checked").each(function(){
+<<<<<<< HEAD
 					
-				}
+				});
+=======
+					bookid += $(this).val()+",";
+				});
+				bookid = bookid.substr(0,bookid.length-1);
+				console.log(bookid);
+				var frm = document.extendBookForm;
+				frm.extendBookid.value = bookid;
+				frm.action = "extendBookList.ana";
+				frm.method = "POST";
+				frm.submit();
+>>>>>>> branch 'master' of https://github.com/qweaa11/Ananas2.git
 			}
 		});
 		
@@ -243,7 +256,7 @@ th, td {
 			}
 			var bookid = $(this).val();
 			var frm = document.reservBookForm;
-			frm.reservBookid.value = bookid;
+			frm.reserveBookid.value = bookid;
 			frm.action = "r3.ana";
 			frm.method = "GET";
 			frm.submit();
@@ -380,11 +393,11 @@ function deleteAllBook(bookid){
 	var flag = confirm("삭제된 도서정보는 삭제목록에 저장됩니다. 정말로 삭제하시겠습니까?");
 	if(flag == true){
 		var id = prompt("관리자 아이디를 입력해주세요.");
-		if(${sessionScope.loginLibrarian != null}){
+		if(${sessionScope.loginLibrarian != null}) {
 			if(id == "${sessionScope.loginLibrarian.libid}"){
 				approval = true;
 			}
-		}else if(${sessionScope.loginAdmin != null}){
+		} else if(${sessionScope.loginAdmin != null}) {
 			if(id == "${sessionScope.loginAdmin.adminid}"){
 				approval = true;
 			}
@@ -767,8 +780,11 @@ function deleteAllBook(bookid){
 									<input type="hidden" name="rentalBookid"/>
 								</form>
 								<from name="reservBookForm">
-									<input type="hidden" name="reservBookid"/>
+									<input type="hidden" name="reserveBookid"/>
 								</from>
+								<form name="extendBookForm">
+									<input type="hidden" name="extendBookid"/>
+								</form>
 <script>
 function editAllBookInfo(){
 	var flag  = false;

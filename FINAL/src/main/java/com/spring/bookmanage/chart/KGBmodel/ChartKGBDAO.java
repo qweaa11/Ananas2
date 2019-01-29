@@ -14,6 +14,31 @@ public class ChartKGBDAO implements ChartKGBInterDAO {
 	@Autowired
 	private SqlSessionTemplate sqlsession;
 
+	
+	@Override
+	public int findAllreturnTerm() {
+		
+		int cnt = -1;	// 년도의 value 가 될 값
+		int count = 0;	// 반복 횟수
+		int result = 0;	// 쿼리문의 결과값
+		
+		while (true) {
+			
+			result = sqlsession.selectOne("kgb.findAllreturnTerm", count);
+			
+			if(result == 0)
+				break;
+			
+			count++;
+			cnt++;
+		}
+		
+		
+		return cnt;
+		
+	}// end of findAllreturnTerm()--------------------
+	
+	
 	@Override
 	public List<HashMap<String, Object>> findAllReturnGenreChart(String currentyear) {
 		
@@ -39,5 +64,7 @@ public class ChartKGBDAO implements ChartKGBInterDAO {
 		return genreChart;
 		
 	}// end of findAllReturnGenreChart()----------------------------------
+
+	
 	
 }
