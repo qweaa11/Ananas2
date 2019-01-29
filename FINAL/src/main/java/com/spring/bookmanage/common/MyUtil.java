@@ -215,6 +215,17 @@ public class MyUtil {
 		return currentURL;
 	}// end of getCurrentURL
 
+	/**
+	 * 페이지바 생성
+	 * @param sizePerPage
+	 * @param blockSize
+	 * @param totalPage
+	 * @param currentPageNo
+	 * @param colname
+	 * @param searchWord
+	 * @param url
+	 * @return
+	 */
 	public static String createPageBar(int sizePerPage, int blockSize, int totalPage, int currentPageNo,
 			String colname, String searchWord, String url) {
 		String pageBar = "";
