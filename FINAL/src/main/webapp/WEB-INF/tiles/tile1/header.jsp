@@ -50,9 +50,12 @@
 						<li>${sessionScope.loginLibrarian.libid }(${sessionScope.loginLibrarian.name })</li>
 							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginLibrarian.libid }(${sessionScope.loginLibrarian.name }) 
 							<c:if test="${sessionScope.loginLibrarian.status}">[]</c:if></li>
+								<c:if test="${sessionScope.loginLibrarian.status == 0}">[사서]</c:if>
+								<c:if test="${sessionScope.loginLibrarian.status == 1}">[도서관장]</c:if>
+							</li>
 						</c:if>
 						<c:if test="${sessionScope.loginAdmin != null }">
-							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginAdmin.adminid }(${sessionScope.loginAdmin.name })</li>
+							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginAdmin.adminid }(${sessionScope.loginAdmin.name })[관리자]</li>
 						</c:if>
 						<li><a href="schedulerRun.ana">스케줄러실행<i class="glyphicon glyphicon-hourglass"></i></a></li>
 						<li><a href="logout.ana">로그아웃</a></li>
