@@ -85,11 +85,23 @@ public class YSWController {
 			String addr1 = req.getParameter("addr1");
 			String addr2 = req.getParameter("addr2");
 			String post = req.getParameter("post");
-			String yyyy = req.getParameter("yyyy");
-			String mm = req.getParameter("mm");
-			String dd = req.getParameter("dd");
+			String birth = req.getParameter("birth");
 			String gender = req.getParameter("gender");
 			
+			//System.out.println("birth : " + birth);
+			
+			if(memberid == "" || pwd == "" || name == "" || 
+			   email == "" || birth == "" || gender == "" ||  
+			   phone == "" ||  addr1 == "" ||  post == "") {
+				
+				String msg = "필수 정보가 누락 되었습니다. 다시 시도해 주세요.";
+				String loc = "javascript:history.back()";
+				
+				req.setAttribute("msg", msg);
+				req.setAttribute("loc", loc);
+				
+				return "msg";
+			}
 			/*
 			System.out.println("memberid :"+memberid);
 			System.out.println("pwd :"+pwd);
@@ -99,9 +111,7 @@ public class YSWController {
 			System.out.println("addr1 :"+addr1);
 			System.out.println("addr2 :"+addr2);
 			System.out.println("post :"+post);
-			System.out.println("yyyy :"+yyyy);
-			System.out.println("mm :"+mm);
-			System.out.println("dd :"+dd);
+			System.out.println("birth :"+birth);
 			System.out.println("gender :"+gender);
 			*/
 			
@@ -162,9 +172,7 @@ public class YSWController {
 			membervo.setAddr1(addr1);
 			membervo.setAddr2(addr2);
 			membervo.setPost(post);
-			membervo.setYyyy(yyyy);
-			membervo.setMm(mm);
-			membervo.setDd(dd);
+			membervo.setBirth(birth);
 			membervo.setGender(Integer.parseInt(gender));
 			
 			//System.out.println("birth :"+membervo.getBirth());

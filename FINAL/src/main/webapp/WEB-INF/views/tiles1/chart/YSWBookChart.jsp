@@ -47,7 +47,7 @@
 				     type: 'pie'
 				 },
 				 title: {
-				     text: '도서별 보유 비율'
+				     text: '도서 장르별 점유율 대분류'
 				 },
 				 tooltip: {
 				     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -132,7 +132,7 @@
 						            type: 'column'
 						        },
 						        title: {
-						            text: '제품별 판매 점유율'
+						            text: '도서 장르별 점유율 소분류'
 						        },
 						        subtitle: {
 						           // text: 'Click the columns to view versions. Source: <a href="http://netmarketshare.com">netmarketshare.com</a>.'
@@ -184,7 +184,7 @@
 
 <body>
 	<div style="margin-left: 45%; border: solid 0px red; margin-bottom: 50px;">
-		<h2>책  대여 통계</h2>
+		<h2>전체 도서관 장르별 보유 통계</h2>
 	</div>
 	
 	<div style="width: 90%; border: solid 0px red;">

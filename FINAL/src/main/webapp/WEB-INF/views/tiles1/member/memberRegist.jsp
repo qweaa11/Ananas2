@@ -4,10 +4,17 @@
 <% String ctxPath = request.getContextPath(); %>
 
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<!-- // jQuery UI CSS파일  -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />  
+<!-- // jQuery 기본 js파일 -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!-- // jQuery UI 라이브러리 js파일 -->
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 
 <style type="text/css">
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700);
 @import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700);
+  
 
 	body {
 	    background: #fff;
@@ -62,6 +69,8 @@
 
 	$(document).ready(function(){
 		
+		$("#memberid").focus();
+		
 		$(".showResult").hide();
 			
 		$(".form-control").each(function(){
@@ -70,7 +79,11 @@
 					
 				var data = $(this).val().trim();
 					
-				if(data == "") {					
+				if(data == "") {
+					
+					var btn = document.getElementById('registUser');
+					btn.disabled = 'disabled';
+
 					$(":input").attr("disable", true).addClass("hold");
 					$(this).attr("disable", false).removeClass("hold");
 					$(this).focus();
@@ -208,46 +221,93 @@
 	function idDuplicate() {
 			
 			var memberid = $("#memberid").empty().val();
-			var form_data = {"memberid":memberid}
 			
-			$.ajax({
-				url:"idDuplicate.ana",
-				data:form_data,
-				type:"POST",
-				dataType:"JSON",
-				success:function(json){
-					
-					console.log(json.result);
-					
-					if(json.result == 0){
-						
-						$("#unAvailable").hide();
-						$("#available").show();
-					}
-					else{
-						
-						$("#available").hide();
-						$("#unAvailable").show();
-						
-					}
-				},
-				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-				}
+			if(memberid.trim() == "") {
 				
-			});
+				alert("아이디 중복 검사를 할 아이디를 입력해 주세요.");
+			}
+			else{
+				
+				var form_data = {"memberid":memberid}
+				
+					$.ajax({
+						url:"idDuplicate.ana",
+						data:form_data,
+						type:"POST",
+						dataType:"JSON",
+						success:function(json){
+							
+							console.log(json.result);
+							
+							if(json.result == 0){
+								
+								$("#unAvailable").hide();
+								$("#available").show();
+							}
+							else{
+								
+								$("#available").hide();
+								$("#unAvailable").show();
+								
+							}
+						},
+						error: function(request, status, error){
+							alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+						}
+						
+					});
+			 }
 	}// End of function idDuplicate(wishID)-------------
 
 		
 	// 멤버 등록가기
 	function memberRegist() {
-			
-		var frm = document.signupFrm;
-		frm.action = "memberRegistEnd.ana";
-		frm.method = "POST";
-		frm.submit();
 		
+		var memberid = $.trim($("#memberid").val());
+		var email = $.trim($("#email").val());
+		var pwd = $.trim($("#pwd").val());
+		var name = $.trim($("#name").val());
+		var phone = $.trim($("#phone").val());
+		var birth = $.trim($("#birth").val());
+		var post = $.trim($("#post").val());
+		
+		
+		if( memberid != "" &&
+			email != "" &&   
+			pwd != "" &&
+			name != "" &&
+			phone != "" &&
+			birth != "" &&
+			post != "") {
+			
+			var frm = document.signupFrm;
+			frm.action = "memberRegistEnd.ana";
+			frm.method = "POST";   
+			frm.submit();
+			
+		}
+		else{
+			
+			alert("필수 가입정보가 미입력 되었습니다.");
+		}
 	}
+
+	
+	$(function() {
+		  $("#birth").datepicker({
+		    dateFormat: 'yymmdd',
+		    prevText: '이전 달',
+		    nextText: '다음 달',
+		    monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		    monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		    dayNames: ['일','월','화','수','목','금','토'],
+		    dayNamesShort: ['일','월','화','수','목','금','토'],
+		    dayNamesMin: ['일','월','화','수','목','금','토'],
+		    showMonthAfterYear: true,
+		    changeMonth: true,
+		    changeYear: true
+		  });
+		});
 
 </script>
 
@@ -317,53 +377,23 @@
          </div>
        </div>
        
+        <div class="form-group">
+         <label class="control-label col-sm-3"><span class="text-danger">*</span>휴대폰 번호</label>
+         <div class="col-md-5 col-sm-8">
+         	<div class="input-group">
+             <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+           <input type="text" class="form-control" name="phone" id="phone" placeholder="핸드폰 번호를 - 없이 입력해 주세요." value="">
+           <small class="showResult" id="phoneGuidLine" style="color: red; font-weight: bold;"> 올바른 핸드폰 번호를 입력해주세요.</small>
+           </div>
+         </div>
+       </div>
+       
        <div class="form-group">
          <label class="control-label col-sm-3"><span class="text-danger">*</span>생년월일</label>
          <div class="col-xs-8">
            <div class="form-inline">
              <div class="form-group" >
-               <select name="yyyy" class="form-control" style="margin-right: 30px;">
-                 <option value="0">Year</option>
-                 <option value="1955" >1955 </option><option value="1956" >1956 </option><option value="1957" >1957 </option>
-                 <option value="1958" >1958 </option><option value="1959" >1959 </option><option value="1960" >1960 </option>
-                 <option value="1961" >1961 </option><option value="1962" >1962 </option><option value="1963" >1963 </option>
-                 <option value="1964" >1964 </option><option value="1965" >1965 </option><option value="1966" >1966 </option>
-                 <option value="1967" >1967 </option><option value="1968" >1968 </option><option value="1969" >1969 </option>
-                 <option value="1970" >1970 </option><option value="1971" >1971 </option><option value="1972" >1972 </option>
-                 <option value="1973" >1973 </option><option value="1974" >1974 </option><option value="1975" >1975 </option>
-                 <option value="1976" >1976 </option><option value="1977" >1977 </option><option value="1978" >1978 </option>
-                 <option value="1979" >1979 </option><option value="1980" >1980 </option><option value="1981" >1981 </option>
-                 <option value="1982" >1982 </option><option value="1983" >1983 </option><option value="1984" >1984 </option>
-                 <option value="1985" >1985 </option><option value="1986" >1986 </option><option value="1987" >1987 </option>
-                 <option value="1988" >1988 </option><option value="1989" >1989 </option><option value="1990" >1990 </option>
-                 <option value="1991" >1991 </option><option value="1992" >1992 </option><option value="1993" >1993 </option>
-                 <option value="1994" >1994 </option><option value="1995" >1995 </option><option value="1996" >1996 </option>
-                 <option value="1997" >1997 </option><option value="1998" >1998 </option><option value="1999" >1999 </option>
-                 <option value="2000" >2000 </option><option value="2001" >2001 </option><option value="2002" >2002 </option>
-                 <option value="2003" >2003 </option><option value="2004" >2004 </option><option value="2005" >2005 </option>
-                 <option value="2006" >2006 </option>
-                </select>
-             </div>
-             <div class="form-group">
-               <select name="mm" class="form-control">
-                 <option value="">Month</option>
-                 <option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option>
-                 <option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option>
-                 <option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>                
-                </select>
-             </div>
-             <div class="form-group">
-               <select name="dd" class="form-control">
-                 <option value="">Date</option>
-                 <option value="01" >01 </option><option value="02" >02 </option><option value="03" >03 </option><option value="04" >04 </option>
-                 <option value="05" >05 </option><option value="06" >06 </option><option value="07" >07 </option><option value="08" >08 </option>
-                 <option value="09" >09 </option><option value="10" >10 </option><option value="11" >11 </option><option value="12" >12 </option>
-                 <option value="13" >13 </option><option value="14" >14 </option><option value="15" >15 </option><option value="16" >16 </option>
-                 <option value="17" >17 </option><option value="18" >18 </option><option value="19" >19 </option><option value="20" >20 </option>
-                 <option value="21" >21 </option><option value="22" >22 </option><option value="23" >23 </option><option value="24" >24 </option>
-                 <option value="25" >25 </option><option value="26" >26 </option><option value="27" >27 </option><option value="28" >28 </option>
-                 <option value="29" >29 </option><option value="30" >30 </option><option value="31" >31 </option>                
-                </select>
+                 <input type="text" class="form-control" name="birth" id="birth" placeholder="생년월일을 선택해 주세요." />
              </div>
            </div>
          </div>
@@ -374,17 +404,6 @@
          <div class="col-md-8 col-sm-9">
            <label><input name="gender" type="radio" value="0" checked>남성 </label>
            <label><input name="gender" type="radio" value="1" >여성 </label>
-         </div>
-       </div>
-       
-       <div class="form-group">
-         <label class="control-label col-sm-3"><span class="text-danger">*</span>휴대폰 번호</label>
-         <div class="col-md-5 col-sm-8">
-         	<div class="input-group">
-             <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-           <input type="text" class="form-control" name="phone" id="phone" placeholder="핸드폰 번호를 - 없이 입력해 주세요." value="">
-           <small class="showResult" id="phoneGuidLine" style="color: red; font-weight: bold;"> 올바른 핸드폰 번호를 입력해주세요.</small>
-           </div>
          </div>
        </div>
        
