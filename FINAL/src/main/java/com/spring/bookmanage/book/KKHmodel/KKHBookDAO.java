@@ -230,6 +230,31 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		int n = sqlsession.update("KKH.updateDeadline", extendBookid);
 		return n;
 	}
+	@Override
+	public HashMap<String, String> findRentalBook(String returnBookid) {
+		HashMap<String,String> rentalBookInfo = sqlsession.selectOne("KKH.findRentalBook", returnBookid);
+		return rentalBookInfo;
+	}
+	@Override
+	public int insertReturnedBook(HashMap<String, String> rentalBookInfo) {
+		int n = sqlsession.insert("KKH.insertReturnedBook", rentalBookInfo);
+		return n;
+	}
+	@Override
+	public int updateReturnedBookStatus(String returnBookid) {
+		int n = sqlsession.update("KKH.updateReturnBOokStatus", returnBookid);
+		return n;
+	}
+	@Override
+	public int updateLateMemberInfo(String memberid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public int deleteRentalBook(String returnBookid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 
