@@ -119,24 +119,40 @@
 	
 	
 	
-	
-	
-	
 	<!-- 도서관별 연체율을 알려주는 쿼리 -->
 	<resultMap type="HashMap" id="getlibraryOverdueRankListMap">
-		<result property="" column="" javaType="String"/>
+		<result property="LIBNAME" 		column="libname" 		javaType="String" />
+		<result property="CNT" 			column="cnt" 			javaType="String" />
+		<result property="PERCENTAGE" 	column="percentage" 	javaType="String" />
 	</resultMap>
 	<select id="libraryOverdueRankList" resultMap="getlibraryOverdueRankListMap">
-		select count(*)
-		from book A join returned B
-		on a.bookid = b.bookid_fk
-		join member C on c.memberid = b.memberid_fk
-		where upper(${COLNAME}) like upper('%'|| #{SEARCH} ||'%')
+		
+		Select libname, 
+		       count(*) as cnt,
+		       trunc( ( count(libname) )/(select count(*) from ymh_chart where deadline - returndate <![CDATA[<]]> 0) * 100, 2 ) as percentage
+		from ymh_chart
+		where deadline - returndate <![CDATA[<]]> 0
+		group by libname
+
 	</select>
 	
 	
 	
-	
+	<!-- 장르별 연체율을 알려주는 쿼리 -->
+	<resultMap type="HashMap" id="getoverdueByGenreListMap">
+		<result property="GNAME" 		column="gname" 			javaType="String" />
+		<result property="PERCENT" 		column="percentage" 	javaType="String" />
+	</resultMap>
+	<select id="getoverdueByGenreList" resultMap="getoverdueByGenreListMap" parameterType="String">
+		
+		Select gname, 
+       		   trunc( ( count(gname) )/(select count(*) from ymh_chart where deadline - returndate <![CDATA[<]]> 0 and libname = #{libname}) * 100, 2 ) as percentage
+		from ymh_chart
+		where deadline - returndate <![CDATA[<]]> 0
+		and libname = #{libname}
+		group by gname
+
+	</select>
 	
 	
 	

@@ -36,15 +36,47 @@ public class ChartYMHController
 			for(HashMap<String, String> datamap : list)
 			{
 				HashMap<String, Object> submap = new HashMap<String, Object>();
-				submap.put("", value);
-				submap.put("", value);
-				submap.put("", value);
-				submap.put("", value);
+				submap.put("LIBNAME", datamap.get("LIBNAME"));
+				submap.put("CNT", datamap.get("CNT"));
+				submap.put("PERCENTAGE", datamap.get("PERCENTAGE"));
 				
 				returnmapList.add(submap);
 			}
 		}
 		return returnmapList;
+	}// end of libraryOverdueRank()------------------------------------------------
+	
+	
+	@RequestMapping(value="/overdueOfLibraryByGenre.ana",method= {RequestMethod.GET})
+	@ResponseBody
+	public List<HashMap<String, Object>> overdueOfLibraryByGenre(HttpServletRequest request, HttpServletResponse response) 
+	{
+		String libname = request.getParameter("libname");
+		
+		System.out.println(libname);
+		
+		List<HashMap<String, Object>> jsonMapList = new ArrayList<HashMap<String, Object>>();
+				 
+		if(libname != null && !libname.trim().isEmpty())
+		{
+			List<HashMap<String, String>> overdueOfGenreList = service.getoverdueByGenreList(libname);
+			if(overdueOfGenreList != null)
+			{
+				for(HashMap<String, String> map : overdueOfGenreList)
+				{
+					HashMap<String, Object> jsonmap = new HashMap<String, Object>();
+					
+					String gname = map.get("GNAME");
+					String percent = map.get("PERCENT");
+					
+					jsonmap.put("GNAME", gname);
+					jsonmap.put("PERCENT",  percent);
+					
+					jsonMapList.add(jsonmap);
+				}
+			}
+		}
+		return jsonMapList;
 	}// end of libraryOverdueRank()------------------------------------------------
 	
 	

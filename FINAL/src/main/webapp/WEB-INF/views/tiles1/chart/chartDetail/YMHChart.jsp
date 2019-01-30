@@ -1,16 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
 
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
 
 <script type="text/javascript">
 
 	$(document).ready(function () {
 		
-	//	showChart();
+		showChart();
 	});
 
 	
@@ -30,32 +29,35 @@
 					});
 				}); // end of $.each(json, function(entryIndex, entry)-----------------------
 						
+				
 						
 				var overdueRateArr = [];			
-			<%-- 			
-				$.each(json, function(){
-					$.getJSON("<%=request.getContextPath() %>/overdueOfLibrary.ana"),
+					
+				$.each(json, function(entryIndex, entry){
+					$.getJSON("<%=request.getContextPath() %>/overdueOfLibraryByGenre.ana?libname="+entry.LIBNAME,
 						function(json2){
 						
 							var subArr =[];
 							
-							$.each(json2, function(){
+							$.each(json2, function(entryIndex2, entry2){
 								subArr.push([
-									entry2.typename,
-									parseFloat(entry.PERCENTAGE)
+									entry2.GNAME,
+									parseFloat(entry2.PERCENT)
 								]);
 							}); //  end of $.each()-------------------
 						
 							overdueRateArr.push({
-								"name": entry.SNACKNAMe		
+								"name": entry.LIBNAME,
+								"id": entry.LIBNAME,
+								"data": subArr
 							
 							});	
 					});
 				});	// end of 	$.each(json, function(){}------------------------------------
-				 --%>		
+					
 						
 				// create the chart
-				$('#YMHcontainer').Highcharts({
+				$('#YMHcontainer').highcharts({
 				    chart: 
 				    	{
 				        	type: 'column'
@@ -96,12 +98,12 @@
 						},
 				    tooltip: {
 				        headerFormat: '<span style="font-size:10px">{seris.name}</span><br>',
-				        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b> style="padding:0"><b>{point.y:.2f}</b> of total<br/>'
+				        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
 				      
 				    },
 				    series: [{
 				        name: '도서관명',
-				        colorByPoint: ture,
+				        colorByPoint: true,
 				        data: labraryArr
 
 				    	}],

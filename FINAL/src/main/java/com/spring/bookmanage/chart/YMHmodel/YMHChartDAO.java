@@ -18,6 +18,11 @@ public class YMHChartDAO implements InterYMHChartDAO
 		List<HashMap<String, String>> list = sqlsession.selectList("YMH.libraryOverdueRankList");
 		return list;
 	}
+
+	public List<HashMap<String, String>> getoverdueByGenreList(String libname) {
+		List<HashMap<String, String>> list = sqlsession.selectList("YMH.getoverdueByGenreList", libname);
+		return list;
+	}
 	
 	
 	

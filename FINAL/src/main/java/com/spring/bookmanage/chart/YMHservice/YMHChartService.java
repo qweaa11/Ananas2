@@ -19,6 +19,12 @@ public class YMHChartService implements InterYMHChartService
 		List<HashMap<String, String>> list = dao.libraryOverdueRankList();
 		return list;
 	}
+
+
+	public List<HashMap<String, String>> getoverdueByGenreList(String libname) {
+		List<HashMap<String, String>> list = dao.getoverdueByGenreList(libname);
+		return list;
+	}
 	
 	
 	
