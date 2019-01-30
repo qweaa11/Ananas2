@@ -16,4 +16,10 @@ public interface InterYSWChartService {
 
 	List<HashMap<String, String>> findDetailBookChart(String CCODE);
 
+	// 카테고리별 대여 차트
+	List<HashMap<String, String>> findRentalInfo(HashMap<String, String> paramap);
+
+	// 장르별 대여 성별의 퍼센티지
+	List<HashMap<String, String>> findRentalChartGender(HashMap<String, String> paramap);
+
 }

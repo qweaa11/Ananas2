@@ -360,5 +360,66 @@
 	</select>
 	
 	
+	<resultMap type="HashMap" id="rentalInfoMap">
+		<!-- set 다음에 나오는 이름을 쓴다! -->
+		<result property="CNT" column="CNT" javaType="String"/>
+		<result property="PERCENTAGE" column="PERCENTAGE" javaType="String"/>
+		<result property="CNAME" column="CNAME" javaType="String"/>
+	</resultMap>
+	
+	<!--  카테고리별 대여 차트 -->
+	<select id="findRentalInfo" resultMap="rentalInfoMap" parameterType="HashMap">
+	
+		select trunc((count(*)/( select count(*) from rental))*100, 1)as PERCENTAGE
+		      ,count(*) as CNT
+		      ,C.cname as CNAME
+		from book A JOIN rental B
+		on A.bookid  = B.bookid_fk
+		Left JOIN category C
+		on A.ccode_fk = C.ccode
+		where  to_char(rentaldate, 'yyyy') = #{year} and
+		       to_char(rentaldate, 'mm') = #{month}
+		group by cname
+	
+	</select>
+	
+	
+	<resultMap type="HashMap" id="rentalChartGender">
+		<!-- set 다음에 나오는 이름을 쓴다! -->
+		<result property="CNT" column="CNT" javaType="String"/>
+		<result property="PERCENTAGE" column="PERCENTAGE" javaType="String"/>
+		<result property="GENDER" column="GENDER" javaType="String"/>
+	</resultMap>
+	
+	<select id="findRentalChartGender" resultMap="rentalChartGender" parameterType="HashMap">
+	
+		select count(*) as CNT
+		      ,trunc(count(*)/(select count(*)
+		                       from book A JOIN rental B
+		                       on A.bookid  = B.bookid_fk
+		                       Left JOIN category D
+		                       on A.ccode_fk = D.ccode
+		                       where cname = #{cname})*100,1)||'%' as PERCENTAGE
+		      ,nvl(gender,'전체') as GENDER
+		from
+		(
+		    select case when gender in 0 then '남' else '여' end as gender
+		          ,cname
+		          ,ccode
+		    from book A JOIN rental B
+		    on A.bookid  = B.bookid_fk
+		    Left JOIN member C 
+		    on b.memberid_fk = c.memberid
+		    Left JOIN category D
+		    on A.ccode_fk = D.ccode
+		    where cname = #{cname} and
+		          to_char(rentaldate, 'yyyy') = #{year} and
+		          to_char(rentaldate, 'mm') = #{month}
+		)V
+		group by rollup(gender)
+	
+	</select>
+	
+	
 	
 </mapper>

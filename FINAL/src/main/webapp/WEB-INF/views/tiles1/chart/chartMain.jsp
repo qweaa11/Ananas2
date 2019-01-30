@@ -98,7 +98,7 @@
 				</div>
 				
 				<div id="menu4" class="tab-pane fade">
-					<h3>4번탭</h3>
+					<jsp:include page="./chartDetail/YSWChart.jsp"></jsp:include>
 				</div>
 				
 				<div id="menu5" class="tab-pane fade">

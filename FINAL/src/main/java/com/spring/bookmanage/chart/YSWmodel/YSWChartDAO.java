@@ -39,4 +39,22 @@ public class YSWChartDAO implements InterYSWChartDAO {
 		return detail;
 	}
 
+
+	
+	@Override
+	public List<HashMap<String, String>> findRentalInfo(HashMap<String, String> paramap) {
+
+		List<HashMap<String, String>> rentalInfo = sqlsession.selectList("YSW.findRentalInfo", paramap);
+		return rentalInfo;
+	}
+
+
+	// 장르별 대여 성별의 퍼센티지
+	@Override
+	public List<HashMap<String, String>> findRentalChartGender(HashMap<String, String> paramap) {
+
+		List<HashMap<String, String>> rentalInfoGender = sqlsession.selectList("YSW.findRentalChartGender", paramap);
+		return rentalInfoGender;
+	}
+
 }
