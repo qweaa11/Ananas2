@@ -275,4 +275,27 @@
 	
 	</select>
 
+
+	<!-- /////////////////////////////////// 메일발송 //////////////////////////////////////////////// -->
+	
+	
+	<resultMap type="HashMap" id="returnMailMap">
+		<result column="title" property="TITLE" javaType="String"/>
+		<result column="memberid" property="MEMBERID" javaType="String"/>
+		<result column="email" property="EMAIL" javaType="String"/>
+		<result column="name" property="NAME" javaType="String"/>
+	</resultMap>
+	
+	<select id="findAllRentalDeadlineOver" resultMap="returnMailMap">
+		
+		select title, memberid, email, name
+		from rental R join member M
+		on R.memberid_fk = M.memberid
+		join book B
+		on R.bookid_fk = B.bookid
+		where to_char(deadline-1, 'yyyy-mm-dd') = to_char(sysdate, 'yyyy-mm-dd')
+		
+	</select>
+	
+
 </mapper>
