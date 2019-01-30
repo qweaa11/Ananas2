@@ -129,7 +129,7 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	public void insertNewBookDetail(List<KKHBookVO> bookDetailList) {
 		for(KKHBookVO bookvo : bookDetailList) {
 			System.out.println("bookid:"+bookvo.getBookid()+", idx:"+bookvo.getIdx()+",image:"+bookvo.getImage()+",price:"+bookvo.getPrice()+",weight:"+bookvo.getWeight()+",totalpage:"+bookvo.getTotalpage()+",pdate:"+bookvo.getPdate());
-		 sqlsession.insert("KKH.inserNewBookDetail", bookvo);
+			sqlsession.insert("KKH.inserNewBookDetail", bookvo);
 		}
 	}
 	
@@ -218,6 +218,7 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		
 		return n;
 	}
+	
 	@Override
 	public int deleteBookAndBookDetail(String bookid) {
 		int n2 = sqlsession.delete("KKH.deleteBook_Detail",bookid);
@@ -225,35 +226,49 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		if(n1 == n2) return n1;
 		else return 0;
 	}
+	
 	@Override
 	public int updateDeadline(String extendBookid) {
 		int n = sqlsession.update("KKH.updateDeadline", extendBookid);
 		return n;
 	}
+	
 	@Override
 	public HashMap<String, String> findRentalBook(String returnBookid) {
 		HashMap<String,String> rentalBookInfo = sqlsession.selectOne("KKH.findRentalBook", returnBookid);
+		String reserveCount = sqlsession.selectOne("KKH.getReserveCount", returnBookid);
+		rentalBookInfo.put("RESERVECOUNT", reserveCount);
+		System.out.println(rentalBookInfo.get("IDX")+", "+rentalBookInfo.get("BOOKID_FK"));
 		return rentalBookInfo;
 	}
+	
 	@Override
 	public int insertReturnedBook(HashMap<String, String> rentalBookInfo) {
 		int n = sqlsession.insert("KKH.insertReturnedBook", rentalBookInfo);
 		return n;
 	}
+	
 	@Override
-	public int updateReturnedBookStatus(String returnBookid) {
-		int n = sqlsession.update("KKH.updateReturnBOokStatus", returnBookid);
+	public int updateReturnedBookStatus(HashMap<String, String> rentalBookInfo) {
+		System.out.println("reservecount:"+rentalBookInfo.get("RESERVECOUNT"));
+		int n = sqlsession.update("KKH.updateReturnBookStatus", rentalBookInfo);
 		return n;
 	}
 	@Override
-	public int updateLateMemberInfo(String memberid) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateLateMemberInfo(HashMap<String, String> rentalBookInfo) {
+		int n = sqlsession.update("KKH.updateLateMember", rentalBookInfo);				
+		return n;
 	}
 	@Override
 	public int deleteRentalBook(String returnBookid) {
-		// TODO Auto-generated method stub
-		return 0;
+		int n = sqlsession.delete("KKH.deleteRentalBook", returnBookid);
+		return n;
+	}
+	@Override
+	public int reserveCancel(String cancelBookid) {
+		sqlsession.update("KKH.CancelChangeStatus", cancelBookid);
+		int n = sqlsession.delete("KKH.reserveCancel", cancelBookid);
+		return n;
 	}
 	
 	

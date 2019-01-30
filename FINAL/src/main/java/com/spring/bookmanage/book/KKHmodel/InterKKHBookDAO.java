@@ -71,11 +71,13 @@ public interface InterKKHBookDAO {
 
 	int insertReturnedBook(HashMap<String, String> rentalBookInfo);
 
-	int updateReturnedBookStatus(String returnBookid);
+	int updateReturnedBookStatus(HashMap<String, String> rentalBookInfo);
 
-	int updateLateMemberInfo(String memberid);
+	int updateLateMemberInfo(HashMap<String, String> rentalBookInfo);
 
 	int deleteRentalBook(String returnBookid);
+
+	int reserveCancel(String cancelBookid);
 
 
 

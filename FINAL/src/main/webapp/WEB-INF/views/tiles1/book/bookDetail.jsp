@@ -119,7 +119,7 @@ th, td {
 		var reserveFlag = false;
 		var extendFlag = false;
 		var returnFlag = false;
-		
+		var reserve_RentalFlag = false;
 
 		$("#totalbook").click(function() {
 
@@ -162,6 +162,10 @@ th, td {
 				});
 				bookid = bookid.substr(0,bookid.length-1);
 				console.log(bookid);
+				if(bookid == ""){
+					alert("연장하실 책을 선택해 주세요.");
+					return;
+				}
 				var frm = document.extendBookForm;
 				frm.extendBookid.value = bookid;
 				frm.action = "extendBookList.ana";
@@ -201,10 +205,15 @@ th, td {
 				
 					bookid += $(this).val()+",";
 				});
+				
 				bookid = bookid.substr(0,bookid.length-1);
 				console.log(bookid);
+				if(bookid == ""){
+					alert("반납하실 책을 선택해 주세요.");
+					return;
+				}
 				var frm = document.returnBookForm;
-				frm.returnBookid.value = bookid;
+				frm.returnBookid.value = bookid; 
 				frm.action = "returnBookList.ana";
 				frm.method = "POST";
 				frm.submit();
@@ -279,12 +288,57 @@ th, td {
 			frm.submit();
 		});
 		
+		$(".reserve-Rental").hover(function(){
+			var bstatus = $(this).parent().parent().find(".bookStatus").find("input").val();
+			if(bstatus != 2 ){
+				if(!$(this).hasClass("disabled")){
+					$(this).addClass("disabled");
+				}
+				reserve_RentalFlag = true;
+				
+			}
+			
+		},function(){
+			reserveFlag = false;
+			$(this).removeClass("disabled");
+		});
+		
+		$(".reserve-Rental").click(function(){
+			
+			var bookid = $(this).val();
+			var memberid = $(this).parent().parent().find(".reserveMember").find(".reserveMemberid").text();
+			console.log(bookid);
+			console.log(memberid);
+			if(reserve_RentalFlag == false){
+				var frm = document.reserve_RentalForm;
+				frm.rentalBookid.value = bookid;
+				frm.rentalMemberid.value = memberid;
+				frm.action = "r3.ana";
+				frm.method = "GET";
+				frm.submit();
+			}
+				
+		});
+		
+		$(".reserveCancel").click(function(){
+			var bookid = $(this).val();
+			var frm = document.reserveCancelForm;
+			frm.cancelBookid.value = bookid;
+			frm.action = "reserveCancel.ana";
+			frm.method = "GET";
+			frm.submit();
+			
+			
+		});
 		
 		 var fcode_fk = "${bookDetailList.get(0).fcode_fk}";
 		  console.log(fcode_fk);
 		  var bigfcode = fcode_fk.substr(0, 1);
 		 findDetailField(bigfcode);
 		
+		 
+		 
+		 
 });//End of Ready 
 
 function openAllEditForm() {
@@ -435,6 +489,9 @@ function deleteAllBook(bookid){
 		
 	}
 }
+
+
+
 </script>
 
 <!-- Page Content -->
@@ -581,6 +638,7 @@ function deleteAllBook(bookid){
 								<th>도서명</th>
 								<th>ISBN</th>
 								<th>도서 등록일</th>
+								<th>도서 상태</th>
 								<th>예약 회원(이름)</th>
 								<th>연락처</th>
 								<th>회원 등록일</th>
@@ -603,12 +661,51 @@ function deleteAllBook(bookid){
 									<td>${bookReserv.TITLE }</td>
 									<td>${bookReserv.ISBN }</td>
 									<td>${bookReserv.BOOKREGDATE }</td>
-									<td>${bookReserv.MEMBERID }(${bookReserv.NAME })</td>
-									<td>${bookReserv.PHONE }</td>
+									<td class="bookStatus" >
+										<c:if test="${bookReserv.BSTATUS=='0' }">
+											기본
+										</c:if>
+										<c:if test="${bookReserv.BSTATUS=='1' }">
+											대여
+										</c:if>
+										<c:if test="${bookReserv.BSTATUS=='2' }">
+											예약
+										</c:if>
+										<c:if test="${bookReserv.BSTATUS=='3' }">
+											분실
+										</c:if>
+										<input type="hidden" value="${bookReserv.BSTATUS }"/>
+									</td>
+									<td class="reserveMember"><span class="reserveMemberid">${bookReserv.MEMBERID }</span>(${bookReserv.NAME })</td>
+									<c:if test="${bookReserv.PHONE.length() == 11 }">
+										<td>${bookReserv.PHONE.substring(0,3) }-${bookReserv.PHONE.substring(3,7) }-${bookReserv.PHONE.substring(7) }</td>
+									</c:if>
+									<c:if test="${bookReserv.PHONE.length() == 10 }">
+										<td>${bookReserv.PHONE.substring(0,3) }-${bookReserv.PHONE.substring(3,6) }-${bookReserv.PHONE.substring(6) }</td>
+									</c:if>
 									<td>${bookReserv.MEMBERREGDATE }</td>
 									<td>${bookReserv.RESERVEDATE }</td>
-									<td>${bookReserv.STATUS }</td>
-									<td><button type="button" class="btn">대여</button>&nbsp;|&nbsp;<button type="button" class="btn btn-warning">예약취소</button></td>
+									
+									<c:if test="${bookReserv.MSTATUS == '0' }">
+										<td>일반</td>
+									</c:if>
+									<c:if test="${bookReserv.MSTATUS == '1' }">
+										<td>휴면</td>
+									</c:if>
+									<c:if test="${bookReserv.MSTATUS == '2' }">
+										<td>이용정지</td>
+									</c:if>
+									<c:if test="${bookReserv.MSTATUS == '3' }">
+										<td>탈퇴</td>
+									</c:if>
+									<c:if test="${bookReserv.MSTATUS == '4' }">
+										<td>영구정지</td>
+									</c:if>
+									<td>
+										<button type="button" class="btn reserve-Rental" value="${bookReserv.BOOKID }">대여</button>
+											&nbsp;|&nbsp;
+										<button type="button" class="btn btn-warning reserveCancel" value="${bookReserv.BOOKID }">예약취소</button>
+									</td>
 								</tr>
 							</c:forEach>
 						</c:if>	
@@ -796,17 +893,25 @@ function deleteAllBook(bookid){
 								<form name="rentalBookForm">
 									<input type="hidden" name="rentalBookid"/>
 								</form>
-								<from name="reservBookForm">
+								<form name="reservBookForm">
 									<input type="hidden" name="reserveBookid"/>
-								</from>
+								</form>
 								<form name="extendBookForm">
 									<input type="hidden" name="extendBookid"/>
 									<input type="hidden" name="bookid" value="${bookid }"/>
 								</form>
-								<from name="returnBookForm">
+								<form name="returnBookForm">
 									<input type="hidden" name="returnBookid"/>
 									<input type="hidden" name="bookid" value="${bookid }"/>
-								</from>
+								</form>
+								<form name="reserve_RentalForm">
+									<input type="hidden" name="rentalBookid"/>
+									<input type="hidden" name="rentalMemberid"/>
+								</form>
+								<form name="reserveCancelForm">
+									<input type="hidden" name="cancelBookid"/>
+									<input type="hidden" name="bookid" value="${bookid }"/>
+								</form>
 <script>
 function editAllBookInfo(){
 	var flag  = false;

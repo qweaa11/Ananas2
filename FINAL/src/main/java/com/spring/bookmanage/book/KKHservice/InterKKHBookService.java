@@ -61,4 +61,6 @@ public interface InterKKHBookService {
 
 	int returnBook(String returnBookid);
 
+	int reserveCancel(String cancelBookid);
+
 }

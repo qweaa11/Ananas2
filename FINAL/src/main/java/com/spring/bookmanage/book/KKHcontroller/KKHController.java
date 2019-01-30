@@ -251,7 +251,9 @@ public class KKHController {
 				resultMap.put("BOOKID",map.get("BOOKID"));
 				resultMap.put("TITLE",map.get("TITLE"));
 				resultMap.put("ISBN", map.get("ISBN"));
-				resultMap.put("STATUS", map.get("STATUS"));
+				resultMap.put("MSTATUS", map.get("MSTATUS"));
+				resultMap.put("BSTATUS", map.get("BSTATUS"));
+				System.out.println("BSTATUS:"+map.get("BSTATUS"));
 				resultMap.put("MEMBERREGDATE", map.get("MEMBERREGDATE"));
 				resultMap.put("MEMBERID", map.get("MEMBERID"));
 				resultMap.put("RESERVEDATE", map.get("RESERVEDATE"));
@@ -536,7 +538,7 @@ public class KKHController {
 		String bookid = request.getParameter("bookid");
 		String extendBookid = request.getParameter("extendBookid");
 		
-		try {
+		
 			String[] extendBookArr = extendBookid.split(",");
 			System.out.println(extendBookArr[0]);
 			String[] extendSuccessBook = service.updateDeadline(extendBookArr);
@@ -562,9 +564,9 @@ public class KKHController {
 				request.setAttribute("loc", loc);
 				
 			}
-		} catch (PatternSyntaxException e) {
+		
 			
-			int n = service.updateDeadline(extendBookid);
+		/*	int n = service.updateDeadline(extendBookid);
 			if(n == 0) { 
 				String msg = "연장 실패";
 				String loc = "javascript:history.back()";
@@ -579,8 +581,8 @@ public class KKHController {
 				request.setAttribute("msg", msg);
 				request.setAttribute("loc", loc);
 				
-			}
-		}
+			}*/
+		
 		
 		return "msg";
 	}
@@ -591,7 +593,7 @@ public class KKHController {
 		String returnBookid = request.getParameter("returnBookid");
 		String bookid = request.getParameter("bookid");
 		int n=0;
-		try {
+		//try {
 			String[] returnBookidArr = returnBookid.split(",");
 			String[] returnSuccessBook = service.returnBook(returnBookidArr);
 			
@@ -616,7 +618,7 @@ public class KKHController {
 				
 			}
 			
-		} catch (PatternSyntaxException e) {
+		/*} catch (PatternSyntaxException e) {
 			n = service.returnBook(returnBookid);
 			
 			if(n != 1) {
@@ -634,6 +636,31 @@ public class KKHController {
 				request.setAttribute("loc", loc);
 				
 			}
+		}*/
+		
+		return "msg";
+	}
+	
+	@RequestMapping(value="/reserveCancel.ana",method= {RequestMethod.GET})
+	public String reserveCancel(HttpServletRequest request, HttpServletResponse response) {
+		String bookid = request.getParameter("bookid");
+		String cancelBookid = request.getParameter("cancelBookid");
+		
+		int n = service.reserveCancel(cancelBookid);
+		if(n != 1) {
+			String msg = "예약 취소실패";
+			String loc = "javascript:history.back()";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+			
+		}else {
+			String msg = "예약이 취소되었습니다.";
+			String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
+			System.out.println("reserveCancel:"+bookid);
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
 		}
 		
 		return "msg";

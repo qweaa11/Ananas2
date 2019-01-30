@@ -170,7 +170,8 @@
 		<result property="BOOKID" column="bookid" javaType="String"/>
 		<result property="TITLE" column="title" javaType="String" />
 		<result property="BOOKREGDATE" column="bookregdate" javaType="String"/>
-		<result property="STATUS" column="status" javaType="String" />
+		<result property="MSTATUS" column="mstatus" javaType="String" />
+		<result property="BSTATUS" column="bstatus" javaType="String" />
 		<result property="ISBN" column="isbn" javaType="String" />
 		<result property="PHONE" column="phone" javaType="String" />
 		<result property="MEMBERREGDATE" column="memberregdate" javaType="String" />
@@ -179,7 +180,8 @@
 		<result property="NAME" column="name" javaType="String" />
 	</resultMap>
 	<select id="findBookReservation" parameterType="String" resultMap="BookReservation">
-		select B.bookid, title, isbn, to_char(D.regdate,'yyyy-mm-dd') as bookregdate, M.status,M.phone, to_char(M.regdate, 'yyyy-mm-dd') as memberregdate, memberid,reservedate,M.name
+		select B.bookid, title, isbn, to_char(D.regdate,'yyyy-mm-dd') as bookregdate, M.status as mstatus,M.phone, to_char(M.regdate, 'yyyy-mm-dd') as memberregdate, memberid,reservedate,M.name
+				,B.status as bstatus
 		from book B join reservation R on B.bookid = R.bookid_fk
 		join member M on R.memberid_fk = M.memberid join book_detail D on B.bookid = D.bookid
 		where substr(R.bookid_fk,1, instr(R.bookid_fk,'-',1,2)-1 ) = #{bookid}
@@ -356,27 +358,58 @@
 	
 	
 	<resultMap type="HashMap" id="rentalBook">
-		<result property="IDX" column="idx"  />
-		<result property="BOOKID_FK" column="bookid_fk"  />
-		<result property="RENTALDATE" column="rentaldate"  />
-		<result property="DEADLINE" column="deadline" />
-		<result property="RENEW" column="renew" />
-		<result property="LATEDATE" column="latedate" />
-		<result property="MEMBERID_FK" column="memberid_fk"/>
+		<result property="IDX" column="idx"  javaType="String"/>
+		<result property="BOOKID_FK" column="bookid_fk" javaType="String" />
+		<result property="RENTALDATE" column="rentaldate" javaType="String" />
+		<result property="DEADLINE" column="deadline" javaType="String"/>
+		<result property="RENEW" column="renew" javaType="String"/>
+		<result property="LATEDATE" column="latedate" javaType="String"/>
+		<result property="MEMBERID_FK" column="memberid_fk" javaType="String"/>
 	</resultMap>
 	<select id="findRentalBook" parameterType="String" resultMap="rentalBook">
-		select idx,bookid_fk, memberid_fk, rentaldate, deadline,renew , trunc(deadline - sysdate) as latedate
+		select idx,bookid_fk, memberid_fk, rentaldate, deadline,renew , trunc(sysdate - deadline) as latedate 
 		from rental
 		where bookid_fk = #{returnBookid}
 	</select>
 	
+	<select id="getReserveCount" parameterType="String" resultType="String">
+		select count(*) as reserveCount
+		from reservation
+		 where bookid_fk = #{returnBookid}
+	</select>
+	
 	<insert id="insertReturnedBook" parameterType="HashMap">
 		insert into returned(idx,memberid_fk,bookid_fk,returndate,rentaldate,deadline)
-		values(returned_seq.nextval,#{MEMBERID_FK},#{BOOKID_FK}, sysdate, #{RENTALDATE}, #{DEADLINE})
+		values(returned_seq.nextval,#{MEMBERID_FK},#{BOOKID_FK}, default, to_date(#{RENTALDATE},'yyyy-mm-dd hh24:mi:ss'), to_date(#{DEADLINE},'yyyy-mm-dd hh24:mi:ss'))
 	</insert>
 	
-	<!-- <update id="updateReturnBOokStatus" parameterType="String">
+	 <update id="updateReturnBookStatus" parameterType="HashMap">
+	 	update book set 
+	 	<if test="RESERVECOUNT==1">
+			status =  2
+		</if>
+		<if test="RESERVECOUNT==0">
+			status =  0
+		</if>
+		where bookid = #{BOOKID_FK}
+	</update>
+	
+	<update id="updateLateMember" parameterType="HashMap">
+		update member set latefee =100*#{LATEDATE}, revokedate = #{LATEDATE}, status = 2
+		where memberid = #{MEMBERID_FK}	
+	</update> 
+	
+	<delete id="deleteRentalBook" parameterType="String">
+		delete from rental where bookid_fk = #{returnBookid}
+	</delete>
+	
+	<update id="CancelChangeStatus" parameterType="String">
 		update book set status = 0
-		where book 
-	</update> -->
+		where bookid = cancelBookid
+			status = 2
+	</update>
+	
+	<delete id="reserveCancel" parameterType="String">
+		delete from reservation where bookid_fk = #{cancelBookid}
+	</delete>
 </mapper>
