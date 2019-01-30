@@ -230,11 +230,7 @@
 </Script>
 
 <body>
-	<div style="margin-left: 42%; border: solid 0px red; margin-bottom: 50px;">
-		<h2>전체 도서관 장르별 보유 통계</h2>
-	</div>
-	
-	<div class="col-lg-12 col-sm-12" style="width: 95%; border: solid 0px red;">
+	<div class="col-lg-12 col-sm-12" style="border: solid 0px red; margin-bottom: 50px; height: 550px;">
 		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="displayBookChart" style="height: 400px; display: inline-block; border: solid 0px red; margin-left: 5%;"></div>
 		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="chart-container" style="height: 400px; display: inline-block; border: solid 0px red; margin-left: 5%;"></div>
 		<select id="year">
@@ -256,7 +252,7 @@
 			<option value="11">11월</option>
 			<option value="12">12월</option>
 		</select>
-	</div>   
+	</div>
 </body>
 
 
