@@ -25,4 +25,24 @@ public interface JGHBookMapper {
 	 * @return
 	 */
 	List<DeleteBookVO> findAllDeleteBook();
+
+	/**
+	 * 해당하는 삭제도서목록 조회
+	 * @param delidArray
+	 * @return
+	 */
+	List<DeleteBookVO> findAllDeleteBookByDelid(String[] delidArray);
+	/**
+	 * 도서 추가
+	 * @param delidArray
+	 * @return
+	 */
+	int addSetBook(String[] delidArray, List<DeleteBookVO> bookSetList) throws Throwable;
+
+	/**
+	 * 삭제도서 삭제
+	 * @param delidArray
+	 * @return
+	 */
+	int deleteSetDeleteBook(String[] delidArray);
 }

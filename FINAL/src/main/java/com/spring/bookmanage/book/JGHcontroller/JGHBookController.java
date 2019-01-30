@@ -57,6 +57,9 @@ public class JGHBookController {
 	
 	@RequestMapping(value = "restore.ana", method = {RequestMethod.POST})
 	public String restore(HttpServletRequest request, HttpServletResponse response) {
+		String[] delidArray = request.getParameterValues("delid");
+
+		int restoreBook = service.restoreBookService(delidArray);
 
 		return "";
 	}// end of restore
