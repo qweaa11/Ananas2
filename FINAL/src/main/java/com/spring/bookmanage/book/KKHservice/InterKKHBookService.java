@@ -55,4 +55,10 @@ public interface InterKKHBookService {
 
 	String[] updateDeadline(String[] extendBookArr);
 
+	int updateDeadline(String extendBookid);
+
+	String[] returnBook(String[] returnBookidArr);
+
+	int returnBook(String returnBookid);
+
 }

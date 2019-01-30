@@ -62,7 +62,7 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu3">
-							<i class="fa fa-image fa-3x"></i>
+							<span style="font-size: 20pt;">MH</span>
 						</button>
 					</div>
 					
@@ -94,7 +94,7 @@
 				</div>
 				
 				<div id="menu3" class="tab-pane fade">
-					<h3>3번탭</h3>
+					<jsp:include page="./chartDetail/YMHChart.jsp"></jsp:include>
 				</div>
 				
 				<div id="menu4" class="tab-pane fade">

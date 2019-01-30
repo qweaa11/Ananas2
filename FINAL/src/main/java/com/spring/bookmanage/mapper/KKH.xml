@@ -354,4 +354,29 @@
             where bookid_fk = #{extendBookid}) = 0
 	</update>
 	
+	
+	<resultMap type="HashMap" id="rentalBook">
+		<result property="IDX" column="idx"  />
+		<result property="BOOKID_FK" column="bookid_fk"  />
+		<result property="RENTALDATE" column="rentaldate"  />
+		<result property="DEADLINE" column="deadline" />
+		<result property="RENEW" column="renew" />
+		<result property="LATEDATE" column="latedate" />
+		<result property="MEMBERID_FK" column="memberid_fk"/>
+	</resultMap>
+	<select id="findRentalBook" parameterType="String" resultMap="rentalBook">
+		select idx,bookid_fk, memberid_fk, rentaldate, deadline,renew , trunc(deadline - sysdate) as latedate
+		from rental
+		where bookid_fk = #{returnBookid}
+	</select>
+	
+	<insert id="insertReturnedBook" parameterType="HashMap">
+		insert into returned(idx,memberid_fk,bookid_fk,returndate,rentaldate,deadline)
+		values(returned_seq.nextval,#{MEMBERID_FK},#{BOOKID_FK}, sysdate, #{RENTALDATE}, #{DEADLINE})
+	</insert>
+	
+	<!-- <update id="updateReturnBOokStatus" parameterType="String">
+		update book set status = 0
+		where book 
+	</update> -->
 </mapper>

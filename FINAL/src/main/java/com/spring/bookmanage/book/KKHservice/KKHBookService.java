@@ -190,16 +190,58 @@ public class KKHBookService implements InterKKHBookService{
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
 	public String[] updateDeadline(String[] extendBookArr) {
-		String[] extendSuccessBook = new String[extendBookArr.length];
+		String[] extendSuccessBookArr = new String[extendBookArr.length];
 		for(int i=0; i<extendBookArr.length;i++) {
 			int n = bookdao.updateDeadline(extendBookArr[i]);
 			if(n == 1) {
-				extendSuccessBook[i] = extendBookArr[i];
+				extendSuccessBookArr[i] = extendBookArr[i];
 			}
 				
 		}
 		
-		return extendSuccessBook;
+		return extendSuccessBookArr;
+	}
+	@Override
+	public int updateDeadline(String extendBookid) {
+		int n = bookdao.updateDeadline(extendBookid);
+		return n;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public String[] returnBook(String[] returnBookidArr) {
+		String[] returnSuccessBookArr = new String[returnBookidArr.length];
+		//List<HashMap<String,String>> rentalBookInfoList = new ArrayList<HashMap<String,String>>();
+		for(int i =0; i<returnBookidArr.length;i++) {
+			HashMap<String,String> rentalBookInfo = bookdao.findRentalBook(returnBookidArr[i]);
+			int n1 = bookdao.insertReturnedBook(rentalBookInfo);
+			int n2 = bookdao.updateReturnedBookStatus(returnBookidArr[i]);
+			int latedate = Integer.parseInt(rentalBookInfo.get("LATEDAY"));
+			int n3= 1;
+			if(latedate <0) {
+				n3 = bookdao.updateLateMemberInfo(rentalBookInfo.get("MEMBERID"));
+			}
+			int n4 = bookdao.deleteRentalBook(returnBookidArr[i]);
+			if(n1*n2*n3*n4 == 1) {
+				returnSuccessBookArr[i] = returnBookidArr[i];
+			}
+		}
+		
+		return returnSuccessBookArr;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int returnBook(String returnBookid) {
+		HashMap<String,String> rentalBookInfo = bookdao.findRentalBook(returnBookid);
+		int n1 = bookdao.insertReturnedBook(rentalBookInfo);
+		int n2 = bookdao.updateReturnedBookStatus(returnBookid);
+		int latedate = Integer.parseInt(rentalBookInfo.get("LATEDAY"));
+		int n3= 1;
+		if(latedate <0) {
+			n3 = bookdao.updateLateMemberInfo(rentalBookInfo.get("MEMBERID"));
+		}
+		int n4 = bookdao.deleteRentalBook(returnBookid);
+		if(n1*n2*n3*n4 == 1) return 1;
+		else return 0;
 	}
 	
 

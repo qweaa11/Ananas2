@@ -157,10 +157,7 @@ th, td {
 			var bookid = "";
 			if(extendFlag == false)	{
 				$("input.bookChk:checkbox:checked").each(function(){
-<<<<<<< HEAD
 					
-				});
-=======
 					bookid += $(this).val()+",";
 				});
 				bookid = bookid.substr(0,bookid.length-1);
@@ -170,8 +167,9 @@ th, td {
 				frm.action = "extendBookList.ana";
 				frm.method = "POST";
 				frm.submit();
->>>>>>> branch 'master' of https://github.com/qweaa11/Ananas2.git
 			}
+			
+			
 		});
 		
 		$("#btn3").hover(function(){
@@ -194,6 +192,25 @@ th, td {
 			$(this).removeClass("disabled");
 			$("a#toggle3[data-toggle='tooltip']").tooltip("hide");
 	});
+		
+		$("#btn3").click(function(){
+			
+			var bookid = "";
+			if(returnFlag == false){
+				$("input.bookChk:checkbox:checked").each(function(){
+				
+					bookid += $(this).val()+",";
+				});
+				bookid = bookid.substr(0,bookid.length-1);
+				console.log(bookid);
+				var frm = document.returnBookForm;
+				frm.returnBookid.value = bookid;
+				frm.action = "returnBookList.ana";
+				frm.method = "POST";
+				frm.submit();
+			}
+			
+		});
 	
 		
 		$(".rental").hover(function(){
@@ -784,7 +801,12 @@ function deleteAllBook(bookid){
 								</from>
 								<form name="extendBookForm">
 									<input type="hidden" name="extendBookid"/>
+									<input type="hidden" name="bookid" value="${bookid }"/>
 								</form>
+								<from name="returnBookForm">
+									<input type="hidden" name="returnBookid"/>
+									<input type="hidden" name="bookid" value="${bookid }"/>
+								</from>
 <script>
 function editAllBookInfo(){
 	var flag  = false;
