@@ -74,7 +74,13 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu5">
-							<i class="fa fa-check fa-3x"></i>
+							<span style="font-size:20pt;">SY</span>
+						</button>
+					</div>
+					
+					<div class="process-step">
+						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu6">
+							<span style="font-size:20pt;">추가</span>
 						</button>
 					</div>
 					
@@ -102,7 +108,11 @@
 				</div>
 				
 				<div id="menu5" class="tab-pane fade">
-					<h3>5번탭</h3>
+					<jsp:include page="./chartDetail/NSYChart.jsp"></jsp:include>
+				</div>
+				
+				<div id="menu6" class="tab-pane fade">
+					<jsp:include page="./chartDetail/NSYChart.jsp"></jsp:include>
 				</div>
 				
 			</div>

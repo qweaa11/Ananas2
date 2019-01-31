@@ -650,7 +650,7 @@ function deleteAllBook(bookid){
 						<tbody id="displayBookList">
 						<c:if test="${ empty bookReservateList }">
 							<tr>
-								<td colspan="11" style="font-size: 17pt; font-weight:bold;">예약된 책이 없습니다.</td>
+								<td colspan="12" style="font-size: 17pt; font-weight:bold;">예약된 책이 없습니다.</td>
 							</tr>
 						</c:if>
 						<c:if test="${not empty bookReservateList }">
@@ -915,6 +915,7 @@ function deleteAllBook(bookid){
 <script>
 function editAllBookInfo(){
 	var flag  = false;
+	var reg = new RegExp('^([\\S]+(\\.(?i)(jpg|png|gif))$)');
 	<c:forEach var="book" items="${bookDetailList}">
 		if(${book.status != 0}){
 			flag = true;
@@ -931,7 +932,16 @@ function editAllBookInfo(){
 		alert("저자/역자는 입력해야 합니다.");
 		return;
 	}
+	var image = $("#editImage").prop("files")[0].name;
+	console.log(image);
+	if(image != null && image != ""){
+		if(reg.test(image) == false){
+			alert("이미지파일은 .jpg, .png, .gif 파일만 가능합니다.");
+			return;
+		}
+	}
 	
+	if(reg.test())
 	var frm = document.editPublicForm;
 	frm.action = "editPublicBookInfo.ana"; 
 	frm.method = "POST";
