@@ -24,7 +24,7 @@ public class Scheduled {
 	@Autowired
 	AES256 aes;
 	
-	@org.springframework.scheduling.annotation.Scheduled(cron = "30 15 19 * * *")
+	@org.springframework.scheduling.annotation.Scheduled(cron = "0 01 00 * * *")
     public void deadlineOverMailSubmit(){
         
 		List<HashMap<String, String>> memberidList = service.findAllRentalDeadlineOver();
@@ -51,7 +51,7 @@ public class Scheduled {
 				
 				if(memberMap.get("MEMBERID").equals(lastMap.get("MEMBERID"))) {
 					count ++;
-					lastMap.put("TITLE", lastMap.get("TITLE") + "," + memberMap.get("TITLE"));
+					lastMap.put("TITLE", lastMap.get("TITLE") + ",<br/>" + memberMap.get("TITLE"));
 				}
 				
 			}// end of for 내부 -----------

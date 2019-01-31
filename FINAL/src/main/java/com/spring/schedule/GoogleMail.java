@@ -67,20 +67,26 @@ public class GoogleMail {
     	        
     	// 메시지 본문의 내용과 형식, 캐릭터 셋 설정
     	msg.setContent( "<div style='margin-top: 30px;'>\n" + 
-		    			"	<div class='container' style='border: 1px solid #377bb3; border-radius: 5px; width: 80%; margin: auto; padding-top: 0px;' align=\"center\">\n" + 
+		    			"	<div class='container' style='border: 1px solid #377bb3; border-radius: 5px; width: 60%; margin: auto; padding-top: 0px;' align=\"center\">\n" + 
 		    			"		<div class='row'>\n" + 
 		    			"		\n" + 
 		    			"			<div class='panel panel-primary'>\n" + 
 		    			"				<div class='panel-heading' style='background-color: #377bb3;'>\n" + 
 		    			"					<h3 class='panel-title' style='margin: 0px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle;'>\n" + 
-		    			"						<img src=\"https://cdn.icon-icons.com/icons2/621/PNG/512/magnifier-1_icon-icons.com_56924.png\" width=\"30px\" height=\"30px\"> ANANAS</span>\n" + 
+		    			"						<img src=\"https://cdn.icon-icons.com/icons2/621/PNG/512/magnifier-1_icon-icons.com_56924.png\" width=\"30px\" height=\"30px\"> ANANAS\n" + 
 		    			"					</h3>\n" + 
 		    			"				</div>\n" + 
 		    			"				<div class='panel-body' style='font-size: 15pt; margin-top: 20px; margin-bottom: 20px;'>\n" + 
-		    			"					<span style=\"color: red; font-weight: bold;\">" + rentalInfo.get("MEMBERID") + "(" + rentalInfo.get("NAME") +
-		    								")</span> 님의 <span style=\"color: red; font-weight: bold;\">" + rentalInfo.get("TITLE") + "</span>\n" + 
-		    			"					이 반납 기한이 <span style=\"color: red; font-weight: bold;\">내일</span>까지입니다.<br/>\n" + 
-		    			"					대여한 도서관에서 반납해주시기 바랍니다.\n" + 
+		    			"					<ul style=\"text-align: left;\">\n" + 
+		    			"						<li>\n" + 
+		    			"							<span style=\"color: blue; font-weight: bold;\">" + rentalInfo.get("MEMBERID") + "(" + rentalInfo.get("NAME") + 
+		    										")</span> 님의 <br/><span style=\"color: red; font-weight: bold;\">" + rentalInfo.get("TITLE") + "</span><br/>\n" + 
+		    			"							이 반납 기한이 <span style=\"color: red; font-weight: bold;\">내일</span>까지입니다.<br/>\n" + 
+		    			"						</li>\n" + 
+		    			"						<li style='margin-top: 10px;'>\n" + 
+		    			"							대여한 도서관에서 반납해주시기 바랍니다.\n" + 
+		    			"						</li>\n" + 
+		    			"					</ul>\n" + 
 		    			"				</div>\n" + 
 		    			"\n" + 
 		    			"			</div>\n" + 
