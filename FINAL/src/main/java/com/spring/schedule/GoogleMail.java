@@ -15,6 +15,12 @@ import com.spring.schedule.MySMTPAuthenticator;
  
 public class GoogleMail {
 	
+	
+	/**
+	 * 반납 1일전인 사람에게 메일발송
+	 * @param rentalInfo
+	 * @throws Exception
+	 */
     public void sendmail(HashMap<String, String> rentalInfo)  // rentalInfo 받는 사람의 정보
     		throws Exception{
         

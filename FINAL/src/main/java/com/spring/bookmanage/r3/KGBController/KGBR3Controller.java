@@ -26,6 +26,13 @@ public class KGBR3Controller {
 	@Autowired
 	InterKGBR3Service r3service;
 
+	
+	/**
+	 * 대여/반납/예약 페이지 이동
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3.ana", method= {RequestMethod.GET})
 	public String r3Main(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -40,6 +47,12 @@ public class KGBR3Controller {
 	}// end of r3()--------------------------------
 	
 	
+	/**
+	 * 도서 대여
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3searchMember.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String,String>> r3searchMember(HttpServletRequest request, HttpServletResponse response) {
@@ -79,6 +92,13 @@ public class KGBR3Controller {
 		
 	}// end of r3searchMember()------------------------------------
 	
+	
+	/**
+	 * 회원조회
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3findOneMember.ana", method= {RequestMethod.GET})
 	@ResponseBody 
 	public HashMap<String, String> r3findOneMember(HttpServletRequest request, HttpServletResponse response) {
@@ -100,6 +120,13 @@ public class KGBR3Controller {
 		
 	}// end of r3findOneMember()------------------
 	
+	
+	/**
+	 * 도서 조회
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3searchBook.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, String>> r3searchBook(HttpServletRequest request, HttpServletResponse response) {
@@ -145,6 +172,12 @@ public class KGBR3Controller {
 	}// end of r3searchBook()-----------------------------
 	
 	
+	/**
+	 * 도서 대여
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/rentalInsert.ana", method= {RequestMethod.POST})
 	@ResponseBody
 	public HashMap<String, String> rentalInsert(HttpServletRequest request, HttpServletResponse response) {
@@ -187,7 +220,12 @@ public class KGBR3Controller {
 	}// end of rentalInsert()------------------------
 	
 	
-	
+	/**
+	 * 대여목록
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3searchRental.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, String>> searchRental(HttpServletRequest request, HttpServletResponse response) {
@@ -230,6 +268,12 @@ public class KGBR3Controller {
 	}// end of searchRental()-------------------
 	
 	
+	/**
+	 * 도서 반납
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3bookReturn.ana", method= {RequestMethod.POST})
 	@ResponseBody
 	public HashMap<String, String> r3bookReturn(HttpServletRequest request, HttpServletResponse response) {
@@ -265,6 +309,12 @@ public class KGBR3Controller {
 	}// end of bookReturn()---------------
 	
 	
+	/**
+	 * 도서 연장
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3bookRenew.ana", method= {RequestMethod.POST})
 	@ResponseBody
 	public HashMap<String, String> r3bookRenew(HttpServletRequest request, HttpServletResponse response) {
@@ -295,6 +345,12 @@ public class KGBR3Controller {
 	}// end of r3bookReservation()-------------------------------
 	
 	
+	/**
+	 * 예약에 대한 대여 목록
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/r3searchReserveRental.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, String>> r3searchReserveRental(HttpServletRequest request, HttpServletResponse response) {
@@ -337,7 +393,12 @@ public class KGBR3Controller {
 	}// end of r3searchReserveRental()-------------------
 	
 	
-	
+	/**
+	 * 예약
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="r3bookReservation.ana", method= {RequestMethod.POST})
 	@ResponseBody
 	public HashMap<String, String> r3bookReservation(HttpServletRequest request, HttpServletResponse response) {
