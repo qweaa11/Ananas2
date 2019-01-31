@@ -3,21 +3,43 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/jquery-ui-1.11.4.custom/jquery-ui.css" />
+<script type="text/javascript" src="<%= request.getContextPath() %>/resources/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
 <% String ctxPath = request.getContextPath(); %>
    
 <style type="text/css">
-	table, th, td, input, textarea {border: solid gray 1px;}
 	
-	#table, #table2 {border-collapse: collapse;
-	 		         width: 1000px;
-	 		        }
-	#table th, #table td{padding: 5px;}
+	table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 70%;
+	}
+	
+	td, th {
+	  border: 1px solid #dddddd;
+	  text-align: left;
+	  padding: 8px;
+	}
+	
+	tr:nth-child(even) {
+	  background-color: #f2f2f2;
+	}
+	
+	ul {
+		padding-left: 0px;
+	}
+
+	/* table, th, td, input, textarea {border: solid gray 1px;} */
+	
+	#table {border-collapse: collapse;
+	 		width: 1000px;
+	 		}
+	/* #table th, #table td{padding: 5px;}
 	#table th{width: 120px; background-color: #DDDDDD;}
-	#table td{width: 860px;}
+	#table td{width: 860px;} */
 	.long {width: 470px;}
 	.short {width: 120px;} 	
-	
-	a{text-decoration: none;}	
 
 </style>
 
@@ -87,14 +109,10 @@
     
 </script>
 
-<div style="padding-left: 10%; border: solid 0px red;">
-	<h1>글내용보기</h1>
+<div style="padding-left: 20%; border: solid 0px red;">
+	<h1>글 수정하기</h1>
 	
 	<table id="table">
-		<tr>
-			<th>글번호</th>
-			<td>${boardvo.idx}</td>
-		</tr>
 		<tr>
 			<th>성명</th>
 			<td>${boardvo.name}</td>
@@ -120,15 +138,17 @@
 	
 	<br/>
 	
-	<button type="button" id="btnUpdate">완료</button>
-	<button type="button" onClick="javascript:history.back();">취소</button>
-	<button type="button" onClick="javascript:location.href='<%=request.getContextPath()%>/del.ana?idx=${boardvo.idx}'">삭제</button>
+	<div style="float: right; margin-right: 34.3%">
+		<button type="button" class="btn btn-info btn-sm" id="btnUpdate">완료</button>
+		<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
+		<button type="button" class="btn btn-info btn-sm" onClick="javascript:location.href='<%=request.getContextPath()%>/del.ana?idx=${boardvo.idx}'">삭제</button>
+	</div>
 	
 	<form name="editFrm">
-		<input type="hidden" name="idx" value="${boardvo.idx}"/>
-		<input type="hidden" name="subject"/>
-		<input type="hidden" name="content"/>
-		<input type="hidden" name="pw"/>
+		<input type="text" name="idx" value="${boardvo.idx}"/>
+		<input type="text" name="subject"/>
+		<input type="text" name="content"/>
+		<input type="text" name="pw"/>
 	</form>
 		
 	<br/>

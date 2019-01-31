@@ -19,4 +19,5 @@ public interface InterYjkService {
 
 	List<LibraryVO> getliblibrary();// 도서관 정보 가져오기	
 
+
 }

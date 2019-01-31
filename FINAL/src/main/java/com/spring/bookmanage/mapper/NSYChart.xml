@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="NSYChart">
+	
+	<!-- 도서관별 보유도서 비율(통계) 파이차트  -->
+	<resultMap id="libraryBookPieChartMap" type="HashMap">
+		<result property="libname" column="libname" javaType="String"/>
+		<result property="percent" column="percent" javaType="String"/>
+	</resultMap>
+	<select id="libraryBookPieChart" resultMap="libraryBookPieChartMap">
+		select bookQty, libname, totalbookQty, trunc((bookQty)/(totalbookQty)*100,1) AS percent
+		from
+		(
+		select count(*) AS bookQty, libname, (select count(*) from book) AS totalbookQty
+		from library L 
+		join book B on L.libcode = B.libcode_fk
+		group by libname
+		)v
+	</select>
+	
+	<!-- 도서관별 보유도서 비율(통계) 바차트(분류별 도서비율 추가) -->
+	<resultMap id="libraryBookBarChartMap" type="HashMap">
+		<result property="cname" column="cname" javaType="String"/>
+		<result property="percent" column="percent" javaType="String"/>
+	</resultMap>
+	<select id="libraryBookBarChart" resultMap="libraryBookBarChartMap">
+		select bookQty, totalbookQty, trunc((bookQty)/(totalbookQty)*100,1) AS percent, cname
+		from
+		(
+		select count(*) AS bookQty
+		    , (select count(*) 
+		        from book B
+		        join library L on L.libcode = B.libcode_fk
+		        where libname = #{libname}) AS totalbookQty
+		    , cname
+		from library L 
+		join book B on L.libcode = B.libcode_fk
+		join category C on C.ccode = B.ccode_fk
+		where libname = #{libname}
+		group by cname
+		)v
+	</select>
+	
+</mapper>

@@ -4,13 +4,13 @@
  <!-- ==== mapper 이름 설정 ==== -->
 <mapper namespace="NSYLibrary">
 	<!-- 도서관등록 완료 하기 -->
-	<insert id="resisterLibraryEnd" parameterType="com.spring.bookmanage.library.model.NSYLibraryVO">
+	<insert id="resisterLibraryEnd" parameterType="com.spring.bookmanage.library.NSYmodel.NSYLibraryVO">
 		insert into library(libcode, idx, libname, tel, post, addr1, addr2, fileName, orgFilename, fileSize, regDate, y, x) 
 		values('L'||libcode_seq.nextval, library_seq.nextval, #{libname}, #{tel}, #{post}, #{addr1}, #{addr2}, #{fileName}, #{orgFilename}, #{fileSize}, default, #{y}, #{x})
 	</insert>
 	
 	<!-- 도서관목록 가져오기 (페이징, 검색기능 가능) -->
-	<select id="getLibraryList" parameterType="HashMap" resultType="com.spring.bookmanage.library.model.NSYLibraryVO">
+	<select id="getLibraryList" parameterType="HashMap" resultType="com.spring.bookmanage.library.NSYmodel.NSYLibraryVO">
 		select RNO, libcode, idx, libname, tel, post, addr1, addr2, fileName, orgFilename, fileSize, regDate, y, x
 		from
 		(
@@ -38,20 +38,20 @@
 	</select>
 	
 	<!-- 도서관상세정보 가져오기(도서관수정페이지도 같이사용함) -->
-	<select id="getLibraryDetailInfo" parameterType="String" resultType="com.spring.bookmanage.library.model.NSYLibraryVO">
+	<select id="getLibraryDetailInfo" parameterType="String" resultType="com.spring.bookmanage.library.NSYmodel.NSYLibraryVO">
 		select libcode, idx, libname, tel, post, addr1, addr2, fileName, orgFilename, fileSize, regDate, y, x
 		from library
 		where idx = #{idx}
 	</select>
 	
 	<!-- 도서관정보수정하기 완료하기 (이미지파일이 있는경우) -->
-	<update id="editLibraryInfoEnd" parameterType="com.spring.bookmanage.library.model.NSYLibraryVO">
+	<update id="editLibraryInfoEnd" parameterType="com.spring.bookmanage.library.NSYmodel.NSYLibraryVO">
 		update library set libname = #{libname}, tel = #{tel}, post = #{post}, addr1 = #{addr1}, addr2 = #{addr2}, y = #{y}, x = #{x}, fileName = #{fileName}, orgFilename = #{orgFilename}, fileSize = #{fileSize}  
 		where idx = #{idx}
 	</update>
 	
 	<!-- 도서관정보수정하기 완료하기 (이미지파일이 없는경우) -->
-	<update id="editLibraryInfoEnd_noImg" parameterType="com.spring.bookmanage.library.model.NSYLibraryVO">
+	<update id="editLibraryInfoEnd_noImg" parameterType="com.spring.bookmanage.library.NSYmodel.NSYLibraryVO">
 		update library set libname = #{libname}, tel = #{tel}, post = #{post}, addr1 = #{addr1}, addr2 = #{addr2}, y = #{y}, x = #{x} 
 		where idx = #{idx}
 	</update>

@@ -24,6 +24,9 @@ public class Scheduled {
 	@Autowired
 	AES256 aes;
 	
+	/**
+	 * 12시가 되면 대여한 책중 반납 1일전인 사람에게 메일 발송
+	 */
 	@org.springframework.scheduling.annotation.Scheduled(cron = "0 01 00 * * *")
     public void deadlineOverMailSubmit(){
         

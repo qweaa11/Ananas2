@@ -115,7 +115,7 @@
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
 							<li><a href="r3.ana">대출/반납/예약</a></li>
 							<li><a href="rentalList.ana">대여목록</a></li>
-							<li><a href="bookReturned.ana">예약목록</a></li>
+							<li><a href="reservationList.ana">예약목록</a></li>
 							<li><a href="bookReturned.ana">반납목록</a></li>
 						</ul>
 					</li>
@@ -144,9 +144,9 @@
 						<img src="resources/img/home-logo/home-logo5-mini.png">
 						<span style="margin-left: 10px;">사서게시판</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
-							<li><a href="boardList.ana">공지 게시판</a></li>
+							<li><a href="noticeList.ana">공지 게시판</a></li>
 							<li><a href="board.ana">자유 게시판</a></li>
-						</ul>
+						</ul>       
 					</li>
 	                
 	            </ul>

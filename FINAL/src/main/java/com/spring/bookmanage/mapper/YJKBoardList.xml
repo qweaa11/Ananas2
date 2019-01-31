@@ -6,28 +6,39 @@
 <!-- ===== 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
 <mapper namespace="bookmanage">
 
+<!--  글쓰기 idx 값 채번해오기  -->
+<select id="selectBoardIdx" resultType="int">
+	select board_seq.nextval
+	from dual
+</select>
 <!-- 글 쓰기 완료요청(파일첨부가 없는) -->
-<insert id="boardAdd" parameterType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
-	<if test="root.equals('')"> <!-- 원글 -->
+<insert id="boardAdd" parameterType="HashMap">
+	<if test="ROOT.equals('')"> <!-- 원글 -->
 	insert into Board(idx, libid_fk, name, subject, content, pw, readCount, regDate, status, groupno, root, depthno)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, 0, 0)
+	values(#{IDX}, #{LIBID_FK}, #{NAME}, #{SUBJECT}, #{CONTENT}, #{PW}, 0, sysdate, 0, #{GROUPNO}, 0, 0)
 	</if>
-	<if test="!root.equals('')"> <!-- 답글 -->
+	<if test="!ROOT.equals('')"> <!-- 답글 -->
 	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{root}, #{depthno}+1)
+	values(#{IDX}, #{LIBID_FK}, #{NAME}, #{SUBJECT}, #{CONTENT}, #{PW}, default, default, 0, #{GROUPNO}, #{ROOT}, #{DEPTHNO}+1)
 	</if>
 </insert>
 
 <!-- 글 쓰기 완료요청(파일첨부가 있는) -->
-<insert id="boardAdd_withFile" parameterType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
-	<if test="root.equals('')"> <!-- 원글 -->
+<!-- <insert id="boardAdd_withFile" parameterType="HashMap">
+	<if test="ROOT.equals('')"> 원글
 	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, fileName, orgFileName, fileSize, root, depthno)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{fileName}, #{orgFileName}, #{fileSize}, 0, 0)
+	values(board_seq.nextval, #{LIBID_FK}, #{NAME}, #{SUBJECT}, #{CONTENT}, #{PW}, default, default, 0, #{GROUPNO}, #{FILENAME}, #{ORGFILENAME}, #{FILESIZE}, 0, 0)
 	</if>
-	<if test="!root.equals('')"> <!-- 답글 -->
+	<if test="!ROOT.equals('')"> 답글
 	insert into Board(idx, libid_fk, name, subject, content, pw, readcount, regDate, status, groupno, root, depthno, fileName, orgFileName, fileSize)
-	values(board_seq.nextval, #{libid_fk}, #{name}, #{subject}, #{content}, #{pw}, default, default, 0, #{groupno}, #{root}, #{depthno}+1, #{fileName}, #{orgFileName}, #{fileSize})
+	values(board_seq.nextval, #{LIBID_FK}, #{NAME}, #{SUBJECT}, #{CONTENT}, #{PW}, default, default, 0, #{GROUPNO}, #{ROOT}, #{DEPTHNO}+1, #{FILENAME}, #{ORGFILENAME}, #{FILESIZE})
 	</if>
+</insert> -->
+
+<!-- 파일첨부 -->
+<insert id="boardAdd_withFile" parameterType="HashMap">
+	insert into Board_Attachfile(idx, board_idx_fk, filename, filesize, orgfilename)
+	values(board_attachfile_seq.nextval, #{BOARD_IDX_FK}, #{FILENAME}, #{FILESIZE}, #{ORGFILENAME})
 </insert>
 
 <!-- 전체글 목록 가져오기 -->
@@ -39,19 +50,19 @@
 	order by idx desc	 -->
 	select idx, name, subject, readcount, regdate, commentCount
 			 , groupno, root, depthno
-			 , fileName, orgFileName, fileSize
+			 
 		from
 		(
 		    select rownum AS RNO
 		         , idx, name, subject, readcount, regdate, commentCount
 		         , groupno, root, depthno
-		         , fileName, orgFileName, fileSize
+		         
 		    from 
 		    (
 		        select idx, name, subject, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') AS regdate
 		        	 , commentCount
 		        	 , groupno, root, depthno
-		        	 , fileName, orgFileName, fileSize
+		        	 
 		        from Board
 		        where status = 0
 		        <if test="SEARCH != null and SEARCH != '' and SEARCH !='null' ">
@@ -66,20 +77,25 @@
 
 </select>
 
+<select id="getAttachFileCount" parameterType="String" resultType="int">
+	select count(*)
+	from board_attachfile
+	where board_idx_fk = #{board_idx_fk}
+</select>
+
 <!-- ==== 글 1개를 보여줄 때 조회수(readCount) 1 증가 시키기  ==== -->
 <update id="setAddReadCount" parameterType="String">
 	update Board set readcount = readcount + 1
 	where status = 0 and idx = #{idx}
 </update>
 
-<!-- ==== 파일첨부가 있는 답변형 게시판에서 글 1개를 보여주기 -->
+<!-- ==== 답변형 게시판에서 글 1개를 보여주기 -->
 <select id="getView" parameterType="String" resultType="com.spring.bookmanage.board.YJKmodel.YJKBoardVO">
 	select previousidx, previoussubject,
 		   idx, libid_fk, name, subject, content, readcount, 
 		   regDate, nextidx, nextsubject, 
 		   commentCount,
-		   groupno, root, depthno,
-		   fileName, orgFilename, fileSize
+		   groupno, root, depthno
 	from
 	(
         select lag(idx, 1) over(order by idx desc) as previousidx
@@ -90,12 +106,26 @@
              , lead(subject, 1) over(order by idx desc) as nextsubject
              , commentCount
              , groupno, root, depthno
-             , fileName, orgFilename, fileSize
         from Board
         where status = 0
     )V
 	where V.idx = #{idx}
 </select>
+
+<!-- 첨부파일 보여주기 -->
+<select id="FileView" parameterType="String" resultType="com.spring.bookmanage.board.YJKmodel.YJKAttachFileVO">
+	select *
+	from board_attachfile
+	where board_idx_fk = #{idx}
+</select>
+
+<!-- 첨부파일 다운로드 -->
+<select id="fileDownload" parameterType="String" resultType="com.spring.bookmanage.board.YJKmodel.YJKAttachFileVO">
+	select *
+	from board_attachfile
+	where idx = #{fileidx}
+</select>
+
 
 <!-- 검색조건에 만족하는 총 게시물 건수 알아오기 -->
 <select id="getTotalCountWithSearch" parameterType="HashMap" resultType="int">
@@ -156,11 +186,12 @@
 	where idx = #{IDX}
 </update>
 
-<!-- ==== 글 1개 삭제하기 ==== -->
+<!-- ==== 원글 삭제 ==== -->
 <update id="deleteContent" parameterType="HashMap">
-	update Board set status = 1
+	update board set status = 1
 	where idx = #{IDX}
 </update>
+
 
 <!-- ==== 원글에 글번호에 대한 댓글 중 페이지 번호에 해당하는 총 갯수를 구한다. -->
 <select id="getCommentTotalCount" parameterType="HashMap" resultType="int">
@@ -191,6 +222,13 @@
 	select nvl(max(groupno), 0)
 	from Board
 </select>
+
+<select id="getCommentCnt" parameterType="com.spring.bookmanage.board.YJKmodel.YJKReplyVO" resultType="int">
+	select count(*) from Reply 
+	where parentidx = #{parentidx} <!-- 이 idx 가없단거야 -->
+</select>
+
+
 
 </mapper>
 

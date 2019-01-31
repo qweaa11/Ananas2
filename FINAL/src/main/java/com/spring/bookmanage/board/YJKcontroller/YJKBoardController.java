@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.spring.bookmanage.board.YJKmodel.YJKAttachFileVO;
 import com.spring.bookmanage.board.YJKmodel.YJKBoardVO;
 import com.spring.bookmanage.board.YJKmodel.YJKReplyVO;
 import com.spring.bookmanage.board.YJKservice.InterYJKBoardService;
@@ -29,6 +30,55 @@ import com.spring.bookmanage.library.Yjkmodel.YjkVO;
 
 @Controller
 public class YJKBoardController {
+	
+	// 페이지바
+	public static String getPageBarWithSearch(int sizePerPage, int blockSize, int totalPage, int currentShowPageNo,
+			  String colname, String search, String period, String url) {
+	String pageBar = "";
+	int loop = 1;
+	int pageNo = ((currentShowPageNo-1)/blockSize)*blockSize+1;// 공식임!!!
+	
+	// currentShowPageNo 가 1~10 일때 pageNo 는 1
+	// currentShowPageNo 가 11~20 일때 pageNo 는 11
+	// currentShowPageNo 가 21~30 일때 pageNo 는 21
+	String str_pageNo = "";
+	
+	if(pageNo == 1) {
+		str_pageNo = "";
+	} else {
+		str_pageNo = "&nbsp;<a href=\""+url+"?currentShowPageNo="+(pageNo - 1)+"&sizePerPage="+sizePerPage
+		+"&colname="+colname+"&search="+search+"&period="+period+"\" >"
+		+"<span><<</span></a>&nbsp;";
+	} // end of if~else
+	
+	pageBar += str_pageNo;
+	
+	while (!(pageNo > totalPage || loop > blockSize)) {
+		if (pageNo == currentShowPageNo) {
+			str_pageNo = "&nbsp;<a class=\"active\">"+pageNo+"</a>&nbsp;";
+		} else {
+			str_pageNo = "&nbsp;<a href=\""+url+"?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage
+			+"&colname="+colname+"&search="+search+"&period="+period+"\" >"+pageNo+"</a>"
+			+"&nbsp;";
+		} // end of if~else
+	
+		pageBar += str_pageNo;
+		pageNo++;
+		loop++;
+	} // end of while
+	
+	if (pageNo > totalPage) {
+		str_pageNo = "";
+	} else {
+		str_pageNo = "&nbsp;<a href=\""+url+"?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage
+		+ "&colname="+colname+"&search="+search+"&period="+period+"\" >"
+		+ "<span>>></span></a>&nbsp;";
+	} // end of if~else
+	
+		pageBar += str_pageNo;
+	
+		return pageBar;
+	}// end of getPageBarWithSearch
 	
 	//==== 의존객체 주입하기(DI : Dependency Injection)  ====
 	@Autowired
@@ -57,12 +107,32 @@ public class YJKBoardController {
 	
 	// ==== 글쓰기 완료 요청 ==== //
 	@RequestMapping(value="/boardAddEnd.ana",method= {RequestMethod.POST})
-	public String boardAddEnd(YJKBoardVO boardvo, MultipartHttpServletRequest req) {
-		
+	public String boardAddEnd(MultipartHttpServletRequest req, HttpServletResponse res, YJKBoardVO boardvo) {
+
 		// ========= !!첨부파일이 있는지 없는지 알아오기 시작!! =========
-		MultipartFile attach = boardvo.getAttach();
+	//	MultipartFile attach = boardvo.getAttach();
 		
-		if(!attach.isEmpty()) {
+		
+		List<MultipartFile> attachList = req.getFiles("attach");
+		int idx = service.selectBoardIdx();
+		HashMap<String, String> boardMap = new HashMap<String, String>();
+		
+		boardMap.put("LIBID_FK",boardvo.getLibid_fk());
+		boardMap.put("NAME", boardvo.getName());
+		boardMap.put("SUBJECT", boardvo.getSubject());
+		boardMap.put("CONTENT", boardvo.getContent());
+		boardMap.put("PW", boardvo.getPw());
+		boardMap.put("READCOUNT", boardvo.getReadCount());
+		boardMap.put("REGDATE, ", boardvo.getRegDate());
+		boardMap.put("STATUS", boardvo.getStatus());
+		boardMap.put("GROUPNO", boardvo.getGroupno());
+		boardMap.put("ROOT", boardvo.getRoot());
+		boardMap.put("DEPTHNO", boardvo.getDepthno());
+		boardMap.put("IDX", String.valueOf(idx));
+				
+		List<HashMap<String, String>> boardMapList = new ArrayList<HashMap<String, String>>();
+		
+		if(attachList != null) {
 			// attach 가 비어있지 않다면 (즉, 첨부파일이 있는 경우라면)
 			// WAS의 webapp 의 절대경로를 알아와야 한다.
 			HttpSession session = req.getSession();
@@ -79,38 +149,62 @@ public class YJKBoardController {
 			
 			long fileSize = 0;
 			// 파일크기를 읽어오기 위한 용도
-			try {
-				bytes = attach.getBytes();
-				// getBytes() 는 첨부된 파일을 바이트 단위로 파일을 다 읽어오는 것이다.
-				
-				newFileName = fileManager.doFileUpload(bytes, attach.getOriginalFilename(), path);
-				// 첨부된 파일을 WAS(톰캣)의 디스크로 파일올리기를 하는 것이다.
-				
-				// 3. BoardVO boardvo 에 fileName 값과 orgFilename 값과 fileSize 값을 넣어주기
-				boardvo.setFileName(newFileName);
-				boardvo.setOrgFileName(attach.getOriginalFilename());
-				
-				fileSize = attach.getSize();
-				// 첨부한 파일의 크기인데 리턴타입은 long 타입이다.
-				
-				boardvo.setFileSize(String.valueOf(fileSize));
 			
-			} catch (Exception e) {
-				e.printStackTrace();
+			for(int i=0; i<attachList.size(); i++) {
+				try {
+					bytes = attachList.get(i).getBytes();
+					// getBytes() 는 첨부된 파일을 바이트 단위로 파일을 다 읽어오는 것이다.
+					
+					newFileName = fileManager.doFileUpload(bytes, attachList.get(i).getOriginalFilename(), path);
+					// 첨부된 파일을 WAS(톰캣)의 디스크로 파일올리기를 하는 것이다.
+					
+					fileSize = attachList.get(i).getSize();
+										
+					HashMap<String, String> boardFileMap = new HashMap<String, String>();
+					
+					boardFileMap.put("BOARD_IDX_FK", String.valueOf(idx));
+					boardFileMap.put("FILENAME", newFileName);
+					boardFileMap.put("ORGFILENAME", attachList.get(i).getOriginalFilename());					
+					boardFileMap.put("FILESIZE", String.valueOf(fileSize));
+										
+					boardMapList.add(boardFileMap);
+				
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
-		}
+		}// end of if(attachList != null)-------------
 		// ==== !!첨부파일이 있는지 없는지 알아오기 끝!! ==== // 
 		// ==== 파일첨부가 없는 경우 또는 있는 경우 Service 단으로 호출하기 ==== //
 	
 		int n = 0;
-		if(attach.isEmpty()) {
+		int m = 0;
+		int count = 0;
+		
+		
+		if(attachList == null) {
+			
 			// 파일첨부가 없다라면
-			n = service.boardAdd(boardvo);
+			n = service.boardAdd(boardMap);
+			
 		}
-		else {
+		else if(attachList != null) {
 			// 파일첨부가 있다라면
-			n = service.boardAdd_withFile(boardvo);
+			
+			n = service.boardAdd(boardMap);
+			
+			for(int i=0; i<boardMapList.size(); i++) {
+				m = service.boardAdd_withFile(boardMapList.get(i));
+				if(m == 1) count++;
+			}
+			
+			if(boardMapList.size() == count) {
+				n = 1;
+			}
+			else {
+				n = 0;
+			}
 		}
 		
 		String loc = "";
@@ -199,10 +293,13 @@ public class YJKBoardController {
 		
 		boardList = service.getboardList(paraMap);
 		
+		List<YJKBoardVO> boardList2 = service.getAttachFileCount(boardList);
+		
+		
 		// 페이지바 만들기
 		String pagebar = "<ul>";
 		
-		pagebar += MyUtil.getPageBarWithSearch(sizePerPage, blockSize, totalPage, currentShowPageNo, colname, search, "", "boardList.ana");
+		pagebar += getPageBarWithSearch(sizePerPage, blockSize, totalPage, currentShowPageNo, colname, search, "", "boardList.ana");
 		
 		pagebar += "<ul>";
 		
@@ -210,8 +307,7 @@ public class YJKBoardController {
 		
 		HttpSession session = req.getSession();
 		session.setAttribute("readCountPermission", "yes");
-		
-		req.setAttribute("boardList", boardList);
+		req.setAttribute("boardList2", boardList2);
 		
 		req.setAttribute("colname", colname);	// view단에서 검색어를 유지시키려고 보낸다.
 		req.setAttribute("search", search);		// view단에서 검색어를 유지시키려고 보낸다.
@@ -237,7 +333,8 @@ public class YJKBoardController {
 		// 돌아갈 페이지를 위해서 뷰단으로 넘겨준다.
 		
 		YJKBoardVO boardvo = null; // 글 1개를 저장한 객체변수
-				
+		List<YJKAttachFileVO> attachfilevo = null; // 첨부파일을 저장한 객체변수
+						
 		HttpSession session = req.getSession();
 		YjkVO loginuser = (YjkVO)session.getAttribute("loginuser");
 		// 로그인 되어진 사용자 정보를 가져온다.
@@ -253,11 +350,9 @@ public class YJKBoardController {
 			// 들어온 경우
 			if(loginuser != null) {
 				libid = loginuser.getLibid();
-			}
-			System.out.println("idx:"+idx);
-			// 로그인 되어진 사용자 정보를 읽어온다.
-			
+			}			
 			boardvo = service.getView(idx, libid);
+			attachfilevo = service.FileView(idx);
 			
 			// !! 중요함 !!
 			// 글 1개를 보기위해 글 목록을 거쳐온 경우라면
@@ -270,25 +365,89 @@ public class YJKBoardController {
 			// 이럴경우 우리는 글 조회수 증가없는 그냥 1개글만 보여주도록 한다.
 			boardvo = service.getViewWithNoAddCount(idx);
 			// 조회수(readCount)증가 없이 그냥 글 1개만 가져오는 것.
+			attachfilevo = service.FileView(idx);
 		}
 		
+		req.setAttribute("attachfilevo", attachfilevo);
 		req.setAttribute("boardvo", boardvo);
 		req.setAttribute("gobackURL", gobackURL);
 		
 		return "board/boardView.tiles1";				
 	}
 	
+	// ==== 첨부파일 다운로드 받기 =====
+			@RequestMapping(value="/boardDownload.ana", method={RequestMethod.GET})
+			public void boardDownload(HttpServletRequest req, HttpServletResponse res) {
+				String loc = "javascript:history.back();";
+				String fileidx = req.getParameter("fileidx"); // 다운로드를 클릭한 해당 첨부파일의 idx값
+				String idx = req.getParameter("idx");// 첨부파일이 있는 글번호
+				
+				YJKBoardVO boardvo = service.getViewWithNoAddCount(idx);
+				// 조회수 증가 없이 1개글 가져오기
+				YJKAttachFileVO attachfilevo = service.fileDownload(fileidx);
+				
+				boolean flag = false;
+				
+					
+					String fileName = attachfilevo.getFilename();
+					//  WAS(톰캣) 디스크에 저장 된 파일명이다.
+					
+					System.out.println(fileName);
+					
+					String orgFilename = attachfilevo.getOrgfilename();
+					// 구현환경 및 활용기술 및 팀내역할.txt 와 같은 것을 가져온다.
+					
+					System.out.println(orgFilename);
+
+					HttpSession session = req.getSession();
+					String root = session.getServletContext().getRealPath("/");
+					String path = root+"resources"+File.separator+"files";
+					// path 가 첨부파일들을 저장 된  WAS(톰캣)의 폴더가 된다.
+					// *** 다운로드 하기 *** //
+					// 다운로드가 실패 할 경우 메시지를 띄워주기 위해서 
+					// boolean 타입 변수 flag 를 선언한다.
+					
+					
+					flag = fileManager.doFileDownload(fileName, orgFilename, path, res);
+					// 다운로드가 성공하면 true를 반환하고 
+					// 다운로드가 실패하면 false를 반환한다.
+					
+					if(!flag) {
+						// 다운로드가 실패 할 경우 메시지를 띄워준다.
+						res.setContentType("text/html; charset=UTF-8");
+						req.setAttribute("loc", loc);
+						try {
+							PrintWriter out = res.getWriter();
+							
+							// PrintWriter out 이 웹브라우저 상에 내용물을 기재(써주는)해주는 객체이다.
+							
+							out.println("<script type ='text/javascript'>alert('파일 다운로드가 실패했습니다!!')</script>");
+							
+							
+						} catch (IOException e) {
+				
+							e.printStackTrace();
+						}
+						
+					}
+				
+				
+			}
+	
 	// ==== 댓글쓰기 ====
 		@RequestMapping(value="/boardAddComment.ana", method={RequestMethod.POST})
 		@ResponseBody
-		public HashMap<String, String> boardAddComment(YJKReplyVO replyvo) 
+		public HashMap<String, String> boardAddComment(YJKReplyVO replyvo , HttpServletRequest req) 
 			throws Throwable {
 			
 			HashMap<String, String> returnMap = new HashMap<String, String>();
+			//String commentCount_str = req.getParameter("commnetCount");
+			//int commentCount = Integer.parseInt(commentCount_str) +1;
 			
-			// 댓글쓰기(AJAX 처리)
+			// 댓글쓰기(AJAX 처리) 
+			System.out.println(replyvo.getParentidx());
 			int n = service.boardAddComment(replyvo);
-			
+			System.out.println(n+"=========== cnt");
 			if(n == 1) {
 				// 댓글쓰기 및 원 게시물(Board 테이블)에 댓글의 갯수(1씩 증가)
 				returnMap.put("NAME", replyvo.getName());
@@ -296,26 +455,13 @@ public class YJKBoardController {
 				returnMap.put("REGDATE", MyUtil.getNowTime());
 			}
 			
+			//위엔 에드두고 여기서 카운트개수 따로가져오는게 좋을듯 댓글개수만 가져오는걸로 추가 ㄱㄱ  댓글 보여주는걸 새로 만들자는거지? 응 ㄱㄷㄱㄷ
+			int cnt = service.getCommentCnt(replyvo);
+			returnMap.put("COMMENTCOUNT", String.valueOf(cnt));
+			System.out.println(cnt+"===========개수잘가져오는거확인1");
 			return returnMap;
 			
 		}
-		
-		/*// ==== 댓글쓰면 commentCount +1 ====
-		@RequestMapping(value="/updateCommentCount.ana", method={RequestMethod.POST})
-		@ResponseBody
-		public HashMap<String, String> updateCommentCount(YJKReplyVO replyvo) 
-			throws Throwable {
-			
-			HashMap<String, String> returnMap = new HashMap<String, String>();
-			
-			// 댓글쓰면 commentCount + 1(AJAX 처리)
-			returnMap = service.updateCommentCount(replyvo);
-			
-			returnMap.put("", replyvo.getName());
-					
-			return returnMap;
-			
-		} 보류 */
 		
 		// ==== 댓글내용 가져오기 ====
 		@RequestMapping(value="/replyList.ana", method={RequestMethod.GET})
@@ -487,6 +633,9 @@ public class YJKBoardController {
 		public String boardDelEnd(HttpServletRequest req) throws Throwable {
 			
 			String idx = req.getParameter("idx");
+			String groupno = req.getParameter("groupno");
+			String depthno = req.getParameter("depthno");
+			String root = req.getParameter("root");
 			String pw = req.getParameter("pw");
 			
 			HashMap<String, String> paraMap = new HashMap<String, String>();
@@ -518,55 +667,6 @@ public class YJKBoardController {
 			return "msg";
 		}
 		
-		// ==== 첨부파일 다운로드 받기 =====
-		@RequestMapping(value="/boardDownload.ana", method={RequestMethod.GET})
-		public void boardDownload(HttpServletRequest req, HttpServletResponse res) {
-			
-			String idx = req.getParameter("idx");
-			// 첨부파일이 있는 글번호
-			
-			YJKBoardVO boardvo = service.getViewWithNoAddCount(idx);
-			// 조회수 증가 없이 1개글 가져오기
-			
-			String fileName = boardvo.getFileName();
-			//  WAS(톰캣) 디스크에 저장 된 파일명이다.
-			
-			String orgFilename = boardvo.getOrgFileName();
-			// 구현환경 및 활용기술 및 팀내역할.txt 와 같은 것을 가져온다.
-
-			HttpSession session = req.getSession();
-			String root = session.getServletContext().getRealPath("/");
-			String path = root+"resources"+File.separator+"files";
-			// path 가 첨부파일들을 저장 된  WAS(톰캣)의 폴더가 된다.
-			
-			
-			// *** 다운로드 하기 *** //
-			// 다운로드가 실패 할 경우 메시지를 띄워주기 위해서 
-			// boolean 타입 변수 flag 를 선언한다.
-			boolean flag = false;
-			
-			fileManager.doFileDownload(fileName, orgFilename, path, res);
-			// 다운로드가 성공하면 true를 반환하고 
-			// 다운로드가 실패하면 false를 반환한다.
-			
-			if(!flag) {
-				// 다운로드가 실패 할 경우 메시지를 띄워준다.
-				res.setContentType("text/html; charset=UTF-8");
-				
-				try {
-					PrintWriter out = res.getWriter();
-					// PrintWriter out 이 웹브라우저 상에 내용물을 기재(써주는)해주는 객체이다.
-					
-					out.println("<script type ='text/javascript'>alert('파일 다운로드가 실패했습니다!!')</script>");
-					
-				} catch (IOException e) {
 		
-					e.printStackTrace();
-				}
-				
-				
-			}
-			
-		}
 
 }

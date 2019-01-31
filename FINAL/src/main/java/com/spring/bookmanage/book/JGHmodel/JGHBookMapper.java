@@ -6,13 +6,6 @@ import java.util.List;
 public interface JGHBookMapper {
 
 	/**
-	 * 검색한 삭제도서 목록 조회(페이지네이션 구현)
-	 * @param parameterMap
-	 * @return
-	 */
-	List<DeleteBookVO> findAllDeleteBookWithPagination(HashMap<String, String> parameterMap);
-
-	/**
 	 * 검색조건에 따른 삭제된 도서목록 조회
 	 * 페이지네이션 미구현
 	 * @param parameterMap
@@ -32,17 +25,10 @@ public interface JGHBookMapper {
 	 * @return
 	 */
 	List<DeleteBookVO> findAllDeleteBookByDelid(String[] delidArray);
-	/**
-	 * 도서 추가
-	 * @param delidArray
-	 * @return
-	 */
-	int addSetBook(String[] delidArray, List<DeleteBookVO> bookSetList) throws Throwable;
 
 	/**
-	 * 삭제도서 삭제
-	 * @param delidArray
-	 * @return
+	 * 삭제도서 복원(트랜잭션)
+	 * @param bookSetList
 	 */
-	int deleteSetDeleteBook(String[] delidArray);
+	void restoreBook(List<DeleteBookVO> bookSetList);
 }

@@ -7,6 +7,7 @@ $(document).ready(function(e){
 	        html:"true"
 	    }); 
 		
+		
 		// 대여 회원 검색 카테고리
 	    $('.search-member').find('a').click(function(e) {
 			e.preventDefault();

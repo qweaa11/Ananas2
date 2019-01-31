@@ -5,24 +5,22 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.bookmanage.book.JGHmodel.DeleteBookVO;
 import com.spring.bookmanage.book.JGHmodel.JGHBookMapper;
 
+/**
+ * 삭제도서 서비스(복구)
+ * @author implements(nine9ash)
+ *
+ */
 @Service
 public class JGHBookService {
 
 	@Autowired private JGHBookMapper mapper;
-
-	public int countDeleteBookWithSearchOption(HashMap<String, String> parameterMap) {
-
-		return 0;
-	}// end of countDeleteBookWithSearchOption
-
-	public int countDeleteBookWithOutSearchOption() {
-
-		return 0;
-	}// end of countDeleteBookWithOutSearhOption
 
 	/**
 	 * 검색조건에 따른 삭제도서 목록 불러오기(페이징 미구현)
@@ -50,13 +48,11 @@ public class JGHBookService {
 	 * @param delidArray
 	 * @return
 	 */
-	public int restoreBookService(String[] delidArray) {
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public void restoreBookService(String[] delidArray) throws Throwable {
 		List<DeleteBookVO> bookSetList = mapper.findAllDeleteBookByDelid(delidArray);
-		int addRow = mapper.addSetBook(delidArray, bookSetList);
-		int deleteRow = mapper.deleteSetDeleteBook(delidArray);
+		mapper.restoreBook(bookSetList);
 
-		int transactionFlag = addRow*deleteRow;
-
-		return transactionFlag;
+		return ;
 	}// end of restoreBookService
 }

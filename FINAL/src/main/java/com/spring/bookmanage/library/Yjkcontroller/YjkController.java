@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.spring.bookmanage.JDSmodel.AdminVO;
+import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.common.AES256;
 import com.spring.bookmanage.common.FileManager;
 import com.spring.bookmanage.common.SHA256;
@@ -46,12 +48,41 @@ public class YjkController {
 		
 		req.setAttribute("libInfo", libInfo);
 		
-		return "library/librarianRegist.tiles1";
+		HttpSession session = req.getSession();
+		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		AdminVO loginAdmin = (AdminVO)session.getAttribute("loginAdmin");
+		
+		if(loginLibrarian != null && loginLibrarian.getStatus()==1) {
+			return "library/librarianRegist2.tiles1";
+		}else if(loginAdmin != null) {
+			return "library/librarianRegist.tiles1";
+		}else if(loginLibrarian != null && loginLibrarian.getStatus()==0) {
+			
+			String msg = "사서는 접근권한이 없습니다.";
+			String loc = "javascript:history.back();";
+			
+			req.setAttribute("msg", msg);
+			req.setAttribute("loc", loc);
+			
+			return "msg";
+		}else {
+			String msg = "로그인 후에 이용가능합니다.";
+			String loc = "javascript:history.back();";
+			
+			req.setAttribute("msg", msg);
+			req.setAttribute("loc", loc);
+			
+			return "msg";
+		}
+		
+		
+		/*return "library/librarianRegist.tiles1";*/
+		
 	}
 	
 	// ==== 관리자 등록하기 ==== //
 	@RequestMapping(value="/librarianRegistEnd.ana",method= {RequestMethod.POST})
-	public String adminRegistEnd(YjkVO adminvo, MultipartHttpServletRequest req) {
+	public String adminRegistEnd(MultipartHttpServletRequest req, YjkVO adminvo) {
 		
 		int n = 0;
 		
@@ -63,6 +94,7 @@ public class YjkController {
 		String tel = req.getParameter("tel");
 		String libcode = req.getParameter("libcode");
 		String status = req.getParameter("status");
+		String email = req.getParameter("email");
 
 		/*System.out.println(libid);
 		System.out.println(pwd);
@@ -82,11 +114,11 @@ public class YjkController {
 			String imgFileName = "";
 			
 			HttpSession session = req.getSession();
-			String root = session.getServletContext().getRealPath("/");
+			String root = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\";
 			
 			System.out.println("root : " + root);
 			
-			String path = root + "resources" + File.separator + "profilePicture";
+			String path = root + "resources"+File.separator+"librarian";
 			System.out.println("path : "+ path);
 			
 			bytes = attach.getBytes();
@@ -107,6 +139,7 @@ public class YjkController {
 		adminvo.setTel(tel);
 		adminvo.setLibcode_fk(libcode);
 		adminvo.setStatus(status);
+		adminvo.setEmail(email);
 		
 		n = service.adminRegistEnd(adminvo);
 		

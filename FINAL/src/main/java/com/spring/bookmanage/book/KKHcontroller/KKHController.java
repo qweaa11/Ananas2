@@ -45,7 +45,9 @@ public class KKHController {
 	
 	@RequestMapping(value="/bookList.ana",method= {RequestMethod.GET})
 	/** bookList.jsp 페이지로 이동하는 메소드
-	 * 
+	 * 	library, language,category, field의 값을 DB에서 가져와서 사이드바에 출력해준다.
+	 * @param request
+	 * @param response
 	 * @return
 	 */
 	public String bookList(HttpServletRequest request, HttpServletResponse response) {
@@ -53,7 +55,8 @@ public class KKHController {
 		HttpSession session = request.getSession();
 		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
 		HashMap<String,String> libcode = new HashMap<String,String>();
-		if(librarian != null) {
+		if(librarian != null) { 
+			//사서로 접속한 경우, 각각의 language, category, field,library 값에 접속한 사서의 도서관코드(libcode) 를 넣어서 해당 도서관의 장서수만 표시하도록 한다.
 			libcode.put("LIBCODE", librarian.getLibcode_fk());
 		}
 		
@@ -75,7 +78,7 @@ public class KKHController {
 	@RequestMapping(value="/KKHfindBookBySidebar.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	/**
-	 * ajax로 library,field,category,language, sort 값을 받아와서 조건을 검색해 책 목록을 가져오는 메소드
+	 * 조건 검색 사이드바에서 ajax로 library,field,category,language, sort 값을 받아와서 조건을 검색해 책 목록을 가져오는 메소드
 	 * @param request
 	 * @param response
 	 * @return List<HashMap<String,Object>>
@@ -90,8 +93,9 @@ public class KKHController {
 		String sort = request.getParameter("sort");
 		HttpSession session =request.getSession();
 		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
-		String libcode =""; 
+		String libcode ="";
 		if(librarian != null)
+			// 사서로 접속한 경우 사서의 도서관코드(libcode)를 검색조건에 넣어주도록 한다.
 			libcode = librarian.getLibcode_fk();
 		
 		
@@ -100,56 +104,40 @@ public class KKHController {
 		ArrayList<String> cateArr = null;
 		ArrayList<String> fieldArr = null;
 		
-		if(librarian != null) {
+		if(librarian != null) { 
+			//사서로 접속했을경우 도서검색 조건중 도서관을 사서의 도서관코드(libcode) 로 고정시킨다.
 			library = "'"+libcode+"'";
-			System.out.println("1111");
+			
 		}else if(library != "" && librarian == null){
+			//총관리자로 접속했을때 사이드바를 이용해 도서관들을 조건에 넣어 검색할 경우,조건에 넣은 도서관코드들을 library 에 넣어준다.
 			library = "'"+library+"'";
-			System.out.println("2222");
-		}
+			
+		}// 총관리자로 접속하고 도서관 조건을 입력하지 않은 경우 그냥 아무 값도 넣지 않는다.
+		
 		if(language != "") language = "'"+language+"'";
 		if(category != "") category = "'"+category+"'";
 		if(field != "") field = "'"+field+"'";
 		
-		/*System.out.println("//////////////");
-		System.out.println(language);
-		System.out.println("/////////////");
-		if(library.indexOf(",") != -1) libArr = new ArrayList<String>(Arrays.asList(library.split(",")));
-		else if(library.indexOf(",") == -1 && library != "" ) {
-			libArr = new ArrayList<String>();
-			libArr.add(library);
-		}
-		if(language.indexOf(",") != -1) lanArr = new ArrayList<String>(Arrays.asList(language.split(",")));
-		else if(language.indexOf(",") == -1 && language != "") {
-			lanArr = new ArrayList<String>();
-			lanArr.add(language);
-		}
-		if(category.indexOf(",") != -1) cateArr = new ArrayList<String>(Arrays.asList(category.split(",")));
-		else if(category.indexOf(",") == -1 && category != "") {
-			cateArr = new ArrayList<String>();
-			cateArr.add(category);
-		}
-		if(field.indexOf(",") != -1) fieldArr = new ArrayList<String>(Arrays.asList(field.split(",")));
-		else if(field.indexOf(",") == -1 && field != "" ) {
-			fieldArr = new ArrayList<String>();
-			fieldArr.add(field);
-		}*/
-		
-	
 		//System.out.println("library=>"+library+",  language=>"+language+",  category=>"+category+",  field=>"+field);
+		
 		HashMap<String,Object> parameterMap = new HashMap<String,Object>();
+		//사이드바의 조건으로 받은 값들을 해쉬맵에 넣어준다.
 		parameterMap.put("LIBRARY", library);
 		parameterMap.put("LANGUAGE", language);
 		parameterMap.put("CATEGORY", category);
 		parameterMap.put("FIELD", field);
 		parameterMap.put("SORT", sort);
 		parameterMap.put("LIBCODE", libcode);
+		
 		//System.out.println(parameterMap.get("LIBRARY"));
 		List<KKHBookVO> bookList = null;
+		//해당 조건을 이용해 도서리스트를 가져오는 service 메소드
 		bookList = service.findBookBysidebar(parameterMap);
 		
 		for(KKHBookVO bookvo : bookList) {
 			HashMap<String,Object> map = new HashMap<String,Object>();
+			//받은 리스트들을 해쉬맵에 담아서 넘겨준다.
+			//왜냐면 이거 @ResponseBody 선언 해줫는데 리스트를 VO로 받아버려서 그럼;;;;;
 			map.put("BOOKID", bookvo.getBookid());
 			map.put("IDX", bookvo.getIdx());
 			map.put("TITLE", bookvo.getTitle());
@@ -175,20 +163,28 @@ public class KKHController {
 			resultList.add(map);
 		}
 		
+		//@ResponseBody 선언된 ajax이므로 그냥 해쉬맵을 리턴해준다.
 		return resultList;
 	}
 	
 	@RequestMapping(value="/KKHfindBookBySearchbar.ana", method= {RequestMethod.GET})
 	@ResponseBody
+	/**
+	 * 검색창을 이용해 도서리스트를 가져오는 ajax 
+	 * @param request
+	 * @param response
+	 * @return List<HashMap<String,Object>>
+	 */
 	public List<HashMap<String,Object>> findBookBySearchbar(HttpServletRequest request, HttpServletResponse response){
 		List<HashMap<String,Object>> resultList = new ArrayList<HashMap<String,Object>>();
-		String searchType = request.getParameter("searchType");
-		String searchWord = request.getParameter("searchWord");
-		String sort = request.getParameter("sort");
+		String searchType = request.getParameter("searchType");	//검색타입
+		String searchWord = request.getParameter("searchWord"); //검색어
+		String sort = request.getParameter("sort");			    //정렬조건
 		String library = "";
 		HttpSession session = request.getSession();
 		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
 		if(librarian != null) {
+			//사서가 접속한 경우 도서관 코드를 검색조건에 추가해준다.
 			library = librarian.getLibcode_fk(); 
 		}
 		
@@ -200,6 +196,7 @@ public class KKHController {
 		List<KKHBookVO> bookList = service.findBookBySearchbar(parameterMap);
 		
 		for(KKHBookVO bookvo : bookList) {
+			// HashMap에 다시담는 이유는 KKHBookVO 로 받았는데 @ResponseBody 로 보내줘야 하기때문....
 			HashMap<String,Object> map = new HashMap<String,Object>();
 			map.put("BOOKID", bookvo.getBookid());
 			map.put("IDX", bookvo.getIdx());
@@ -229,21 +226,39 @@ public class KKHController {
 	}
 	
 	
+	
 	@RequestMapping(value="/bookDetail.ana",method= {RequestMethod.GET})
+	/**
+	 * 도서 상세페이지로 이동하는 컨트롤러, 수정을 위해 종류,분야,도서관,장르 등등을 가져온다.
+	 * 이때 받는 bookid 는 두번째 하이푼(-) 이전 까지의 코드이다.
+	 * ex)L1000KRE02530UN-1 요까지만 있는 것임.
+	 * @param request
+	 * @param response
+	 * @return List<KKHBookVO>
+	 */
 	public String bookDetail(HttpServletRequest request, HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		System.out.println("bookid:"+bookid); 
 		HashMap<String,String> libcode = new HashMap<String,String>();
 		
+
 		List<HashMap<String,String>> bookReservateList = new ArrayList<HashMap<String,String>>();
+		
+		//해당 bookid 에 해당하는 도서리스트를 가져오는 메소드
+		//L1000KRE02530UN-1
 		List<KKHBookVO> bookDetailList = service.findBookDetail(bookid);
+		
 		int length = bookDetailList.size();
+		
+		//도서 수정을 위한 각 항목별 리스트 가져오기
 		List<HashMap<String,String>> categoryList = service.findAllCategory(libcode);
 		List<HashMap<String,String>> languageList = service.findAllLanguage(libcode);
 		List<HashMap<String,String>> genreList = service.findgenre();
-		List<HashMap<String,String>> fieldList = service.findfield();
+		List<HashMap<String,String>> fieldList = service.findfield(); // 이때 가져오는 field 정보는 000,100,200 등 큰 field 값이다.
 		List<HashMap<String,String>> libraryList = service.findAllLibrary(libcode);
+		// 항목 리스트 끝
 		
+		//도서상세 페이지에서 보여줄 해당도서들 중 예약된 책목록을 가져오는 메소드
 		List<HashMap<String,String>> bookbridgeList =  service.findBookReservateList(bookid);
 		try {
 			for(HashMap<String,String> map : bookbridgeList) {
@@ -279,10 +294,18 @@ public class KKHController {
 	
 	@RequestMapping(value="/findDetailField.ana", method= {RequestMethod.GET})
 	@ResponseBody
+	/**
+	 * 도서 공용정보 수정시 세부field 값을 가져오기 위한 ajax 
+	 * 큰 field 값(000,100,200 ... 900) 등의 값을 받아오고난 뒤
+	 * 그에 해당하는 하위 field값( 100 일경우 >> 110,120,130... 180,190) 을 List로 가져온다.
+	 * @param request
+	 * @return List<HashMap<String,String>>
+	 */
 	public List<HashMap<String,String>> findDetailField(HttpServletRequest request){
 		
-		String bigfcode = request.getParameter("bigfcode");
+		String bigfcode = request.getParameter("bigfcode");//큰 field 값을 받아오고
 		
+		//그걸 이용해 하위 field 값을 가져온다.
 		List<HashMap<String,String>> detailFieldList = service.findDetailField(bigfcode);
 		
 		
@@ -290,21 +313,31 @@ public class KKHController {
 	}
 	
 	
+	/**
+	 * 도서 공용 정보 수정을 위한 매핑
+	 * Agecode,title,author,image
+	 * nation,library,language,field,genre 등을 수정한다.
+	 * 기존의 것과 동일할 경우엔 수정 안함.
+	 * @param bookvo
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/editPublicBookInfo.ana",method= {RequestMethod.POST})
 	public String editPublicBookInfo(KKHBookVO bookvo,MultipartHttpServletRequest request,HttpServletResponse response) {
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
-		String editAgecode = request.getParameter("editAgecode");
-		String editTitle = request.getParameter("editTitle");
-		String editAuthor = request.getParameter("editAuthor");
-		String editNation = request.getParameter("editNation");
-		String editLibrary = request.getParameter("editLibrary");
-		String editLanguage = request.getParameter("editLanguage");
-		String editCategory = request.getParameter("editCategory");
-		String editField = request.getParameter("editField");
-		String editGenre = request.getParameter("editGenre");
-		String editImage = request.getParameter("editImage");
-		String length = request.getParameter("bookListLength");
+		String editAgecode = request.getParameter("editAgecode"); 	// 연령코드
+		String editTitle = request.getParameter("editTitle");		// 도서명
+		String editAuthor = request.getParameter("editAuthor");		// 저자/역자
+		String editNation = request.getParameter("editNation");		// 국가코드
+		String editLibrary = request.getParameter("editLibrary");	// 도서관코드
+		String editLanguage = request.getParameter("editLanguage");	// 언어코드
+		String editCategory = request.getParameter("editCategory");	// 종류코드
+		String editField = request.getParameter("editField");		// 분야코드
+		String editGenre = request.getParameter("editGenre");		// 장르코드
+		String editImage = request.getParameter("editImage");		// 도서 이미지
+		String length = request.getParameter("bookListLength");		// 수정해야할 도서 갯수
 		int n=0;
 		MultipartFile attach = bookvo.getEditImage();
 		
@@ -357,26 +390,35 @@ public class KKHController {
 		
 		System.out.println("eidtIma:"+editImage);
 		String bookid = request.getParameter("bookid");
+		
+		//변경할 도서와 기존 도서의 정보를 비교하기 위해 해당 도서번호(두번째하이푼[-] 이전까지의 코드) 를 가진 도서 1개의 정보를 가져온다.
 		KKHBookVO book = service.findOneBook(bookid);
+		
 		parameterMap.put("BOOKID", bookid);
 		parameterMap.put("EDITAGECODE", editAgecode);
 		parameterMap.put("LENGTH", length);
 		parameterMap.put("EDITTITLE", editTitle);
 		parameterMap.put("EDITAUTHOR", editAuthor);
+		
 		if(!(editImage =="" || editImage == null)) {
+			//변경할 이미지가 없으면 HashMap에 넣어주지 않는다.
 			parameterMap.put("EDITIMAGE", editImage);
 		}
 		if(!editLibrary.equals(book.getLibcode_fk()) || !editNation.equals(book.getNcode_fk()) || !editLanguage.equals(book.getLcode_fk()) || !editCategory.equals(book.getCcode_fk()) || !editField.equals(book.getFcode_fk())|| !editGenre.equals(book.getGcode_fk())) {
-			
+			//도서관코드, 국가코드, 언어코드, 종류코드, 분야코드, 장르코드 중 하나라도 다를경우 도서코드를 변경해주어야한다.
+			//그때문에 위의 조건을 만족할 경우에만 HashMap에 담아서 service로 보낸다.
 			parameterMap.put("EDITLIBRARY",editLibrary);
 			parameterMap.put("EDITNATION",editNation);
 			parameterMap.put("EDITLANGUAGE", editLanguage);
 			parameterMap.put("EDITCATEGORY", editCategory);
 			parameterMap.put("EDITFIELD", editField);
 			parameterMap.put("EDITGENRE", editGenre);
+			//새롭게 도서일련번호를 부여하고자 하는 메소드 실행.
 			n = service.editBookPlzChangeBookid(parameterMap,book);
 			
 		}else {
+			//도서코드를 변경할 필요가 없는경우 아래의 service 메소드를 실행한다.
+			//이경우 HashMap엔 bookid(두번째 하이푼[-]이전까지의 값), agecode,length, title, author 값만 들어있음
 			n = service.eidtBookNoChangeBookid(parameterMap,book);
 		}
 		

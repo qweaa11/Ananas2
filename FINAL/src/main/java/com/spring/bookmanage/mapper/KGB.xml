@@ -237,6 +237,7 @@
 	<!-- /////////////////////////////////// 차트 //////////////////////////////////////////////// -->
 	
 	
+	<!-- 검색 가능한 년도를 가져오는 메소드 -->
 	<select id="findAllreturnTerm" parameterType="int" resultType="int">
 	
 		select count(*)
@@ -247,6 +248,8 @@
 	</select>
 	
 	
+	
+	<!-- 년도의 월별 장르 차트 정보를 가져오는 메소드 -->
 	<resultMap type="HashMap" id="genreChartMap">
 		<result column="gcode" property="GCODE" javaType="String"/>
 		<result column="rentalmonth" property="RENTALMONTH" javaType="String"/>
@@ -279,6 +282,8 @@
 	<!-- /////////////////////////////////// 메일발송 //////////////////////////////////////////////// -->
 	
 	
+	
+	<!-- 연체 되어있는 회원의 데이터를 알아오는 메소드 -->
 	<resultMap type="HashMap" id="returnMailMap">
 		<result column="title" property="TITLE" javaType="String"/>
 		<result column="memberid" property="MEMBERID" javaType="String"/>

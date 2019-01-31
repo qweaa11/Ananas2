@@ -21,6 +21,13 @@ public class ChartKGBController {
 	private ChartKGBInterService service;
 	
 	
+	
+	/**
+	 * 검색 가능한 년도를 가져오는 메소드
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/kgbChartYear.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public HashMap<String, Integer> kgbChartYear(HttpServletRequest request, HttpServletResponse response) {
@@ -36,6 +43,12 @@ public class ChartKGBController {
 	}// end of kgbChartYear()--------------------------------------
 	
 	
+	/**
+	 * 년도의 월별 장르 차트 정보를 가져오는 메소드
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/genre.ana", method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, Object>> genre(HttpServletRequest request, HttpServletResponse response) {

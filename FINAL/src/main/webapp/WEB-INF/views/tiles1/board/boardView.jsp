@@ -2,10 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
 <%String ctxPath = request.getContextPath(); %>
 
 <style type="text/css">
@@ -65,6 +64,8 @@
 			goViewReply("1"); // 초기치 설정(최신의 댓글을 최대 5개 까지 보여주겠다. 즉, 1페이지를 보여주겠다.)
 		}
 		
+		
+		
 		/* if(${boardvo.commentCount > 0}) {
 			$(".commentContent").show();
 		}
@@ -99,30 +100,33 @@
 		
 		var queryString = $("form[name=addWriteFrm]").serialize();
 		
-		
 		$.ajax({
 			url:"<%=request.getContextPath()%>/boardAddComment.ana",
 			data:queryString,
 			type:"POST",
 			dataType:"JSON",
-			success:function(json) {
+			success:function(json) { //이쪽을보고있었단말야?  success 자체가 실행이안된건데. 그런것들 주석으로 정리해두고 니가 이해못한것들
 				var html = "<div>" +
-						   "<div style='text-align: center'>"+json.NAME+"</div>"+
-						   "<div>"+json.CONTENT+"</div>"+
-						   "<div style='text-align: right'>"+json.REGDATE+"</div>"+
+						   "<div class='col-lg-2'>"+json.NAME+"</div>"+
+						   "<div class='col-lg-7'>"+json.CONTENT+"</div>"+
+						   "<div class='col-lg-3' style='text-align: right;'>"+json.REGDATE+"</div>"+
 						   "</div>";
+				var commentCount = "<div>"+json.COMMENTCOUNT+"</div>"
 				$("#commentDisplay").prepend(html);
+				//$("#commentCount").remove(); // 새로운걸 가져오면서 이걸통해서 저걸 없애버린거고			
+				$("#commentCount").html(commentCount); //새로가져온값을 다시 넣어주는거야
 				frm.content.value = "";
+				//viewCommentCount();
 			},
-			error: function(request, status, error){
+			error: function(request, status, error){ //이게먼진알아?  아작스에 에러 생기면 에러 alert? 글치 근데 넌 아까 이거계속뜨는데
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
-		});
+		}); // 안쓰는주석들 다지워버리고 모르겠으면 하나하나 코딩에 해석달고 ㄱㄱ 웅웅 ㅠ ㅠ 아라썽
 	}// end of function goAddWrite()-------------
 	
 	// ==== 댓글내용을 Ajax로 페이징 처리하여 보여주기 ====
 	function goViewReply(currentShowPageNo) {
-		
+	
 		var form_data = {"idx":"${boardvo.idx}",
 						 "currentShowPageNo":currentShowPageNo};
 		
@@ -134,11 +138,11 @@
 			success:function(json){
 				var resultHTML = "";
 				$.each(json, function(entryIndex, entry){
-					resultHTML += "<tr>"+
-								  "<td style='text-align: center;'>"+entry.NAME+"</td>"+
-								  "<td>"+entry.CONTENT+"</td>"+
-								  "<td style='text-align: right;'>"+entry.REGDATE+"</td>"+
-								  "</tr>";
+					resultHTML += "<div>"+
+								  "<div class='col-lg-2' >"+entry.NAME+"</div>"+
+								  "<div class='col-lg-7'>"+entry.CONTENT+"</div>"+
+								  "<div class='col-lg-3' style='text-align: right;'>"+entry.REGDATE+"</div>"+
+								  "</div>";
 				});// end of $.each()-----------
 				
 				$("#commentDisplay").empty().html(resultHTML);
@@ -156,7 +160,7 @@
 	function makeReplyPageBar(currentShowPageNo) {	
 		
 		var form_data = {"idx":"${boardvo.idx}",
-						 sizePerPage:"5"};
+						 sizePerPage:"10"};
 		
 		$.ajax({
 			url:"<%=request.getContextPath()%>/boardCommentTotalPage.ana",
@@ -222,8 +226,9 @@
 	
 </script>
 
+
 <div style="padding-left: 10%;" class="row">
-	<h1>글내용보기</h1>
+	<h1 style="margin-bottom: 30px;"><a href="<%=request.getContextPath()%>/boardList.ana;">자유게시판</a></h1>
 <div class="container-fluid col-lg-7">
 	<div>
 		<table>
@@ -261,7 +266,10 @@
 			<!-- ==== 첨부파일 이름 및 파일크기를 보여주고 첨부파일 다운받게 만들기 ==== -->
 			<!-- <th>첨부파일</th> -->
 			<%-- <c:if test="${sessionScope.loginuser != null}"> --%>
-				<img src="<%=ctxPath%>/resources/img/disc-icon.png"><a href="<%=request.getContextPath()%>/boardDownload.ana?idx=${boardvo.idx}">${boardvo.orgFileName}</a>
+				<c:forEach var="file" items="${attachfilevo}">
+				<img src="<%=ctxPath%>/resources/img/disc-icon.png"><a href="<%=request.getContextPath()%>/boardDownload.ana?fileidx=${file.idx}&idx=${boardvo.idx}">${file.orgfilename}</a>
+				<br/>
+				</c:forEach>
 			<%-- </c:if> --%>
 			
 			<%-- <c:if test="${sessionScope.loginuser == null}">
@@ -271,7 +279,7 @@
 	</div>
 	<div class="Count col-lg-12" style="border: 0px solid gray; margin-bottom: 1%;">
 		<div class="col-lg-1" style="font-weight: bold;">
-		댓글수 ${boardvo.commentCount}
+		댓글수 <div id="commentCount">${boardvo.commentCount}</div> <!-- 여기안에 코멘트카운트를 가져왔던거고   --> 
 		</div>
 		<div class="col-lg-1" style="font-weight: bold;">
 		<!-- <th>조회수</th> -->
@@ -281,11 +289,7 @@
 	<!-- ==== 댓글 내용 보여주기 ==== -->
 	 <div class="comment-box col-lg-12" style="border:0px solid gray; background-color: #f2f2f2">
 		<div class="commentContent">
-			<div  class="col-lg-12">
-				<table id="commentDisplay">
-				
-				</table>
-			</div>       
+			<div id="commentDisplay" class="col-lg-12" ></div>       
 			<div id="pageBar" class="col-lg-12" align="center"></div>
 		</div>
 		<div class="col-lg-12">
@@ -294,6 +298,7 @@
 				<input type="hidden" name="libid_fk" value="classfor" readonly />
 				<input type="hidden" name="name" value="양정구" class="short" readonly/> 
 				<input type="hidden" name="parentidx" value="${boardvo.idx}" />
+				<input type="hidden" name="commnetCount" value="${boardvo.commentCount}" />
 				<!-- 댓글에 달리는 원게시물 글번호(즉, 댓글의 부모글 글번호) -->
 				<input type="text" style="width: 90%; height: 80px; margin-top: 5%; margin-bottom: 2%;" name="content" class="long" />
 				<button type="button" style="height: 80px; width: 9.5%; margin-top: 5%; margin-bottom: 5%" class="btn btn-info btn-sm" onClick="goAddWrite();" >등록</button>  

@@ -16,6 +16,7 @@
 
 	$(document).ready(function(){
 		
+		// 도서관 목록 실행하기 보여지는페이지(currentShowPageNo='1')
 		goSearch("1");
 		
 		// ==== 검색 엔터키적용 ====
@@ -107,12 +108,11 @@
 					
 					var pageNo = Math.floor((currentShowPageNo - 1)/blockSize) * blockSize + 1;
 
-					//[이전]
+					//[이전][ < :태그에 잘찾아보면 있다. ]
 					if(pageNo !=1 ){
 						
 						 pageBarHTML += "<li><a href='javascript:goSearch(\""+(pageNo-1)+"\");'><</a></li>";
 							 
-
 					}//if_2
 					
 					while(!(loop > blockSize || pageNo > totalPage)){
@@ -129,7 +129,7 @@
 				       	 loop++;
 				    	 pageNo++;
 					}//while
-					//[다음]
+					//[다음][ > :태그에 잘찾아보면 있다. ]
 				    
 					if( !(pageNo > totalPage) ) {
 				    	 
@@ -149,8 +149,7 @@
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			} // error
-			
-			
+
 		});//end of ajax
 		
 	}// end of function makeBarPage()
@@ -170,19 +169,32 @@
 		frm.submit();
 	}// end of getLibraryDetailInfo(idx)
 	
-	// ==== 파업창을 열어 특정도서관정보 수정 페이지를 보여주는 기능 ====
+	// ==== 파업창을 열어 특정도서관정보 수정 페이지를 보여주는 기능 (특정암호 입력후 접속가능)====
 	function editLibraryInfo(idx){
 		
-		var frm = document.idxFrm;
-		var url = "editLibraryInfo.ana";
-		var option = "width="+700+",height="+800;
-		window.open("","도서관정보수정",option);
+		// 특정암호입력 페이지 만들기
+		var finalconfirm = prompt( '관리자 암호를 넣어주세요.(암호:1234)', '비밀번호' );
 		
-		frm.action = url;
-		frm.idx.value = idx;
-		frm.target = "도서관정보수정";
-		frm.method = "GET";
-		frm.submit();
+		if(finalconfirm == "1234") {
+			
+			confirm("정보 수정을 진행하시겠습니까?");
+			
+			if(confirm){
+				var frm = document.idxFrm;
+				var url = "editLibraryInfo.ana";
+				var option = "width="+700+",height="+800;
+				window.open("","도서관정보수정",option);
+				
+				frm.action = url;
+				frm.idx.value = idx;
+				frm.target = "도서관정보수정";
+				frm.method = "GET";
+				frm.submit();
+			}//end of if(confrim)
+		}
+		else {
+			alert("관리자 비밀번호가 반드시 필요합니다.")
+		}// end of if_else
 		
 	}// end of function editLibraryInfo(idx)
 	

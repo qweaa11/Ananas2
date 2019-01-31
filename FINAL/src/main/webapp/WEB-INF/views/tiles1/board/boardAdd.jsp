@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/jquery-ui-1.11.4.custom/jquery-ui.css" />
+<script type="text/javascript" src="<%= request.getContextPath() %>/resources/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
 
 <% String ctxPath = request.getContextPath(); %>
 
@@ -46,6 +48,41 @@
 	
 	$(document).ready(function(){
 		
+		$("#spinnerOqty").spinner({
+			spin: function(event, ui) {
+				if( ui.value > 10 ) {
+					$( this ).spinner( "value", 0 );
+					return false;
+				}
+				else if( ui.value < 0 ) {
+					$(this).spinner( "value", 10 );
+					return false;
+				}
+			}
+		});
+		
+		$("#spinnerOqty").bind("spinstop", function(){
+			// 스핀너는 이벤트가 "change" 가 아니라 "spinstop" 이다.
+			var html = "";
+			
+			var spinnerOqtyVal = $("#spinnerOqty").val();
+			
+			if(spinnerOqtyVal == "0") {
+				$("#divFileattach").empty();
+				return;
+			}
+			else
+			{
+				for(var i=0; i<parseInt(spinnerOqtyVal); i++) {
+					html += "<br/>";
+					html += "<input type='file' name='attach' class='btn btn-default' />";
+				}
+				
+				$("#divFileattach").empty();
+				$("#divFileattach").append(html);	
+			}
+		});
+		
 		 /* ==== 스마트 에디터 구현 시작 ==== */
 		//전역변수
 	    var obj = [];
@@ -69,13 +106,13 @@
 	    
 	    // 쓰기버튼
 	    $("#btnWrite").click(function(){
-	    	alert("오니?");
+	    
 	    	 /* ==== 스마트 에디터 구현 시작 ==== */
 	    	//id가 content인 textarea에 에디터에서 대입
 	        obj.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 	        /* ==== 스마트 에디터 구현 끝 ==== */
-	    	alert("오니?2");
-	    	if($("#pw").val().trim == "") {
+	    	
+	    	if($("#pw").val().trim() == "") {
 	    		alert("암호를 적어주세요!")
 	    		return;
 	    	}
@@ -92,7 +129,7 @@
 		
 </script>
 
-<div style="padding-left: 10%; margin-bottom: 0.2%; border: solid 0px red;">
+<div style="padding-left: 20%; margin-bottom: 0.2%; border: solid 0px red;">
 	<h1>글쓰기</h1>
 	<%-- 
 	<form name="addFrm"> 
@@ -107,7 +144,7 @@
 			<tr>
 				<th>성명</th>
 				<td>
-				    <input type="hidden" name="libid_fk" value="tester00" readonly/>
+				    <input type="hidden" name="libid_fk" value="classfor" readonly/>
 					<input type="text" name="name" value="" class="short" />
 				</td>
 			</tr>
@@ -124,10 +161,14 @@
             	</td>
          	</tr>
          	
-        <!-- ==== #135. 파일첨부 타입 추가하기 ==== -->
+        <!-- ==== 다중파일첨부 타입 추가하기 ==== -->
          <tr>
         	<th>파일첨부</th>
-        	<td><input type="file" name="attach" /></td>
+        	<td>
+        		<label for="spinnerOqty">파일갯수: </label>
+        		<input id="spinnerOqty" value="0" style="width: 30px; height: 20px;"/>
+        		<div id="divFileattach"></div>
+        	</td>
         </tr>
 
 		<tr>
@@ -137,8 +178,8 @@
 		</table>
 		<br/>
 		
-		<!-- ==== #126. 답변글쓰기인 경우
-				       부모글의 seq 값인 fk_seq 값과
+		<!-- ==== 답변글쓰기인 경우
+				       부모글의 idx 값인 root 값과
 				       부모글의 groupno 값과
 				       부모글의 depthno 값을 hidden 타입으로 보낸다. -->
 				       
@@ -146,8 +187,10 @@
 		<input type="hidden" name="groupno" value="${groupno}" />
 		<input type="hidden" name="depthno" value="${depthno}" /> 
 		
-		<button type="button" class="btn btn-info btn-sm" id="btnWrite">쓰기</button>
-		<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
+		<div style="float: right; margin-right: 34.3%">
+			<button type="button" class="btn btn-info btn-sm" id="btnWrite">쓰기</button>
+			<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
+		</div>
 	</form>
 
 </div>	

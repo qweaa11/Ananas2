@@ -5,18 +5,36 @@
 
 
 <style type="text/css">
-	table, th, td, input, textarea {border: solid gray 1px;}
+	table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 70%;
+	}
 	
-	#table, #table2 {border-collapse: collapse;
-	 		         width: 1000px;
-	 		        }
-	#table th, #table td{padding: 5px;}
+	td, th {
+	  border: 1px solid #dddddd;
+	  text-align: left;
+	  padding: 8px;
+	}
+	
+	tr:nth-child(even) {
+	  background-color: #f2f2f2;
+	}
+	
+	ul {
+		padding-left: 0px;
+	}
+
+	/* table, th, td, input, textarea {border: solid gray 1px;} */
+	
+	#table {border-collapse: collapse;
+	 		width: 1000px;
+	 		}
+	/* #table th, #table td{padding: 5px;}
 	#table th{width: 120px; background-color: #DDDDDD;}
-	#table td{width: 860px;}
+	#table td{width: 860px;} */
 	.long {width: 470px;}
-	.short {width: 120px;} 	
-	
-	a{text-decoration: none;}	
+	.short {width: 120px;} 		
 
 </style>
 
@@ -36,7 +54,7 @@
     } 
 </script>
 
-<div style="padding-left: 10%; border: solid 0px red;">
+<div style="padding-left: 20%; border: solid 0px red;">
 	<h1 style="margin-bottom: 50px;">글삭제</h1>
 	
 	<form name="delFrm">
@@ -52,8 +70,10 @@
 			</tr>
 		</table>
 		<br/>
-		<button type="button" onclick="goDelete();">삭제</button>
-		<button type="button" onclick="javascript:history.back();">취소</button>
+		<div style="float: right; margin-right: 34.3%">
+			<button type="button" class="btn btn-info btn-sm" onclick="goDelete();">삭제</button>
+			<button type="button" class="btn btn-info btn-sm" onclick="javascript:history.back();">취소</button>
+		</div>
 	</form>
 		
 	<br/>

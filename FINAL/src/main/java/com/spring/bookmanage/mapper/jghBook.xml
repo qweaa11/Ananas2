@@ -43,13 +43,22 @@
 		order by deldate desc, rno asc
 	</select>
 	
-	<select id="findAllDeleteBookByDelid" parameterType="HashMap">
-		select rownum as rno, bookid, title, author, pubname, agecode, count, delid, deldate, cleanerid
+	<!-- 선택한 삭제도서 목록 조회 -->
+	<select id="findAllDeleteBookByDelid" parameterType="HashMap" resultType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
+		select rownum as rno, bookid, title, author, pubcode, status, agecode
+			, isbn, ncode, lcode, fcode, ccode, gcode
+			, libcode, intro, image, price, weight, totalpage
+			, pdate, regdate, deldate, count, delid, cleanerid
 		from
 			(
 			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
-				, title, author, pubname, agecode, count, delid
-				, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
+				, title, author, D.pubcode, status, agecode
+				, isbn, ncode, lcode, fcode, ccode, gcode
+				, libcode, intro, image, price, weight, totalpage
+				, to_char(pdate, 'yyyy-mm-dd') as pdate
+				, to_char(regdate, 'yyyy-mm-dd') as regdate
+				, to_char(deldate, 'yyyy-mm-dd') as deldate
+				, count, delid, cleanerid
 			from delete_book D join publisher P
 			on D.pubcode = P.pubcode
 			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
@@ -64,10 +73,37 @@
 		order by deldate desc, rno asc
 	</select>
 	
-	<!-- Transaction, 도서삭제 이전에 도서테이블에 값을 삽입 -->
-	<!-- <insert id="insertBook" parameterType="com.spring.bookmanage.book.DeleteBookVO">
-		insert into book(idx, bookid, title, author, pubcode_fk, status, agecode, isbn, ncode_fk, lcode_fk, fcode_fk, ccode_fk, gcode_fk, libcode_fk)
-		value(book_seq.nextval,${bookid}, ${title}, ${author}, ${pubcode_fk}, ${status}, ${agecode}, ${ISBN}, ${ncode_fk}, ${lcode_fk}, ${fcode_fk}, ${ccode_fk}, ${gcode_fk}, ${libcode_fk} )
-	</insert> -->
+	<!-- 삭제도서 복원(Transaction) -->
+	<delete id="restoreBook" statementType="CALLABLE" parameterType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
+		{
+			call pcd_restorebook
+			(
+				#{bookid, mode=IN}
+				,#{title, mode=IN}
+				,#{author, mode=IN}
+				,#{pubcode, mode=IN}
+				,#{status, mode=IN}
+				,#{agecode, mode=IN}
+				,#{ISBN, mode=IN}
+				,#{ncode, mode=IN}
+				,#{lcode, mode=IN}
+				,#{fcode, mode=IN}
+				,#{ccode, mode=IN}
+				,#{gcode, mode=IN}
+				,#{libcode, mode=IN}
+				
+				,#{intro, mode=IN}
+				,#{image, mode=IN}
+				,#{price, mode=IN}
+				,#{weight, mode=IN}
+				,#{totalpage, mode=IN}
+				,#{pdate, mode=IN}
+				,#{regdate, mode=IN}
+				,#{count, mode=IN}
+				
+				,#{delid, mode=IN}
+			)
+		}
+	</delete>
 
 </mapper>

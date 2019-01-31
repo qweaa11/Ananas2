@@ -13,19 +13,19 @@ public class KKHBookVO {
 	private int status;		// book 테이블의 도서 상태값 
 	private int agecode;	// book 테이블의 도서연령
 	private int count; 		// 해당 도서번호를 가진 같은 책의 도서권수
-	private String gcode_fk;
+	private String gcode_fk;// genre 코드
 	private String gname; 	// genre 코드  이름(장르 코드)
-	private String ncode_fk;
+	private String ncode_fk;// nation 코드
 	private String nname;	// nation 코드 이름(국가코드 0-국내 / 1- 해외)
-	private String lcode_fk;
+	private String lcode_fk;// language 코드
 	private String lname; 	// language 코드 이름 (언어 코드)
-	private String fcode_fk;
+	private String fcode_fk;// field 코드
 	private String fname;	// field 코드 이름(분야 코드 ex] 철학, 과학 etc)
-	private String ccode_fk;
+	private String ccode_fk;// category 코드
 	private String cname;	// category 코드 이름(종류 코드) 소설, 시 등등
-	private String libcode_fk;
+	private String libcode_fk;// library 코드
 	private String libname;	// 도서관 코드 이름
-	private String pubcode_fk;
+	private String pubcode_fk;//출판사 코드
 	private String pubname;	// 출판사 코드 이름
 	private String isbn;	// 도서별 ISBN 값
 	private String intro;	// book_detail 테이블의 책소개 글
@@ -318,6 +318,7 @@ public class KKHBookVO {
 		this.regdate = regdate;
 	}
 	
+	// 도서 status 값에 따라 상태를 문자로 변환해주는 메소드
 	public String getTranseStatus() {
 		String statusname = "";
 		switch (status) {
@@ -342,6 +343,7 @@ public class KKHBookVO {
 		
 	}
 	
+	//도서 연령값에 따라 문자로 변환해주는 메소드
 	public String getTranseAgecode() {
 		String agename = "";
 		switch (agecode) {

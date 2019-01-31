@@ -28,23 +28,28 @@ $(document).ready(function(){
 	var y = ${libraryDetailInfo.y};
 	var x = ${libraryDetailInfo.x};
 	
-	// ==== 11자리 핸드폰 번호 정규표현식 처리하기(정규표현식 변경필요) ====	
-	$(".fail").hide();
-	$(".unfail").hide();
+	// ==== 11자리 핸드폰 번호 정규표현식 처리하기(정규표현식 변경필요) ====
+	// 성공 실패 메세지
+	$(".fail").hide();//실패 메시지 숨김
+	$(".unfail").hide();//성공 메시지 숨김
 	
 	$("#tel").blur(function(){
 		var tel = $(this).val();
-		var regExp_TEL = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
+		var regExp_TEL = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/; //정규표현식
 		var bool = regExp_TEL.test(tel);
 		
+		// 실패라면
 		if(!bool){
-			$(".fail").show();
-			$("#tel").val("");
+			$(".fail").show();// 실패 메시지 보여줌
+			$("#tel").val("");// 값초기화
+			$("#tel").focus();// 마우스 포커스 위치 변경
 		}
+		// 성공이라면
 		else{
-			$(".fail").hide();
-			$(".unfail").show();
-		}
+			$(".fail").hide(); // 실패 메시지 숨김 <<-- 위에서 해줘서 필요없음
+			$(".unfail").show(); // 성공메시지 보여줌
+		}// end of if_else
+		
 	});// end of ("#tel").blur(function()
 	
 			
@@ -109,26 +114,27 @@ $(document).ready(function(){
 			
 });// end of ready
 
-// ==== 도서관정보 수정 완료하기 ====
-function editLibraryInfo(){
-	
-	// ==== 입력란에 공백이 있으면 등록 불가 ====
-	var libname = $("#libname").val();
-	var tel = $("#tel").val();
-	var post = $("#post").val();
-	var addr = $("#addr1").val();
-	
-	if(libname == "" || tel == "" || post == "" || addr1 == ""  ){
-		alert("입력란에 정보를 입력해주세요.")
-	}
-	else{
-		var frm = document.libFrm;
-		frm.action = "editLibraryInfoEnd.ana";
-		frm.method = "POST";
-		frm.submit();
-	}//end of if else
-	
-}// end of goResister()
+	// ==== 도서관정보 수정 완료하기 ====
+	function editLibraryInfo(){
+		
+		// 객체 선언해주기
+		var libname = $("#libname").val();
+		var tel = $("#tel").val();
+		var post = $("#post").val();
+		var addr = $("#addr1").val();
+		
+		// ==== 입력란에 공백이 있으면 등록 불가 ====
+		if(libname == "" || tel == "" || post == "" || addr1 == ""  ){
+			alert("입력란에 정보를 입력해주세요.")
+		}
+		else{
+			var frm = document.libFrm;
+			frm.action = "editLibraryInfoEnd.ana";
+			frm.method = "POST";
+			frm.submit();
+		}//end of if else
+		
+	}// end of editLibraryInfo()
 
 </script>
 
