@@ -104,7 +104,7 @@ public class KKHBookService implements InterKKHBookService{
 		String newBookid = parameterMap.get("EDITLIBRARY")+parameterMap.get("EDITNATION")+parameterMap.get("EDITLANGUAGE")+parameterMap.get("EDITCATEGORY")+parameterMap.get("EDITFIELD")+parameterMap.get("EDITGENRE");
 		String newBookFirstNum = bookdao.findNewBook1stNum(newBookid);
 		//System.out.println("firstNum:"+newBookFirstNum);
-		newBookid += "-"+newBookFirstNum;
+		newBookid += "-"+newBookFirstNum; 
 		parameterMap.put("NEWBOOKID", newBookid);
 		List<KKHBookVO> bookDetailList = bookdao.selectAndDelBookDetail(parameterMap.get("BOOKID"));
 		for(int i=0; i<bookDetailList.size();i++) {
@@ -190,16 +190,68 @@ public class KKHBookService implements InterKKHBookService{
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
 	public String[] updateDeadline(String[] extendBookArr) {
-		String[] extendSuccessBook = new String[extendBookArr.length];
+		String[] extendSuccessBookArr = new String[extendBookArr.length];
 		for(int i=0; i<extendBookArr.length;i++) {
 			int n = bookdao.updateDeadline(extendBookArr[i]);
 			if(n == 1) {
-				extendSuccessBook[i] = extendBookArr[i];
+				extendSuccessBookArr[i] = extendBookArr[i];
 			}
 				
 		}
 		
-		return extendSuccessBook;
+		return extendSuccessBookArr;
+	}
+	@Override
+	public int updateDeadline(String extendBookid) {
+		int n = bookdao.updateDeadline(extendBookid);
+		return n;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public String[] returnBook(String[] returnBookidArr) {
+		String[] returnSuccessBookArr = new String[returnBookidArr.length];
+		//List<HashMap<String,String>> rentalBookInfoList = new ArrayList<HashMap<String,String>>();
+		for(int i =0; i<returnBookidArr.length;i++) {
+			System.out.println("returnBookid1:"+returnBookidArr[i]);
+			HashMap<String,String> rentalBookInfo = bookdao.findRentalBook(returnBookidArr[i]);
+			int n1 = bookdao.insertReturnedBook(rentalBookInfo);
+			int n2 = bookdao.updateReturnedBookStatus(rentalBookInfo);
+			int latedate = Integer.parseInt(rentalBookInfo.get("LATEDATE"));
+			int n3= 1;
+			if(latedate >0) {
+				n3 = bookdao.updateLateMemberInfo(rentalBookInfo);
+			}
+			int n4 = bookdao.deleteRentalBook(returnBookidArr[i]);
+			if(n1*n2*n3*n4 == 1) {
+				returnSuccessBookArr[i] = returnBookidArr[i];
+			}
+		}
+		
+		return returnSuccessBookArr;
+	}
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int returnBook(String returnBookid) {
+		System.out.println("returnBookid2:"+returnBookid);
+		HashMap<String,String> rentalBookInfo = bookdao.findRentalBook(returnBookid);
+		int n1 = bookdao.insertReturnedBook(rentalBookInfo);
+		int n2 = bookdao.updateReturnedBookStatus(rentalBookInfo);
+		int latedate = Integer.parseInt(rentalBookInfo.get("LATEDATE"));
+		int n3= 1;
+		if(latedate >0) {
+			n3 = bookdao.updateLateMemberInfo(rentalBookInfo);
+		}
+		int n4 = bookdao.deleteRentalBook(returnBookid);
+		if(n1*n2*n3*n4 == 1) return 1;
+		else return 0;
+	}
+	
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	public int reserveCancel(String cancelBookid) {
+		int n = bookdao.reserveCancel(cancelBookid);
+		return n;
 	}
 	
 

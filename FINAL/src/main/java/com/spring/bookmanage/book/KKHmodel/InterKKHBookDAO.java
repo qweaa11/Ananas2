@@ -67,6 +67,18 @@ public interface InterKKHBookDAO {
 
 	int updateDeadline(String extendBookid);
 
+	HashMap<String, String> findRentalBook(String returnBookid);
+
+	int insertReturnedBook(HashMap<String, String> rentalBookInfo);
+
+	int updateReturnedBookStatus(HashMap<String, String> rentalBookInfo);
+
+	int updateLateMemberInfo(HashMap<String, String> rentalBookInfo);
+
+	int deleteRentalBook(String returnBookid);
+
+	int reserveCancel(String cancelBookid);
+
 
 
 	

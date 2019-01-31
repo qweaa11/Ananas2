@@ -11,6 +11,7 @@
 			var flag = $(this).parent().find(".check").is(":checked");
 			$(this).parent().find(".check").prop("checked",!flag);
 		});// end of tr click
+		
 		$("#searchWord").keydown(function(event) {
 	         if(event.keyCode == 13) {
 	        	 search();
@@ -19,7 +20,7 @@
 		
 	});// end of document ready
 	
-	function search() {
+	function search() {// 검색
 		var searchFrm = document.searchFrm;
 		var searchWord = $("#searchWord").val();
 		searchFrm.method = "GET";
@@ -27,19 +28,49 @@
 		searchFrm.submit();
 	}// end of search
 	
-	function searchKeep() {
+	function searchKeep() {// 검색어 유지
 		if(${searchWord != null && searchWord!= "" && searchWord != "null"}) {
 			$("#colname").val("${colname}");
 			$("#searchWord").val("${searchWord}");
 		}// end of if
 	}// end of searchKeep
 	
-	function allCheckFalse() {
+	function allCheckFalse() {// 체크박스 전체해제
 		var flag = $("input:checkbox[name=check]").prop("checked",false);
 	}// end of allCheck
-	function recover() {
+	
+	function restore(delid) {// 삭제도서 복구
+		var restoreFrm = searchFrm;
+		restoreFrm.method = "POST";
+		restoreFrm.action = "restore.ana";
 		
-	}// end of 
+		var flag = false;
+		var count = 0;
+		$(".tr-row").each(function() {
+			flag = $(this).find(".check").is(":checked");
+			
+			if(!flag) {
+				$(this).find(".delid").attr("disabled", true);
+			} else {
+				count++;
+			}// end of if~else
+		});// end of each
+
+		var choice = confirm(count+"권의 도서를 모두 복구하시겠습니까?");
+		if(count < 1) {
+			alert("복구할 도서를 선택하지 않았습니다.");
+			$(".tr-row").find(".delid").attr("disabled", false);
+			
+			return ;
+		}// end of if
+		
+		if(!choice) {
+			return ;
+		}// end of if
+
+		restoreFrm.submit();
+	}// end of restore
+	
 </script>
 
 <div class="container">
@@ -83,7 +114,7 @@
 					</div>
 					
 					<div style="float: right;">
-						<button type="button" class="btn btn-success" onclick="recover('${goBackURL}');">복원<i class="glyphicon glyphicon-refresh"></i></button>
+						<button type="button" class="btn btn-success" onclick="restore();">복원<i class="glyphicon glyphicon-refresh"></i></button>
 					</div>
 				</div>
 

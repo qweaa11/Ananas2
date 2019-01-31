@@ -44,4 +44,19 @@ public class JGHBookService {
 
 		return deleteBookListWithOutSearch;
 	}// end of noSearchList
+
+	/**
+	 * 삭제도서 복구
+	 * @param delidArray
+	 * @return
+	 */
+	public int restoreBookService(String[] delidArray) {
+		List<DeleteBookVO> bookSetList = mapper.findAllDeleteBookByDelid(delidArray);
+		int addRow = mapper.addSetBook(delidArray, bookSetList);
+		int deleteRow = mapper.deleteSetDeleteBook(delidArray);
+
+		int transactionFlag = addRow*deleteRow;
+
+		return transactionFlag;
+	}// end of restoreBookService
 }

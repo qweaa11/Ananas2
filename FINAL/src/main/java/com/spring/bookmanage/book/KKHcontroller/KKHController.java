@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -250,7 +251,9 @@ public class KKHController {
 				resultMap.put("BOOKID",map.get("BOOKID"));
 				resultMap.put("TITLE",map.get("TITLE"));
 				resultMap.put("ISBN", map.get("ISBN"));
-				resultMap.put("STATUS", map.get("STATUS"));
+				resultMap.put("MSTATUS", map.get("MSTATUS"));
+				resultMap.put("BSTATUS", map.get("BSTATUS"));
+				System.out.println("BSTATUS:"+map.get("BSTATUS"));
 				resultMap.put("MEMBERREGDATE", map.get("MEMBERREGDATE"));
 				resultMap.put("MEMBERID", map.get("MEMBERID"));
 				resultMap.put("RESERVEDATE", map.get("RESERVEDATE"));
@@ -532,31 +535,134 @@ public class KKHController {
 	
 	@RequestMapping(value="/extendBookList.ana",method = {RequestMethod.POST})
 	public String extendBookList(HttpServletRequest request, HttpServletResponse response) {
+		String bookid = request.getParameter("bookid");
 		String extendBookid = request.getParameter("extendBookid");
-		String[] extendBookArr = extendBookid.split(",");
-		System.out.println(extendBookArr[0]);
 		
-		String[] extendSuccessBook = service.updateDeadline(extendBookArr);
-		if(extendSuccessBook.length < 1) { 
-			String msg = "연장 실패";
+		
+			String[] extendBookArr = extendBookid.split(",");
+			System.out.println(extendBookArr[0]);
+			String[] extendSuccessBook = service.updateDeadline(extendBookArr);
+			
+			
+			if(extendSuccessBook.length < 1) { 
+				String msg = "연장 실패";
+				String loc = "javascript:history.back()";
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+				
+			}else {
+				String msg = "";
+				for(int i=0; i<extendSuccessBook.length;i++) {
+					System.out.println(extendSuccessBook[i]);
+					if(!extendSuccessBook[i].isEmpty())	msg += extendSuccessBook[i]+",";
+				}
+				msg = msg.substring(0, msg.length()-1)+" 도서 연장 성공!!";
+				String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
+				System.out.println("extendBookListAsBookid:"+bookid);
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+			}
+		
+			
+		/*	int n = service.updateDeadline(extendBookid);
+			if(n == 0) { 
+				String msg = "연장 실패";
+				String loc = "javascript:history.back()";
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+				
+			}else {
+				String msg = extendBookid+" 연장 성공!!";
+				String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
+				System.out.println("extendBookListAsBookid:"+bookid);
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+			}*/
+		
+		
+		return "msg";
+	}
+	
+	
+	@RequestMapping(value="/returnBookList.ana", method = {RequestMethod.POST})
+	public String returnBookList(HttpServletRequest request, HttpServletResponse response) {
+		String returnBookid = request.getParameter("returnBookid");
+		String bookid = request.getParameter("bookid");
+		int n=0;
+		//try {
+			String[] returnBookidArr = returnBookid.split(",");
+			String[] returnSuccessBook = service.returnBook(returnBookidArr);
+			
+			if(returnSuccessBook.length < 1) { 
+				String msg = "반납 실패";
+				String loc = "javascript:history.back()";
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+				
+			}else {
+				String msg = "";
+				for(int i=0; i<returnSuccessBook.length;i++) {
+					System.out.println(returnSuccessBook[i]);
+					if(!returnSuccessBook[i].isEmpty())	msg += returnSuccessBook[i]+",";
+				}
+				msg = msg.substring(0, msg.length()-1)+" 도서 반납 되었습니다.";
+				String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
+				System.out.println("returnSuccessBook:"+bookid);
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+			}
+			
+		/*} catch (PatternSyntaxException e) {
+			n = service.returnBook(returnBookid);
+			
+			if(n != 1) {
+				String msg = "반납 실패";
+				String loc = "javascript:history.back()";
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+				
+			}else {
+				String msg = "반납 성공";
+				String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
+				System.out.println("retnrnBookListAsBookid:"+bookid);
+				request.setAttribute("msg", msg);
+				request.setAttribute("loc", loc);
+				
+			}
+		}*/
+		
+		return "msg";
+	}
+	
+	@RequestMapping(value="/reserveCancel.ana",method= {RequestMethod.GET})
+	public String reserveCancel(HttpServletRequest request, HttpServletResponse response) {
+		String bookid = request.getParameter("bookid");
+		String cancelBookid = request.getParameter("cancelBookid");
+		
+		int n = service.reserveCancel(cancelBookid);
+		if(n != 1) {
+			String msg = "예약 취소실패";
 			String loc = "javascript:history.back()";
 			request.setAttribute("msg", msg);
 			request.setAttribute("loc", loc);
 			
 			
 		}else {
-			String msg = "";
-			for(int i=0; i<extendSuccessBook.length;i++) {
-				System.out.println(extendSuccessBook[i]);
-				if(!extendSuccessBook[i].isEmpty())	msg += extendSuccessBook[i]+",";
-			}
-			msg = msg.substring(0, msg.length()-1)+" 도서 연장 성공!!";
-			String loc = "/bookmanage/bookDetail.ana?bookid="+extendBookArr[0].substring(0, extendBookArr[0].indexOf("-", 16));
-			System.out.println(extendBookArr[0].substring(0, extendBookArr[0].indexOf("-", 16)));
+			String msg = "예약이 취소되었습니다.";
+			String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
+			System.out.println("reserveCancel:"+bookid);
 			request.setAttribute("msg", msg);
 			request.setAttribute("loc", loc);
 			
 		}
+		
 		return "msg";
 	}
 

@@ -215,7 +215,7 @@
 						        type: 'column'
 						    },
 						    title: {
-						        text: '장르별 도서 인기'
+						        text: '장르별 인기 도서'
 						    },
 						    subtitle: {
 						        text: '출처 : 데이터베이스'

@@ -42,5 +42,32 @@
 			) T
 		order by deldate desc, rno asc
 	</select>
+	
+	<select id="findAllDeleteBookByDelid" parameterType="HashMap">
+		select rownum as rno, bookid, title, author, pubname, agecode, count, delid, deldate, cleanerid
+		from
+			(
+			select distinct substr(D.bookid,1, instr(D.bookid,'-',1,2)-1 ) as bookid
+				, title, author, pubname, agecode, count, delid
+				, to_char(deldate, 'yyyy-mm-dd') as deldate, cleanerid
+			from delete_book D join publisher P
+			on D.pubcode = P.pubcode
+			join ( select substr(bookid,1, instr(bookid,'-',1,2)-1 ) as bookid,  count(*) as count
+			        from delete_book group by substr(bookid,1, instr(bookid,'-',1,2)-1 )
+			     ) V
+			on substr(D.bookid, 1, instr(D.bookid,'-',1,2)-1 ) = V.bookid
+			) T
+		where delid in
+		<foreach collection="delidArray" index="i" open="(" separator="," close=")"> <!-- 반복횟수 : index  시작 열기 : open  구분자 : separator 끝 닫기 : close -->
+	         ${delidArray[i]}
+	    </foreach>
+		order by deldate desc, rno asc
+	</select>
+	
+	<!-- Transaction, 도서삭제 이전에 도서테이블에 값을 삽입 -->
+	<!-- <insert id="insertBook" parameterType="com.spring.bookmanage.book.DeleteBookVO">
+		insert into book(idx, bookid, title, author, pubcode_fk, status, agecode, isbn, ncode_fk, lcode_fk, fcode_fk, ccode_fk, gcode_fk, libcode_fk)
+		value(book_seq.nextval,${bookid}, ${title}, ${author}, ${pubcode_fk}, ${status}, ${agecode}, ${ISBN}, ${ncode_fk}, ${lcode_fk}, ${fcode_fk}, ${ccode_fk}, ${gcode_fk}, ${libcode_fk} )
+	</insert> -->
 
 </mapper>

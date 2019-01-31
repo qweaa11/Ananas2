@@ -41,4 +41,22 @@ public class YSWChartService implements InterYSWChartService {
 		return detail;
 	}
 
+
+	// 카테고리별 대여 차트
+	@Override
+	public List<HashMap<String, String>> findRentalInfo(HashMap<String, String> paramap) {
+
+		List<HashMap<String, String>> rentalInfo = dao.findRentalInfo(paramap);
+		return rentalInfo;
+	}
+
+
+	// 장르별 대여 성별의 퍼센티지
+	@Override
+	public List<HashMap<String, String>> findRentalChartGender(HashMap<String, String> paramap) {
+
+		List<HashMap<String, String>> rentalInfoGender = dao.findRentalChartGender(paramap);
+		return rentalInfoGender;
+	}
+
 }
