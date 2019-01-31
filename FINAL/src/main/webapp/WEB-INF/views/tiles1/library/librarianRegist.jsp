@@ -73,6 +73,16 @@
 	          if(passwd != passwdCheck) $(this).parent().parent().find(".error").show();
 	          else $(this).parent().parent().find(".error").hide();
 	       });// end of $("#pwdcheck").blur(function())------------------------------------------------
+	       
+	       $("#email").blur(function(){
+	           var email = $(this).val();
+	           var regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
+	           
+	           var bool = regExp_email.test(email);
+	           
+	           if(!bool) $(this).parent().parent().find(".error").show();
+	           else $(this).parent().parent().find(".error").hide();
+	        });// end of $("#email").blur(function())------------------------------------------------
 		
 	       
 	});// end of $(document).ready(function())--------------------
@@ -105,8 +115,7 @@
 	<label class="control-label col-sm-3">아이디 <span class="text-danger">*</span></label>
 		<div class="col-md-8 col-sm-9">
 			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-					<input style="width: 260px" type="text" class="form-control requiredInfo" name="libid" id="libid" placeholder="아이디를 입력해주세요" value="" required>
+				<input style="width: 299px; border-radius: 4px;" type="text" class="form-control requiredInfo" name="libid" id="libid" placeholder="아이디를 입력해주세요" value="" required>
 			</div>
 			<a id="idcheck" style="cursor: pointer;"><img src="resources/img/idcheck.gif"></a>
 			<span id="error_id" style="color: red; font-weight: bold;"></span>
@@ -147,6 +156,18 @@
 		</div>
 </div>
 
+<!-- 이메일 입력 -->
+<div class="form-group">
+	<label class="control-label col-sm-3">이메일 <span class="text-danger">*</span></label>
+		<div class="col-md-5 col-sm-8">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+					<input style="width: 260px" type="text" class="form-control requiredInfo" name="email" id="email" placeholder="abc@naver.com" value="">
+			</div>
+			<span class="error" style="color: red">이메일 형식에 맞지 않습니다.</span>   
+		</div>
+</div>
+
 <!-- 도서관 번호 입력 -->
 <div class="form-group">
 	<label class="control-label col-sm-3">도서관 이름 <span class="text-danger">*</span></label>
@@ -178,8 +199,8 @@
 			<div class="form-group" style="margin-left: 0%">
 				<select class="form-control"  name="status" style="width: 78px" >
 					<option value="">등급</option>
-					<option value="1">사서</option>
-					<option value="2">도서관장</option>
+					<option value="0">사서</option>
+					<option value="1">도서관장</option>
 				</select>
 			</div>
 		</div>
@@ -199,7 +220,7 @@
 <!-- 등록하기 버튼 -->
 <div class="form-group">
 	<div class="col-xs-offset-3 col-xs-10">
-		<button id="registUser" type="button" class="btn btn-primary" onClick="adminRegistEnd()">등록하기</button> 
+		<button id="registUser" type="button" class="btn btn-info" onClick="adminRegistEnd()">등록하기</button> 
 	</div>
 </div>
 </form>

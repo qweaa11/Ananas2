@@ -15,10 +15,8 @@
 
 <!-- ==== 관리자 등록하기 ==== -->
 <insert id="adminRegistEnd" parameterType="com.spring.bookmanage.library.Yjkmodel.YjkVO">
-
-	insert into librarian (libid, libcode_fk, idx, pwd, name, tel, status, imgFileName)
-	values(#{libid}, #{libcode_fk}, LIBRARIAN_seq.nextval, #{pwd}, #{name}, #{tel}, #{status}, #{imgFileName})
-
+	insert into librarian (libid, libcode_fk, idx, pwd, name, tel, status, imgFileName, email)
+	values(#{libid}, #{libcode_fk}, LIBRARIAN_seq.nextval, #{pwd}, #{name}, #{tel}, #{status}, #{imgFileName}, #{email})
 </insert>
 
 <!-- ==== 도서관 정보 가져오기 ==== -->

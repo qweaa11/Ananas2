@@ -1,5 +1,6 @@
 package com.spring.bookmanage.board.YJKmodel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +23,18 @@ public class YJKBoardDAO implements InterYJKBoardDAO {
 		
 		return getboardList;
 	}
+	
+	// 다중파일첨부
+	@Override
+	public List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList) {
+		for(int i =0; i<boardList.size();i++ ) {
+			String board_idx_fk = boardList.get(i).getIdx();
+			int n = sqlsession.selectOne("bookmanage.getAttachFileCount",board_idx_fk);
+			boardList.get(i).setFileCount(n);
+		}
+		return boardList;
+	}
+
 
 	// ==== 글 1개를 보여주는 페이지 요청(먼저 글 조회수 증가를 할지 안 할지 결정해야함) =====
 	@Override
@@ -40,23 +53,39 @@ public class YJKBoardDAO implements InterYJKBoardDAO {
 		sqlsession.update("bookmanage.setAddReadCount", idx);
 		
 	}
-
-	// ==== 파일첨부가 없는 글쓰기 요청 ==== //
+	
+	// 글쓰기 idx값 채번해오기 요청
 	@Override
-	public int boardAdd(YJKBoardVO boardvo) {
+	public int selectBoardIdx() {
+		int idx = sqlsession.selectOne("bookmanage.selectBoardIdx");
+		return idx;
+	}
+
+	// ==== 글쓰기 요청 ==== //
+	@Override
+	public int boardAdd(HashMap<String, String> boardMap) {
 		
-		int n = sqlsession.insert("bookmanage.boardAdd", boardvo);
+		int n = sqlsession.insert("bookmanage.boardAdd", boardMap);
 		
 		return n;
 	}
 
-	// ==== 파일첨부가 있는 글쓰기 요청 ==== //
+	// ==== 파일첨부 요청 ==== //
 	@Override
-	public int boardAdd_withFile(YJKBoardVO boardvo) {
+	public int boardAdd_withFile(HashMap<String, String> boardMapList) {
 		
-		int n = sqlsession.insert("bookmanage.boardAdd_withFile", boardvo);
+		int n = sqlsession.insert("bookmanage.boardAdd_withFile", boardMapList);
 		
 		return n;
+	}
+	
+	// view 페이지에 첨부파일 보여주기
+	@Override
+	public List<YJKAttachFileVO> FileView(String idx) {
+		
+		List<YJKAttachFileVO> attachfile = sqlsession.selectList("bookmanage.FileView", idx);
+		
+		return attachfile;
 	}
 
 	// ==== Board 테이블에서 groupno 컬럼의 최대값 알아오기
@@ -155,7 +184,7 @@ public class YJKBoardDAO implements InterYJKBoardDAO {
 		return count;
 	}
 
-	// 원글 삭제
+	// 원글 삭제하기
 	@Override
 	public int deleteContent(HashMap<String, String> paraMap) {
 
@@ -163,18 +192,32 @@ public class YJKBoardDAO implements InterYJKBoardDAO {
 		
 		return n;
 	}
+	
 
 	// 댓글 삭제
 	@Override
 	public int delComment(HashMap<String, String> paraMap) {
 		
-		int n = sqlsession.update("board.delComment", paraMap);
+		int n = sqlsession.update("bookmanage.delComment", paraMap);
 		
 		return n;
 	}
 
-	
+	@Override
+	public int getCommentCnt(YJKReplyVO replyvo) {
+		
+		int totalCount = sqlsession.selectOne("bookmanage.getCommentCnt", replyvo);
+		
+		return totalCount;
+	}
 
-	
+	// 파일 다운로드
+	@Override
+	public YJKAttachFileVO fileDownload(String fileidx) {
+		
+		YJKAttachFileVO attachfilevo = sqlsession.selectOne("bookmanage.fileDownload", fileidx);
+		
+		return attachfilevo;
+	}
 
 }

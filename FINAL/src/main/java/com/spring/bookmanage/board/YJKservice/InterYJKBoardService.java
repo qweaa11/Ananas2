@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.spring.bookmanage.board.YJKmodel.YJKAttachFileVO;
 import com.spring.bookmanage.board.YJKmodel.YJKBoardVO;
 import com.spring.bookmanage.board.YJKmodel.YJKReplyVO;
 
@@ -20,9 +21,11 @@ public interface InterYJKBoardService {
 	YJKBoardVO getViewWithNoAddCount(String idx);
 	// 조회수(readCount)증가 없이 그냥 글 1개만 가져오는 것.
 
-	int boardAdd(YJKBoardVO boardvo); // 파일 첨부가 없는 글쓰기
+	int boardAdd(HashMap<String, String> boardMap); // 파일 첨부가 없는 글쓰기
 
-	int boardAdd_withFile(YJKBoardVO boardvo); // 파일 첨부가 있는 글쓰기
+	int boardAdd_withFile(HashMap<String, String> hashMap); // 파일 첨부하기
+	
+	List<YJKAttachFileVO> FileView(String idx); // 첨부파일 보여주기
 
 	int getTotalCountWithSearch(HashMap<String, String> paraMap); 
 	// 검색조건에 만족하는 총 게시물 건수 알아오기
@@ -45,7 +48,16 @@ public interface InterYJKBoardService {
 	int boardDel(HashMap<String, String> paraMap) throws Throwable;
 	// 글 삭제하기
 	
+	int getCommentCnt(YJKReplyVO replyvo);
+	// 댓글개수 카운팅
 
-	
+	int selectBoardIdx();
+	// board idx 채번
+
+	List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList);
+
+	YJKAttachFileVO fileDownload(String fileidx);
+	// 파일 다운로드
+
 
 }

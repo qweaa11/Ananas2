@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class YJKBoardVO {
 
-	private String idx;				// 글번호
+	private String idx;				// 실제 글번호
 	private String libid_fk;		// 관리자아이디
 	private String name;			// 작성자명
 	private String subject;			// 제목
@@ -50,6 +50,7 @@ public class YJKBoardVO {
  	// !!!!!! MultipartFile attach 는 오라클 데이터베이스 tblBoard 테이블의 컬럼이 아니다.!!!!!!  
  	// /Board/src/main/webapp/WEB-INF/views/tiles1/board/add.jsp 파일에서 input type="file" 인 name 의 이름(attach)과 
  	// 동일해야만 파일첨부가 가능해진다.!!!!
+	private int fileCount;     		//board_attachfile 테이블에 있는 첨부파일 갯수
 
 	public YJKBoardVO() {}
 	
@@ -79,6 +80,15 @@ public class YJKBoardVO {
 		this.orgFileName = orgFileName;
 		this.fileSize = fileSize;
 		this.attach = attach;
+	}
+	
+
+	public int getFileCount() {
+		return fileCount;
+	}
+
+	public void setFileCount(int fileCount) {
+		this.fileCount = fileCount;
 	}
 
 	public String getIdx() {

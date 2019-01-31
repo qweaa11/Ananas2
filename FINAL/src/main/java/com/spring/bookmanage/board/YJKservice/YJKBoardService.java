@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.bookmanage.board.YJKmodel.InterYJKBoardDAO;
+import com.spring.bookmanage.board.YJKmodel.YJKAttachFileVO;
 import com.spring.bookmanage.board.YJKmodel.YJKBoardVO;
 import com.spring.bookmanage.board.YJKmodel.YJKReplyVO;
 
@@ -28,6 +29,13 @@ public class YJKBoardService implements InterYJKBoardService {
 		
 		return boardList;
 	}
+	
+	@Override
+	public List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList) {
+		List<YJKBoardVO> boardList2= dao.getAttachFileCount(boardList);
+		return boardList2;
+	}
+
 
 	// ==== 글 1개를 보여주는 페이지 요청(먼저 글 조회수 증가를 할지 안 할지 결정해야함) ====
 	@Override
@@ -54,40 +62,48 @@ public class YJKBoardService implements InterYJKBoardService {
 		
 		return boardvo;
 	}
-
-	// ==== 파일 첨부가 없는 글쓰기 요청 ==== //
+	// 글쓰기 idx값 채번해오기 요청
 	@Override
-	public int boardAdd(YJKBoardVO boardvo) {
-		
-		// ==== 원글쓰기인지, 답변글쓰기인지 구분하기 ====
-		if(boardvo.getRoot() == null ||
-		   boardvo.getRoot().trim().isEmpty()) {
-			// 원글쓰기인 경우
-			int groupno = dao.getGroupnoMax()+1;
-			boardvo.setGroupno(String.valueOf(groupno));
-		}
-		
-		int n = dao.boardAdd(boardvo);
-		
-		return n;
+	public int selectBoardIdx() {
+		int idx = dao.selectBoardIdx();
+		return idx;
 	}
-
-	// ==== 파일 첨부가 있는 글쓰기 요청 ==== //
-	@Override
-	public int boardAdd_withFile(YJKBoardVO boardvo) {
 	
+	// ==== 글쓰기 요청 ==== //
+	@Override
+	public int boardAdd(HashMap<String, String> boardMap) {
+		
 		// ==== 원글쓰기인지, 답변글쓰기인지 구분하기 ====
-		if(boardvo.getRoot() == null ||
-		   boardvo.getRoot().trim().isEmpty()) {
+		if(boardMap.get("ROOT") == null ||
+		   boardMap.get("ROOT").trim().isEmpty()) {
 			// 원글쓰기인 경우
 			int groupno = dao.getGroupnoMax()+1;
-			boardvo.setGroupno(String.valueOf(groupno));
+			boardMap.put("GROUPNO",String.valueOf(groupno));
 		}
 		
-		int n = dao.boardAdd_withFile(boardvo);
+		int n = dao.boardAdd(boardMap);
 		
 		return n;
 	}
+
+	// ==== 파일 첨부 요청 ==== //
+	@Override
+	public int boardAdd_withFile(HashMap<String, String> boardMapList) {
+		
+		int n = dao.boardAdd_withFile(boardMapList);
+		
+		return n;
+	}
+	
+	// ==== 첨부파일 보여주기 ====
+	@Override
+	public List<YJKAttachFileVO> FileView(String idx) {
+		
+		List<YJKAttachFileVO> attachfile = dao.FileView(idx);
+		
+		return attachfile;
+	}
+
 
 	// ==== 검색조건에 만족하는 총 게시물 건수 알아오기 ====
 	@Override
@@ -119,11 +135,7 @@ public class YJKBoardService implements InterYJKBoardService {
 		n = dao.boardAddComment(replyvo);
 
 		if(n == 1) {
-			System.out.println(n);
-			System.out.println("오니?");
-			System.out.println(replyvo.getParentidx());
 			result = dao.updateCommentCount(replyvo.getParentidx());
-			System.out.println(result);
 		}
 		
 		return result;
@@ -178,7 +190,7 @@ public class YJKBoardService implements InterYJKBoardService {
 		
 		if(checkpw == true) {
 			count = dao.isExistsComment(paraMap); // 원글에 댓글이 있는지 없는지 확인
-			result1 = dao.deleteContent(paraMap); // 원글 1개 삭제
+			result1 = dao.deleteContent(paraMap); // 원글 삭제하기
 			
 			if(count > 0) {
 				result2 = dao.delComment(paraMap); // 댓글삭제
@@ -193,5 +205,21 @@ public class YJKBoardService implements InterYJKBoardService {
 		return n;
 	}
 
+	// 댓글 갯수 가져오기
+	@Override
+	public int getCommentCnt(YJKReplyVO replyvo) {
 
+		return dao.getCommentCnt(replyvo);
+	}
+
+	// 파일 다운로드
+	@Override
+	public YJKAttachFileVO fileDownload(String fileidx) {
+		
+		YJKAttachFileVO attachfilevo = dao.fileDownload(fileidx);
+		
+		return attachfilevo;
+	}
+
+	
 }

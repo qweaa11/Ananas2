@@ -12,7 +12,8 @@ public class YjkVO {
 	private String tel;				// 연락처
 	private String status;			// 등급
 	private String imgFileName;		// 이미지 파일이름
-	private MultipartFile attach;
+	private String email;			// 이메일
+	private MultipartFile attach;	// 파일첨부
 	
 	public YjkVO() {}
 	
@@ -27,6 +28,16 @@ public class YjkVO {
 		this.status = status;
 		this.imgFileName = imgFileName;
 		
+	}
+	
+	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getLibid() {
