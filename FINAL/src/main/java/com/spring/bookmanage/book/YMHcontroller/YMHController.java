@@ -125,7 +125,7 @@ public class YMHController
 		
 		
 		String bookId = bookvo.getLibCode()+bookvo.getNcode_fk()+bookvo.getLcode_fk()+bookvo.getCcode_fk()+bookvo.getFcode_fk()+bookvo.getGcode_fk();
-		System.out.println("bookId: "+bookId);
+		System.out.println("bookId as: "+bookId);
 		
 		// 도서의 시리얼 넘버중 첫번째 - 전까지 의 count 알아오는 메소드
 		int bookIdN = service.getBookIdN( bookId );
