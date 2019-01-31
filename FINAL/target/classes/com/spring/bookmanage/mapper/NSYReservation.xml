@@ -4,6 +4,7 @@
  <!-- ==== mapper 이름 설정 ==== -->
 <mapper namespace="NSYReservation">
 	
+	<!-- 예약목록 가져오기  -->
 	<resultMap type="HashMap" id="reservationListResult">
 		<result property="idx" column="idx" javaType="String"/>
 		<result property="reserveDate" column="reserveDate" javaType="String"/>
@@ -21,7 +22,6 @@
 		<result property="pubname" column="pubname" javaType="String"/>
 		<result property="rno" column="rno" javaType="String"/>
 	</resultMap>
-	
 	<select id="getReservationList" parameterType="String" resultMap="reservationListResult">
 		select RNO, idx, reserveDate, memberid, name, phone, addr1, addr2, post, bookid, title, author, status, pubcode, pubname
 		from	
@@ -44,9 +44,9 @@
 		<if test='sort != null and sort !="" and sort != "null"'>
 		order by #{sort}
 		</if>
-		
 	</select>
 	
+	<!-- 예약목록 페이지바 생성을위해 목록총갯수 구해오기 -->
 	<select id = "getReservationTotalList" parameterType="HashMap" resultType="int">
 		select count(*)
 		from reservation A 
@@ -58,16 +58,19 @@
 		</if>		
 	</select>
 	
+	<!-- 예약목록의 도서를 대여시, 대여목록테이블에 추가해주기 -->
 	<insert id="reservation_rental" parameterType="HashMap">
 		insert into rental(idx, bookid_fk, memberid_fk, rentalDate, deadline, renew)
 		values(rent_seq.nextval, #{bookid}, #{memberid}, default, default, default)
 	</insert>
 	
+	<!-- 예약목록의 도서를 대여시, 도서테이블의 Status값 변경해주기 (==>대여값 '1') -->
 	<update id="changBookStatus" parameterType="HashMap">
 		update book set status=1
 		where bookid = #{bookid}
 	</update>
 	
+	<!-- 예약목록의 도서를 대여시, 예약목록에서 해당 목록 삭제하기 -->
 	<delete id="deleteReservation" parameterType="HashMap">
 		delete from reservation
 		where bookid_fk = #{bookid}

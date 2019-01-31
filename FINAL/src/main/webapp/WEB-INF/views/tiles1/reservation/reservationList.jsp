@@ -4,21 +4,30 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>==== 도서예약 목록 ====</title>
+<title>==== 예약 목록 ====</title>
 
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		// 예약목록 보여주기(검색 가능, 보여주는페이지 currentShowPageNo'1')
 		goSearch("1");
+		
+		// ==== 검색 엔터키적용 ====
+		$("#searchWord").keydown(function (key) {
+            if (key.keyCode == 13) { 
+               goSearch("1");
+            }
+        }); // end of ("#searchWord").keydown
+		
 	}); // end of $(document).ready()
 	
+	// 예약목록 가져오기 (검색기능 가능)
 	function goSearch(currentShowPageNo){
 		
-		var searchWord = $("#searchWord").val();
-		var colname = $("#colname").val();
-		var sort = $("#sort").val();
+		var searchWord = $("#searchWord").val();//검색어
+		var colname = $("#colname").val();//분류
 		
-		var data_form = {sort:sort, searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:10};
+		var data_form = {searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:10};
 		
 		$.ajax({
 			url:"getReservationList.ana",
@@ -29,16 +38,15 @@
 				
 				var resultHTML = "";
 				
-				
-				
 				if(json.length > 0) { 
 					
 					$.each(json, function(entryIndex, entry){
 						
+						// 도서의 status값을 비교하여 대여가능 & 대여불가 판당하기
+						// 도서의 status값이 0또는 2라면 '대여가능' (첫번째 <td>태그 확인, 사실 status값 2는 필요없음 그냥 아님 로직상으로는 불가능하지만 그냥 넣어둠)
 						if(entry.status == 0 || entry.status == 2){
 							resultHTML += 
 									"<tr>"
-										//+"<td>"+entry.idx+"</td>"
 										+"<td style='color:blue;'><input type='checkbox' name='rentalValue' value='"+entry.bookid+","+entry.memberid+"'></input>대여가능</td>"
 										+"<td>"+entry.rno+"</td>"
 										+"<td>"+entry.reserveDate+"</td>"
@@ -52,10 +60,10 @@
 										+"<td>"+entry.pubname+"</td>"
 									+"</tr>";
 						}
+						// 도서의 status값이 0또는 2가 아니라면 '대여불가'
 						else{
 							resultHTML +=
 									"<tr>"
-										
 										+"<td style='color:red;'><input type='checkbox' name='idx' value='"+entry.idx+"'disabled></input>대여불가</td>" 
 										+"<td>"+entry.rno+"</td>"
 										+"<td>"+entry.reserveDate+"</td>"
@@ -71,14 +79,14 @@
 						}		
 					}); // end of $.each()
 					
+					//resultHTML결과값을 id=result태그에 저장
 					$("#result").empty().html(resultHTML);
+					// 페이지바 실행
 					makeBarPage(currentShowPageNo);
 					
 				} // if 
 				else {
-					
 					$("#result").empty();
-					
 				} // end of if_else
 				
 			}, // end of success
@@ -90,10 +98,11 @@
 		
 	}// end of goSearch
 	
-function makeBarPage(currentShowPageNo){
+	// 예약목록 페이지바 만들기
+	function makeBarPage(currentShowPageNo){
 		
-		var searchWord = $("#searchWord").val();
-		var colname = $("#colname").val();
+		var searchWord = $("#searchWord").val();//검색어
+		var colname = $("#colname").val();//검색분류
 	
 		var form_data = {searchWord:searchWord, colname:colname, currentShowPageNo:currentShowPageNo, sizePerPage:10};
 		
@@ -114,9 +123,10 @@ function makeBarPage(currentShowPageNo){
 					
 					var loop = 1;
 					
+					// 공식!
 					var pageNo = Math.floor((currentShowPageNo - 1)/blockSize) * blockSize + 1;
 
-					//[이전]
+					//[이전][ < :태그에 잘찾아보면 있다. ]
 					if(pageNo !=1 ){
 						
 						 pageBarHTML += "<li><a href='javascript:goSearch(\""+(pageNo-1)+"\");'><</a></li>";
@@ -138,8 +148,8 @@ function makeBarPage(currentShowPageNo){
 				       	 loop++;
 				    	 pageNo++;
 					}//while
-					//[다음]
-				    
+						
+					//[다음][ > :태그에 잘찾아보면 있다. ]
 					if( !(pageNo > totalPage) ) {
 				    	 
 						pageBarHTML += "<li><a href='javascript:goSearch(\""+pageNo+"\");'>></a></li>";
@@ -159,17 +169,17 @@ function makeBarPage(currentShowPageNo){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			} // error
 			
-			
 		});//end of ajax
 		
 	}// end of function makeBarPage()
 	
+	//예약목록에서 체크되어진 도서를 대여하기
 	function goRental(){
 		var frm = document.valueFrm;
 		frm.method = "POST";
 		frm.action = "rental.ana";
 		frm.submit();
-	}
+	}// end of goRental()
 	
 </script>
 <style type="text/css">
@@ -202,27 +212,25 @@ function makeBarPage(currentShowPageNo){
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
-<h1>도서예약 목록</h1>
+<h1>예약목록</h1>
 <br>
 	<form name="valueFrm">
+		<!-- 검색분류 -->
 		<select id="colname" name="colname" style="height:30px;">
 			<option value="name">회원명</option>
 			<option value="title">도서명</option>
 			<option value="reserveDate">날짜</option>
 		</select>
+		<!-- 검색어 -->
 		<input id="searchWord" name="searchWord" style="height:30px;" placeholder="Search..">
 		<button type="button" onClick="goSearch('1');" style="height:30px;">검색</button>
+		<!-- 엔터키 리로드 방지용 (같은 form안에 input태그가 2개 이상 있어야 한다)-->
+		<input type="text" style="display:none;"/>
 		<span style="margin-left:50%; font-size:14pt; font-weight:bold;">정렬</span>
-		<select id="sort" name="sort" style="height:30px; align:right;">
-			<option value="">전체</option>
-			<option value="name">회원명</option>
-			<option value="title">도서명</option>
-			<option value="reserveDate">날짜</option>
-		</select>
-	
 	<br>
 	
 	<table id="customers" >
@@ -242,19 +250,23 @@ function makeBarPage(currentShowPageNo){
 			</tr>
 		</thead>
 		
-		
-		<tbody id="result">
-		</tbody>
+		<!-- AJAX resultHTML 예약목록 저장소 -->
+		<tbody id="result"></tbody>
 			
 	</table>
 	</form>	
 	<br>
 	<!-- ==== 페이지바 보여주기   -->
 	<!-- AJAX에서 다음 ul태그 안에 값을 넣어준다  -->
-	<ul class="pagination pagination-lg" id="pageBar" style=""></ul>
-	<div><button type="button" onClick="goRental();">체크항목 대여하기</button>	</div>
 	
-
+	<table style="width:100%;">
+		<tr>
+			<!-- 페이지바 저장소 -->
+			<td style="width:50%; text-align:right; margin:auto"><div class="pagination pagination-lg" id="pageBar" ></div></td>
+			<td style="text-align:right;"><button type="button" onClick="goRental();">체크항목 대여하기</button></td>
+		</tr>
+	</table>
+		
 </div>
 
 <form name="idxFrm">

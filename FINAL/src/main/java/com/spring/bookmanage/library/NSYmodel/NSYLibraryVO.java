@@ -1,4 +1,4 @@
-package com.spring.bookmanage.library.model;
+package com.spring.bookmanage.library.NSYmodel;
 
 import org.springframework.web.multipart.MultipartFile;
 

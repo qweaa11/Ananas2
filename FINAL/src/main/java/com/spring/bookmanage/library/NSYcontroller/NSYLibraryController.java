@@ -1,4 +1,4 @@
-package com.spring.bookmanage.library.controller;
+package com.spring.bookmanage.library.NSYcontroller;
 
 
 import java.io.File;
@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.bookmanage.common.FileManager;
-import com.spring.bookmanage.library.model.NSYLibraryVO;
-import com.spring.bookmanage.library.service.NSYInterLibraryService;
+import com.spring.bookmanage.library.NSYmodel.NSYLibraryVO;
+import com.spring.bookmanage.library.NSYservice.NSYInterLibraryService;
 
 //==== 컨트롤러 선언 ====
 @Controller
