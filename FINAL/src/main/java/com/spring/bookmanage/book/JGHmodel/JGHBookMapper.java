@@ -32,17 +32,10 @@ public interface JGHBookMapper {
 	 * @return
 	 */
 	List<DeleteBookVO> findAllDeleteBookByDelid(String[] delidArray);
-	/**
-	 * 도서 추가
-	 * @param delidArray
-	 * @return
-	 */
-	int addSetBook(String[] delidArray, List<DeleteBookVO> bookSetList) throws Throwable;
 
 	/**
-	 * 삭제도서 삭제
-	 * @param delidArray
-	 * @return
+	 * 삭제도서 복원(트랜잭션)
+	 * @param bookSetList
 	 */
-	int deleteSetDeleteBook(String[] delidArray);
+	void restoreBook(List<DeleteBookVO> bookSetList);
 }

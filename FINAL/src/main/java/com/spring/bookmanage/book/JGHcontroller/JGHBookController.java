@@ -59,8 +59,24 @@ public class JGHBookController {
 	public String restore(HttpServletRequest request, HttpServletResponse response) {
 		String[] delidArray = request.getParameterValues("delid");
 
-		int restoreBook = service.restoreBookService(delidArray);
+		String msg = "";
+		String loc = "";
 
-		return "";
+		try {
+			service.restoreBookService(delidArray);
+
+			msg = "삭제된 도서를 복구하는데 성공했습니다.";
+			loc = "deleteLog.ana";
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+			msg = "삭제된 도서를 복구하는데 실패했습니다.";
+			loc = "javascript:history.back();";
+		}// end of try~catch
+
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+
+		return "msg";
 	}// end of restore
 }

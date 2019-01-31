@@ -9,19 +9,18 @@ public class DeleteBookVO {
 	/* 도서 테이블 */
 	private int idx;				// 인덱스
 	private String bookid; 			// 도서일련번호
-	private String bookid_fk; 		// 참조키인 도서일련번호
 	private String title; 			// 도서명
 	private String author; 			// 저자명
 	private int status; 			// 상태(일반 0, 대여 1,예약 2,분실 3, 삭제 4)
 	private int agecode; 			// 연령코드
 	private String ISBN; 			// 국제표준도서번호
-	private String pubcode_fk; 		// 출판사 코드
-	private int ncode_fk; 			// 국가코드
-	private String lcode_fk; 		// 언어코드
-	private String fcode_fk; 		// 분야코드
-	private String ccode_fk; 		// 종류코드
-	private String gcode_fk; 		// 장르코드
-	private String libcode_fk; 		// 도서관번호
+	private String pubcode; 		// 출판사 코드
+	private int ncode; 			// 국가코드
+	private String lcode; 		// 언어코드
+	private String fcode; 		// 분야코드
+	private String ccode; 		// 종류코드
+	private String gcode; 		// 장르코드
+	private String libcode; 		// 도서관번호
 
 	/* 도서 상세 테이블 */
 	private String intro; 			// 책소개
@@ -51,8 +50,8 @@ public class DeleteBookVO {
 	public DeleteBookVO() { }// end of default constructor
 
 	public DeleteBookVO(int idx, String bookid, String title, String author, int status, int agecode, String ISBN,
-			String pubcode_fk, int ncode_fk, String lcode_fk, String fcode_fk, String ccode_fk, String gcode_fk,
-			String libcode_fk, String intro, String image, String price, String weight, String totalpage, String pdate,
+			String pubcode, int ncode, String lcode, String fcode, String ccode, String gcode,
+			String libcode, String intro, String image, String price, String weight, String totalpage, String pdate,
 			String regdate) {
 		this.idx = idx;
 		this.bookid = bookid;
@@ -61,13 +60,13 @@ public class DeleteBookVO {
 		this.status = status;
 		this.agecode = agecode;
 		this.ISBN = ISBN;
-		this.pubcode_fk = pubcode_fk;
-		this.ncode_fk = ncode_fk;
-		this.lcode_fk = lcode_fk;
-		this.fcode_fk = fcode_fk;
-		this.ccode_fk = ccode_fk;
-		this.gcode_fk = gcode_fk;
-		this.libcode_fk = libcode_fk;
+		this.pubcode = pubcode;
+		this.ncode = ncode;
+		this.lcode = lcode;
+		this.fcode = fcode;
+		this.ccode = ccode;
+		this.gcode = gcode;
+		this.libcode = libcode;
 		this.intro = intro;
 		this.image = image;
 		this.price = price;
@@ -107,14 +106,6 @@ public class DeleteBookVO {
 
 	public void setBookid(String bookid) {
 		this.bookid = bookid;
-	}
-
-	public String getBookid_fk() {
-		return bookid_fk;
-	}
-
-	public void setBookid_fk(String bookid_fk) {
-		this.bookid_fk = bookid_fk;
 	}
 
 	public String getTitle() {
@@ -157,60 +148,60 @@ public class DeleteBookVO {
 		this.ISBN = ISBN;
 	}
 
-	public String getPubcode_fk() {
-		return pubcode_fk;
+	public String getPubcode() {
+		return pubcode;
 	}
 
-	public void setPubcode_fk(String pubcode_fk) {
-		this.pubcode_fk = pubcode_fk;
+	public void setPubcode(String pubcode) {
+		this.pubcode = pubcode;
 	}
 
-	public int getNcode_fk() {
-		return ncode_fk;
+	public int getNcode() {
+		return ncode;
 	}
 
-	public void setNcode_fk(int ncode_fk) {
-		this.ncode_fk = ncode_fk;
+	public void setNcode(int ncode) {
+		this.ncode = ncode;
 	}
 
-	public String getLcode_fk() {
-		return lcode_fk;
+	public String getLcode() {
+		return lcode;
 	}
 
-	public void setLcode_fk(String lcode_fk) {
-		this.lcode_fk = lcode_fk;
+	public void setLcode(String lcode) {
+		this.lcode = lcode;
 	}
 
-	public String getFcode_fk() {
-		return fcode_fk;
+	public String getFcode() {
+		return fcode;
 	}
 
-	public void setFcode_fk(String fcode_fk) {
-		this.fcode_fk = fcode_fk;
+	public void setFcode(String fcode) {
+		this.fcode = fcode;
 	}
 
-	public String getCcode_fk() {
-		return ccode_fk;
+	public String getCcode() {
+		return ccode;
 	}
 
-	public void setCcode_fk(String ccode_fk) {
-		this.ccode_fk = ccode_fk;
+	public void setCcode(String ccode) {
+		this.ccode = ccode;
 	}
 
-	public String getGcode_fk() {
-		return gcode_fk;
+	public String getGcode() {
+		return gcode;
 	}
 
-	public void setGcode_fk(String gcode_fk) {
-		this.gcode_fk = gcode_fk;
+	public void setGcode(String gcode) {
+		this.gcode = gcode;
 	}
 
-	public String getLibcode_fk() {
-		return libcode_fk;
+	public String getLibcode() {
+		return libcode;
 	}
 
-	public void setLibcode_fk(String libcode_fk) {
-		this.libcode_fk = libcode_fk;
+	public void setLibcode(String libcode) {
+		this.libcode = libcode;
 	}
 
 	public String getIntro() {

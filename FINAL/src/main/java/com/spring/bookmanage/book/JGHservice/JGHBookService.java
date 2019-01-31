@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.bookmanage.book.JGHmodel.DeleteBookVO;
 import com.spring.bookmanage.book.JGHmodel.JGHBookMapper;
@@ -50,13 +53,11 @@ public class JGHBookService {
 	 * @param delidArray
 	 * @return
 	 */
-	public int restoreBookService(String[] delidArray) {
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public void restoreBookService(String[] delidArray) throws Throwable {
 		List<DeleteBookVO> bookSetList = mapper.findAllDeleteBookByDelid(delidArray);
-		int addRow = mapper.addSetBook(delidArray, bookSetList);
-		int deleteRow = mapper.deleteSetDeleteBook(delidArray);
+		mapper.restoreBook(bookSetList);
 
-		int transactionFlag = addRow*deleteRow;
-
-		return transactionFlag;
+		return ;
 	}// end of restoreBookService
 }
