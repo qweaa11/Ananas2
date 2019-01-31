@@ -7,17 +7,15 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * 삭제도서 DAO
+ * @author implements(nine9ash)
+ *
+ */
 @Repository
 public class JGHBookDAO implements JGHBookMapper {
 
 	@Autowired private SqlSessionTemplate sqlsession;
-
-	@Override
-	public List<DeleteBookVO> findAllDeleteBookWithPagination(HashMap<String, String> parameterMap) {
-		List<DeleteBookVO> deleteBookList = sqlsession.selectList("jghDeleteBook.findAllDeleteBookWithPagination", parameterMap);
-
-		return deleteBookList;
-	}// end of findAllDeleteBookWithPagination
 
 	@Override
 	public List<DeleteBookVO> findAllDeleteBookBySearchOption(HashMap<String, String> parameterMap) {
@@ -37,11 +35,7 @@ public class JGHBookDAO implements JGHBookMapper {
 	public List<DeleteBookVO> findAllDeleteBookByDelid(String[] delidArray) {
 		HashMap<String, Object> paraMap = new HashMap<>();
 		paraMap.put("delidArray", delidArray);
-		
-		for(String asd : delidArray) {
-			System.out.println(asd);
-		}
-		
+				
 		List<DeleteBookVO> deleteBookListByDelid = sqlsession.selectList("jghBook.findAllDeleteBookByDelid", paraMap);
 
 		return deleteBookListByDelid;

@@ -6,13 +6,6 @@ import java.util.List;
 public interface JGHBookMapper {
 
 	/**
-	 * 검색한 삭제도서 목록 조회(페이지네이션 구현)
-	 * @param parameterMap
-	 * @return
-	 */
-	List<DeleteBookVO> findAllDeleteBookWithPagination(HashMap<String, String> parameterMap);
-
-	/**
 	 * 검색조건에 따른 삭제된 도서목록 조회
 	 * 페이지네이션 미구현
 	 * @param parameterMap

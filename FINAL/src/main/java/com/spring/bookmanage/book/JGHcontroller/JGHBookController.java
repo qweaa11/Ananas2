@@ -16,11 +16,22 @@ import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.book.JGHmodel.DeleteBookVO;
 import com.spring.bookmanage.book.JGHservice.JGHBookService;
 
+/**
+ * 삭제도서 컨트롤러
+ * @author implements(nine9ash)
+ *
+ */
 @Controller
 public class JGHBookController {
 
 	@Autowired private JGHBookService service;
 
+	/**
+	 * 삭제도서 목록 페이지 제어
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "deleteLog.ana", method = {RequestMethod.GET})
 	public String deleteLog(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
@@ -54,7 +65,13 @@ public class JGHBookController {
 
 		return "book/deleteLog.tiles1";
 	}// end of deleteBookLog
-	
+
+	/**
+	 * 삭제도서 복구처리 제어
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "restore.ana", method = {RequestMethod.POST})
 	public String restore(HttpServletRequest request, HttpServletResponse response) {
 		String[] delidArray = request.getParameterValues("delid");

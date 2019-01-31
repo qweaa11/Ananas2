@@ -43,6 +43,7 @@
 		order by deldate desc, rno asc
 	</select>
 	
+	<!-- 선택한 삭제도서 목록 조회 -->
 	<select id="findAllDeleteBookByDelid" parameterType="HashMap" resultType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
 		select rownum as rno, bookid, title, author, pubcode, status, agecode
 			, isbn, ncode, lcode, fcode, ccode, gcode

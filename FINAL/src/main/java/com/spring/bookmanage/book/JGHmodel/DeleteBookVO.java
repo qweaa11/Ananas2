@@ -1,5 +1,10 @@
 package com.spring.bookmanage.book.JGHmodel;
 
+/**
+ * 삭제도서 VO
+ * @author implements(nine9ash)
+ *
+ */
 public class DeleteBookVO {
 
 	/* 테이블에 존재하지 않는 필드 */

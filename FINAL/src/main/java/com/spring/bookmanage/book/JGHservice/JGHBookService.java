@@ -12,20 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.bookmanage.book.JGHmodel.DeleteBookVO;
 import com.spring.bookmanage.book.JGHmodel.JGHBookMapper;
 
+/**
+ * 삭제도서 서비스(복구)
+ * @author implements(nine9ash)
+ *
+ */
 @Service
 public class JGHBookService {
 
 	@Autowired private JGHBookMapper mapper;
-
-	public int countDeleteBookWithSearchOption(HashMap<String, String> parameterMap) {
-
-		return 0;
-	}// end of countDeleteBookWithSearchOption
-
-	public int countDeleteBookWithOutSearchOption() {
-
-		return 0;
-	}// end of countDeleteBookWithOutSearhOption
 
 	/**
 	 * 검색조건에 따른 삭제도서 목록 불러오기(페이징 미구현)
