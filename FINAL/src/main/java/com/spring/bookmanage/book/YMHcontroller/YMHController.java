@@ -32,8 +32,7 @@ public class YMHController
 	
 	@Autowired
 	private FileManager fileManager;
-	
-	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------
 	
 	
 	// 도서 등록 창 요청
@@ -50,7 +49,6 @@ public class YMHController
 		
 		return "findPublisher.notiles";
 	}// end of findPublisher()----------------------------------------------
-	
 	
 	
 	// 도서등록 완효 요청
@@ -80,8 +78,6 @@ public class YMHController
 				
 				newFileName = fileManager.doFileUpload(bytes, attach.getOriginalFilename(), path);
 				
-				System.out.println(">>>확인용 : " + newFileName);
-				
 				bookvo.setFilename(newFileName);
 				bookvo.setOrgFilename(attach.getOriginalFilename());
 				
@@ -95,6 +91,8 @@ public class YMHController
 						
 		}// end of if()-----------------------------------
 		// ===  첨부파일이 있는지 확인하기 끝   === //
+		
+		
 		
 		
 		// ===  도서 등록 시작하기!!!   === //
@@ -184,12 +182,11 @@ public class YMHController
 	}// end of bookRegisterEnd()----------------------------------------------
 		
 	
-	
-	
 	// field 테이블에서 값아 알아오기
 	@RequestMapping(value="/showFieldDetail.ana",method= {RequestMethod.GET})
 	@ResponseBody
-	public List<HashMap<String, String>> showFieldDetail(HttpServletRequest request, HttpServletResponse response) {
+	public List<HashMap<String, String>> showFieldDetail(HttpServletRequest request, HttpServletResponse response) 
+	{	// 필드값의 대분류를 선택하면 상세 분류를 보여주는 메소드
 		
 		List<HashMap<String, String>> mapList = new ArrayList<HashMap<String, String>>();
 		
@@ -197,7 +194,6 @@ public class YMHController
 		
 		String initFcode = fcode.substring(0, 1);
 		
-		 
 		List<YMHBookVO> fieldList = service.fieldCodeList(initFcode);
 		
 		for(YMHBookVO bvo : fieldList)
@@ -207,10 +203,8 @@ public class YMHController
 			map.put("FCODE", bvo.getFcode_fk());
 			map.put("FNAME", bvo.getFname());
 			
-			
 			mapList.add(map);
 		}
-		
 		
 		return mapList;
 	}// end of showFieldDetail------------------------------------------------
@@ -221,13 +215,10 @@ public class YMHController
 	@RequestMapping(value="/showLibrary.ana",method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, String>> showLibrary(HttpServletRequest request, HttpServletResponse response) 
-	{
+	{	// 관리자의 경우, 현재 library테이블에 있는 모든 도서관의 이름들을 알아오기 위한 메소드
 		List<HashMap<String, String>> mapList = new ArrayList<HashMap<String, String>>();
 		
-		
-		
 		List<YMHBookVO> libraryList = service.showLibrary();
-		
 		
 		for(YMHBookVO bvo : libraryList)
 		{
@@ -242,39 +233,6 @@ public class YMHController
 		return mapList;
 	}// end of showLibrary------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -36,10 +36,8 @@
 	
 		
 		if( ${sessionScope.loginLibrarian != null} )
-		{
+		{	// 도서관 사서의 경우 자기 도서관에만 책을 넣을수 있게 만들고 도서관 번호에는 사서의 도서관 번호가 자동으로 들어감
 			$("#libCode").val("${sessionScope.loginLibrarian.libcode_fk}");
-			
-
 		}
 		
 		
@@ -47,10 +45,12 @@
 		
 		// 출판사 조회등록 버튼을 누룰때 
 		$("#Submit").click(function(){
-			var regExp_num = new RegExp(/^[0-9]+$/);
-			var regExp_date = new RegExp(/^[0-9]{8}$/);
-			var regExp_ISBN = new RegExp(/^[a-z0-9]{10,13}$/);
+			// 정규화 포맷
+			var regExp_num = new RegExp(/^[0-9]+$/);	// 숫자인지
+			var regExp_date = new RegExp(/^[0-9]{8}$/);	// 8자리 숫자인지
+			var regExp_ISBN = new RegExp(/^[a-z0-9]{10,13}$/);	// 영어와 숫자가 혼합된 10자리에서 13자리인지
 			
+			// 유효성 검사
 			if( $("#title").val().trim() == "" )
 			{
 				alert("도서명을 입력하세요");
@@ -79,11 +79,7 @@
 					alert("ISBN은 10자리 혹은 13자리 입니다.");
 					return;
 				}
-			}
-			
-			
-			
-			
+			}			
 			if( $("#lcode_fk").val().trim() == "" )
 			{
 				alert("언어를 골라주세요");
@@ -114,7 +110,6 @@
 				alert("연령대를 골라주세요");
 				return;
 			}
-			
 			if( $("#price").val().trim() == "" )
 			{
 				alert("가격을 적어주세요");
@@ -128,10 +123,7 @@
 					alert("숫자만 입력해 주세요");
 					return;
 				}	
-				
-				
 			}
-			
 			if( $("#weight").val().trim() == "" )
 			{
 				alert("무게를 적어주세요");
@@ -146,7 +138,6 @@
 					return;
 				}
 			}
-			
 			if( $("#totalPage").val().trim() == "" )
 			{
 				alert("총 페이지 수를 적어주세요");
@@ -161,7 +152,6 @@
 					return;
 				}
 			}
-			
 			if( $("#pDate").val().trim() == "" )
 			{
 				alert("발행일자를 적어주세요");
@@ -176,7 +166,6 @@
 					return;
 				}
 			}
-			
 			if( $("#intro").val().trim() == "" )
 			{
 				alert("책소개를 적어주세요");
@@ -188,14 +177,7 @@
 				return;
 			}
 			
-			
-			
-			console.log( $("#libCode").val() );
-	
-			
-			
-			
-			
+			// 유효성 검사가 끝난다면 폼에 담긴 정보들은 보냄
 			var signupFrm = document.signup;
 			signupFrm.action = "<%= request.getContextPath()%>/bookRegisterEnd.ana";
 			signupFrm.method="POST";
@@ -203,7 +185,6 @@
 			signupFrm.submit();
 		});// end of $("#Submit").click(function()----------------------------------------------------------------
 		//---------------------------------------------------------------------------------------------------------
-				
 				
 		
 		// 출판사 조회 버튼을 누룰때 새창으로 출판사 조회하기
@@ -215,17 +196,16 @@
 		});// end of $("#searchPublisher").click(function()---------------------------------------------------------
 		//----------------------------------------------------------------------------------------------------------
 				
-				
 		
-		$("#spinnerCount").spinner({
+		$("#spinnerCount").spinner({ // 도서를 몇권 등록 할것인지 정하기
 			spin: function(event, ui){
 				if(ui.value > 100)
-				{
+				{ // 최대 100권
 					$(this).spinner("value", 100);
 					return false;
 				}
 				else if(ui.value<1)
-				{
+				{ //최소 1권
 					$(this).spinner("value", 1);
 					return false;
 				}
@@ -234,13 +214,12 @@
 		//--------------------------------------------------------------------------------------------------------------
 		
 		
-		
-		
-		
 	});  // end of $(document).ready(function(){});-------------------------------------------------------------------
-
+	//----------------------------------------------------------------------------------------------------------------
+	
+	
 	function showFieldDetail(fieldCode)
-	{
+	{	// 첫번째 큰 필드를 정하면 두번째 상세 필드를 나타내주는 function
 		var form_data = {"fieldCode":fieldCode}
 		
 		$.ajax({
@@ -271,8 +250,7 @@
 	
 	
 	function showLibrary()
-	{
-		
+	{	// 관리자의 경우 도서관번호가 없기떄문에 정해줘야 한다.
 		if( ${sessionScope.loginLibrarian == null} )
 		{
 			$.ajax({
@@ -286,7 +264,7 @@
 						
 						resultHTML += "<option value=\""+entry.LIBCODE+"\">"+entry.LIBNAME+"</option>";
 									
-					}); // end of each()---------------------
+					}); // end of each()---------------------------------------------------------------------------
 					
 					
 					$("#libCode").append(resultHTML);
@@ -295,22 +273,9 @@
 					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error );
 				}// end of error---------------------------------------------------------
 					
-			});// end of ajax()----------------------------------------------------------
-			
-		}
-		
-		
-		
-		
-		
-		
-		
-	}// end of showLibrary()-----------------------------------------------------------------------------------
-	
-	
-	
-	
-	
+			});// end of ajax()----------------------------------------------------------------------------
+		}// end of if()-------------------------------------------------------------------------------------------		
+	}// end of showLibrary()-----------------------------------------------------------------------------------------------------------------------
 	
 	
 	
@@ -322,10 +287,8 @@
 <div class="container border" style="">
 	<div class="row border">
     	<div class="col-md-8">
-    	      
 	        <h1 class="entry-title"><span>자료 등록</span> <img src="<%= request.getContextPath()%>/resources/img/BWFile.jpg">  <small> 자료관리 > 자료등록</small> </h1>
 	        <hr>
-	        
 	    <!-- 도서 등록시 필요한 도서 등록 폼 추가 -->    
         <form class="form-horizontal" name="signup" enctype="multipart/form-data" >
         
@@ -443,9 +406,8 @@
 					
 	          	</div>
 	          	
-					<div class="col-md-8 col-sm-9" id="fieldDisplay">	</div>
+				<div class="col-md-8 col-sm-9" id="fieldDisplay">	</div>
 					
-			
 	        </div>
         
         	<!-- 도서 등록시 도서 장르 추가 -->
@@ -540,32 +502,25 @@
 	        </div>
         
         
-        <!-- 총괄관리자일때만 보여주기 -->
-       	<c:if test="${sessionScope.loginLibrarian == null}">
-     			<!-- 도서 등록시 도서관명 추가 -->
-	       	<div class="form-group">
-	       		<label class="control-label col-sm-3">도서관명 <span class="text-danger">*</span></label>
-	          	<div class="col-md-5 col-sm-8">
-	          	<select id='libCode' name='libCode' class='custom-select' style='width: 200px;'>
-	          		
-	          	</select>
-	          	</div>
-	        </div>
-       	</c:if>
-        	 <!-- 총괄관리자가 아니면때만 보여주기 -->
-       	<c:if test="${sessionScope.loginLibrarian != null}">
-     			<!-- 도서 등록시 도서관명 추가 -->
-	       	<div class="form-group">
-	       		
-	          
-	          	<input type="hidden" id='libCode' name='libCode' class='custom-select' style='width: 200px;'/>
-	          		
-	     
-	          	
-	        </div>
-       	</c:if>
-        	
-    
+	        <!-- 총괄관리자일때만 보여주기 -->
+	       	<c:if test="${sessionScope.loginLibrarian == null}">
+	     			<!-- 도서 등록시 도서관명 추가 -->
+		       	<div class="form-group">
+		       		<label class="control-label col-sm-3">도서관명 <span class="text-danger">*</span></label>
+		          	<div class="col-md-5 col-sm-8">
+		          	<select id='libCode' name='libCode' class='custom-select' style='width: 200px;'>
+		          		
+		          	</select>
+		          	</div>
+		        </div>
+	       	</c:if>
+	        <!-- 사서일때는 hidden 타입으로  -->
+	       	<c:if test="${sessionScope.loginLibrarian != null}">
+	     			<!-- 도서 등록시 도서관명 추가 -->
+		       	<div class="form-group">
+		          	<input type="hidden" id='libCode' name='libCode' class='custom-select' style='width: 200px;'/>
+		        </div>
+	       	</c:if>
         	
         	
         	<!-- 도서 등록시 이미지 파일 추가 -->

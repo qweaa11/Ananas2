@@ -25,19 +25,20 @@ public class ChartYMHController
 	@RequestMapping(value="/libraryOverdueRank.ana",method= {RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap<String, Object>> libraryOverdueRank(HttpServletRequest request, HttpServletResponse response) 
-	{
+	{	// 도서관별 연체율을 알려주기 위한 메소드
 		
 		List<HashMap<String, Object>> returnmapList = new ArrayList<HashMap<String, Object>>();
-				 
+		
+		// 도서관의 연체율을 알아오기 위한 메소드
 		List<HashMap<String, String>> list = service.libraryOverdueRankList();
 		
 		if(list != null)
 		{
 			for(HashMap<String, String> datamap : list)
 			{
+				// 해쉬맵에 도서관 이름과 퍼센티지를 넣어보낸다
 				HashMap<String, Object> submap = new HashMap<String, Object>();
 				submap.put("LIBNAME", datamap.get("LIBNAME"));
-				submap.put("CNT", datamap.get("CNT"));
 				submap.put("PERCENTAGE", datamap.get("PERCENTAGE"));
 				
 				returnmapList.add(submap);
@@ -51,6 +52,7 @@ public class ChartYMHController
 	@ResponseBody
 	public List<HashMap<String, Object>> overdueOfLibraryByGenre(HttpServletRequest request, HttpServletResponse response) 
 	{
+		// 도서관 이름 받아오기
 		String libname = request.getParameter("libname");
 		
 		System.out.println(libname);
@@ -59,7 +61,9 @@ public class ChartYMHController
 				 
 		if(libname != null && !libname.trim().isEmpty())
 		{
+			// 도서관 장르별로 연체율을 알아오기 위한 메소드
 			List<HashMap<String, String>> overdueOfGenreList = service.getoverdueByGenreList(libname);
+			
 			if(overdueOfGenreList != null)
 			{
 				for(HashMap<String, String> map : overdueOfGenreList)

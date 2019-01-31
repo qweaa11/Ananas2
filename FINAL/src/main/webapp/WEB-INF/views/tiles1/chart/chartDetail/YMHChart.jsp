@@ -9,7 +9,7 @@
 
 	$(document).ready(function () {
 		
-		showChart();
+		showChart();	// 차트보여주기
 	});
 
 	
@@ -50,7 +50,6 @@
 								"name": entry.LIBNAME,
 								"id": entry.LIBNAME,
 								"data": subArr
-							
 							});	
 					});
 				});	// end of 	$.each(json, function(){}------------------------------------
@@ -60,11 +59,11 @@
 				$('#YMHcontainer').highcharts({
 				    chart: 
 				    	{
-				        	type: 'column'
+				        	type: 'column'	// 차트타입 설정
 				    	},
 				    title: 
 					    {
-					        text: '도서관 장르별 연체율'
+					        text: '도서관 장르별 연체율'	// 차트제목설정
 					    },
 				    subtitle: 
 					    {
@@ -72,31 +71,32 @@
 					    },
 				    xAxis: 
 					    {
-					        type: 'category'
+					        type: 'category'	// 가로축
 					    },
 				    yAxis: 
 					    {
 					        title: 
 					        {
-					            text: '연체율 (%)'
+					            text: '연체율 (%)'	// 세로축
 					        }
 					    },
 					legend:
 						{
-							enabled: false
+							enabled: false // 범례
 						},
 					plotOptions:
 						{
 							series:
 								{
 									borderWidth: 0,
+									
 									dataLabels: {
 										enabled: true,
 										format: '{point.y:.1f}%'
 									}
 								}
 						},
-				    tooltip: {
+				    tooltip: {	// 막대 그래프에 마우스 포인터를 올리면 보여주는 값 설정
 				        headerFormat: '<span style="font-size:10px">{seris.name}</span><br>',
 				        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
 				      

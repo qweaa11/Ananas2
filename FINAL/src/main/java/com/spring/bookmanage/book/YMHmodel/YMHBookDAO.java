@@ -16,7 +16,15 @@ public class YMHBookDAO implements InterYMHBookDAO
 	@Autowired
 	private SqlSessionTemplate sqlsession;
 	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * 첫번째 필드코드를 대분류로 정하면 상세분류 필드코드를 가져오는 메소드
+	 * 작성자 유민후
+	 *
+	 * @param YMHBookVO bookvo
+	 * @return List<YMHBookVO>
+	 */
 	@Override
 	public List<YMHBookVO> fieldCodeList(String initFcode) {
 		List<YMHBookVO> filedcodelist = sqlsession.selectList("YMH.fieldCodeList", initFcode);
@@ -26,7 +34,13 @@ public class YMHBookDAO implements InterYMHBookDAO
 
 
 	
-	
+	/**
+	 * 관리자의 경우 어떤 도서관에 등록할지 정할 수 있도록 도서관 명과 도서관코드를 가져오는 메소드
+	 * 작성자 유민후
+	 *
+	 * @param YMHBookVO bookvo
+	 * @return List<YMHBookVO>
+	 */
 	@Override
 	public List<YMHBookVO> showLibrary()
 	{
@@ -35,9 +49,6 @@ public class YMHBookDAO implements InterYMHBookDAO
 	}// end of showLibrary()-------------------------------------------
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	
-	
-	
 	
 	/**
 	 * 출판사가 publisher 테이블에 있는지 확인하는 메소드
@@ -55,8 +66,6 @@ public class YMHBookDAO implements InterYMHBookDAO
 	}// end of isExistPublisher(YMHBookVO bookvo)-------------------------------------------
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	
 	
 	/**
 	 * publisher 테이블에 insert하는 메소드
@@ -79,9 +88,6 @@ public class YMHBookDAO implements InterYMHBookDAO
 		return n;
 	}// end of addPublisher(YMHBookVO bookvo)-------------------------------------------
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 	
 	
 	/**
@@ -100,7 +106,6 @@ public class YMHBookDAO implements InterYMHBookDAO
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
 	/**
 	 * book_Detail 테이블에 insert하는 메소드
 	 * 작성자 유민후
@@ -114,8 +119,6 @@ public class YMHBookDAO implements InterYMHBookDAO
 		return n;
 	}// end of addOneBook_detail(YMHBookVO bookvo)-------------------------------------------
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 	/**
@@ -132,21 +135,6 @@ public class YMHBookDAO implements InterYMHBookDAO
 	}// end of BookIdN(String bookId)-------------------------------------------
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

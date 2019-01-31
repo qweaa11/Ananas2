@@ -108,7 +108,7 @@
 		
 	</select>
 	
-	<!-- returned 테이블의 총 갯수 구해오기 -->
+	<!-- returned 테이블의 총 갯수 구해오기 하이차트 첫번째 용 -->
 	<select id="getReturnedTotalCountWithSearch" resultType="int" parameterType="HashMap">
 		select count(*)
 		from book A join returned B
@@ -119,7 +119,7 @@
 	
 	
 	
-	<!-- 도서관별 연체율을 알려주는 쿼리 -->
+	<!-- 도서관별 연체율을 알려주는 쿼리 하이차트 두번째 용 -->
 	<resultMap type="HashMap" id="getlibraryOverdueRankListMap">
 		<result property="LIBNAME" 		column="libname" 		javaType="String" />
 		<result property="CNT" 			column="cnt" 			javaType="String" />

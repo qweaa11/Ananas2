@@ -36,7 +36,6 @@ public interface InterYMHBookService
 	 * @return List<YMHBookVO>
 	 */
 	int isExistPublisher(YMHBookVO bookvo);
-	// 출판사가 publisher 테이블에 있는지 확인하는 메소드
 
 	
 	/**
@@ -68,8 +67,6 @@ public interface InterYMHBookService
 	 */
 	int addOneBook_detail(YMHBookVO bookvo);
 
-
-	
 
 	
 	/**
