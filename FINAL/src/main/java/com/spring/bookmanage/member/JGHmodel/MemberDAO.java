@@ -7,10 +7,18 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.schedule.JGHscheduler.ScheduleMapper;
+
+/**
+ * MemberDAO
+ * @author implements(nine9sh)
+ *
+ */
 @Repository
-public class MemberDAO implements MemberMapper {
+public class MemberDAO implements MemberMapper, ScheduleMapper {
 	@Autowired private SqlSessionTemplate sqlsession;
 
+	/* MemberManagement part */
 	@Override
 	public List<MemberVO> findAllMember() {
 		List<MemberVO> memberList = sqlsession.selectList("jgh.findAllMember");
@@ -110,4 +118,10 @@ public class MemberDAO implements MemberMapper {
 
 		return memberList;
 	}// end of findAllMemberWithPagination
+
+	/* Scheduler part 
+	@Override
+	public void schedulingAllMemberByRevokeDate() {
+		sqlsession.update("jghSchedule.schedulingAllMemberByRevokeDate");
+	}// end of scheduilingAllMemberByRevokeDate */
 }
