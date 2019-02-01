@@ -148,6 +148,15 @@
 							<li><a href="board.ana">자유 게시판</a></li>
 						</ul>       
 					</li>
+					
+					<li class="dropdown" style="margin-left: 15px;"> 
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
+						<img src="resources/img/home-logo/home-logo7.png">
+						<span style="margin-left: 10px;">쪽지</span><span class="caret" style="margin-left: 3px;"></span></a>  
+						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
+							<li><a href="messageForm.ana">발신/수신/보관함</a></li>
+						</ul>       
+					</li>
 	                
 	            </ul>
 	        </div>

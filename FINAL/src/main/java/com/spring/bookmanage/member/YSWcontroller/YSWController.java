@@ -71,7 +71,7 @@ public class YSWController {
 	
 	//===== 회원등록 =====
 	@RequestMapping(value="/memberRegistEnd.ana", method= {RequestMethod.POST})
-	public String memberRegistEnd(MultipartHttpServletRequest req, HttpServletResponse res, YSWMemberVO membervo) {
+	public String memberRegistEnd(HttpServletRequest req1, HttpServletResponse res, MultipartHttpServletRequest req, YSWMemberVO membervo) {
 		
 		int result = 0;
 		

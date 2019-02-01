@@ -421,5 +421,27 @@
 	</select>
 	
 	
+	<resultMap type="HashMap" id="basicInfoMap">
+		<!-- set 다음에 나오는 이름을 쓴다! -->
+		<result property="LIBRARIANNUM" column="librarianNum" javaType="String"/>
+		<result property="LIBRARIANID" column="librarianId" javaType="String"/>
+		<result property="NAME" column="name" javaType="String"/>
+		<result property="POSITION" column="position" javaType="String"/>
+		<result property="EMAIL" column="email" javaType="String"/>
+		<result property="LIBNAME" column="libname" javaType="String"/>
+	</resultMap>
+	
+	<select id="findBasicInfo" resultMap="basicInfoMap">
+	
+		select A.idx as librarianNum
+		      ,libid as librarianId
+		      ,name
+		      ,case when status in 0 then '사서' else '관리자' end as position
+		      ,email ,libname
+		from librarian A JOIN library B
+		on A.libcode_fk  = B.libcode
+	
+	</select>
+	
 	
 </mapper>
