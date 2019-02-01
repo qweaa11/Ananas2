@@ -56,7 +56,7 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-warning btn-circle" data-toggle="tab" href="#menu2">
-							<span style="font-size: 20pt;">뭐함</span>
+							<span style="font-size: 20pt;">분야</span>
 						</button>
 					</div>
 					

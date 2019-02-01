@@ -7,8 +7,6 @@
 
 	$(document).ready(function () {
 		
-		
-		
 		Highcharts.chart('field', {
 		    chart: {
 		        type: 'column'
@@ -58,27 +56,27 @@
 		    },
 		    series: [{
 		        name: '강남도서관',
-		        data: [15.9, 71.5, 40.4, 32.2, 90.0, 26.0]
+		        data: [15.9, 71.5, 40.4, 32.2, 90.0, 26.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '을지로도서관',
-		        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5]
+		        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '당산도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '김포도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '부산도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '성남도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 		    }]
 		});
 	});
@@ -87,6 +85,41 @@
 </script>
 
 <div>
+	<div class="col-xs-12">
+	
+		<div class="col-xs-6">
+			기간
+		</div>
+		
+		<div class="col-xs-6">
+			카테고리
+		</div>
+	
+		<div class="col-xs-6">
+		
+			<a class="btn btn-warning btn-select btn-select-light">
+				<input type="hidden" class="btn-select-input" id="termval" name="term" value="0" />
+				<span class="btn-select-value">2019년</span>
+				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
+				<ul id="term">
+				</ul>
+			</a>
+			 
+		</div>
+		
+		<div class="col-xs-6">
+			<a class="btn btn-warning btn-select btn-select-light">
+				<input type="hidden" class="btn-select-input" id="" name="" value="0" />
+				<span class="btn-select-value">퍼센티지</span>
+				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
+				<ul>
+					<li value="0">퍼센티지</li>
+					<li value="1">권수</li>
+				</ul>
+			</a>
+		</div>
+	
+	</div>
 
 	<div id="field" style="margin: 0 auto; border-radius: 5px; clear: both;">
 	</div>
