@@ -295,6 +295,8 @@ public class YJKBoardController {
 		
 		List<YJKBoardVO> boardList2 = service.getAttachFileCount(boardList);
 		
+		List<YJKBoardVO> boardList3 = service.getorgTextCount(boardList2);
+		
 		
 		// 페이지바 만들기
 		String pagebar = "<ul>";
@@ -304,11 +306,10 @@ public class YJKBoardController {
 		pagebar += "<ul>";
 		
 		
-		
 		HttpSession session = req.getSession();
 		session.setAttribute("readCountPermission", "yes");
-		req.setAttribute("boardList2", boardList2);
 		
+		req.setAttribute("boardList3", boardList3);
 		req.setAttribute("colname", colname);	// view단에서 검색어를 유지시키려고 보낸다.
 		req.setAttribute("search", search);		// view단에서 검색어를 유지시키려고 보낸다.
 		req.setAttribute("pagebar", pagebar);

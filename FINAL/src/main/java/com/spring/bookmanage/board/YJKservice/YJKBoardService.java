@@ -30,12 +30,23 @@ public class YJKBoardService implements InterYJKBoardService {
 		return boardList;
 	}
 	
+	// ==== 첨부파일 갯수 가져오기
 	@Override
 	public List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList) {
+		
 		List<YJKBoardVO> boardList2= dao.getAttachFileCount(boardList);
+		
 		return boardList2;
 	}
+	
+	// ==== 원글 카운트 ====
+	@Override
+	public List<YJKBoardVO> getorgTextCount(List<YJKBoardVO> boardList2) {
 
+		List<YJKBoardVO> boardList3 = dao.getorgTextCount(boardList2);
+
+		return boardList3;
+	}
 
 	// ==== 글 1개를 보여주는 페이지 요청(먼저 글 조회수 증가를 할지 안 할지 결정해야함) ====
 	@Override
@@ -220,6 +231,5 @@ public class YJKBoardService implements InterYJKBoardService {
 		
 		return attachfilevo;
 	}
-
 	
 }

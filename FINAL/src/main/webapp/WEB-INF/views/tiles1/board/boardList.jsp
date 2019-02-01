@@ -139,7 +139,7 @@ ul {
 			<!-- <th style="width: 70px;  text-align: center;" >파일</th>	 -->		
 		</tr>	
 		
-		<c:forEach items="${boardList2}" var="boardvo">
+		<c:forEach items="${boardList3}" var="boardvo">
 			<tr>
 				<td style="text-align: center;">${boardvo.idx}</td>
 				<td>
@@ -166,16 +166,32 @@ ul {
 				<!-- 답변글 -->
 				<c:if test="${boardvo.depthno > 0}">
 					<c:if test="${boardvo.commentCount > 0 }">
-						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">&nbsp;└Re&nbsp;</span>${boardvo.subject}&nbsp;</span>
+					<c:if test="${boardvo.orgTextCount == 1}">
+							<span style="font-weight: bold; font-style: italic; font-size: smaller; vertical-align: text-top; color: red;">[원글이 삭제 된 답글]</span>
+							<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">&nbsp;&nbsp;</span>${boardvo.subject}&nbsp;</span>
+					</c:if>
+					<c:if test="${boardvo.orgTextCount == 0 }">
+							<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">&nbsp;└Re&nbsp;</span>${boardvo.subject}&nbsp;</span>
+					</c:if>
+					
 						<span style="font-weight: bold; font-style: italic; font-size: smaller; vertical-align: super; color: red;">[${boardvo.commentCount}]</span>
 						<span>
 							<c:if test="${boardvo.fileCount > 0}">
 								<img src="<%=request.getContextPath()%>/resources/img/disc-icon.png" border="0">
 							</c:if>
-						</span>					
+						</span>	
+						<span>
+							
+						</span>				
 					</c:if>
 					<c:if test="${boardvo.commentCount == 0}">
-						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">&nbsp;└Re&nbsp;</span>${boardvo.subject}</span>
+					<c:if test="${boardvo.orgTextCount == 1}">
+						<span style="font-weight: bold; font-style: italic; font-size: smaller; vertical-align: text-top; color: red;">[원글이 삭제 된 답글]</span>
+						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">&nbsp;&nbsp;</span>${boardvo.subject}&nbsp;</span>
+					</c:if>
+					<c:if test="${boardvo.orgTextCount == 0 }">
+						<span class="subject" onclick="goView('${boardvo.idx}','${gobackURL}');"><span style="color: red; font-style: italic; padding-left: ${boardvo.depthno * 20}">&nbsp;└Re&nbsp;</span>${boardvo.subject}&nbsp;</span>
+					</c:if>
 						<span>
 							<c:if test="${boardvo.fileCount > 0}">
 								<img src="<%=request.getContextPath()%>/resources/img/disc-icon.png" border="0">
@@ -201,7 +217,7 @@ ul {
 				</c:forEach>
 	
 		
-		<c:if test="${boardList2 == null || empty boardList2 }">
+		<c:if test="${boardList3 == null || empty boardList3 }">
 			<tr>
 				<td colspan="6" style="text-align: center;">검색 된 게시물이 없습니다.</td>
 			</tr>

@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 public interface InterYJKBoardDAO {
 
 	List<YJKBoardVO> getboardList(HashMap<String, String> paraMap); // 전체글 목록 가져오기
+	
+	List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList); // 첨부파일 갯수 가져오기
+	
+	List<YJKBoardVO> getorgTextCount(List<YJKBoardVO> boardList2); // 원글 카운트
 
 	YJKBoardVO getView(String idx); // 글 1개를 보여주기
 
@@ -60,9 +64,6 @@ public interface InterYJKBoardDAO {
 
 	int selectBoardIdx();
 	// 글 번호 채번해오기
-
-	List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList);
-
 	
 	YJKAttachFileVO fileDownload(String fileidx);
 	// 파일 다운로드

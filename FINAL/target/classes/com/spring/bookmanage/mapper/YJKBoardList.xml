@@ -77,10 +77,18 @@
 
 </select>
 
+<!-- 다중파일첨부 -->
 <select id="getAttachFileCount" parameterType="String" resultType="int">
 	select count(*)
 	from board_attachfile
 	where board_idx_fk = #{board_idx_fk}
+</select>
+
+<!-- 원글 카운트 -->
+<select id="getorgTextCount" parameterType="String" resultType="int">
+	select count(*)
+	from board
+	where idx = #{root} and status = 1
 </select>
 
 <!-- ==== 글 1개를 보여줄 때 조회수(readCount) 1 증가 시키기  ==== -->

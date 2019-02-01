@@ -14,6 +14,10 @@ public interface InterYJKBoardService {
 
 	List<YJKBoardVO> getboardList(HashMap<String, String> paraMap); // 전체글 리스트 가져오기
 
+	List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList); // board_attachfile 테이블에 있는 첨부파일 갯수
+	
+	List<YJKBoardVO> getorgTextCount(List<YJKBoardVO> boardList2); // board 테이블에 있는 원글 카운트
+
 	YJKBoardVO getView(String idx, String libid);
 	// 1개글 보여주기. 글 조회수 증가는 다른 사람의 글을 읽을 때만 증가하도록 한다.
 	// 로그인 하지 않은 상태에서 글을 읽을 때는 조회수가 증가가 일어나지 않도록 해야한다.
@@ -54,10 +58,7 @@ public interface InterYJKBoardService {
 	int selectBoardIdx();
 	// board idx 채번
 
-	List<YJKBoardVO> getAttachFileCount(List<YJKBoardVO> boardList);
-
 	YJKAttachFileVO fileDownload(String fileidx);
 	// 파일 다운로드
-
 
 }

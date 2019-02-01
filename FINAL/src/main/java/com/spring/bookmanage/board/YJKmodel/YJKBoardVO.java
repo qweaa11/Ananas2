@@ -51,6 +51,8 @@ public class YJKBoardVO {
  	// /Board/src/main/webapp/WEB-INF/views/tiles1/board/add.jsp 파일에서 input type="file" 인 name 의 이름(attach)과 
  	// 동일해야만 파일첨부가 가능해진다.!!!!
 	private int fileCount;     		//board_attachfile 테이블에 있는 첨부파일 갯수
+	
+	private int orgTextCount;		// board 테이블에 있는 원글 갯수
 
 	public YJKBoardVO() {}
 	
@@ -82,6 +84,16 @@ public class YJKBoardVO {
 		this.attach = attach;
 	}
 	
+	
+	
+
+	public int getOrgTextCount() {
+		return orgTextCount;
+	}
+
+	public void setOrgTextCount(int orgTextCount) {
+		this.orgTextCount = orgTextCount;
+	}
 
 	public int getFileCount() {
 		return fileCount;
