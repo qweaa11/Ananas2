@@ -14,7 +14,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.common.MyUtil;
 
 
