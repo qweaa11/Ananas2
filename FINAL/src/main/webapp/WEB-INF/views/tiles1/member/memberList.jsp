@@ -5,8 +5,8 @@
 <style>
 	#searchSelect {
 		padding: .2em .4em;
-		font-size:13pt;
-	    border-radius: 3px;
+		font-size: 13pt;
+		border-radius: 3px;
 	}
 	
 	#search {
@@ -23,7 +23,13 @@
 		border-radius: 50% !important;
 		margin: 0 5px;
 	}
-
+	
+	.gly-spin {
+		-webkit-animation: spin 2s infinite linear;
+		-moz-animation: spin 2s infinite linear;
+		-o-animation: spin 2s infinite linear;
+		animation: spin 2s infinite linear;
+	}
 </style>
 
 <script type="text/javascript">
@@ -370,7 +376,7 @@
 						<i class="glyphicon glyphicon-ok"></i></button>
 					<button type="button" class="btn btn-dark" 
 						 data-toggle="tooltip" data-placement="top" title="복원하기" onclick="recover('${goBackURL}');">
-						 <i class="glyphicon glyphicon-refresh"></i></button>
+						 <i class="glyphicon glyphicon-refresh gly-spin"></i></button>
 					<button type="button" class="btn btn-warning" 
 						 data-toggle="tooltip" data-placement="top" title="탈퇴" onclick="remove('${goBackURL}');">
 						 <i class="glyphicon glyphicon-trash"></i></button>

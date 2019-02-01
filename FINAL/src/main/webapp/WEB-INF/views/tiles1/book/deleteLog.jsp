@@ -2,6 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<style>
+	.gly-spin {
+		-webkit-animation: spin 2s infinite linear;
+		-moz-animation: spin 2s infinite linear;
+		-o-animation: spin 2s infinite linear;
+		animation: spin 2s infinite linear;
+	}
+</style>
 <script type="text/javascript">
 	$(document).ready(function() {
 		searchKeep();
@@ -127,7 +135,7 @@
 					<div style="float: right;">
 						<button type="button" class="btn btn-success"
 							data-toggle="tooltip" data-placement="top" title="도서복원" onclick="restore();">
-							<i class="glyphicon glyphicon-refresh"></i></button>
+							<i class="glyphicon glyphicon-refresh gly-spin"></i></button>
 					</div>
 				</div>
 
