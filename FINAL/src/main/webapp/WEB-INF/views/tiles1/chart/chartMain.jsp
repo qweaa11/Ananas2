@@ -95,7 +95,7 @@
 					<jsp:include page="./chartDetail/KGBChart.jsp"></jsp:include>
 				</div>
 				
-				<div id="menu2" class="tab-pane fade">
+				<div id="menu2" class="tab-pane fade active in" style="width: 100; padding: 50px;">
 					<jsp:include page="./chartDetail/JGHChart.jsp"></jsp:include>
 				</div>
 				
