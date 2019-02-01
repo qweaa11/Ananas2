@@ -38,8 +38,6 @@ public class LoginCheck {
 		
 		HttpServletResponse response = (HttpServletResponse)joinPoint.getArgs()[1];
 		
-		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
-		System.out.println("1111:"+librarian.getName()+",1234:"+librarian.getLibid());
 		
 		if(session.getAttribute("loginLibrarian") == null && session.getAttribute("loginAdmin") == null) {
 			// 해당 요청자가 로그인을 하지 않은 상태이라면 로그인 하는 페이지로 이동시키겠다.
