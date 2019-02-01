@@ -12,12 +12,18 @@
 			$(this).parent().find(".check").prop("checked",!flag);
 		});// end of tr click
 		
+		// 엔터키로 검색허용
 		$("#searchWord").keydown(function(event) {
 	         if(event.keyCode == 13) {
 	        	 search();
 	         }// end of if
 	    });// end of searchword keydown
 		
+	    // 툴팁
+		$('[data-toggle="tooltip"]').tooltip({
+	        html:"true"
+	    });
+	    
 	});// end of document ready
 	
 	function search() {// 검색
@@ -88,7 +94,9 @@
 
 					<input type="text" id="searchWord" name="searchWord" />
 					<input type="hidden" name="goBackURL" />
-					<button type="button" class="btn btn-info" onclick="search();">검색</button>
+					<button type="button" class="btn btn-info"
+						data-toggle="tooltip" data-placement="top" title="검색" onclick="search();">
+						<i class="glyphicon glyphicon-search"></i></button>
 				</div>
 				
 				<br/>
@@ -96,7 +104,8 @@
 					<div class="collapse navbar-collapse" id="bs-slide-dropdown">
 				        <ul class="nav navbar-nav navbar-right">
 				            <li class="dropdown">
-				              <i class="dropdown-toggle glyphicon glyphicon-th-list" data-toggle="dropdown" style="cursor: pointer;"></i>
+				              <i class="dropdown-toggle glyphicon glyphicon-th-list"
+				              	data-toggle="dropdown" style="cursor: pointer;"></i>
 				              <ul class="dropdown-menu" role="menu">
 				                <li><a href="#">도서일련번호 오름차순</a></li>
 				                <li><a href="#">도서명 오름차순</a></li>
@@ -110,11 +119,15 @@
 				
 				<div style="margin-bottom: 2%; margin-top: 2%;">
 					<div style="float: left;">
-						<button type="button" id="lock"class="btn btn-dark" onclick="allCheckFalse();"><i class="glyphicon glyphicon-remove"></i></button>
+						<button type="button" id="lock"class="btn btn-dark"
+							data-toggle="tooltip" data-placement="top" title="전체선택 해제" onclick="allCheckFalse();">
+							<i class="glyphicon glyphicon-remove"></i></button>
 					</div>
 					
 					<div style="float: right;">
-						<button type="button" class="btn btn-success" onclick="restore();">복원<i class="glyphicon glyphicon-refresh"></i></button>
+						<button type="button" class="btn btn-success"
+							data-toggle="tooltip" data-placement="top" title="도서복원" onclick="restore();">
+							<i class="glyphicon glyphicon-refresh"></i></button>
 					</div>
 				</div>
 

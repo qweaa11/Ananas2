@@ -36,28 +36,35 @@
 			$(this).parent().find(".check").prop("checked",!flag);
 		});// end of tr click
 
+		// 엔터키 검색 설정
 		$("#searchWord").keydown(function(event) {
 	         if(event.keyCode == 13) {
 	        	 search();
 	         }// end of if
 	    });// end of searchword keydown
+	    
+	    // 툴팁
+		$('[data-toggle="tooltip"]').tooltip({
+	        html:"true"
+	    });
+	    
 	});// end of document ready
 	
-	function search() {
+	function search() {// 검색
 		var searchFrm = document.searchFrm;
 		searchFrm.method = "GET";
 		searchFrm.action = "memberList.ana";
 		searchFrm.submit();
 	}// end of search
 	
-	function searchKeep() {
+	function searchKeep() {// 검색어 유지
 		if(${searchWord != null && searchWord!= "" && searchWord != "null"}) {
 			$("#colname").val("${colname}");
 			$("#searchWord").val("${searchWord}");
 		}// end of if
 	}// end of searchKeep
 	
-	function allCheckFalse() {
+	function allCheckFalse() {// 전체선택 해제
 		var flag = $("input:checkbox[name=check]").prop("checked",false);
 	}// end of allCheck
 
@@ -277,7 +284,7 @@
 		$(".tr-row").find(".idx").attr("disabled", false);
 	}// end of ban
 	
-	function latefeeReset(goBackURL) {
+	function latefeeReset(goBackURL) {// 연체료 납부(초기화)
 		var frm = searchFrm;
 		frm.method = "POST";
 		frm.action = "latefeeReset.ana";
@@ -347,18 +354,32 @@
 
 					<input type="text" id="searchWord" name="searchWord" />
 					<input type="hidden" name="goBackURL" />
-					<button type="button" class="btn btn-info" onclick="search();">검색</button>
+					<button type="button" class="btn btn-info" 
+						data-toggle="tooltip" data-placement="top" title="검색" onclick="search();">
+						<i class="glyphicon glyphicon-search"></i></button>
 				</div>
 
 				<div style="float: left;">
-					<button type="button" id="lock"class="btn btn-dark" onclick="allCheckFalse();"><i class="glyphicon glyphicon-remove"></i></button>
+					<button type="button" id="lock"class="btn btn-dark" 
+						data-toggle="tooltip" data-placement="top" title="전체선택 해제" onclick="allCheckFalse();">
+						<i class="glyphicon glyphicon-remove"></i></button>
 				</div>
 				<div style="float: right;">
-					<button type="button" class="btn btn-success" onclick="unlock('${goBackURL}');">휴면해제<i class="glyphicon glyphicon-ok"></i></button>
-					<button type="button" class="btn btn-dark" onclick="recover('${goBackURL}');">복원하기<i class="glyphicon glyphicon-refresh"></i></button>
-					<button type="button" class="btn btn-warning" onclick="remove('${goBackURL}');">탈퇴처리<i class="glyphicon glyphicon-trash"></i></button>
-					<button type="button" class="btn btn-danger" onclick="ban('${goBackURL}');">영구정지<i class="glyphicon glyphicon-ban-circle"></i></button>
-					<button type="button" class="btn btn-info" onclick="latefeeReset('${goBackURL}')">납부완료<i class="glyphicon glyphicon-usd"></i></button>
+					<button type="button" class="btn btn-success"
+						data-toggle="tooltip" data-placement="top" title="휴면해제" onclick="unlock('${goBackURL}');">
+						<i class="glyphicon glyphicon-ok"></i></button>
+					<button type="button" class="btn btn-dark" 
+						 data-toggle="tooltip" data-placement="top" title="복원하기" onclick="recover('${goBackURL}');">
+						 <i class="glyphicon glyphicon-refresh"></i></button>
+					<button type="button" class="btn btn-warning" 
+						 data-toggle="tooltip" data-placement="top" title="탈퇴" onclick="remove('${goBackURL}');">
+						 <i class="glyphicon glyphicon-trash"></i></button>
+					<button type="button" class="btn btn-danger" 
+						 data-toggle="tooltip" data-placement="top" title="영구정지" onclick="ban('${goBackURL}');">
+						 <i class="glyphicon glyphicon-ban-circle"></i></button>
+					<button type="button" class="btn btn-info" 
+					 	data-toggle="tooltip" data-placement="top" title="연체료 납부" onclick="latefeeReset('${goBackURL}')">
+						<i class="glyphicon glyphicon-usd"></i></button>
 				</div>
 			
 				<table id="table-member" class="table table-striped table-hover">
@@ -402,6 +423,7 @@
 							<td class="detail">
 								<input type="hidden" id="idx${no.count}" name="idx" class="idx" value="${memberVO.idx}"/>
 								<button type="button" class="btn btn-dark"
+									data-toggle="tooltip" data-placement="top" title="회원상세"
 									onclick="javascript:location.href='memberDetail.ana?idx=${memberVO.idx}'">
 									<i class="glyphicon glyphicon-user"></i></button>
 							</td>
