@@ -27,7 +27,7 @@ public class Scheduled {
 	/**
 	 * 12시가 되면 대여한 책중 반납 1일전인 사람에게 메일 발송
 	 */
-	@org.springframework.scheduling.annotation.Scheduled(cron = "0 01 00 * * *")
+	@org.springframework.scheduling.annotation.Scheduled(cron = "0 1 0 * * *")
     public void deadlineOverMailSubmit(){
         
 		List<HashMap<String, String>> memberidList = service.findAllRentalDeadlineOver();
