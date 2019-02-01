@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-#menu1, #menu2 {
+#menu1 {
 	background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
 	/* Chrome 10+, Saf5.1+ */
 	background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);

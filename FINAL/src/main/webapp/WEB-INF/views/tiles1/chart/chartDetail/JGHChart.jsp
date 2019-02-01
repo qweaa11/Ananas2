@@ -1,28 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<style type="text/css">
-
-	#menu2 {
-		width: 100px;
-		height: 100px;
-		background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* Chrome 10+, Saf5.1+ */
-		background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* FF3.6+ */
-		background: -ms-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* IE10 */
-		background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* Opera 11.10+ */
-		background: linear-gradient(90deg, #16222A 10%, #3A6073 90%); /* W3C */
-		font-family: 'Raleway', sans-serif;
-	}
-
-</style>
+<link rel="stylesheet" type="text/css" href="resources/css/jghChartStyle.css"/>
 
 <script type="text/javascript">
 
 	$(document).ready(function () {
+		
+		
+		
 		Highcharts.chart('field', {
 		    chart: {
 		        type: 'column'
@@ -102,7 +88,7 @@
 
 <div>
 
-	<div id="field" style="min-width: 310px; height: 400px; margin: 0 auto;">
+	<div id="field" style="margin: 0 auto; border-radius: 5px; clear: both;">
 	</div>
 	
 </div>
