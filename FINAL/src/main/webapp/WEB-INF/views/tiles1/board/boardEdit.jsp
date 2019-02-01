@@ -145,10 +145,10 @@
 	</div>
 	
 	<form name="editFrm">
-		<input type="text" name="idx" value="${boardvo.idx}"/>
-		<input type="text" name="subject"/>
-		<input type="text" name="content"/>
-		<input type="text" name="pw"/>
+		<input type="hidden" name="idx" value="${boardvo.idx}"/>
+		<input type="hidden" name="subject"/>
+		<input type="hidden" name="content"/>
+		<input type="hidden" name="pw"/>
 	</form>
 		
 	<br/>

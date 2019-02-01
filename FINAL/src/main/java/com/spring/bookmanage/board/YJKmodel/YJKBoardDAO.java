@@ -35,6 +35,16 @@ public class YJKBoardDAO implements InterYJKBoardDAO {
 		return boardList;
 	}
 
+	// ==== 원글 카운트 ==== 
+	@Override
+	public List<YJKBoardVO> getorgTextCount(List<YJKBoardVO> boardList2) {
+		for(int i = 0; i<boardList2.size(); i++) {
+			String root = boardList2.get(i).getRoot();
+			int n = sqlsession.selectOne("bookmanage.getorgTextCount", root);
+			boardList2.get(i).setOrgTextCount(n);
+		}
+		return boardList2;
+	}
 
 	// ==== 글 1개를 보여주는 페이지 요청(먼저 글 조회수 증가를 할지 안 할지 결정해야함) =====
 	@Override
