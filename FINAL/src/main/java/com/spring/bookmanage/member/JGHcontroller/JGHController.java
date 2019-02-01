@@ -34,7 +34,7 @@ public class JGHController {
 	 * @throws GeneralSecurityException
 	 */
 	@RequestMapping(value = "memberList.ana", method = {RequestMethod.GET})
-	public String list(HttpServletRequest request, HttpServletRequest response)
+	public String list(HttpServletRequest request, HttpServletResponse response)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		List<MemberVO> memberList = null;
 

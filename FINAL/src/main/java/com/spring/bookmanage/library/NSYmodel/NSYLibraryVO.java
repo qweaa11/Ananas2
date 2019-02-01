@@ -13,17 +13,13 @@ public class NSYLibraryVO {
 	private String addr1;	// 주소지
 	private String addr2;	// 상세주소지
 	private String regDate; // 등록일자
-	
 	private String fileName; //저장되는 파일 이름
 	private String orgFilename; //저장되는 원래 이름
 	private String fileSize; //파일 크기
-	
-	
 	private String y; // 지도에 표시할 좌표값 Y
 	private String x; // 지도에 표시할 좌표값 X
 	
 	private MultipartFile imgFile; // 진짜 파일 ==> WAS(톰캣) 디스크에 저장됨.
-	
 	
 	public NSYLibraryVO() {}
 	
