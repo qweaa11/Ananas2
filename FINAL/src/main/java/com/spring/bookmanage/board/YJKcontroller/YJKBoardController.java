@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.board.YJKmodel.YJKAttachFileVO;
 import com.spring.bookmanage.board.YJKmodel.YJKBoardVO;
 import com.spring.bookmanage.board.YJKmodel.YJKReplyVO;
@@ -90,10 +91,9 @@ public class YJKBoardController {
 	
 	// ==== 글쓰기 페이지 보여주기 ==== //
 	@RequestMapping(value="/boardAdd.ana",method= {RequestMethod.GET})
-	public String boardAdd(HttpServletRequest req, HttpServletResponse res) {
+	public String required_boardAdd(HttpServletRequest req, HttpServletResponse res) {
 		
 		// ==== 답변 글쓰기 추가된 경우 ====
-		
 		String root = req.getParameter("root");
 		String groupno = req.getParameter("groupno");
 		String depthno = req.getParameter("depthno");
@@ -337,7 +337,8 @@ public class YJKBoardController {
 		List<YJKAttachFileVO> attachfilevo = null; // 첨부파일을 저장한 객체변수
 						
 		HttpSession session = req.getSession();
-		YjkVO loginuser = (YjkVO)session.getAttribute("loginuser");
+		
+		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
 		// 로그인 되어진 사용자 정보를 가져온다.
 		
 		String readCountPermission = (String)session.getAttribute("readCountPermission");
@@ -349,8 +350,8 @@ public class YJKBoardController {
 			// 글 1개를 보기 위해 
 			// http://localhost:9090/bookmanage/boardList.ana(목록)
 			// 들어온 경우
-			if(loginuser != null) {
-				libid = loginuser.getLibid();
+			if(loginLibrarian != null) {
+				libid = loginLibrarian.getLibid();
 			}			
 			boardvo = service.getView(idx, libid);
 			attachfilevo = service.FileView(idx);
@@ -377,297 +378,290 @@ public class YJKBoardController {
 	}
 	
 	// ==== 첨부파일 다운로드 받기 =====
-			@RequestMapping(value="/boardDownload.ana", method={RequestMethod.GET})
-			public void boardDownload(HttpServletRequest req, HttpServletResponse res) {
-				String loc = "javascript:history.back();";
-				String fileidx = req.getParameter("fileidx"); // 다운로드를 클릭한 해당 첨부파일의 idx값
-				String idx = req.getParameter("idx");// 첨부파일이 있는 글번호
-				
-				YJKBoardVO boardvo = service.getViewWithNoAddCount(idx);
-				// 조회수 증가 없이 1개글 가져오기
-				YJKAttachFileVO attachfilevo = service.fileDownload(fileidx);
-				
-				boolean flag = false;
-				
-					
-					String fileName = attachfilevo.getFilename();
-					//  WAS(톰캣) 디스크에 저장 된 파일명이다.
-					
-					System.out.println(fileName);
-					
-					String orgFilename = attachfilevo.getOrgfilename();
-					// 구현환경 및 활용기술 및 팀내역할.txt 와 같은 것을 가져온다.
-					
-					System.out.println(orgFilename);
+	@RequestMapping(value="/boardDownload.ana", method={RequestMethod.GET})
+	public void required_boardDownload(HttpServletRequest req, HttpServletResponse res) {
+		String loc = "javascript:history.back();";
+		String fileidx = req.getParameter("fileidx"); // 다운로드를 클릭한 해당 첨부파일의 idx값
+		String idx = req.getParameter("idx");// 첨부파일이 있는 글번호
+		
+		YJKBoardVO boardvo = service.getViewWithNoAddCount(idx);
+		// 조회수 증가 없이 1개글 가져오기
+		YJKAttachFileVO attachfilevo = service.fileDownload(fileidx);
+		
+		boolean flag = false;
+		
+			
+			String fileName = attachfilevo.getFilename();
+			//  WAS(톰캣) 디스크에 저장 된 파일명이다.
+			
+			System.out.println(fileName);
+			
+			String orgFilename = attachfilevo.getOrgfilename();
+			// 구현환경 및 활용기술 및 팀내역할.txt 와 같은 것을 가져온다.
+			
+			System.out.println(orgFilename);
 
-					HttpSession session = req.getSession();
-					String root = session.getServletContext().getRealPath("/");
-					String path = root+"resources"+File.separator+"files";
-					// path 가 첨부파일들을 저장 된  WAS(톰캣)의 폴더가 된다.
-					// *** 다운로드 하기 *** //
-					// 다운로드가 실패 할 경우 메시지를 띄워주기 위해서 
-					// boolean 타입 변수 flag 를 선언한다.
+			HttpSession session = req.getSession();
+			String root = session.getServletContext().getRealPath("/");
+			String path = root+"resources"+File.separator+"files";
+			// path 가 첨부파일들을 저장 된  WAS(톰캣)의 폴더가 된다.
+			// *** 다운로드 하기 *** //
+			// 다운로드가 실패 할 경우 메시지를 띄워주기 위해서 
+			// boolean 타입 변수 flag 를 선언한다.
+			
+			
+			flag = fileManager.doFileDownload(fileName, orgFilename, path, res);
+			// 다운로드가 성공하면 true를 반환하고 
+			// 다운로드가 실패하면 false를 반환한다.
+			
+			if(!flag) {
+				// 다운로드가 실패 할 경우 메시지를 띄워준다.
+				res.setContentType("text/html; charset=UTF-8");
+				req.setAttribute("loc", loc);
+				try {
+					PrintWriter out = res.getWriter();
+					
+					// PrintWriter out 이 웹브라우저 상에 내용물을 기재(써주는)해주는 객체이다.
+					
+					out.println("<script type ='text/javascript'>alert('파일 다운로드가 실패했습니다!!')</script>");
 					
 					
-					flag = fileManager.doFileDownload(fileName, orgFilename, path, res);
-					// 다운로드가 성공하면 true를 반환하고 
-					// 다운로드가 실패하면 false를 반환한다.
-					
-					if(!flag) {
-						// 다운로드가 실패 할 경우 메시지를 띄워준다.
-						res.setContentType("text/html; charset=UTF-8");
-						req.setAttribute("loc", loc);
-						try {
-							PrintWriter out = res.getWriter();
-							
-							// PrintWriter out 이 웹브라우저 상에 내용물을 기재(써주는)해주는 객체이다.
-							
-							out.println("<script type ='text/javascript'>alert('파일 다운로드가 실패했습니다!!')</script>");
-							
-							
-						} catch (IOException e) {
-				
-							e.printStackTrace();
-						}
-						
-					}
-				
-				
-			}
+				} catch (IOException e) {
+		
+					e.printStackTrace();
+				}	
+			}	
+		}
 	
 	// ==== 댓글쓰기 ====
-		@RequestMapping(value="/boardAddComment.ana", method={RequestMethod.POST})
-		@ResponseBody
-		public HashMap<String, String> boardAddComment(YJKReplyVO replyvo , HttpServletRequest req) 
-			throws Throwable {
-			
-			HashMap<String, String> returnMap = new HashMap<String, String>();
-			//String commentCount_str = req.getParameter("commnetCount");
-			//int commentCount = Integer.parseInt(commentCount_str) +1;
-			
-			// 댓글쓰기(AJAX 처리) 
-			System.out.println(replyvo.getParentidx());
-			int n = service.boardAddComment(replyvo);
-			System.out.println(n+"=========== cnt");
-			if(n == 1) {
-				// 댓글쓰기 및 원 게시물(Board 테이블)에 댓글의 갯수(1씩 증가)
-				returnMap.put("NAME", replyvo.getName());
-				returnMap.put("CONTENT", replyvo.getContent());
-				returnMap.put("REGDATE", MyUtil.getNowTime());
-			}
-			
-			//위엔 에드두고 여기서 카운트개수 따로가져오는게 좋을듯 댓글개수만 가져오는걸로 추가 ㄱㄱ  댓글 보여주는걸 새로 만들자는거지? 응 ㄱㄷㄱㄷ
-			int cnt = service.getCommentCnt(replyvo);
-			returnMap.put("COMMENTCOUNT", String.valueOf(cnt));
-			System.out.println(cnt+"===========개수잘가져오는거확인1");
-			return returnMap;
-			
+	@RequestMapping(value="/boardAddComment.ana", method={RequestMethod.POST})
+	@ResponseBody
+	public HashMap<String, String> boardAddComment(YJKReplyVO replyvo , HttpServletRequest req) 
+		throws Throwable {
+		
+		HashMap<String, String> returnMap = new HashMap<String, String>();
+		//String commentCount_str = req.getParameter("commnetCount");
+		//int commentCount = Integer.parseInt(commentCount_str) +1;
+		
+		// 댓글쓰기(AJAX 처리) 
+		System.out.println(replyvo.getParentidx());
+		int n = service.boardAddComment(replyvo);
+		System.out.println(n+"=========== cnt");
+		if(n == 1) {
+			// 댓글쓰기 및 원 게시물(Board 테이블)에 댓글의 갯수(1씩 증가)
+			returnMap.put("NAME", replyvo.getName());
+			returnMap.put("CONTENT", replyvo.getContent());
+			returnMap.put("REGDATE", MyUtil.getNowTime());
 		}
 		
-		// ==== 댓글내용 가져오기 ====
-		@RequestMapping(value="/replyList.ana", method={RequestMethod.GET})
-		@ResponseBody
-		public List<HashMap<String, Object>> boardcommentList(HttpServletRequest req) {
+		//위엔 에드두고 여기서 카운트개수 따로가져오는게 좋을듯 댓글개수만 가져오는걸로 추가 ㄱㄱ  댓글 보여주는걸 새로 만들자는거지? 응 ㄱㄷㄱㄷ
+		int cnt = service.getCommentCnt(replyvo);
+		returnMap.put("COMMENTCOUNT", String.valueOf(cnt));
+		System.out.println(cnt+"===========개수잘가져오는거확인1");
+		return returnMap;
+		
+	}
+		
+	// ==== 댓글내용 가져오기 ====
+	@RequestMapping(value="/replyList.ana", method={RequestMethod.GET})
+	@ResponseBody
+	public List<HashMap<String, Object>> boardcommentList(HttpServletRequest req) {
 
-			List<HashMap<String, Object>> mapList = new ArrayList<HashMap<String, Object>>();
-			
-			String idx = req.getParameter("idx");
-			// 원글의 글 번호 받아오기
-			System.out.println("idx :"+idx);
-			String currentShowPageNo = req.getParameter("currentShowPageNo");
-			
-			if(currentShowPageNo == null || "".equals(currentShowPageNo)) {
-				currentShowPageNo = "1";
-			}
-			
-			int sizePerPage = 5; // 한 페이지당 5개 댓글 보여주기
-			
-			int rno1 = Integer.parseInt(currentShowPageNo)*sizePerPage - (sizePerPage-1); 	// 공식!!!
-			int rno2 = Integer.parseInt(currentShowPageNo)*sizePerPage;	// 공식!!!
-			
-			HashMap<String, String> paraMap = new HashMap<String, String>();
-			paraMap.put("IDX", idx);
-			paraMap.put("RNO1", String.valueOf(rno1));
-			paraMap.put("RNO2", String.valueOf(rno2));
-			
-			List<YJKReplyVO> commentList = service.listComment(paraMap);
-			System.out.println(commentList);
-			// 원글에 글번호에 대한 댓글 중 페이지 번호에 해당하는 댓글만 조회해온다.
-			
-			for(YJKReplyVO cmtvo : commentList) {
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("NAME", cmtvo.getName());
-				map.put("CONTENT", cmtvo.getContent());
-				map.put("REGDATE", cmtvo.getRegdate());
-				
-				mapList.add(map);
-			}
-			
-			
-			return mapList;
+		List<HashMap<String, Object>> mapList = new ArrayList<HashMap<String, Object>>();
+		
+		String idx = req.getParameter("idx");
+		// 원글의 글 번호 받아오기
+		System.out.println("idx :"+idx);
+		String currentShowPageNo = req.getParameter("currentShowPageNo");
+		
+		if(currentShowPageNo == null || "".equals(currentShowPageNo)) {
+			currentShowPageNo = "1";
 		}
 		
-		// ==== 댓글 TotalPage 가져오기 ====
-		@RequestMapping(value="/boardCommentTotalPage.ana", method={RequestMethod.GET})
-		@ResponseBody
-		public HashMap<String, Integer> getCommentTotalPage(HttpServletRequest req) {
+		int sizePerPage = 5; // 한 페이지당 5개 댓글 보여주기
+		
+		int rno1 = Integer.parseInt(currentShowPageNo)*sizePerPage - (sizePerPage-1); 	// 공식!!!
+		int rno2 = Integer.parseInt(currentShowPageNo)*sizePerPage;	// 공식!!!
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("IDX", idx);
+		paraMap.put("RNO1", String.valueOf(rno1));
+		paraMap.put("RNO2", String.valueOf(rno2));
+		
+		List<YJKReplyVO> commentList = service.listComment(paraMap);
+		System.out.println(commentList);
+		// 원글에 글번호에 대한 댓글 중 페이지 번호에 해당하는 댓글만 조회해온다.
+		
+		for(YJKReplyVO cmtvo : commentList) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("NAME", cmtvo.getName());
+			map.put("CONTENT", cmtvo.getContent());
+			map.put("REGDATE", cmtvo.getRegdate());
 			
-			HashMap<String, Integer> returnMap = new HashMap<String, Integer>();
-			
-			String idx = req.getParameter("idx");
-			// 원글의 글 번호를 받아와서 원글에 딸린 댓글의 갯수를 알아오려고 한다.
-			
-			String sizePerPage = req.getParameter("sizePerPage");
-			
-			HashMap<String, String> paraMap = new HashMap<String, String>();
-			paraMap.put("IDX", idx);
-			paraMap.put("SIZEPERPAGE", sizePerPage);
-			
-			int totalCount = service.getCommentTotalCount(paraMap);
-			// 원글에 글번호에 해당하는 댓글의 총갯수를 알아오기
-			
-			// -- 총 페이지수(totalPage) 구하기
-			int totalPage = (int)Math.ceil((double)totalCount/Integer.parseInt(sizePerPage));
-			
-			returnMap.put("TOTALPAGE", totalPage);
-			
-			return returnMap;
+			mapList.add(map);
 		}
 		
-		// ==== 글 수정 페이지 요청 ====
-		@RequestMapping(value="/boardEdit.ana", method={RequestMethod.GET})
-		public String boardEdit(HttpServletRequest req, HttpServletResponse res) {
-			
-			// 수정해야 할 글 번호 가져오기
-			String idx = req.getParameter("idx");
-			
-			// 수정해야 할 글 내용 가져오기
-			YJKBoardVO boardvo = service.getViewWithNoAddCount(idx); // 조회수 증가 없이 글 1개 가져오는 것
-			
-			/*HttpSession session = req.getSession();
-			YjkVO loginadmin = (YjkVO)session.getAttribute("loginadmin");
-			
-			if(!loginadmin.getLibid().equals(boardvo.getLibid_fk())) {
-				String msg = "다른 관리자의 글은 수정이 불가합니다.";
-				String loc = "javascript:history.back();";
-				
-				req.setAttribute("msg", msg);
-				req.setAttribute("loc", loc);
-				
-				return "msg";
-			}
-			else {*/
-				req.setAttribute("boardvo", boardvo);
-				
-				return "board/boardEdit.tiles1";
-		//	}
-			
-		}
 		
-		// ==== 글 수정 페이지 완료하기 ====
-		@RequestMapping(value="/boardEditEnd.ana", method={RequestMethod.POST})
-		public String boardEditEnd(YJKBoardVO boardvo, HttpServletRequest req) {
-			
-			// 원래 암호와 글 수정 페이지에 입력한 암호와 비교하기
-			String adminPW = boardvo.getPw();
-			
-			HashMap<String, String> paraMap = new HashMap<String, String>();
-			paraMap.put("IDX", boardvo.getIdx());
-			paraMap.put("PW", boardvo.getPw());
-			paraMap.put("SUBJECT", boardvo.getSubject());
-			paraMap.put("CONTENT", boardvo.getContent());
-			
-			int result = service.boardEdit(paraMap);
-			// 넘겨받은 값이 1 이면 update 성공 
-			// 넘겨받은 값이 0 이면 update 실패(암호가 틀리므로)
-			
-			String msg = "";
-			String loc = "";
-			
-			if(result == 0) {
-				msg = "글 수정 실패!";
-				loc = "javascript:history.back();";
-			}
-			else {
-				msg = "글 수정 성공!";
-				loc = req.getContextPath()+"/boardView.ana?idx="+boardvo.getIdx();
-			}
+		return mapList;
+	}
+		
+	// ==== 댓글 TotalPage 가져오기 ====
+	@RequestMapping(value="/boardCommentTotalPage.ana", method={RequestMethod.GET})
+	@ResponseBody
+	public HashMap<String, Integer> getCommentTotalPage(HttpServletRequest req) {
+		
+		HashMap<String, Integer> returnMap = new HashMap<String, Integer>();
+		
+		String idx = req.getParameter("idx");
+		// 원글의 글 번호를 받아와서 원글에 딸린 댓글의 갯수를 알아오려고 한다.
+		
+		String sizePerPage = req.getParameter("sizePerPage");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("IDX", idx);
+		paraMap.put("SIZEPERPAGE", sizePerPage);
+		
+		int totalCount = service.getCommentTotalCount(paraMap);
+		// 원글에 글번호에 해당하는 댓글의 총갯수를 알아오기
+		
+		// -- 총 페이지수(totalPage) 구하기
+		int totalPage = (int)Math.ceil((double)totalCount/Integer.parseInt(sizePerPage));
+		
+		returnMap.put("TOTALPAGE", totalPage);
+		
+		return returnMap;
+	}
+	
+	// ==== 글 수정 페이지 요청 ====
+	@RequestMapping(value="/boardEdit.ana", method={RequestMethod.GET})
+	public String required_boardEdit(HttpServletRequest req, HttpServletResponse res) {
+		
+		// 수정해야 할 글 번호 가져오기
+		String idx = req.getParameter("idx");
+		
+		// 수정해야 할 글 내용 가져오기
+		YJKBoardVO boardvo = service.getViewWithNoAddCount(idx); // 조회수 증가 없이 글 1개 가져오는 것
+		
+		HttpSession session = req.getSession();
+
+		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		
+		if(!loginLibrarian.getLibid().equals(boardvo.getLibid_fk())) {
+			String msg = "다른 관리자의 글은 수정이 불가합니다.";
+			String loc = "javascript:history.back();";
 			
 			req.setAttribute("msg", msg);
 			req.setAttribute("loc", loc);
 			
 			return "msg";
 		}
+		else {
+			req.setAttribute("boardvo", boardvo);
+			
+			return "board/boardEdit.tiles1";
+		}
 		
-		// ==== 글 삭제 페이지 요청 =====
-		@RequestMapping(value="/boardDel.ana", method={RequestMethod.GET})
-		public String boardDel(HttpServletRequest req, HttpServletResponse res) {
+	}
+	
+	// ==== 글 수정 페이지 완료하기 ====
+	@RequestMapping(value="/boardEditEnd.ana", method={RequestMethod.POST})
+	public String boardEditEnd(YJKBoardVO boardvo, HttpServletRequest req) {
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("IDX", boardvo.getIdx());
+		paraMap.put("PW", boardvo.getPw()); // 원래 암호와 글 수정 페이지에 입력한 암호와 비교하기
+		paraMap.put("SUBJECT", boardvo.getSubject());
+		paraMap.put("CONTENT", boardvo.getContent());
+		
+		int result = service.boardEdit(paraMap);
+		// 넘겨받은 값이 1 이면 update 성공 
+		// 넘겨받은 값이 0 이면 update 실패(암호가 틀리므로)
+		
+		String msg = "";
+		String loc = "";
+		
+		if(result == 0) {
+			msg = "글 수정 실패!";
+			loc = "javascript:history.back();";
+		}
+		else {
+			msg = "글 수정 성공!";
+			loc = req.getContextPath()+"/boardView.ana?idx="+boardvo.getIdx();
+		}
+		
+		req.setAttribute("msg", msg);
+		req.setAttribute("loc", loc);
+		
+		return "msg";
+	}
+	
+	// ==== 글 삭제 페이지 요청 =====
+	@RequestMapping(value="/boardDel.ana", method={RequestMethod.GET})
+	public String required_boardDel(HttpServletRequest req, HttpServletResponse res) {
+		
+		// 삭제 할 글 번호 가져오기
+		String idx = req.getParameter("idx");
+		
+		// 삭제 할 글 내용 가져오기
+		YJKBoardVO boardvo = service.getViewWithNoAddCount(idx);
+		
+		HttpSession session = req.getSession();
+		
+		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		
+		
+		
+		if(!loginLibrarian.getLibid().equals(boardvo.getLibid_fk())) {
+			String msg = "다른 관리자의 글은 삭제가 불가합니다.";
+			String loc = "javascript:history.back();";
 			
-			// 삭제 할 글 번호 가져오기
-			String idx = req.getParameter("idx");
+			req.setAttribute("msg", msg);
+			req.setAttribute("loc", loc);
 			
-			// 삭제 할 글 내용 가져오기
-			YJKBoardVO boardvo = service.getViewWithNoAddCount(idx);
-			
-			/*HttpSession session = req.getSession();
-			YjkVO loginuser = (YjkVO)session.getAttribute("loginuser");
-			
-			if(!loginuser.getLibid().equals(boardvo.getLibid_fk())) {
-				String msg = "다른 관리자의 글은 삭제가 불가합니다.";
-				String loc = "javascirpt:history.back();";
-				
-				req.setAttribute("msg", msg);
-				req.setAttribute("loc", loc);
-				
-				return "msg";
-			}
-			else {*/
-				req.setAttribute("idx", idx);
-		//	}
+			return "msg";
+		}
+		else {
+			req.setAttribute("idx", idx);
 			
 			return "board/boardDel.tiles1";
-			
 		}
-		
-		// ==== 글 삭제 페이지 완료하기 ====
-		@RequestMapping(value="/boardDelEnd.ana", method={RequestMethod.POST})
-		public String boardDelEnd(HttpServletRequest req) throws Throwable {
-			
-			String idx = req.getParameter("idx");
-			String groupno = req.getParameter("groupno");
-			String depthno = req.getParameter("depthno");
-			String root = req.getParameter("root");
-			String pw = req.getParameter("pw");
-			
-			HashMap<String, String> paraMap = new HashMap<String, String>();
-			
-			paraMap.put("IDX", idx);
-			paraMap.put("PW", pw);
-			
-			int result = service.boardDel(paraMap);
-			/*
-			 넘겨받은 값이 1이면 글 삭제 성공,
-			 넘겨받은 값이 0이면 글 삭제 실패(암호가 틀리므로)
-			 */
-			
-			String msg = "";
-			String loc = "";
-			
-			if(result == 0) {
-				msg = "글 삭제 실패!!";
-				loc = "javascript:history.back();";
-			}
-			else {
-				msg = "글 삭제 성공!!";
-				loc = req.getContextPath()+"/boardList.ana";
-			}
-			
-			req.setAttribute("msg", msg);
-			req.setAttribute("loc", loc);
+
+	}
 	
-			return "msg";
+	// ==== 글 삭제 페이지 완료하기 ====
+	@RequestMapping(value="/boardDelEnd.ana", method={RequestMethod.POST})
+	public String boardDelEnd(HttpServletRequest req) throws Throwable {
+		
+		String idx = req.getParameter("idx");
+		String pw = req.getParameter("pw");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		
+		paraMap.put("IDX", idx);
+		paraMap.put("PW", pw);
+		
+		int result = service.boardDel(paraMap);
+		/*
+		 넘겨받은 값이 1이면 글 삭제 성공,
+		 넘겨받은 값이 0이면 글 삭제 실패(암호가 틀리므로)
+		 */
+		
+		String msg = "";
+		String loc = "";
+		
+		if(result == 0) {
+			msg = "글 삭제 실패!!";
+			loc = "javascript:history.back();";
+		}
+		else {
+			msg = "글 삭제 성공!!";
+			loc = req.getContextPath()+"/boardList.ana";
 		}
 		
-		
+		req.setAttribute("msg", msg);
+		req.setAttribute("loc", loc);
+
+		return "msg";
+	}	
 
 }

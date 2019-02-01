@@ -3,21 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     
-<style type="text/css">
-	/* table, th, td {border: solid gray 1px;}
-	#table {border-collapse: collapse; width: 750px;} 
-	
-	.subjectstyle {font-weight: bold;
-    	           color: navy;
-    	           cursor: pointer; }
-	
-	
-	#table {border-collapse: collapse; width: 920px;}
-	#table th, #table td {padding: 5px;}
-	#table th {background-color: #DDDDDD;}
-	
-	a{text-decoration: none;}  */
-	
+<style type="text/css">	
 table {
 	font-family: arial, sans-serif;
 	border-collapse: collapse;
@@ -205,14 +191,6 @@ ul {
 				<td style="text-align: center;">${boardvo.regDate}</td>
 				<td style="text-align: center;">${boardvo.readCount}</td>
 
-				<%-- <td align="center">
-						<c:if test="${boardvo.fileCount > 0}">
-							<img src="<%=request.getContextPath()%>/resources/img/disc-icon.png" border="0">
-						</c:if>
-						<c:if test="${boardvo.fileCount == 0 }">
-							<img src="<%=request.getContextPath()%>/resources/img/nodisc-icon.png" border="0">
-						</c:if>
-					</td> --%>
 				</tr>
 				</c:forEach>
 	
