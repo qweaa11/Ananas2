@@ -35,9 +35,6 @@
 	#table {border-collapse: collapse;
 	 		width: 1000px;
 	 		}
-	/* #table th, #table td{padding: 5px;}
-	#table th{width: 120px; background-color: #DDDDDD;}
-	#table td{width: 860px;} */
 	.long {width: 470px;}
 	.short {width: 120px;} 	
 

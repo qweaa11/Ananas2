@@ -1,4 +1,4 @@
-package com.spring.bookmanage.JDScontroller;
+package com.spring.JDScontroller;
 
 import java.util.HashMap;
 
@@ -38,7 +38,7 @@ import com.spring.bookmanage.common.SHA256;
 		
 		// ===== 로그인 폼 페이지 요청 =====/
 		@RequestMapping(value="/login.ana", method= {RequestMethod.GET})
-		public String login(HttpServletRequest req) {
+		public String login(HttpServletRequest req,HttpServletResponse response) {
 			
 			String cookie_key = "";
 			String cookie_value = "";
@@ -113,13 +113,7 @@ import com.spring.bookmanage.common.SHA256;
 				// 아무런 이상없이 로그인 하는 경우
 				session.setAttribute("loginLibrarian", loginLibrarian);
 			
-				if(session.getAttribute("gobackURL") != null) {
-					
-					String gobackURL = (String)session.getAttribute("gobackURL");
-					req.setAttribute("gobackURL", gobackURL);
-					
-					session.removeAttribute("gobackURL");
-				}
+				
 
 				String saveid1 = req.getParameter("saveid1");
 				
@@ -175,13 +169,7 @@ import com.spring.bookmanage.common.SHA256;
 				// 아무런 이상없이 로그인 하는 경우
 				session.setAttribute("loginAdmin", loginAdmin);
 			
-				if(session.getAttribute("gobackURL") != null) {
-					
-					String gobackURL = (String)session.getAttribute("gobackURL");
-					req.setAttribute("gobackURL", gobackURL);
-					
-					session.removeAttribute("gobackURL");
-				}
+				
 				
 				
 				String saveid2 = req.getParameter("saveid2");
@@ -211,7 +199,7 @@ import com.spring.bookmanage.common.SHA256;
 
 		// ===== 로그아웃 완료 요청 =====
 		@RequestMapping(value="/logout.ana", method={RequestMethod.GET})
-		public String logout(HttpServletRequest req, HttpSession session) {
+		public String logout(HttpServletRequest req, HttpServletResponse response, HttpSession session) {
 			
 			 session.invalidate();
 		  	

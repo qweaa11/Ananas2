@@ -144,8 +144,8 @@
 			<tr>
 				<th>성명</th>
 				<td>
-				    <input type="hidden" name="libid_fk" value="classfor" readonly/>
-					<input type="text" name="name" value="" class="short" />
+				    <input type="hidden" name="libid_fk" value="${sessionScope.loginLibrarian.libid}" readonly/>
+					<input type="text" name="name" value="${sessionScope.loginLibrarian.name}" class="short" />
 				</td>
 			</tr>
 			<tr>

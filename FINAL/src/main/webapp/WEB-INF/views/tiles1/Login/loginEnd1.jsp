@@ -8,13 +8,9 @@
 	var gobackURL = "${requestScope.gobackURL}";
 	
 	if(loginLibrarian != null && loginLibrarian != "" && (gobackURL == null || gobackURL == "") ) {
-		//alert("로그인 성공 !!");
+		alert("로그인 성공 !!");
 		location.href="<%=ctxPath%>/index.ana";
 	}
 	
-	if(loginLibrarian != null && loginLibrarian != "" && (gobackURL != null && gobackURL != "")) {
-		alert("로그인 성공 !!");
-		location.href=gobackURL;
-	}
-</script>
+	</script>
     

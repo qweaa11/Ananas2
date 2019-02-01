@@ -16,7 +16,7 @@ public class KGBLibraryController {
 	@Autowired JGHLibraryService service;
 
 	@RequestMapping(value="/index.ana", method= {RequestMethod.GET})
-	public String index() {
+	public String index(HttpServletRequest request,HttpServletResponse response) {
 
 		return "library/index.tiles1";
 	}// end of index
