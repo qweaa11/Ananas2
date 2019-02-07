@@ -221,7 +221,7 @@ input[type=submit]:hover {
     	<h3></h3>
 	    <div class="panel panel-primary">
 	    	<div class="panel-heading">Panel with panel-primary class</div>
-	    	<div class="panel-body">Panel Content</div>
+	    	<jsp:include page="./receiveMessege.jsp"></jsp:include>
 	    </div>
     </div>
     
@@ -229,7 +229,7 @@ input[type=submit]:hover {
     	<h3></h3>
 	    <div class="panel panel-primary">
 	    	<div class="panel-heading">Panel with panel-primary class</div>
-	    	<div class="panel-body">Panel Content</div>
+	    	<jsp:include page="./sendMessege.jsp"></jsp:include>
 	    </div>
     </div>
   </div>

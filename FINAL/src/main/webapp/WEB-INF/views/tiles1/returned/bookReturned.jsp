@@ -168,6 +168,7 @@
 					html += "<tr>" +
 							   "<td style='text-align:center;'>"+entry.idx+"</td>"+
 							   "<td style='text-align:center;'>"+entry.memberID+"</td>"+
+							   "<td style='text-align:center;'>"+entry.memberID+"</td>"+
 							   "<td style='text-align:center;'>"+entry.name+"</td>"+
 							   "<td style='text-align:center;'>"+entry.phone+"</td>"+
 							   "<td style='text-align:center;'>"+entry.title+"</td>"+
@@ -320,8 +321,9 @@
 						<thead>
 							<tr>
 								<th style="width: 6%; text-align: center;">번호</th>
-								<th style="width: 10%; text-align: center;">회원ID</th>
-								<th style="width: 10%; text-align: center;">회원명</th>
+								<th style="width: 6%; text-align: center;">도서관코드</th>
+								<th style="width: 8%; text-align: center;">회원ID</th>
+								<th style="width: 6%; text-align: center;">회원명</th>
 								<th style="width: 10%; text-align: center;">회원연락처</th>
 								<th style="width: 20%; text-align: center;">도서명</th>
 								<th style="width: 20%; text-align: center;">작가명</th>

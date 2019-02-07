@@ -78,6 +78,7 @@ public class YMHReturnedController
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			try {
 				map.put("idx", rvo.getIdx());
+				
 				map.put("memberID", rvo.getMemberID());
 				map.put("name", rvo.getName());
 				map.put("title", rvo.getTitle());

@@ -155,10 +155,28 @@
 	</select>
 	
 	
+	<select id="listMessage" parameterType="HashMap" resultType="com.spring.bookmanage.message.YMHmodel.YMHMessageVO">
+		
+		Select m.idx as idx, m.tartgetid as tartgetid, m.title as title, m.opendate as opendate, m.senddate as senddate, l.name as name
+		from message m join librarian l
+		on m.tartgetid = l.libid
+		where sender = #{USERID}
+		and delsend = 0
+
+		
+	</select>
 	
 	
-	
-	
+	<select id="listReceiveMessage" parameterType="HashMap" resultType="com.spring.bookmanage.message.YMHmodel.YMHMessageVO">
+		
+		Select m.idx as idx, m.sender as sender, m.title as title, m.opendate as opendate, m.senddate as senddate, l.name as sendername, m.TARTGETID as TARTGETID
+		from message m join librarian l
+		on m.sender = l.libid
+		where tartgetid = #{USERID}
+		and delsend = 0
+
+		
+	</select>
 	
 	
 	
