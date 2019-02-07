@@ -70,7 +70,8 @@
 								"<i class='far fa-calendar-alt' style='font-size:15px; text-align: right;'> "+json.REGDATE+"</i>"+
 							"</div>";
 							 
-					$("#commentList").prepend(html);
+				//	$("#commentList").prepend(html);
+					goViewComment(1);
 					frm.content.value = "";
 				},
 				error: function(request, status, error){
