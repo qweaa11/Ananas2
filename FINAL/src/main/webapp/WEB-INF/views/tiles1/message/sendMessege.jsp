@@ -56,9 +56,17 @@
 					              "<td style='text-align: center;'>"+entry.IDX+"</td>"+
 					              "<td>"+entry.TARTGETID+" - "+entry.TARTGETNAME+"</td>"+
 					              "<td>"+entry.TITLE+"</td>"+
-					              "<td style='text-align: center;'>"+entry.SENDDATE+"</td>"+
-					              "<td style='text-align: center;'>"+entry.OPENDATE+"</td>"+
-					              "<td style='text-align: center;'>삭제</td>"+
+					              "<td style='text-align: center;'>"+entry.SENDDATE+"</td>";
+					              
+               if(entry.OPENDATE != null){
+            	    resultHTML += "<td style='text-align: center;'>"+entry.OPENDATE+"</td>";
+               }
+               else{
+			 	    resultHTML += "<td style='text-align: center;'>X</td>";
+	           }
+			   
+			   
+				    resultHTML += "<td style='text-align: center;'>삭제</td>"+
 					              "</tr>";
 				});// end of $.each()-------------
 				
@@ -176,12 +184,12 @@
 		<table> 
 			<thead>
 				<tr>
-					<th style="width: 15%; border: solid red 1px; align-content: center;">쪽지번호</th>
-					<th style="width: 15%; border: solid red 1px;">받는사람</th>
-					<th style="width: 23%; border: solid red 1px;">제목</th>
+					<th style="width: 8%;  border: solid red 1px; align-content: center;">쪽지번호</th>
+					<th style="width: 20%; border: solid red 1px;">받는사람</th>
+					<th style="width: 25%; border: solid red 1px;">제목</th>
 					<th style="width: 20%; border: solid red 1px;">발송일자</th>
 					<th style="width: 20%; border: solid red 1px;">열람일자</th>
-					<th style="width: 7%; border: solid red 1px;">삭제</th>
+					<th style="width: 7%;  border: solid red 1px;">삭제</th>
 				</tr>
 			</thead>
 			<tbody id="messageDisplay"></tbody>
