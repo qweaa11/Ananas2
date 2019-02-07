@@ -62,7 +62,7 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu3">
-							<span style="font-size: 20pt;">연체율</span>
+							<span style="font-size: 20pt;">연체</span>
 						</button>
 					</div>
 					

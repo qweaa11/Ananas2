@@ -284,23 +284,23 @@
 
 
 
-<div class="container border" style="">
-	<div class="row border">
-    	<div class="col-md-8">
+<div class="container border" style="padding-left: 15%;">
+	<div class=" container row" >
+    	<div class="col-md-8 border">
 	        <h1 class="entry-title"><span>자료 등록</span> <img src="<%= request.getContextPath()%>/resources/img/BWFile.jpg">  <small> 자료관리 > 자료등록</small> </h1>
 	        <hr>
 	    <!-- 도서 등록시 필요한 도서 등록 폼 추가 -->    
         <form class="form-horizontal" name="signup" enctype="multipart/form-data" >
         
 	        <div class="form-group">
-	          <label class="control-label col-sm-3">도서명 <span class="text-danger">*</span></label>
-	          <div class="col-md-8 col-sm-9">
-	          	<div class="input-group">
-		              <span class="input-group-addon"><i class=""></i></span>
-		              <input type="text" class="form-control" name="title" id="title" placeholder="도서명을 적어주세요" value="">
-		        </div>
-	            <small> 원서의 경우 영어로 적어주세요.</small> 
-	          </div>
+	        	<label class="control-label col-sm-3">도서명 <span class="text-danger">*</span></label>
+	          	<div class="col-md-8 col-sm-9">
+	          		<div class="input-group">
+		              	<span class="input-group-addon"><i class=""></i></span>
+		              	<input type="text" class="form-control" name="title" id="title" placeholder="도서명을 적어주세요" value="">
+		        	</div>
+	            	<small> 원서의 경우 영어로 적어주세요.</small> 
+	          	</div>
 	        </div>
         
         	<!-- 도서 등록시 도서 작가 추가 -->
@@ -343,24 +343,22 @@
         	<!-- 도서 등록시 도서 언어 추가 -->
 	        <div class="form-group">
 	        	<label class="control-label col-sm-3">  언어  <span class="text-danger">*</span></label>
-					<div class="col-md-8 col-sm-9">
-					    <select id="lcode_fk" name="lcode_fk" class="custom-select" style="width: 200px;">
-						    <option value="" selected>언어</option>
-						    <option value="KR">한국어</option>
-						    <option value="EN">영어</option>
-						    <option value="JP">일본어</option>
-						    <option value="CH">중국어</option>
-						    <option value="FR">프랑스어</option>
-						    
-						</select>
-					</div>
+				<div class="col-md-8 col-sm-9">
+				    <select id="lcode_fk" name="lcode_fk" class="custom-select" style="width: 200px;">
+					    <option value="" selected>언어</option>
+					    <option value="KR">한국어</option>
+					    <option value="EN">영어</option>
+					    <option value="JP">일본어</option>
+					    <option value="CH">중국어</option>
+					    <option value="FR">프랑스어</option>
+					</select>
+				</div>
 	        </div>
 	        
 	        
 	        <!-- 도서 등록시 도서 국가분류 추가 -->
 	        <div class="form-group">
 	          	<label class="control-label col-sm-3">국가분류 <span class="text-danger">*</span></label>
-	          
 	          	<div class="col-md-8 col-sm-9">
 		            <label> <input name="ncode_fk" id="ncode_fk" type="radio" value="0" checked> 국내 </label>
 		            <label> <input name="ncode_fk" id="ncode_fk" type="radio" value="1" > 해외 </label>
@@ -370,20 +368,20 @@
 	        <!-- 도서 등록시 도서 종류 추가 -->
 	        <div class="form-group">
 	        	<label class="control-label col-sm-3">  종류  <span class="text-danger">*</span></label>
-					<div class="col-md-8 col-sm-9">
-					    <select id="ccode_fk" name="ccode_fk" class="custom-select" style="width: 200px;">
-						    <option value="" selected>종류</option>
-						    <option value="E01">수필</option>
-						    <option value="E02">에세이</option>
-						    <option value="P01">시</option>
-						    <option value="D01">사전</option>
-						    <option value="F01">동화</option>
-						    <option value="F02">소설</option>
-						    <option value="M01">잡지</option>
-						    <option value="C01">만화</option>
-						    <option value="S01">참고서</option>
-						</select>
-					</div>
+				<div class="col-md-8 col-sm-9">
+				    <select id="ccode_fk" name="ccode_fk" class="custom-select" style="width: 200px;">
+					    <option value="" selected>종류</option>
+					    <option value="E01">수필</option>
+					    <option value="E02">에세이</option>
+					    <option value="P01">시</option>
+					    <option value="D01">사전</option>
+					    <option value="F01">동화</option>
+					    <option value="F02">소설</option>
+					    <option value="M01">잡지</option>
+					    <option value="C01">만화</option>
+					    <option value="S01">참고서</option>
+					</select>
+				</div>
 	        </div>
         
         	<!-- 도서 등록시 도서 주제 추가 -->
@@ -506,17 +504,15 @@
 	       	<c:if test="${sessionScope.loginLibrarian == null}">
 	     			<!-- 도서 등록시 도서관명 추가 -->
 		       	<div class="form-group">
-		       		<label class="control-label col-sm-3">도서관명 <span class="text-danger">*</span></label>
+	       		<label class="control-label col-sm-3">도서관명 <span class="text-danger">*</span></label>
 		          	<div class="col-md-5 col-sm-8">
-		          	<select id='libCode' name='libCode' class='custom-select' style='width: 200px;'>
-		          		
-		          	</select>
+			          	<select id='libCode' name='libCode' class='custom-select' style='width: 200px;'></select>
 		          	</div>
 		        </div>
 	       	</c:if>
 	        <!-- 사서일때는 hidden 타입으로  -->
 	       	<c:if test="${sessionScope.loginLibrarian != null}">
-	     			<!-- 도서 등록시 도서관명 추가 -->
+	     		<!-- 도서 등록시 도서관명 추가 -->
 		       	<div class="form-group">
 		          	<input type="hidden" id='libCode' name='libCode' class='custom-select' style='width: 200px;'/>
 		        </div>
@@ -543,15 +539,11 @@
 			
         	</form>
         	
-        	
         	<div class="form-group">
 	          	<div class="col-xs-offset-3 col-xs-10">
 	            	<button type="button" id="Submit" class="btn btn-primary">등록</button>  
 	          	</div>
 	        </div>
-         
-      	
    	 	</div>
 	</div>
-	
 </div>
