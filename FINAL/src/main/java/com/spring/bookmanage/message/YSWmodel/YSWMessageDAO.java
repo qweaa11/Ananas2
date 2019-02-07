@@ -32,6 +32,15 @@ public class YSWMessageDAO implements InterYSWMessageDAO {
 	}
 
 
+	// 메세지 보내기
+	@Override
+	public int sendMessage(HashMap<String, String> paraMap) {
+
+		int result = sqlsession.insert("YSW.sendMessage", paraMap);
+		return result;
+	}
+
+
 	
 
 }

@@ -459,4 +459,12 @@
 	</select>
 	
 	
+	<insert id="sendMessage" parameterType="HashMap">
+	
+		insert into message (idx, tartgetid, sender, message, senddate, deltarget, delsend, title)
+		values(message_seq.nextval, #{recipientID}, #{loginLibrarian}, #{message}, sysdate, 0, 0, #{messageTitle})
+	
+	</insert>
+	
+	
 </mapper>

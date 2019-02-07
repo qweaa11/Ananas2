@@ -28,7 +28,7 @@ label {
   display: inline-block;
 }
 
-input[type=submit] {
+input[type=button] {   
   background-color: #4CAF50;
   color: white;
   padding: 12px 20px;
@@ -83,7 +83,8 @@ input[type=submit]:hover {
   clear: both;
 }
 
-/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+
+
 @media screen and (max-width: 550px) {
   .col-20, .col-70, input[type=submit] {
     width: 80%;
@@ -108,7 +109,24 @@ input[type=submit]:hover {
 			findRecipient(libname);
 			
 		});
-	});
+		
+		$("#sendMessage").click(function(){
+			
+			var loginLibrarian = "${sessionScope.loginLibrarian.libid}";
+			
+			var frm = document.messageFrm;
+			frm.library.value = $("#library").val();
+			frm.loginLibrarian.value = loginLibrarian;
+			frm.recipient.value = $("#recipient").val();
+			frm.messageTitle.value = $("#messageTitle").val();
+			frm.message.value = $("#message").val();
+			frm.action = "sendMessage.ana";
+			frm.method = "POST";
+			frm.submit();
+		});
+	
+		
+	});// end of 
 	
 	function findRecipient(libname) {
 		
@@ -123,6 +141,10 @@ input[type=submit]:hover {
 			success: function(json){
 				
 				var recipientList = "";
+				/* var libname = "";
+				var position = "";
+				var name = "";
+				var librarianid = ""; */
 				
 				$.each(json, function(entryIndex, entry){
 					
@@ -155,80 +177,89 @@ input[type=submit]:hover {
   <h2>메세지</h2>
 
   <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="tab" href="#sendMessage">메세지 보내기</a></li>
+    <li class="active"><a data-toggle="tab" href="#sendMessageFrm">메세지 보내기</a></li>
     <li><a data-toggle="tab" href="#receiveMessage">받은 메세지</a></li>
     <li><a data-toggle="tab" href="#mailbox">보낸 메세지</a></li>
   </ul>
 
   <div class="tab-content">
-    <div id="sendMessage" class="tab-pane fade in active">
+    <div id="sendMessageFrm" class="tab-pane fade in active">
     	<h3></h3>
 	    <div class="panel panel-primary">
 	    	<div class="panel-heading">
 			</div>
 	    	<div class="panel-body">
-	    		<form action="/action_page.php">
-	    			<div class="row">
-					    <div class="col-10">
-					      <label for="country">도서관</label>
-					    </div>
-					    <div class="col-30">
-					      <select id="library" name="library">
-					      	<c:forEach var="library" items="${libraryName}">
-					      		<option value="${library.LIBNAME}">${library.LIBNAME}</option>
-					      	</c:forEach>
-					      </select>
-					    </div>
-				  	</div>
-				  	
-					<div class="row">
-					  <div class="col-10">
-					    <label for="lname">사서 아이디</label>
-					  </div>
-					  <div class="col-30">
-					    <select id="recipient" name="recipient">
-					    </select>
-					  </div>
-					</div>
-					
-					<div class="row">
-				    	<div class="col-10">
-				      		<label for="fname">제목</label>
-				    	</div>
-					    <div class="col-30">
-					    	<input type="text" id="mailTitle" name="mailTitle" placeholder="제목">
-					    </div>
-				  	</div>
-					
-					<div class="row">
-					  <div class="col-20">
-					    <label for="subject">내용</label>
-					  </div>
-					  <div class="col-70">
-					    <textarea id="message" name="message" placeholder="보낼 메세지 내용..." style="height:200px"></textarea>
-					  </div>
-					</div>
-					
-					<div class="row">
-					  <input type="submit" value="Submit" on>
-					</div>
-				</form>
+	   			<div class="row">
+				    <div class="col-10">
+				      <label for="country">도서관</label>
+				    </div>
+				    <div class="col-30">
+				      <select id="library" name="library">
+				      	<c:forEach var="library" items="${libraryName}">
+				      		<option value="${library.LIBNAME}">${library.LIBNAME}</option>
+				      	</c:forEach>
+				      </select>
+				    </div>
+			  	</div>
+			  	
+				<div class="row">
+				  <div class="col-10">
+				    <label for="lname">사서 아이디</label>
+				  </div>
+				  <div class="col-30">
+				    <select id="recipient" name="recipient">
+				    </select>
+				  </div>
+				</div>
+				
+				<div class="row">
+			    	<div class="col-10">
+			      		<label for="fname">제목</label>
+			    	</div>
+				    <div class="col-30">
+				    	<input type="text" id="messageTitle" name="messageTitle" placeholder="제목">
+				    </div>
+			  	</div>
+				
+				<div class="row">
+				  <div class="col-20">
+				    <label for="subject">내용</label>
+				  </div>
+				  <div class="col-70">
+				    <textarea id="message" name="message" placeholder="보낼 메세지 내용..." style="height:200px"></textarea>
+				  </div>
+				</div>
+				
+				<div class="row">
+				  <input type="button" id="sendMessage" name="sendMessage" value="보내기" />
+				</div>
 			</div>
+			
+			<form name="messageFrm">
+				<input type="hidden" name="library" value=""/>
+				<input type="hidden" name="loginLibrarian" value=""/>
+				<input type="hidden" name="recipient" value=""/>
+				<input type="hidden" name="messageTitle" value=""/>
+				<input type="hidden" name="message" value=""/>
+			</form>
 	    </div>
     </div>
+    
+
+    
     
     <div id="receiveMessage" class="tab-pane fade">
     	<h3></h3>
 	    <div class="panel panel-primary">
-	    	<div class="panel-heading">Panel with panel-primary class</div>
+	    	<div class="panel-heading">${sessionScope.loginLibrarian.libid}님의 받은 메세지</div>
 	    	<div class="panel-body">Panel Content</div>
 	    </div>
     </div>
     
     <div id="mailbox" class="tab-pane fade">
     	<h3></h3>
-	    <div class="panel panel-primary">
-	    	<div class="panel-heading">Panel with panel-primary class</div>
+	    <div class="panel panel-primary">    
+	    	<div class="panel-heading">${sessionScope.loginLibrarian.libid}님의 보낸 메세지</div>
 	    	<div class="panel-body">Panel Content</div>
 	    </div>
     </div>

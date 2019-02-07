@@ -215,7 +215,7 @@
 						            colorByPoint: true,
 						            data: bookObjArr   // **** 위에서 구한값을 대입시킴. ****
 						        }],  
-						        drilldown: { 
+						        drilldown: {
 						        	series: bookObjDetailArr  // **** 위에서 구한값을 대입시킴. ****
 
 						        }  

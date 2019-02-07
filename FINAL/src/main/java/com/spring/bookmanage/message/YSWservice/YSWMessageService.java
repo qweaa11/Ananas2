@@ -33,5 +33,14 @@ public class YSWMessageService implements InterYSWMessageService {
 	}
 
 
+	// 메세지 보내기
+	@Override
+	public int sendMessage(HashMap<String, String> paraMap) {
+
+		int result = dao.sendMessage(paraMap);
+		return result;
+	}
+
+
 	
 }
