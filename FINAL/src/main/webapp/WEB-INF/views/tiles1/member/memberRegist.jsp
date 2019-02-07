@@ -71,17 +71,17 @@
 		
 		$("#memberid").focus();
 		
-		$(".showResult").hide();
+		$(".showResult").hide(); // 유효성 검사 결과를 모두 감춰준다.
 			
 		$(".form-control").each(function(){
 				
 			$(this).blur(function(){
 					
-				var data = $(this).val().trim();
+				var data = $(this).val().trim(); // 포커스가 되어있는 곳의 값을 공백제거후 저장해온다.
 					
 				if(data == "") {
 					
-					var btn = document.getElementById('registUser');
+					var btn = document.getElementById('registUser'); // 공백값이 있을경우 버튼을 비활성화 시킨다.
 					btn.disabled = 'disabled';
 
 					$(":input").attr("disable", true).addClass("hold");
@@ -200,7 +200,7 @@
 		});// end of $(".form-control").each(function()-----------
 				
 				
-		$("#post").click(function(){
+		$("#post").click(function(){// 우편번호를 클릭하면 다음지도 찾기 앱을 불러온다.
 				
 			new daum.Postcode({
 				oncomplete: function(data) {
@@ -263,6 +263,7 @@
 	// 멤버 등록가기
 	function memberRegist() {
 		
+		// 인풋 태그에 기입 된 모든 값을 가져온다.
 		var memberid = $.trim($("#memberid").val());
 		var email = $.trim($("#email").val());
 		var pwd = $.trim($("#pwd").val());
@@ -271,7 +272,7 @@
 		var birth = $.trim($("#birth").val());
 		var post = $.trim($("#post").val());
 		
-		
+		// 인풋 태그에 기입 된 값이 공백이 없는 경우 회원 등록을 한다.
 		if( memberid != "" &&
 			email != "" &&   
 			pwd != "" &&
@@ -293,7 +294,7 @@
 	}
 
 	
-	$(function() {
+	$(function() { // 생년월일 등록 페이지에 사용 되는 데이터 피커의 설정
 		  $("#birth").datepicker({
 		    dateFormat: 'yymmdd',
 		    prevText: '이전 달',
@@ -332,7 +333,7 @@
           <small style="color: red;">*</small><small> ID는 반드시 중복체크를 해주셔야 합니다! </small><br/>
           <small class="showResult" id="available" style="color: green; font-weight: bold;"> 사용가능한 아이디 입니다. </small>
           <small class="showResult" id="unAvailable" style="color: red; font-weight: bold;"> 이미 사용중인 아이디 입니다.</small>
-          <small class="showResult" id="idGuidLine" style="color: red; font-weight: bold;"> 아이디는 영문, 숫자의 조합으로 6자이상 12자이하로 만들어주세요.</small>
+          <small class="showResult" id="idGuidLine" style="color: red; font-weight: bold;"> 아이디는 영문, 숫자로 6자이상 12자이하로 만들어주세요.</small>
          </div>
        </div>
         

@@ -93,6 +93,63 @@ input[type=submit]:hover {
 </style>
 
 
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		var libname =  $("#library").val();
+		//console.log(libname);
+		findRecipient(libname);
+		
+		$("#library").change(function(){
+			
+			var libname =  $("#library").val();
+			//console.log(libname);
+			findRecipient(libname);
+			
+		});
+	});
+	
+	function findRecipient(libname) {
+		
+		var form_data = {"libname":libname}
+		
+		$.ajax({
+			
+			url:"findRecipient.ana",
+			type:"GET",
+			data:form_data,
+			dataType:"JSON",
+			success: function(json){
+				
+				var recipientList = "";
+				
+				$.each(json, function(entryIndex, entry){
+					
+					if(json.length != 0){
+						
+						recipientList += "<option>"+entry.POSITION+" -- "+entry.NAME+"["+entry.LIBRARIANID+"]"+"</option>";
+						
+					}
+					else {
+						
+						recipientList = "해당 도서관에 등록 된 사서및 관리자가 없습니다.";
+					}
+					
+					$("#recipient").html(recipientList);
+					
+				});
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			} // error
+		});
+	}
+
+</script>
+
+
 
 <div class="container">
   <h2>메세지</h2>
@@ -117,8 +174,8 @@ input[type=submit]:hover {
 					    </div>
 					    <div class="col-30">
 					      <select id="library" name="library">
-					      	<c:forEach var="infoList" items="${basicInfoList}">
-					      		<option>${infoList.LIBNAME}</option>
+					      	<c:forEach var="library" items="${libraryName}">
+					      		<option value="${library.LIBNAME}">${library.LIBNAME}</option>
 					      	</c:forEach>
 					      </select>
 					    </div>
@@ -129,11 +186,8 @@ input[type=submit]:hover {
 					    <label for="lname">사서 아이디</label>
 					  </div>
 					  <div class="col-30">
-					    <select id="library" name="library">
-					      	<c:forEach var="infoList" items="${basicInfoList}">
-					      		<option>${infoList.NAME}[${infoList.LIBRARIANID}] *${infoList.LIBNAME}*</option>
-					      	</c:forEach>
-					      </select>
+					    <select id="recipient" name="recipient">
+					    </select>
 					  </div>
 					</div>
 					
@@ -156,7 +210,7 @@ input[type=submit]:hover {
 					</div>
 					
 					<div class="row">
-					  <input type="submit" value="Submit">
+					  <input type="submit" value="Submit" on>
 					</div>
 				</form>
 			</div>

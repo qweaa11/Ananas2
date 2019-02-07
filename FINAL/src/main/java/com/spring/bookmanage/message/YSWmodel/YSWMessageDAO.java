@@ -13,12 +13,25 @@ public class YSWMessageDAO implements InterYSWMessageDAO {
 	@Autowired
 	private SqlSessionTemplate sqlsession;
 
-	
-	@Override
-	public List<HashMap<String, String>> findBasicInfo() {
 
-		List<HashMap<String, String>> basicInfoList = sqlsession.selectList("YSW.findBasicInfo");
-		return basicInfoList;
+	// 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기
+	@Override
+	public List<HashMap<String, String>> findLibrary() {
+
+		List<HashMap<String, String>> libraryName = sqlsession.selectList("YSW.findLibrary");
+		return libraryName;
 	}
+
+
+	// 해당 도서관에 소속 된 관리자, 사서 보여주기 
+	@Override
+	public List<HashMap<String, Object>> findRecipientList(String libname) {
+		
+		List<HashMap<String, Object>> recipientList = sqlsession.selectList("YSW.findRecipientList", libname);
+		return recipientList;
+	}
+
+
+	
 
 }

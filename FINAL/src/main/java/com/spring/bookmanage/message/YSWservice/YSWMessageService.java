@@ -15,10 +15,23 @@ public class YSWMessageService implements InterYSWMessageService {
 	private InterYSWMessageDAO dao;
 
 	
+	// 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기
 	@Override
-	public List<HashMap<String, String>> findBasicInfo() {
-		
-		List<HashMap<String, String>> basicInfoList = dao.findBasicInfo();
-		return basicInfoList;
+	public List<HashMap<String, String>> findLibrary() {
+
+		List<HashMap<String, String>> libraryName = dao.findLibrary();
+		return libraryName;
 	}
+
+
+	// 해당 도서관에 소속 된 관리자, 사서 보여주기 
+	@Override
+	public List<HashMap<String, Object>> findRecipientList(String libname) {
+
+		List<HashMap<String, Object>> recipientList = dao.findRecipientList(libname);
+		return recipientList;
+	}
+
+
+	
 }
