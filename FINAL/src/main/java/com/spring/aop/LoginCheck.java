@@ -1,4 +1,4 @@
-package com.spring.bookmanage.JDSaop;
+package com.spring.aop;
 
 import java.io.IOException;
 
@@ -23,11 +23,11 @@ import com.spring.bookmanage.common.MyUtil;
 public class LoginCheck {
 	
 	// ===== Pointcut 을 생성한다. =====
-	@Pointcut("execution(public * com.spring..*Controller.requireLogin_*(..))")
-	public void requireLogin() {}
+	@Pointcut("execution(public * com.spring.bookmanage..*Controller.*(..))")
+	public void required() {}
 		
 	// === Before Advice 선언 및 Before Advice 내용 구현하기
-	@Before("requireLogin()")
+	@Before("required()")
 	public void before(JoinPoint joinPoint) {
 		// JoinPoint joinPoint는 포인트멋되어진 주업무의 메소드이다.
 		
@@ -37,33 +37,12 @@ public class LoginCheck {
 		
 		HttpServletResponse response = (HttpServletResponse)joinPoint.getArgs()[1];
 		
-		if(session.getAttribute("loginLibrarian") == null) {
+		
+		if(session.getAttribute("loginLibrarian") == null && session.getAttribute("loginAdmin") == null) {
 			// 해당 요청자가 로그인을 하지 않은 상태이라면 로그인 하는 페이지로 이동시키겠다.
 			try {
 				String msg ="먼저 로그인 하세요~~!";
-				String loc = request.getContextPath()+"/FINAL/login.ana";
-				request.setAttribute("msg", msg);
-				request.setAttribute("loc", loc);
-				
-				// >>> 로그인 성공 후 로그인 하기전 페이지로 돌아가는 작업하기 <<<
-				// ===>>> 현재 페이지 주소(URL) 알아내기 <<<===
-				String url = MyUtil.getCurrentURL(request);
-				
-				session.setAttribute("gobackURL", url);
-				// 세션에 url 값을 저장해준다.
-				
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msg.jsp");
-				dispatcher.forward(request, response);
-			} catch (ServletException | IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-		else if(session.getAttribute("loginAdmin") == null) {
-			// 해당 요청자가 로그인을 하지 않은 상태이라면 로그인 하는 페이지로 이동시키겠다.
-			try {
-				String msg ="먼저 로그인 하세요~~!";
-				String loc = request.getContextPath()+"/FINAL/login.ana";
+				String loc = request.getContextPath()+"/login.ana";
 				request.setAttribute("msg", msg);
 				request.setAttribute("loc", loc);
 				

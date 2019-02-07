@@ -36,7 +36,7 @@ public class YMHReturnedController
 	
 	// 도서 반납 목록 창 요청
 	@RequestMapping(value="/bookReturned.ana",method= {RequestMethod.GET})
-	public String bookReturned()
+	public String bookReturned(HttpServletRequest request,HttpServletResponse response)
 	{
 		return "returned/bookReturned.tiles1";
 	}// end of String bookReturned()------------------------------------------------------------------------------

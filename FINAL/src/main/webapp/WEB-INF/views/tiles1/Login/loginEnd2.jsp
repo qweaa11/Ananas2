@@ -12,9 +12,6 @@
 		location.href="<%=ctxPath%>/index.ana";
 	}
 	
-	if(loginAdmin != null && loginAdmin != "" && (gobackURL != null && gobackURL != "")) {
-		alert("로그인 성공 !!");
-		location.href=gobackURL;
-	}
+	
 </script>
     

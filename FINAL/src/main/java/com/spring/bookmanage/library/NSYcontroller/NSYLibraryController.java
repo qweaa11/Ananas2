@@ -43,7 +43,6 @@ public class NSYLibraryController {
 		
 	}// end of resisterLibrary()
 	
-	
 	//==== 도서관등록 완료하기 ====
 	@RequestMapping(value="/resisterLibraryEnd.ana", method={RequestMethod.POST})
 	public String resisterLibraryEnd(MultipartHttpServletRequest req, HttpServletResponse res, NSYLibraryVO libraryvo) {
@@ -63,20 +62,22 @@ public class NSYLibraryController {
 		libraryvo.setAddr2(addr2);
 		libraryvo.setY(y);
 		libraryvo.setX(x);
-		
+
 		MultipartFile imgFile = libraryvo.getImgFile();
-		
+	
 		String newFileName="";
 		
 		byte[] bytes = null;
 		
 		long fileSize= 0;
 		
-		if(!imgFile.isEmpty()) { 
+		//단일파일
+		if(!imgFile.isEmpty()) {
 			// imgFile(첨부파일) 있는경우 
 			String path = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\resources\\NSYfiles";
 			
 			try {
+				
 				bytes = imgFile.getBytes();
 				
 				newFileName = fileManager.doFileUpload(bytes, imgFile.getOriginalFilename(), path);
@@ -123,7 +124,7 @@ public class NSYLibraryController {
 	
 	//==== 도서관목록페이지 보여주기 (페이징,검색 가능) ====
 	@RequestMapping(value="/libraryList.ana", method={RequestMethod.GET})
-	public String libraryList(HttpServletRequest req) {
+	public String libraryList(HttpServletRequest req, HttpServletResponse res) {
 		
 		return "library/NSYlibraryList.tiles1";
 		
@@ -241,7 +242,7 @@ public class NSYLibraryController {
 	
 	// ==== 도서관정보 수정 완료 하기 ====
 	@RequestMapping(value="/editLibraryInfoEnd.ana", method= {RequestMethod.POST})
-	public String editLibraryInfoEnd(HttpServletRequest req, HttpServletResponse res, NSYLibraryVO libraryvo) {
+	public String editLibraryInfoEnd(MultipartHttpServletRequest req, HttpServletResponse res, NSYLibraryVO libraryvo) {
 		
 		String idx = req.getParameter("idx");
 		String libname = req.getParameter("libname");

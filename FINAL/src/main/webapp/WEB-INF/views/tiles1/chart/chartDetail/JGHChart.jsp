@@ -1,28 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<style type="text/css">
-
-	#menu2 {
-		width: 100px;
-		height: 100px;
-		background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* Chrome 10+, Saf5.1+ */
-		background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* FF3.6+ */
-		background: -ms-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* IE10 */
-		background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-		/* Opera 11.10+ */
-		background: linear-gradient(90deg, #16222A 10%, #3A6073 90%); /* W3C */
-		font-family: 'Raleway', sans-serif;
-	}
-
-</style>
+<link rel="stylesheet" type="text/css" href="resources/css/jghChartStyle.css"/>
 
 <script type="text/javascript">
 
 	$(document).ready(function () {
+		
 		Highcharts.chart('field', {
 		    chart: {
 		        type: 'column'
@@ -72,27 +56,27 @@
 		    },
 		    series: [{
 		        name: '강남도서관',
-		        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0]
+		        data: [15.9, 71.5, 40.4, 32.2, 90.0, 26.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '을지로도서관',
-		        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5]
+		        data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '당산도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '김포도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '부산도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 
 		    }, {
 		        name: '성남도서관',
-		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0]
+		        data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 		    }]
 		});
 	});
@@ -101,8 +85,43 @@
 </script>
 
 <div>
+	<div class="col-xs-12">
+	
+		<div class="col-xs-6">
+			기간
+		</div>
+		
+		<div class="col-xs-6">
+			카테고리
+		</div>
+	
+		<div class="col-xs-6">
+		
+			<a class="btn btn-warning btn-select btn-select-light">
+				<input type="hidden" class="btn-select-input" id="termval" name="term" value="0" />
+				<span class="btn-select-value">2019년</span>
+				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
+				<ul id="term">
+				</ul>
+			</a>
+			 
+		</div>
+		
+		<div class="col-xs-6">
+			<a class="btn btn-warning btn-select btn-select-light">
+				<input type="hidden" class="btn-select-input" id="" name="" value="0" />
+				<span class="btn-select-value">퍼센티지</span>
+				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
+				<ul>
+					<li value="0">퍼센티지</li>
+					<li value="1">권수</li>
+				</ul>
+			</a>
+		</div>
+	
+	</div>
 
-	<div id="field" style="min-width: 310px; height: 400px; margin: 0 auto;">
+	<div id="field" style="margin: 0 auto; border-radius: 5px; clear: both;">
 	</div>
 	
 </div>

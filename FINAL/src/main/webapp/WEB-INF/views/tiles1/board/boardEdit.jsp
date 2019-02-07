@@ -35,9 +35,6 @@
 	#table {border-collapse: collapse;
 	 		width: 1000px;
 	 		}
-	/* #table th, #table td{padding: 5px;}
-	#table th{width: 120px; background-color: #DDDDDD;}
-	#table td{width: 860px;} */
 	.long {width: 470px;}
 	.short {width: 120px;} 	
 
@@ -145,10 +142,10 @@
 	</div>
 	
 	<form name="editFrm">
-		<input type="text" name="idx" value="${boardvo.idx}"/>
-		<input type="text" name="subject"/>
-		<input type="text" name="content"/>
-		<input type="text" name="pw"/>
+		<input type="hidden" name="idx" value="${boardvo.idx}"/>
+		<input type="hidden" name="subject"/>
+		<input type="hidden" name="content"/>
+		<input type="hidden" name="pw"/>
 	</form>
 		
 	<br/>

@@ -71,7 +71,7 @@ public class YSWController {
 	
 	//===== 회원등록 =====
 	@RequestMapping(value="/memberRegistEnd.ana", method= {RequestMethod.POST})
-	public String memberRegistEnd(MultipartHttpServletRequest req, HttpServletResponse res, YSWMemberVO membervo) {
+	public String memberRegistEnd(HttpServletRequest req1, HttpServletResponse res, MultipartHttpServletRequest req, YSWMemberVO membervo) {
 		
 		int result = 0;
 		
@@ -219,17 +219,18 @@ public class YSWController {
 		
 		int totalCount = 0;
 		
+		//페이징 처리를 위해서 사서수 가져오기
 		if(searchWord != null && !searchWord.trim().equals("") && !searchWord.equalsIgnoreCase("null")) {
 			
 			HashMap<String, String> paraMap = new HashMap<String, String>();
 			paraMap.put("sort", sort);
 			paraMap.put("searchWord", searchWord);
 			
-			totalCount = service.totalCounttWithOption(paraMap);
+			totalCount = service.totalCounttWithOption(paraMap); //검색어가 있을때 검색어에 따른 사서 수
 		}
 		else {
 			
-			totalCount = service.totalNoneOption();
+			totalCount = service.totalNoneOption(); //검색어가 없을때 사서 수
 			
 		}
 		

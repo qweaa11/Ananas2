@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.plaf.synth.SynthSeparatorUI;
 
@@ -42,7 +43,7 @@ public class YjkController {
 	
 	// ==== 관리자 등록 페이지 보여주기 ==== //
 	@RequestMapping(value="/librarianRegist.ana",method= {RequestMethod.GET})
-	public String librarianRegist(HttpServletRequest req) {
+	public String librarianRegist(HttpServletRequest req, HttpServletResponse response) {
 
 		List<LibraryVO> libInfo = service.getliblibrary();
 		
@@ -82,7 +83,7 @@ public class YjkController {
 	
 	// ==== 관리자 등록하기 ==== //
 	@RequestMapping(value="/librarianRegistEnd.ana",method= {RequestMethod.POST})
-	public String adminRegistEnd(MultipartHttpServletRequest req, YjkVO adminvo) {
+	public String adminRegistEnd(MultipartHttpServletRequest req,HttpServletResponse response, YjkVO adminvo) {
 		
 		int n = 0;
 		
@@ -174,7 +175,7 @@ public class YjkController {
 	// ==== 아이디 중복체크 ==== //
 	@RequestMapping(value="/idDuplicateCheck.ana",method= {RequestMethod.GET})
 	@ResponseBody
-	public HashMap<String, Integer> idDuplicateCheck(HttpServletRequest req) {
+	public HashMap<String, Integer> idDuplicateCheck(HttpServletRequest req,HttpServletResponse response) {
 		
 		String libid = req.getParameter("libid");
 		

@@ -173,6 +173,7 @@ p{margin:3px;}
 						                    "<p><span style='color: #004080; font-weight: bold;'>휴대폰 : "+ entry.LIBRARIANTEL+"</span></p>"+
 						                    "<p class'text-muted'><span style='color: #004080; font-weight: bold;'>아이디 : "+entry.LIBID+"</span></p>"+
 						                "</div>"+
+						                //앵커태그의 버튼을 클릭하면 해당 사서의 정보를 모달 창으로 띄워주기 위해서 앵커태그를 클릭 할 때 해당 사서의 정보를 담아서 보내 주도록 한다. 
 						                "<a class='btn btn-primary btn-xs btn-update btn-add-card updateInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#updateInfo'>Update Info.</a>"+
 						                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
 						             "</div>"+
@@ -213,12 +214,15 @@ p{margin:3px;}
 	// 해당 사서의 카드에서 업데이트 버튼을 누르면 보여줄 상세 정보를 넘겨주기
 	$(document).on("click", ".updateInfo", function() {
 		
+		 // data-personal에 담겨져있는 정보를 담아온다.
 	     var personalInfo = $(this).data('personal');
 	     
 	     var infoSpliter = personalInfo.split(',');   
 	     
-	     for(var i in infoSpliter){
+	     // 분리해온 정보를 담아서 modal-body 안으로 값을 넣어준다. 
+	     for(var i in infoSpliter){// 그중 7번째 값은 이미지 파일의 파일명이 들어있다.
 	    	if(i == 6){
+	    		// 이미 파일의 경로+파일명을  faceImgInUpdate 아이디를 가진 src 에 넣어준다. 
 				$(".modal-body #faceImgInUpdate").attr("src", "resources/librarian/"+infoSpliter[i]);
 			}else{
 				$(".modal-body .personalInfo"+i+"").val(infoSpliter[i]);
@@ -256,8 +260,9 @@ p{margin:3px;}
 	function goUpdate() {
 		
 		var finalconfirm = prompt( '관리자 암호를 넣어주세요', '비밀번호' );
+		//prompt 를 통해서  alert 형식으로 문장을 띄워주고 입력한 비밀번호를 받아온다.
 		
-		if(finalconfirm == "qwer1234") {
+		if(finalconfirm == "qwer1234") { // 입력한 비밀번호가 특정값과 일치하는지 검사하고 작업을 실행
 			
 			confirm("정말 정보 수정을 진행하시겠습니까?");
 			

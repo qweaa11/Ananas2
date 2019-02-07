@@ -63,7 +63,7 @@
 									});	// end of $.each(json2, function(entryIndex2, entry2){  --------------  
 				
 									bookObjDetailArr.push({
-										"name": entry.CNAME,
+										"name": entry.CNT+"권",
 										"id": entry.CNAME,
 										"data": subArr
 									});

@@ -55,8 +55,7 @@
 						</c:if>
 
 						<c:if test="${sessionScope.loginAdmin != null}">
-							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginAdmin.adminid}(${sessionScope.loginAdmin.name})[관리자]</li>
-							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginAdmin.adminid}[관리자]</li>
+							<li style="color: #ffffff; margin-top: 15px;">${sessionScope.loginAdmin.adminid}(${sessionScope.loginAdmin.name})</li>
 						</c:if>
 						
 						<li><a href="schedulerRun.ana">스케줄러실행<i class="glyphicon glyphicon-hourglass"></i></a></li>
@@ -145,7 +144,16 @@
 						<span style="margin-left: 10px;">사서게시판</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
 							<li><a href="noticeList.ana">공지 게시판</a></li>
-							<li><a href="board.ana">자유 게시판</a></li>
+							<li><a href="boardList.ana">자유 게시판</a></li>
+						</ul>       
+					</li>
+					
+					<li class="dropdown" style="margin-left: 15px;"> 
+						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
+						<img src="resources/img/home-logo/home-logo7.png">
+						<span style="margin-left: 10px;">쪽지</span><span class="caret" style="margin-left: 3px;"></span></a>  
+						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
+							<li><a href="messageForm.ana">발신/수신/보관함</a></li>
 						</ul>       
 					</li>
 	                

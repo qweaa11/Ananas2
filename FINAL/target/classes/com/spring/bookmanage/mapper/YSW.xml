@@ -385,7 +385,6 @@
 	
 	
 	<resultMap type="HashMap" id="rentalChartGender">
-		<!-- set 다음에 나오는 이름을 쓴다! -->
 		<result property="CNT" column="CNT" javaType="String"/>
 		<result property="PERCENTAGE" column="PERCENTAGE" javaType="String"/>
 		<result property="GENDER" column="GENDER" javaType="String"/>
@@ -420,6 +419,44 @@
 	
 	</select>
 	
+	
+	<!-- 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기 맵 -->
+	<resultMap type="HashMap" id="libraryMap">
+		<result property="LIBNAME" column="libname" javaType="String"/>
+	</resultMap>
+	
+	<!-- 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기  -->
+	<select id="findLibrary" resultMap="libraryMap">
+	
+		select libname
+		from library
+	
+	</select>
+	
+	
+	<!-- 해당 도서관에 소속 된 관리자, 사서 보여주기 맵 -->
+	<resultMap type="HashMap" id="basicInfoMap">	
+		<result property="LIBRARIANNUM" column="librarianNum" javaType="String"/>
+		<result property="LIBRARIANID" column="librarianId" javaType="String"/>
+		<result property="NAME" column="name" javaType="String"/>
+		<result property="POSITION" column="position" javaType="String"/>
+		<result property="EMAIL" column="email" javaType="String"/>
+		<result property="LIBNAME" column="libname" javaType="String"/>		
+	</resultMap>
+	
+	<!-- 해당 도서관에 소속 된 관리자, 사서 보여주기  -->
+	<select id="findRecipientList" parameterType="String" resultMap="basicInfoMap">
+	
+		select A.idx as librarianNum
+		      ,libid as librarianId
+		      ,name
+		      ,case when status in 0 then '사서' else '관리자' end as position
+		      ,email ,libname
+		from librarian A JOIN library B
+		on A.libcode_fk  = B.libcode
+		where libname = #{libname}
+	
+	</select>
 	
 	
 </mapper>

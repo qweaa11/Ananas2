@@ -42,7 +42,7 @@ public class BSBLoginCheck {
 			// 로그인 하는 페이지로 이동 시키겠다.
 			try {
 				String msg = "먼저 로그인 하세요..";
-				String loc = request.getContextPath()+"/login.action";
+				String loc = request.getContextPath()+"/login.ana";
 				request.setAttribute("msg", msg);
 				request.setAttribute("loc", loc);
 				

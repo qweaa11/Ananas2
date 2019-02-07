@@ -62,18 +62,7 @@
 	
 		if(${boardvo.commentCount > 0}) {
 			goViewReply("1"); // 초기치 설정(최신의 댓글을 최대 5개 까지 보여주겠다. 즉, 1페이지를 보여주겠다.)
-		}
-		
-		
-		
-		/* if(${boardvo.commentCount > 0}) {
-			$(".commentContent").show();
-		}
-		else {
-			$(".commentContent").hide();
-		} */
-		
-		
+		}		
 
 	});// end of $(document).ready()----------------------
 	
@@ -105,23 +94,21 @@
 			data:queryString,
 			type:"POST",
 			dataType:"JSON",
-			success:function(json) { //이쪽을보고있었단말야?  success 자체가 실행이안된건데. 그런것들 주석으로 정리해두고 니가 이해못한것들
+			success:function(json) { 
 				var html = "<div>" +
 						   "<div class='col-lg-2'>"+json.NAME+"</div>"+
 						   "<div class='col-lg-7'>"+json.CONTENT+"</div>"+
 						   "<div class='col-lg-3' style='text-align: right;'>"+json.REGDATE+"</div>"+
 						   "</div>";
 				var commentCount = "<div>"+json.COMMENTCOUNT+"</div>"
-				$("#commentDisplay").prepend(html);
-				//$("#commentCount").remove(); // 새로운걸 가져오면서 이걸통해서 저걸 없애버린거고			
+				$("#commentDisplay").prepend(html);		
 				$("#commentCount").html(commentCount); //새로가져온값을 다시 넣어주는거야
 				frm.content.value = "";
-				//viewCommentCount();
 			},
-			error: function(request, status, error){ //이게먼진알아?  아작스에 에러 생기면 에러 alert? 글치 근데 넌 아까 이거계속뜨는데
+			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
-		}); // 안쓰는주석들 다지워버리고 모르겠으면 하나하나 코딩에 해석달고 ㄱㄱ 웅웅 ㅠ ㅠ 아라썽
+		}); 
 	}// end of function goAddWrite()-------------
 	
 	// ==== 댓글내용을 Ajax로 페이징 처리하여 보여주기 ====
@@ -156,7 +143,8 @@
 		});		
 		
 	}// end of function goViewReply()---------------
-	
+
+	// ==== 댓글 페이지바 ==== 
 	function makeReplyPageBar(currentShowPageNo) {	
 		
 		var form_data = {"idx":"${boardvo.idx}",
@@ -265,16 +253,16 @@
 		<div class="col-lg-12" style="float: right; margin-bottom: 2%;">
 			<!-- ==== 첨부파일 이름 및 파일크기를 보여주고 첨부파일 다운받게 만들기 ==== -->
 			<!-- <th>첨부파일</th> -->
-			<%-- <c:if test="${sessionScope.loginuser != null}"> --%>
+			<c:if test="${sessionScope.loginLibrarian != null}">
 				<c:forEach var="file" items="${attachfilevo}">
 				<img src="<%=ctxPath%>/resources/img/disc-icon.png"><a href="<%=request.getContextPath()%>/boardDownload.ana?fileidx=${file.idx}&idx=${boardvo.idx}">${file.orgfilename}</a>
 				<br/>
 				</c:forEach>
-			<%-- </c:if> --%>
+			 </c:if>
 			
-			<%-- <c:if test="${sessionScope.loginuser == null}">
+			<c:if test="${sessionScope.loginLibrarian == null}">
 				${boardvo.orgFileName}
-			</c:if> --%>
+			</c:if> 
 		</div>
 	</div>
 	<div class="Count col-lg-12" style="border: 0px solid gray; margin-bottom: 1%;">
@@ -295,8 +283,8 @@
 		<div class="col-lg-12">
 			<!-- ===== 댓글쓰기 폼 추가 ===== -->
 			<form name="addWriteFrm">     
-				<input type="hidden" name="libid_fk" value="classfor" readonly />
-				<input type="hidden" name="name" value="양정구" class="short" readonly/> 
+				<input type="hidden" name="libid_fk" value="${sessionScope.loginLibrarian.libid}" readonly />
+				<input type="hidden" name="name" value="${sessionScope.loginLibrarian.name}" class="short" readonly/> 
 				<input type="hidden" name="parentidx" value="${boardvo.idx}" />
 				<input type="hidden" name="commnetCount" value="${boardvo.commentCount}" />
 				<!-- 댓글에 달리는 원게시물 글번호(즉, 댓글의 부모글 글번호) -->

@@ -56,7 +56,7 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-warning btn-circle" data-toggle="tab" href="#menu2">
-							<span style="font-size: 20pt;">뭐함</span>
+							<span style="font-size: 20pt;">분야</span>
 						</button>
 					</div>
 					
@@ -95,7 +95,7 @@
 					<jsp:include page="./chartDetail/KGBChart.jsp"></jsp:include>
 				</div>
 				
-				<div id="menu2" class="tab-pane fade">
+				<div id="menu2" class="tab-pane fade" style="width: 100; padding: 50px;">
 					<jsp:include page="./chartDetail/JGHChart.jsp"></jsp:include>
 				</div>
 				
