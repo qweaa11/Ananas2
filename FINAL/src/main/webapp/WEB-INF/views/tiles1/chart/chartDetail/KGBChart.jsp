@@ -332,9 +332,9 @@
 </script> 
  
 <div>
-	<div class="col-xs-12">
+	<div class="col-xs-12" style="padding: 0px;">
 	
-		<div class="col-xs-6" style="color: #ffffff;">
+		<div class="col-xs-6" style="color: #ffffff; padding-left: 0px;">
 			기간
 		</div>
 		
@@ -342,9 +342,9 @@
 			데이터 타입
 		</div>
 	
-		<div class="col-xs-6">
+		<div class="col-xs-6" style="padding-left: 0px;">
 		
-			<a class="btn btn-info btn-select btn-select-light">
+			<a class="btn btn-info btn-select btn-select-light" style="min-width: 0px;">
 				<input type="hidden" class="btn-select-input" id="termval" name="term" value="0" />
 				<span class="btn-select-value">2019년</span>
 				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
@@ -354,8 +354,8 @@
 			 
 		</div>
 		
-		<div class="col-xs-6">
-			<a class="btn btn-info btn-select btn-select-light">
+		<div class="col-xs-6" style="padding-right: 0px;">
+			<a class="btn btn-info btn-select btn-select-light" style="min-width: 0px;">
 				<input type="hidden" class="btn-select-input" id="genretype" name="genretype" value="0" />
 				<span class="btn-select-value">퍼센티지</span>
 				<span class='btn-select-arrow glyphicon glyphicon-chevron-down'></span>
