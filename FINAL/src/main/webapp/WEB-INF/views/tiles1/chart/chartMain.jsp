@@ -80,6 +80,12 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu6">
+							<span style="font-size:20pt;">언어</span>
+						</button>
+					</div>
+					
+					<div class="process-step">
+						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu7">
 							<span style="font-size:20pt;">추가</span>
 						</button>
 					</div>
@@ -112,7 +118,11 @@
 				</div>
 				
 				<div id="menu6" class="tab-pane fade">
-					<jsp:include page="./chartDetail/NSYChart.jsp"></jsp:include>
+					<jsp:include page="./chartDetail/YJKChart.jsp"></jsp:include>
+				</div>
+				
+				<div id="menu7" class="tab-pane fade">
+					<jsp:include page="./chartDetail/YJKChart.jsp"></jsp:include>
 				</div>
 				
 			</div>
