@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===== mapper 기본 설정 ===== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<!-- ===== 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== --> 
+<mapper namespace="bookmanage">
+
+<resultMap type="HashMap" id="chartMap">
+	<result property="PERCENTAGE" column="percentage" javaType="String"/>
+	<result property="CNT" column="cnt" javaType="String"/>
+	<result property="LNAME" column="lname" javaType="String"/>
+</resultMap>
+
+<select id="languageBookChart" resultMap="chartMap">
+	select trunc( cnt/(select count(*) from book) * 100, 1)||'%' as percentage
+            , cnt, lname 
+		from
+		(
+		    select count(*) as CNT, L.lname as lname
+		    from book B JOIN language L
+		    on B.lcode_fk = L.lcode
+		    group by lname
+		)V
+</select>
+
+<resultMap type="HashMap" id="libchartMap">
+	<result property="PERCENTAGE" column="percentage" javaType="String"/>
+	<result property="CNT" column="cnt" javaType="String"/>
+	<result property="LIBNAME" column="libname" javaType="String"/>
+</resultMap>
+
+<select id="libBookChart" resultMap="libchartMap">
+	select trunc(cnt/(select count(*) from book)*100, 1)||'%' as PERCENTAGE
+            , cnt, libname
+	from
+	(
+		select count(*) CNT, B.libname as libname
+		from Book A JOIN library B
+		on A.libcode_fk = B.libcode
+		group by libname
+	)V
+</select>
+
+<select id="liblanguageBookChart" resultMap="chartMap">
+	select trunc(cnt/(select count(*) from book where libcode_fk = (select libcode from library where libname = #{libname}))*100, 1)||'%'as PERCENTAGE
+            , cnt, lname 
+    from
+    (
+        select count(*) as CNT, lname
+        from Book A JOIN library B
+        on A.libcode_fk = B.libcode
+        left JOIN language C
+        on A.lcode_fk = c.lcode
+        where libcode_fk in (select libcode from library where libname = #{libname}) 
+        group by lname
+    )V
+</select>
+
+
+</mapper>
