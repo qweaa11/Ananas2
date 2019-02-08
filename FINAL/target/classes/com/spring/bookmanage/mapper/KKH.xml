@@ -304,26 +304,36 @@
 		where bookid like'%'||#{BOOKID}||'%'
 	</update>
 	
+	<!-- 개별 도서정보를 update 해준다. -->
 	<update id="editIndivBookInfo" parameterType="HashMap">
 		update book_detail set  price = #{EDITPRICE}, weight=#{EDITWEIGHT}, totalpage = #{EDITTOTALPAGE}, pdate = to_date(#{EDITPDATE},'yyyy-mm-dd hh24:mi:ss')
 		where bookid  = #{BOOKID}
 	</update>
 	
+	<!-- 변경된 ISBN 값을 book테이블에서 update 해준다. -->
 	<update id="editIndivBookISBN" parameterType="HashMap">
 		update book set isbn = #{EDITISBN}
 		where bookid = #{BOOKID}
 	</update>
 	
+	<!-- 해당 도서번호를 가진 책 1개를 book_detail테이블에서 delete한다. -->
 	<delete id="deleteIndivBookDetail" parameterType="String">
 		delete from book_detail where bookid = #{bookid}
-		
 	</delete>
 	
+	<!-- 해당 도서번호를 가진 책 1개를 book 테이블에서 delete한다. -->
 	<delete id="deleteIndivBook" parameterType="String">
 		delete from book where bookid = #{bookid}
-		
 	</delete>
 	
+	<!-- 추가될 도서일련번호의 시작번호를 채번해오는 쿼리문 -->
+	<select id="findStartBookNum" parameterType="String" resultType="int">
+		select max(to_number(substr(bookid,instr(bookid,'-',1,2)+1 )) )+1 as startBookNum
+		from book
+		where bookid like '%'||#{bookid}||'%'
+	</select>
+	
+	<!-- 추가될 도서에 입력될 도서정보를 book 테이블에서 select 해오는 쿼리문  -->
 	<select id="findBookSampleList" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		select bookid,title,author,pubcode_fk,agecode,isbn,ncode_fk,lcode_fk,fcode_fk,ccode_fk,gcode_fk,libcode_fk
 		from book
@@ -331,6 +341,7 @@
 		order by to_number(substr(bookid,instr(bookid,'-',1,2))) desc
 	</select>
 	
+	<!-- 추가될 도서에 입력될 도서정보를 book_detail 테이블에서 select 해오는 쿼리문 -->
 	<select id="findBookDetailSampleList" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		select intro,image,price,weight,totalpage,pdate,regdate
 		from book_detail
@@ -338,14 +349,7 @@
 		order by to_number(substr(bookid,instr(bookid,'-',1,2))) desc
 	</select>
 	
-	
-	<select id="findStartBookNum" parameterType="String" resultType="int">
-		select max(to_number(substr(bookid,instr(bookid,'-',1,2)+1 )) )+1 as startBookNum
-		from book
-		where bookid like '%'||#{bookid}||'%'
-	</select>
-	
-	
+	<!-- 추가할 도서를 book 테이블에  insert 해주는 쿼리문 -->
 	<insert id="insertAdditionalBookInfo" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		insert into book(bookid, idx, title, author, PUBCODE_FK, STATUS, AGECODE, ISBN,
 						 NCODE_FK, LCODE_FK, FCODE_FK, CCODE_FK, GCODE_FK, LIBCODE_FK) 
@@ -353,11 +357,13 @@
 				#{lcode_fk}, #{fcode_fk},  #{ccode_fk}, #{gcode_fk}, #{libcode_fk})
 	</insert>
 	
+	<!-- 추가할 도서를 book_detail 테이블에 insert 해주는쿼리문 -->
 	<insert id="insertAdditionalBookDetailInfo" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		insert into book_detail(bookid,idx,intro,image,price,weight,totalpage,pdate,regdate)
 		values(#{bookid},bookd_seq.nextval,#{intro},#{image},to_number(#{price}),#{weight},to_number(#{totalpage}),to_date(#{pdate},'yyyy-mm-dd hh24:mi:ss'),default)
 	</insert>
 	
+	<!-- 삭제시킬 도서의 모든 정보를 가져오는 쿼리문 -->
 	<select id="deleteBookList" parameterType="String" resultType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		select B.bookid,title,author,pubcode_fk,status,agecode,isbn,libcode_fk, ncode_fk, lcode_fk, fcode_fk, ccode_fk, gcode_fk, intro,image,price,weight,totalpage,pdate,regdate
 		from book B join book_detail D
@@ -365,11 +371,14 @@
 		where B.bookid like '%'||#{bookid}||'%'
 	</select>
 	
+	<!-- delete_book 테이블에 넣을 같은책들에 모두 부여될 delid 값을 채번해오는 메소드
+		(같은 책일경우 모두 같은 delid 를 가짐) -->
 	<select id="selectDelid" resultType="int">
 		select delid_seq.nextval
 		from dual
 	</select>
 	
+	<!-- delete_book 테이블에 삭제시킨 책의 정보를 insert 해주는 쿼리문 -->
 	<insert id="insertDelete_Book" parameterType="com.spring.bookmanage.book.KKHmodel.KKHBookVO">
 		insert into delete_book(idx,bookid,title,author,pubcode,status,agecode,isbn,libcode,ncode,lcode,fcode,ccode,gcode,intro,image,price,weight,totalpage,pdate,regdate,deldate,cleanerid,delid)
 		values(delbook_seq.nextval, #{bookid}, #{title}, #{author}, #{pubcode_fk}, #{status}, #{agecode}, #{isbn}
@@ -377,12 +386,14 @@
 				,#{intro}, #{image}, #{price}, #{weight}, #{totalpage}, to_date(#{pdate},'yyyy-mm-dd hh24:mi:ss'), to_date(#{regdate},'yyyy-mm-dd hh24:mi:ss'), sysdate, #{cleanerid}, #{delid})
 	</insert>
 	
-	<delete id="deleteBook" parameterType="String">
-		delete from  book where bookid like '%'||#{bookid}||'%'
-	</delete>
-	
+	<!-- book_detail 테이블에서 삭제도서들을 delete 해주는 쿼리문 -->
 	<delete id="deleteBook_Detail" parameterType="String">
 		delete from  book_detail where bookid like '%'||#{bookid}||'%'
+	</delete>
+	
+	<!-- 삭제할 도서들을 book 테이블에서 delete 해주는 쿼리문 -->
+	<delete id="deleteBook" parameterType="String">
+		delete from  book where bookid like '%'||#{bookid}||'%'
 	</delete>
 	
 	<update id="updateDeadline" parameterType="String">

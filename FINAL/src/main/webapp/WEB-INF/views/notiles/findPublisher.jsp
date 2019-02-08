@@ -9,7 +9,13 @@
    .long {width: 470px;}
    .short {width: 120px;} 
    a:hover { cursor: pointer;}
-  
+  	#loadingImage{
+  		 background-image: url("resources/img/loadingProgressive.gif");
+  		 background-repeat: no-repeat;
+  		 background-size: 200px 200px;
+ 		 background-position: left; 
+  	}
+  	
 </style>    
 
 <script>
@@ -68,7 +74,9 @@
 
 	function showPublisher(startNo, endNo)
 	{
+		$("#loadingImage").show();
 		$("#loading").show();
+		
 		console.log("로딩바가 돌거야");
 		
 		$.ajax({
@@ -104,8 +112,10 @@
 				
 				if(size != 0)
 				{
+					$("#loadingImage").hide();
 					console.log("로딩바가 멈출거야");
 					$("#loading").hide();
+					
 				}
 				
 				$("#publisherDisplay").append(resultHTML); 
@@ -123,6 +133,7 @@
 			error: function(request, status, error)
 			{
 				$("#loading").hide(); 
+				$("#loadingImage").hide();
 			//	alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error );
 			}// end of error---------------------------------------------------------
 		});// end of $.ajax()---------------------------------------------------------
@@ -276,7 +287,7 @@
 
 	<div>
 		<table id="table" class="table table-hover">
-			<thead>
+			<thead>      
 				<tr>
 					<th style="width: 5%; text-align: center;">No</th>
 					<th style="width: 20%; text-align: center;">출판사명</th>
@@ -288,5 +299,6 @@
 			<tbody id="publisherDisplay"></tbody>
 		</table>
 	</div>
+	<div id="loadingImage" style="position: absolute; left:370px; top:10px; width:60%; height:600px; opacity: 0.5; "></div>
 </body>
 </html>
