@@ -62,6 +62,10 @@ public class PMGBoardController {
 		
 		
 		HttpSession session = request.getSession();
+		
+		session.removeAttribute("colname"); // 공지사항 목록 리스트로 오면 세션 삭제
+		session.removeAttribute("search"); // 공지사항 목록 리스트로 오면 세션 삭제
+		
 		session.setAttribute("readCountPermission", "yes");
 		
 		String gobackURL = MyUtil.getCurrentURL(request);
@@ -326,7 +330,7 @@ public class PMGBoardController {
 	}
 	
 	// 공지사항 1개글 상세보기
-	@RequestMapping(value="/noticeView", method= {RequestMethod.GET})
+	@RequestMapping(value="/noticeView.ana", method= {RequestMethod.GET})
 	public String noticeView(HttpServletRequest request, HttpServletResponse response) {
 		
 		String idx = request.getParameter("idx");
@@ -347,6 +351,13 @@ public class PMGBoardController {
 		}
 		request.setAttribute("gobackURL", gobackURL);
 		
+		if(session.getAttribute("colname") == null && session.getAttribute("search") == null) { // 검색 후 컬럼네임과 검색어를 세션에 저장
+			
+			session.setAttribute("colname", colname);
+			session.setAttribute("search", search);
+			
+		}
+		
 		// 로그인 되어진 사용자 정보를 가져옴(총관리자, 도서관장, 사서)
 		AdminVO adminvo = (AdminVO)request.getSession().getAttribute("loginAdmin");
 		LibrarianVO libvo = (LibrarianVO)request.getSession().getAttribute("loginLibrarian");
@@ -362,8 +373,6 @@ public class PMGBoardController {
 		if(adminvo != null) {
 			userid = adminvo.getAdminid();
 			paraMap.put("ADMINID", adminvo.getAdminid());
-			paraMap.put("COLNAME", colname);
-			paraMap.put("SEARCH", search);
 		}
 		
 		if(libvo != null) {
@@ -371,12 +380,15 @@ public class PMGBoardController {
 			paraMap.put("LIBCODE", libvo.getLibcode_fk());
 			paraMap.put("ADMINID", null);
 		//	paraMap.put("LIBID", libvo.getLibid());
-			paraMap.put("COLNAME", colname);
-			paraMap.put("SEARCH", search);
 		}
 		
+		paraMap.put("COLNAME", (String)session.getAttribute("colname"));
+		paraMap.put("SEARCH", (String)session.getAttribute("search"));
 		paraMap.put("IDX", idx);
 		paraMap.put("USERID", userid);
+		
+	//	System.out.println("컬럼네임 : "+paraMap.get("COLNAME"));
+	//	System.out.println("검색어 : "+paraMap.get("SEARCH"));
 		
 		if(readCountPermission != null &&
 		   "yes".equals(readCountPermission)) { 

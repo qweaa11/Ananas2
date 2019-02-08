@@ -24,6 +24,9 @@
 		
 		$(document).ready(function(){
 			
+		//	console.log("${sessionScope.colname}");
+		//	console.log("${sessionScope.search}");
+			
 			if(${noticevo.commentCount > 0}) {
 				goViewComment("1");
 			}
@@ -274,14 +277,14 @@
 <div class="container">                  
   <ul class="pager">
   <c:if test="${not empty noticevo.previousseq && not empty noticevo.nextseq}">
-    <li class="previous"><a href="noticeView.ana?idx=${noticevo.previousseq}">이전글 : ${noticevo.previousseq}. ${noticevo.previoussubject}</a></li>
-    <li class="next"><a href="noticeView.ana?idx=${noticevo.nextseq}">다음글 : ${noticevo.nextseq}. ${noticevo.nextsubject}</a></li>
+    <li class="previous"><a href="noticeView.ana?idx=${noticevo.previousseq}">이전글 : ${noticevo.previousseq}) ${noticevo.previoussubject}</a></li>
+    <li class="next"><a href="noticeView.ana?idx=${noticevo.nextseq}">다음글 : ${noticevo.nextseq}) ${noticevo.nextsubject}</a></li>
   </c:if>
   <c:if test="${empty noticevo.previousseq}">
-  	<li class="next"><a href="noticeView.ana?idx=${noticevo.nextseq}">다음글 : ${noticevo.nextseq}. ${noticevo.nextsubject}</a></li>
+  	<li class="next"><a href="noticeView.ana?idx=${noticevo.nextseq}">다음글 : ${noticevo.nextseq}) ${noticevo.nextsubject}</a></li>
   </c:if>
   <c:if test="${empty noticevo.nextseq}">
-  	<li class="previous"><a href="noticeView.ana?idx=${noticevo.previousseq}">이전글 : ${noticevo.previousseq}. ${noticevo.previoussubject}</a></li>
+  	<li class="previous"><a href="noticeView.ana?idx=${noticevo.previousseq}">이전글 : ${noticevo.previousseq}) ${noticevo.previoussubject}</a></li>
   </c:if>
   </ul>
 </div>

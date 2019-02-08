@@ -323,7 +323,7 @@
 		        on N.libcode = L.libcode
 		        where status = 0
 		        <if test='ADMINID == "" or ADMINID == null'>
-		        	and (N.libcode = #{LIBCODE} or adminid_fk IS NOT NULL)
+		        	and N.libcode = #{LIBCODE} or adminid_fk IS NOT NULL
 		        </if>
 		    ) V
 		    <if test='SEARCH != null and SEARCH != "" and SEARCH != "null" '>
