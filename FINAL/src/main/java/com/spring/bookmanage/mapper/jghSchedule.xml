@@ -5,7 +5,22 @@
 
 <!-- ===== #29. 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== -->
 <mapper namespace="jghSchedule">
+	
+	<!-- 이용정지계정 기간 갱신 스케줄러 -->
+	<!--
+		create procedure pcd_decreaserevoke
+		    is
+		    begin
+		        update member set revokeDate = revokeDate-1
+		        where revokeDate > 0;
+		        
+		        update member set status = 0
+		        where revokeDate = 0 AND status = 2;
+		        commit;
+		    end pcd_decreaseRevoke;
+	-->
 	<update id="schedulingAllMemberByRevokeDate">
 		{ call pcd_decreaserevoke() }
 	</update>
+	
 </mapper>

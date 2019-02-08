@@ -74,6 +74,74 @@
 	</select>
 	
 	<!-- 삭제도서 복원(Transaction) -->
+	<!--
+		도서일련번호와 출판정보를 위해 사용할 종합뷰
+		create or replace view view_bookid as
+		    select B.bookid, title, author, to_char(D.regdate,'yyyy-mm-dd') as regdate
+		        , libname, LI.tel 
+		        , nname, lname, cname, fname, gname
+		        , substr(B.bookid,1,instr(B.bookid,'-',1)-1) as simple
+		        , P.pubname
+		    from book B join book_detail D on B.bookid = D.bookid
+		    join library LI on B.libcode_fk = LI.libcode
+		    join nation N on B.ncode_fk = N.ncode
+		    join language LA on B.lcode_fk = LA.lcode
+		    join category C on B.ccode_fk = C.ccode
+		    join field F on B.fcode_fk = F.fcode
+		    join genre G on B.gcode_fk = G.gcode
+		    join PUBLISHER P on B.pubcode_fk = P.pubcode;
+	    
+		삭제도서 복원 프로시저
+		create or replace procedure pcd_restorebook
+		(param_bookid       in book.bookid%type, 			param_title    	in book.title%type
+		, param_author      in book.author%type, 			param_pubcode  	in book.pubcode_fk%type
+		, param_status      in book.status%type, 			param_agecode 	in book.agecode%type
+		, param_isbn        in book.isbn%type, 				param_ncode    	in book.ncode_fk%type
+		, param_lcode       in book.lcode_fk%type, 			param_fcode	  	in book.fcode_fk%type
+		, param_ccode       in book.ccode_fk%type, 			param_gcode    	in book.gcode_fk%type
+		, param_libcode     in book.libcode_fk%type
+		
+		, param_intro       in book_detail.intro%type, 		param_image     in book_detail.image%type
+		, param_price       in book_detail.price%type, 		param_weight    in book_detail.weight%type
+		, param_totalpage   in book_detail.totalpage%type, 	param_pdate 	in book_detail.pdate%type
+		, param_regdate     in book_detail.regdate%type, 	param_count   	in number
+		
+		, param_delid       in delete_book.delid%type
+		)
+		
+		    is
+		        v_bookid    number:=0;
+		    begin
+		        select nvl(MAX
+		        (
+		            to_number
+		            (
+		                substr
+		                (
+		                    bookid, instr(bookid, '-', 1, 1)+1, 
+		                    length(substr(bookid, instr(bookid, '-', 1, 1)+1)) - length(substr(bookid, instr(bookid, '-', 1, 2)))
+		                )
+		            )
+		        ),0) into v_bookid
+		        from view_bookid
+		        where simple = substr(param_bookid,1,15);
+		        
+		              갱신할 삭제도서 묶음 복원
+		        for i in 1..param_count loop
+		        	도서에 복원
+		            insert into book(idx, bookid, title, author, pubcode_fk, status, agecode, isbn, ncode_fk, lcode_fk, fcode_fk, ccode_fk, gcode_fk, libcode_fk)
+		            values(book_seq.nextval, substr(param_bookid, 1, 15) || '-' || (v_bookid+1) || '-' || i, param_title, param_author, param_pubcode, param_status, param_agecode, param_isbn, param_ncode, param_lcode, param_fcode, param_ccode, param_gcode, param_libcode);
+		            
+		                     도서상세에 복원
+		            insert into book_detail(idx, bookid, intro, image, price, weight, totalpage, pdate, regdate)
+		            values(bookD_seq.nextval, substr(param_bookid, 1, 15)||'-'||(v_bookid+1)||'-'||i, param_intro, param_image, param_price, param_weight, param_totalpage, param_pdate, param_regdate);
+		        end loop;
+		        
+		              삭제도서 삭제
+		        delete from delete_book where delid = param_delid;
+		        
+		    end pcd_restorebook;
+	-->
 	<delete id="restoreBook" statementType="CALLABLE" parameterType="com.spring.bookmanage.book.JGHmodel.DeleteBookVO">
 		{
 			call pcd_restorebook
