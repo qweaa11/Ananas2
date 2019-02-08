@@ -187,6 +187,40 @@ public class PMGBoardDAO implements InterPMGBoardDAO {
 		return n;
 	}
 
+	// 등록한 공지사항 idx 가져오기
+	public int findNoticeMaxidx() {
+		
+		int n = sqlsession.selectOne("PMG.findNoticeMaxidx");
+		
+		return n;
+	}// end of findNoticeMaxidx()-------------------------
+
+	
+	
+	// 공지사항 글 등록이 완료되면 알람테이블에 insert
+	@Override
+	public void insertAlarm(HashMap<String, String> paraMap, List<String> libIdList) throws Throwable {
+		
+		for(String libId : libIdList) {
+			paraMap.put("LIBID", libId);
+			int n = sqlsession.insert("PMG.insertAlarm", paraMap);
+			
+			if(n < 1) {
+				Throwable th = new Throwable();
+				throw th;
+			}
+		}
+	}
+	
+	// librarian테이블의 조건(libcode)에 맞는 아이디(도서관장, 사서) 가져오기
+	@Override
+	public List<String> findLibId(HashMap<String, String> paraMap) {
+		
+		List<String> libIdList = sqlsession.selectList("PMG.findLibId", paraMap);
+		
+		return libIdList;
+	}
+
 	
 
 	

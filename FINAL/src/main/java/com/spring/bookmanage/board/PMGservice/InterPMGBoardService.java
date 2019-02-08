@@ -8,8 +8,8 @@ import com.spring.bookmanage.board.PMGmodel.PMGNoticeVO;
 
 public interface InterPMGBoardService {
 
-	int noticeWriteadd(PMGNoticeVO noticevo); // 공지사항 글쓰기(파일첨부가 없는 글쓰기)
-	int noticeWriteadd_withFile(PMGNoticeVO noticevo);// 공지사항 글쓰기(파일첨부가 있는 글쓰기)
+	int noticeWriteadd(PMGNoticeVO noticevo) throws Throwable; // 공지사항 글쓰기(파일첨부가 없는 글쓰기)
+	int noticeWriteadd_withFile(PMGNoticeVO noticevo) throws Throwable;// 공지사항 글쓰기(파일첨부가 있는 글쓰기)
 	
 	
 	int getTotalCountWithSearch(HashMap<String, String> paraMap);
@@ -60,6 +60,13 @@ public interface InterPMGBoardService {
 	// 원글 공지사항 글번호에 해당하는 댓글의 총갯수 알아오기
 	int commentDelete(HashMap<String, String> paraMap) throws Throwable;
 	// 댓글 삭제
+	
+	
+	void insertAlarm(HashMap<String, String> paraMap) throws Throwable;	
+	// 공지사항 글 등록이 완료되면 알람테이블에 insert
+	
+	
+	
 	
 	
 }

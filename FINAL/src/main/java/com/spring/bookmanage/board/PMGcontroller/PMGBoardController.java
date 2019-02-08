@@ -257,13 +257,14 @@ public class PMGBoardController {
 		// 파일첨부가 된 공지사항 글쓰기
 		MultipartFile attach = noticevo.getAttach();
 		
+		HttpSession session = request.getSession();
 		// 첨부파일이 있는지 없는지 알아오기 시작
 		if(!attach.isEmpty()) {
 			// attach 가 비어있지 않다면(즉, 첨부파일이 있는 경우라면)
 			
 			// 사용자가 보낸 파일을 WAS(톰캣)의 특정 폴더에 저장 => WAS의 webapp/resources/files 라는 폴더로 지정
 			// WAS의 webapp 의 절대경로를 알아와야 한다.
-			HttpSession session = request.getSession();
+			
 			String root = session.getServletContext().getRealPath("/"); // Context가 프로그램 전체를 말한다. // "/" => webapp
 			String path = root + "resources" + File.separator + "files"; // File.separator 운영체제에 따라서 windows는 \ , 나머지(리눅스, 유닉스) /
 			// path 가 첨부파일들을 저장할 WAS(톰캣)의 폴더가 된다.
@@ -305,19 +306,46 @@ public class PMGBoardController {
 		}// 첨부파일이 있는지 없는 알아오기 끝
 		
 		int n = 0;
-		if(attach.isEmpty()) {
-			// 파일첨부가 없다라면
-			n = service.noticeWriteadd(noticevo);
+		
+		try {
+			if(attach.isEmpty()) {
+				// 파일첨부가 없다라면
+				n = service.noticeWriteadd(noticevo);
+			}
+			else {
+				// 파일첨부가 있다라면
+				n = service.noticeWriteadd_withFile(noticevo);
+			}	
+		} catch (Throwable e) {
+			n = 0;
 		}
-		else {
-			// 파일첨부가 있다라면
-			n = service.noticeWriteadd_withFile(noticevo);
-		}		
+			
 		
 		String loc = "";
 		
-		if(n==1) {
+		if(n > 0) {
 			loc = request.getContextPath()+"/noticeList.ana";
+			
+			LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+			
+			HashMap<String, String> paraMap = new HashMap<>();
+			paraMap.put("PIDX", String.valueOf(n)); // notice테이블의 제일 최근 IDX 글번호
+			
+			
+			try {
+				if(librarian != null) {	// 도서관장이 등록한 공지사항 일때
+					paraMap.put("LIBCODE", librarian.getLibcode_fk());
+					paraMap.put("GRADE", String.valueOf(librarian.getStatus()));
+				}
+				service.insertAlarm(paraMap);
+				n=1;
+				
+			} catch (Throwable e) {
+				loc = request.getContextPath()+"/index.ana";
+				n = 0;
+				e.printStackTrace();
+			}
+			
 		}
 		else {
 			loc = request.getContextPath()+"/index.ana";
