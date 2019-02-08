@@ -176,6 +176,8 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		return n;
 	}
 	@Override
+	//개별 도서정보를 수정하는 메소드
+	//이때 ISBN은 book테이블에 있는거라 따로 update해준다.
 	public int editIndivBookInfo(HashMap<String, String> parameterMap) {
 		int n1 = sqlsession.update("KKH.editIndivBookInfo", parameterMap);
 		int n2 = sqlsession.update("KKH.editIndivBookISBN",parameterMap);
@@ -183,16 +185,29 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		else return 0;	
 	}
 	@Override
+	//개별 도서를 테이블에서 삭제하는 메소드
+	//book, book_detail 테이블 두곳에서 모드 삭제해야한다.
+	//이때 book_detail 테이블의정보부터 삭제해야함.
 	public int deleteIndivBook(String bookid) {
 		int n1 = sqlsession.delete("KKH.deleteIndivBookDetail", bookid);
 		int n2 = sqlsession.delete("KKH.deleteIndivBook", bookid);
 		if(n1*n2 == 1) return 1;
 		else return 0;
 	}
+	
 	@Override
+	//추가될 도서의 시작일련번호를 채번해오는 메소드
+	public int findStartBookNum(String bookid) {
+		int startBookNum = sqlsession.selectOne("KKH.findStartBookNum", bookid);
+		return startBookNum;
+	}
+	
+	@Override
+	//추가될 도서에 입력될 도서정보를 해당 도서번호를 가진 책들중 첫번째 책에서 가져오는 메소드
 	public KKHBookVO findBookInfoSample(String bookid) {
 		List<KKHBookVO> bookSampleList = sqlsession.selectList("KKH.findBookSampleList", bookid);
 		List<KKHBookVO> bookDetailSampleList = sqlsession.selectList("KKH.findBookDetailSampleList",bookid);
+		//가져온 리스트의 첫번째 객체정보를 넣어준다.
 		KKHBookVO bookInfoSample = bookSampleList.get(0);
 		bookInfoSample.setIntro(bookDetailSampleList.get(0).getIntro());
 		bookInfoSample.setImage(bookDetailSampleList.get(0).getImage());
@@ -202,12 +217,9 @@ public class KKHBookDAO implements InterKKHBookDAO {
 		bookInfoSample.setPdate(bookDetailSampleList.get(0).getPdate());
 		return bookInfoSample;
 	}
+
 	@Override
-	public int findStartBookNum(String bookid) {
-		int startBookNum = sqlsession.selectOne("KKH.findStartBookNum", bookid);
-		return startBookNum;
-	}
-	@Override
+	//book테이블,book_detail 테이블에 추가할 도서갯수만큼 insert해주는 메소드
 	public int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap) {
 		int count = Integer.parseInt(parameterMap.get("COUNT"));
 		int n1 = 0;
@@ -218,17 +230,19 @@ public class KKHBookDAO implements InterKKHBookDAO {
 			n1 +=sqlsession.insert("KKH.insertAdditionalBookInfo", bookInfoSample); 
 			n2 +=sqlsession.insert("KKH.insertAdditionalBookDetailInfo", bookInfoSample);
 		}
-		if(n1-n2 == 0) return 1;
+		if(n1-n2 == 0) return 1; // 성공적으로 될경우 book에 insert 한 갯수 = book_detail 한 갯수
 		else return 0;
 	}
 	
 	@Override
+	//삭제할 도서의 정보를 VO에 저장하는 메소드
 	public List<KKHBookVO> findDeleteBook(String bookid) {
 		List<KKHBookVO> deleteBookList = sqlsession.selectList("KKH.deleteBookList", bookid);
 		return deleteBookList;
 	}
 	
 	@Override
+	//delete_book 테이블에 가져온 도서정보를 insert 한뒤 book, book_detail 테이블에서 해당 도서의 정보를 삭제하는 메소드
 	public int insertDelete_BookList(List<KKHBookVO> deleteBookList,String cleanerid) {
 		int n = 0;
 		int delid = sqlsession.selectOne("KKH.selectDelid");
@@ -242,9 +256,10 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	}
 	
 	@Override
+	//해당 도서번호를 가진 모든 책들을 삭제하는 메소드
 	public int deleteBookAndBookDetail(String bookid) {
-		int n2 = sqlsession.delete("KKH.deleteBook_Detail",bookid);
-		int n1 = sqlsession.delete("KKH.deleteBook", bookid);
+		int n2 = sqlsession.delete("KKH.deleteBook_Detail",bookid);//book_detail 테이블에서 삭제
+		int n1 = sqlsession.delete("KKH.deleteBook", bookid);	   //book 테이블에서 삭제
 		if(n1 == n2) return n1;
 		else return 0;
 	}
