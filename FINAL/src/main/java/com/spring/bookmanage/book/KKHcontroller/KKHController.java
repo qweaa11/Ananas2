@@ -301,7 +301,7 @@ public class KKHController {
 	 * @param request
 	 * @return List<HashMap<String,String>>
 	 */
-	public List<HashMap<String,String>> findDetailField(HttpServletRequest request){
+	public List<HashMap<String,String>> findDetailField(HttpServletRequest request, HttpServletResponse response){
 		
 		String bigfcode = request.getParameter("bigfcode");//큰 field 값을 받아오고
 		
