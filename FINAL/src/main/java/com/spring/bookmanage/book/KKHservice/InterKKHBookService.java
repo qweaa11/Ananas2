@@ -89,20 +89,65 @@ public interface InterKKHBookService {
 	 */
 	int eidtBookNoChangeBookid(HashMap<String, String> parameterMap, KKHBookVO book);
 
+	/**
+	 * 개별 도서 정보수정 메소드
+	 * ISBN,Price,Weight,TotalPage, Pdate(등록일자) 를 수정한다
+	 * @param parameterMap HashMap
+	 * @return int
+	 */
 	int editIndivBookInfo(HashMap<String, String> parameterMap);
 
+	/**
+	 * 특정 도서 1개를 삭제(테이블에서 delete함)하는 메소드
+	 * @param bookid String
+	 * @return int
+	 */
 	int deleteIndivBook(String bookid);
-
-	KKHBookVO findBookInfoSample(String bookid);
-
-	int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap);
-
+	
+	/**
+	 * 추가될 도서의 시작 일련번호를 채번해오는 메소드
+	 * @param bookid String
+	 * @return int
+	 */
 	int findStartBookNum(String bookid);
 
+	/**
+	 * 추가시킬 도서에 입력될 도서정보를 해당 도서번호를 가진 책들중 첫	번째책에서 가져오는 메소드
+	 * @param bookid String
+	 * @return KKHBookVO
+	 */
+	KKHBookVO findBookInfoSample(String bookid);
+
+	/**
+	 * 추가할 도서객수만큼 도서를 book, book_detail 테이블에 insert해주는 메소드
+	 * @param bookInfoSample KKHBookVO
+	 * @param parameterMap HashMap
+	 * @return int
+	 */
+	int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap);
+
+	/**
+	 * 삭제할 도서의 정보를 VO에 저장하는 메소드
+	 * @param bookid
+	 * @return List[KKHBookVO]
+	 */
 	List<KKHBookVO> findDeleteBook(String bookid);
 
+	/**
+	 * book, book_detail 테이블에서 해당 도서번호를 가진 모든 책을 delete 하고
+	 * delete_book 테이블에 insert 해준다.
+	 * @param deleteBookList[KKHBookVO]
+	 * @param bookid String
+	 * @param cleanerid String
+	 * @return int
+	 */
 	int insertAndDeleteBookList(List<KKHBookVO> deleteBookList,String bookid,String cleanerid);
 
+	/**
+	 * 반납예정일을 +7
+	 * @param extendBookArr
+	 * @return
+	 */
 	String[] updateDeadline(String[] extendBookArr);
 
 	int updateDeadline(String extendBookid);

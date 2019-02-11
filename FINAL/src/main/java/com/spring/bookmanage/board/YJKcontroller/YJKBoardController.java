@@ -223,7 +223,7 @@ public class YJKBoardController {
 	
 	// ==== 전체글 목록 페이지 보여주기 ==== //
 	@RequestMapping(value="/boardList.ana",method= {RequestMethod.GET})
-	public String boardList(HttpServletRequest req) {
+	public String boardList(HttpServletRequest req, HttpServletResponse res) {
 		
 		List<YJKBoardVO> boardList = null;
 				
@@ -325,7 +325,7 @@ public class YJKBoardController {
 	
 	// ==== 글 1개를 보여주는 페이지 요청 ====
 	@RequestMapping(value="/boardView.ana", method= {RequestMethod.GET})
-	public String boardView(HttpServletRequest req) {
+	public String boardView(HttpServletRequest req, HttpServletResponse res) {
 		
 		String idx = req.getParameter("idx");// 글 번호 받아오기
 		
@@ -436,7 +436,7 @@ public class YJKBoardController {
 	// ==== 댓글쓰기 ====
 	@RequestMapping(value="/boardAddComment.ana", method={RequestMethod.POST})
 	@ResponseBody
-	public HashMap<String, String> boardAddComment(YJKReplyVO replyvo , HttpServletRequest req) 
+	public HashMap<String, String> boardAddComment(YJKReplyVO replyvo , HttpServletRequest req, HttpServletResponse res) 
 		throws Throwable {
 		
 		HashMap<String, String> returnMap = new HashMap<String, String>();
@@ -454,7 +454,7 @@ public class YJKBoardController {
 			returnMap.put("REGDATE", MyUtil.getNowTime());
 		}
 		
-		//위엔 에드두고 여기서 카운트개수 따로가져오는게 좋을듯 댓글개수만 가져오는걸로 추가 ㄱㄱ  댓글 보여주는걸 새로 만들자는거지? 응 ㄱㄷㄱㄷ
+		
 		int cnt = service.getCommentCnt(replyvo);
 		returnMap.put("COMMENTCOUNT", String.valueOf(cnt));
 		System.out.println(cnt+"===========개수잘가져오는거확인1");
@@ -465,7 +465,7 @@ public class YJKBoardController {
 	// ==== 댓글내용 가져오기 ====
 	@RequestMapping(value="/replyList.ana", method={RequestMethod.GET})
 	@ResponseBody
-	public List<HashMap<String, Object>> boardcommentList(HttpServletRequest req) {
+	public List<HashMap<String, Object>> boardcommentList(HttpServletRequest req, HttpServletResponse res) {
 
 		List<HashMap<String, Object>> mapList = new ArrayList<HashMap<String, Object>>();
 		
@@ -508,7 +508,7 @@ public class YJKBoardController {
 	// ==== 댓글 TotalPage 가져오기 ====
 	@RequestMapping(value="/boardCommentTotalPage.ana", method={RequestMethod.GET})
 	@ResponseBody
-	public HashMap<String, Integer> getCommentTotalPage(HttpServletRequest req) {
+	public HashMap<String, Integer> getCommentTotalPage(HttpServletRequest req, HttpServletResponse res) {
 		
 		HashMap<String, Integer> returnMap = new HashMap<String, Integer>();
 		
@@ -565,7 +565,7 @@ public class YJKBoardController {
 	
 	// ==== 글 수정 페이지 완료하기 ====
 	@RequestMapping(value="/boardEditEnd.ana", method={RequestMethod.POST})
-	public String boardEditEnd(YJKBoardVO boardvo, HttpServletRequest req) {
+	public String boardEditEnd(YJKBoardVO boardvo, HttpServletRequest req, HttpServletResponse res) {
 		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		paraMap.put("IDX", boardvo.getIdx());
@@ -630,7 +630,7 @@ public class YJKBoardController {
 	
 	// ==== 글 삭제 페이지 완료하기 ====
 	@RequestMapping(value="/boardDelEnd.ana", method={RequestMethod.POST})
-	public String boardDelEnd(HttpServletRequest req) throws Throwable {
+	public String boardDelEnd(HttpServletRequest req, HttpServletResponse res) throws Throwable {
 		
 		String idx = req.getParameter("idx");
 		String pw = req.getParameter("pw");

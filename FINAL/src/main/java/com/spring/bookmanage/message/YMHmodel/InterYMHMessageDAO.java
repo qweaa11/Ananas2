@@ -13,14 +13,20 @@ public interface InterYMHMessageDAO
 	
 	
 	List<YMHMessageVO> listReceiveMessage(HashMap<String, String> paraMap);
+
+
+	int getReceiveMessageTotalCount(HashMap<String, String> paraMap);
 	
+	int getSendMessageTotalCount(HashMap<String, String> paraMap);
 	
+	int deleteReceiveMessage(HashMap<String, String> paraMap);
 	
+	int deleteSendMessage(HashMap<String, String> paraMap);
 	
-	
-	
-	
-	
+	YMHMessageVO listMessage(String idx);
+
+
+	int setOpenDate(String idx);
 	
 	
 	

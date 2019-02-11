@@ -99,6 +99,33 @@
 	</select>
 	
 	<!-- 스케줄러 강제실행(부하율 너무 큼) -->
+	<!--
+		오라클 데이터베이스 잡 스케줄러 = 무명 프로시저
+		하루 1회 실행되는 스케줄러
+		declare
+		    jobno   number;
+		begin
+		    SYS.DBMS_JOB.SUBMIT(
+		        job           =>      jobno
+		        ,what         =>      'FINAL1.PCD_DECREASEREVOKE;'
+		        ,next_date    =>      to_date(trunc(sysdate+1))
+		        ,interval     =>      'TRUNC(SYSDATE+1)'
+		        ,no_parse     =>      TRUE
+		    );
+		end;
+		
+		스케줄러 강제실행 프로시저
+		create or replace procedure pcd_run
+		(param_cnt out number)
+		    is
+		    begin
+		        dbms_job.run(1); 강제실행
+		
+		        select count(*) into param_cnt
+		        from user_jobs
+		        where broken = 'N';
+		    end pcd_run;
+	-->
 	<parameterMap type="HashMap" id="runScheduler_paraMap">
 		<parameter property="row" mode="OUT" jdbcType="VARCHAR"/>
 	</parameterMap>
