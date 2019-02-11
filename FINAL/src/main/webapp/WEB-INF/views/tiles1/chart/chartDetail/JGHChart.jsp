@@ -6,80 +6,85 @@
 <script type="text/javascript">
 
 	$(document).ready(function () {
-		
-		$.ajax({	
+		$.ajax({
 			url:"jghChartYear.ana",
 			type:"GET",
 			dataType:"json",
 			success:function(json) {
-				
 				var count = json.count;
-				
+
 				if(count > -1) {
-					
 					var today = new Date();
 					var year = today.getFullYear();
-					
+					var month = today.getMonth()+1;
+					monthset(0);
+
 					var html = "";
-					
-					
 					for(var i=0; i<=count; i++) {
 						 html += "<li value='"+i+"' class='jyear'>"+(year-i)+"년</li>"
 					}// end of for
 					
 					$("#jterm").html(html);
-					
-					chartField(0);
-					
+					chartField(0, month);
 				}// end of if
-
 			}, error: function(request, status, error) {
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}// end of success~error
-			
 		});// end of ajax for year list
-		
-		
-		$(document).on('click', '.jyear', function (e) {
+
+		$(document).on('click', '.jyear', function(e) {
 			var year = $(this).val();
+			monthset(year);
+
+			var month = $("#jmonthval").val();
+			chartField(year, month);
+		});// end of document on
+		
+		$(document).on('click', '.jmonthli', function(e) {
+			var year = $("#jtermval").val();
+			var month = $(this).val();
+			$("#jmonthval").val(month);
 			
-			chartField(year);
-			
-		});
+			chartField(year, month);
+		});// end of document on
 		
 	});// end of document ready
 	
-	function chartField(year) {// 월에 따른 도서관별 최다대여 도서분야 불러오기
+	function monthset(year) {
 		var today = new Date();
 		var months = today.getMonth()+1;
-		
+
 		if(year > 0)
 			months = 12;
-	
+
 		var monthArray = new Array();
-		for(var i=0; i<months; i++) {
+		for(var i=0;i<months;i++) {
 			monthArray.push(i+1);
 		}// end of for
 		
 		var monthHTML = "";
 		
 		for(var i=0; i<monthArray.length; i++) {
-			monthHTML += "<li value="+monthArray[i]+">"+monthArray[i]+"월</li>";
+			monthHTML += "<li class='jmonthli' value='"+monthArray[i]+"'>"+monthArray[i]+"월</li>";
 			if(i+1 == monthArray.length)
 				$(".months").text(monthArray[i]+"월");
 		}// end of for
 		
 		$("#jmonth").html(monthHTML);
+		
+		$("#jtermval").val(year);
+		$("#jmonthval").val(months);		
+	}// end of monthset()-----------------------
 	
+	function chartField(year, month) {// 월에 따른 도서관별 최다대여 도서분야 불러오기
 		var data_form = {"currentyear":year, "month":month};
 
-		/* $.ajax({
+		$.ajax({
 			url:"jghChartBestField.ana",
 			type:"GET",
 			data:data_form,
 			dataType:"json",
 			success: function(json) {
-				
 				Highcharts.chart('field', {
 				    chart: {
 				        type: 'column'
@@ -92,18 +97,7 @@
 				    },
 				    xAxis: {
 				        categories: [
-				            'Jan',
-				            'Feb',
-				            'Mar',
-				            'Apr',
-				            'May',
-				            'Jun',
-				            'Jul',
-				            'Aug',
-				            'Sep',
-				            'Oct',
-				            'Nov',
-				            'Dec'
+					        month
 				        ],
 				        crosshair: true
 				    },
@@ -128,13 +122,12 @@
 				        }
 				    },
 				    series: json
-				});
-				
+				});// end of Highcharts.chart
 			}, error: function(request, status, error) {
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}// end of success~error
 
-		});// end of ajax */
+		});// end of ajax
 		
 	}// end of chartField
 </script>

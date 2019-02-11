@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===== #28. mapper 기본 설정 ===== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- ===== #29. 루트 엘리먼트 및 네임스페이스 설정하기(이 네임스페이스의 이름은 프로젝트 전체 내에서 반드시 고유해야만 한다.) ===== -->
+<mapper namespace="jghChart">
+	
+	<!-- 조회가능한 연도 조회 = 반납기록이 존재하는 모든 연도 -->
+	<select id="findAllTerm" resultType="Integer">
+		select count(*)
+		from returned 
+		where rentaldate <![CDATA[>=]]> func_startyearcal(#{loop})
+		and rentaldate <![CDATA[<]]> func_startyearcal(to_number(#{loop})-1)
+	</select>
+	
+	<!-- 도서관 전체목록 조회 -->
+	<select id="findAllLibrary" resultType="com.spring.bookmanage.library.Yjkmodel.LibraryVO">
+		select libcode, libname
+		from library
+	</select>
+
+	<!-- 해당년도에 월별 최다대여된 도서분야 정보 -->
+	<resultMap type="HashMap" id="bestFieldRankMap">
+		<result column="fname" property="fname" javaType="String"/>
+		<result column="count" property="count" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="findAllBestFieldRank" parameterType="HashMap" resultMap="bestFieldRankMap">
+		select count, fname
+		from
+		    (
+		    select fname, libname, count
+		        , rank() over(partition by libname order by count desc) as rank
+		    from
+		        (
+		            select fname, libname, count(fname) as count
+		            from book B join library L
+		            on B.libcode_fk = L.libcode
+		            join field F on B.fcode_fk = F.fcode
+		            join returned R on B.bookid = R.bookid_fk
+
+					where libcode = #{libcode}
+		            and func_startyearcal(#{currentyear}) <![CDATA[<=]]> rentaldate
+		            and func_startyearcal(#{currentyear}-1) <![CDATA[>]]> rentaldate
+		            and to_number(to_char(rentaldate,'mm')) = #{month}
+		
+		            group by fname, libname
+		            order by libname asc, count desc
+		        )V
+		    )T
+		where rank = 1
+		order by count desc
+	</select>
+	
+</mapper>
