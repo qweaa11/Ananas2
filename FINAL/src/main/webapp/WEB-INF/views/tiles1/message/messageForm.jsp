@@ -4,11 +4,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
     
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 <style>
 * {
@@ -107,7 +102,6 @@ input[type=submit]:hover {
 			var libname =  $("#library").val();
 			//console.log(libname);
 			findRecipient(libname);
-			
 		});
 		
 		$("#sendMessage").click(function(){
@@ -125,6 +119,24 @@ input[type=submit]:hover {
 			frm.submit();
 		});
 	
+		if(${flag1 !=null}){
+			$("#receiveMsg").addClass("active");
+			$("#receiveMsgTab").click();
+			$("#sendMessageFrm").removeClass("active");
+			$("#sendMessageFrm").removeClass("in");
+			$("#receiveMessage").addClass("active");
+			$("#receiveMessage").addClass("in");
+		}
+		
+		if(${flag2 !=null}){
+			$("#sendMsg").addClass("active");
+			$("#sendMsgTab").click();
+			$("#receiveMessage").removeClass("active");
+			$("#receiveMessage").removeClass("in");
+			$("#sendMessageFrm").addClass("active");
+			$("#sendMessageFrm").addClass("in");
+		}
+		
 		
 	});// end of 
 	
@@ -177,9 +189,9 @@ input[type=submit]:hover {
   <h2>메세지</h2>
 
   <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="tab" href="#sendMessageFrm">메세지 보내기</a></li>
-    <li><a data-toggle="tab" href="#receiveMessage">받은 메세지</a></li>
-    <li><a data-toggle="tab" href="#mailbox">보낸 메세지</a></li>
+    <li id="send"><a data-toggle="tab" href="#sendMessageFrm">메세지 보내기</a></li>
+    <li id="receiveMsg"><a data-toggle="tab" id="receiveMsgTab" href="#receiveMessage">받은 메세지</a></li>
+    <li id="sendMsg"><a data-toggle="tab" id="sendMsgTab" href="#mailbox">보낸 메세지</a></li>
   </ul>
 
   <div class="tab-content">

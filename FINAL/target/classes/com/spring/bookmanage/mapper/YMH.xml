@@ -156,38 +156,105 @@
 	
 	
 	<select id="listMessage" parameterType="HashMap" resultType="com.spring.bookmanage.message.YMHmodel.YMHMessageVO">
+	
 		
-		Select m.idx as idx, m.tartgetid as tartgetid, m.title as title, m.opendate as opendate, m.senddate as senddate, l.name as name
-		from message m join librarian l
-		on m.tartgetid = l.libid
-		where sender = #{USERID}
-		and delsend = 0
-
+		select idx, sender, title, opendate, senddate, TARTGETNAME, TARTGETID
+		from 
+		(
+			Select rownum as RNO, m.idx as idx, m.sender as sender, m.title as title, m.opendate as opendate, m.senddate as senddate, l.name as TARTGETNAME, m.TARTGETID as TARTGETID
+			from message m join librarian l
+			on m.sender = l.libid
+			where sender = #{USERID}
+			and delsend = 0
+			order by idx desc
+		) V 
+		where RNO between #{RNO1} and #{RNO2}
+		
 		
 	</select>
 	
 	
 	<select id="listReceiveMessage" parameterType="HashMap" resultType="com.spring.bookmanage.message.YMHmodel.YMHMessageVO">
 		
-		Select m.idx as idx, m.sender as sender, m.title as title, m.opendate as opendate, m.senddate as senddate, l.name as sendername, m.TARTGETID as TARTGETID
-		from message m join librarian l
-		on m.sender = l.libid
-		where tartgetid = #{USERID}
+		select idx, sender, title, opendate, senddate, sendername, TARTGETID
+		from 
+		(
+			Select rownum as RNO, m.idx as idx, m.sender as sender, m.title as title, m.opendate as opendate, m.senddate as senddate, l.name as sendername, m.TARTGETID as TARTGETID
+			from message m join librarian l
+			on m.sender = l.libid
+			where tartgetid = #{USERID}
+			and deltarget = 0
+			order by idx desc
+		) V 
+		where RNO between #{RNO1} and #{RNO2}
+
+	</select>
+	
+	
+	
+	<select id="getReceiveMessageTotalCount" parameterType="HashMap" resultType="int">
+		Select count(*)
+		from message 
+		where TARTGETID = #{USERID}
+		and deltarget = 0
+
+	</select>
+	
+	
+	<select id="getSendMessageTotalCount" parameterType="HashMap" resultType="int">
+		Select count(*)
+		from message 
+		where SENDER = #{USERID}
 		and delsend = 0
 
-		
 	</select>
 	
 	
 	
 	
+	<select id="deleteReceiveMessage" parameterType="HashMap" resultType="int">
+		
+		update message set deltarget = 1
+		where idx = #{IDX} 
+
+	</select>
 	
 	
+	<select id="deleteSendMessage" parameterType="HashMap" resultType="int">
+		
+		update message set delsend = 1
+		where idx = #{IDX} 
+
+	</select>
 	
 	
-	
-	
-	
+	<select id="listYMHMessage" parameterType="String" resultType="com.spring.bookmanage.message.YMHmodel.YMHMessageVO">
+		
+		Select title, senddate, message, opendate
+		from message
+		where idx = #{idx}
+	</select>
+
+
+	<select id="setOpenDate" parameterType="String" resultType="int">
+		
+		update message set opendate = sysdate
+		where idx = #{IDX} 
+
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </mapper>
 

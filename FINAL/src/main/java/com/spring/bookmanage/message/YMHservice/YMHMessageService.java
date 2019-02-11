@@ -29,7 +29,42 @@ public class YMHMessageService implements InterYMHMessageService
 		return messageList;
 	}
 
+	@Override
+	public int getReceiveMessageTotalCount(HashMap<String, String> paraMap) {
+		int totalCount = dao.getReceiveMessageTotalCount(paraMap);
+		return totalCount;
+	}
 
+	@Override
+	public int getSendMessageTotalCount(HashMap<String, String> paraMap) {
+		int totalCount = dao.getSendMessageTotalCount(paraMap);
+		return totalCount;
+	}
 
+	@Override
+	public int deleteReceiveMessage(HashMap<String, String> paraMap) {
+		int result = dao.deleteReceiveMessage(paraMap);
+		return result;
+	}
+
+	
+	@Override
+	public int deleteSendMessage(HashMap<String, String> paraMap) {
+		int result = dao.deleteSendMessage(paraMap);
+		return result;
+	}
+
+	@Override
+	public YMHMessageVO listMessage(String idx) {
+		YMHMessageVO mvo = dao.listMessage(idx);
+		return mvo;
+	}
+	
+	
+	@Override
+	public int setOpenDate(String idx) {
+		int n = dao.setOpenDate(idx);
+		return n;
+	}
 	
 }

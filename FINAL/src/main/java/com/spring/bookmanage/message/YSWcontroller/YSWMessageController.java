@@ -29,10 +29,13 @@ public class YSWMessageController {
 	// 관리자, 사서 메세지 보내기 페이지 보여주기
 	@RequestMapping(value="messageForm.ana", method= {RequestMethod.GET})
 	public String sendMessageForm(HttpServletRequest req, HttpServletResponse res) {
-		
+		String flag1 = req.getParameter("flag1");
+		String flag2 = req.getParameter("flag2");
 		// 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기
 		List<HashMap<String, String>> libraryName = service.findLibrary();
 		
+		req.setAttribute("flag1", flag1);
+		req.setAttribute("flag2", flag2);
 		req.setAttribute("libraryName", libraryName);
 		
 		return "message/messageForm.tiles1";
