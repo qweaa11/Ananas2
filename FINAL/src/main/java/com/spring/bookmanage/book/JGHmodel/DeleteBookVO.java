@@ -16,15 +16,15 @@ public class DeleteBookVO {
 	private String bookid; 			// 도서일련번호
 	private String title; 			// 도서명
 	private String author; 			// 저자명
-	private int status; 			// 상태(일반 0, 대여 1,예약 2,분실 3, 삭제 4)
+	private int status; 			// 상태(일반 0, 대여 1,예약 2,분실 3)
 	private int agecode; 			// 연령코드
 	private String ISBN; 			// 국제표준도서번호
 	private String pubcode; 		// 출판사 코드
-	private int ncode; 			// 국가코드
-	private String lcode; 		// 언어코드
-	private String fcode; 		// 분야코드
-	private String ccode; 		// 종류코드
-	private String gcode; 		// 장르코드
+	private int ncode; 				// 국가코드
+	private String lcode; 			// 언어코드
+	private String fcode; 			// 분야코드
+	private String ccode; 			// 종류코드
+	private String gcode; 			// 장르코드
 	private String libcode; 		// 도서관번호
 
 	/* 도서 상세 테이블 */
