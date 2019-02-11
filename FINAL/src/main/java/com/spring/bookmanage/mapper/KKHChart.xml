@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KKHChart">
+
+	<resultMap type="HashMap" id="allLibrary">
+		<result property="LIBNAME" column="libname"/>
+		<result property="LIBCODE" column="libcode"/>
+	</resultMap>
+	<select id="getAllLibrary" resultMap="allLibrary">
+		select libname,libcode
+		from library
+		order by libname
+	</select>
+		
+	<resultMap type="HashMap" id="allCategory">
+		<result property="CCODE" column="ccode"/>
+		<result property="CNAME" column="cname"/>
+	</resultMap>
+	<select id="getAllCategory" resultMap="allCategory">
+		select ccode, cname
+		from category
+	</select>
+	
+	<resultMap type="HashMap" id="categoryCount">
+		<result property="CNT" column="cnt" javaType="String"/>
+	</resultMap>
+	<select id="chartOfcategoryInLibrary" parameterType="String" resultMap="categoryCount">
+		select libname,decode(libcode_fk,null,0,count(*) ) as cnt
+	    from
+	    (
+		    select libcode_fk
+		    from book
+		    where ccode_fk = #{ccode}
+	    ) B right join library L
+	    on B.libcode_fk = L.libcode
+	    group by libname,libcode_fk
+	    order by libname
+	</select> 
+</mapper>

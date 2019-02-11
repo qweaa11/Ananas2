@@ -13,9 +13,19 @@
 		}
 	
 		if(${reserveBookid != null}) {
-			$("#search_rental").val("${returnBookid}");
-			$(".rentalsearch").click();
-			$(".tab2info").click();
+			$("#returnBookid").click();
+			$("#search_rental2").val("${reserveBookid}");
+			$(".rentalsearch2").click();
+			
+			$(".tab-pane").addClass("fade");
+			$(".tab-pane").removeClass("active");
+			
+			$("#tab3info").addClass("active");
+			$("#tab3info").removeClass("fade");
+			
+			$(".r3page").removeClass("active"); 
+			$("#li3").addClass("active"); 
+			
 		}
 	});
 	
@@ -32,9 +42,9 @@
 	            
 	                <div class="panel-heading"> 
 	                        <ul class="nav nav-tabs">
-	                            <li class="active"><a href="#tab1info" data-toggle="tab">대여</a></li>
-	                            <li><a href="#tab2info" class="tab2info" data-toggle="tab">반납</a></li>
-	                            <li><a href="#tab3info" data-toggle="tab">예약</a></li>
+	                            <li class="r3page active" id="li1"><a href="#tab1info" data-toggle="tab">대여</a></li>
+	                            <li class="r3page" id="li2"><a href="#tab2info" class="tab2info" data-toggle="tab">반납</a></li>
+	                            <li class="r3page" id="li3"><a href="#tab3info" data-toggle="tab">예약</a></li>
 	                        </ul>
 	                </div>
 	                
@@ -543,7 +553,7 @@
 						                    <ul class="dropdown-menu" role="menu">
 						                      <li><a href="#memberid">아이디</a></li>
 						                      <li><a href="#name">이름</a></li>
-						                      <li><a href="#bookid">일련번호</a></li>
+						                      <li><a id="returnBookid" href="#bookid">일련번호</a></li>
 						                      <li><a href="#title">제목</a></li>
 						                    </ul>
 						                </div>

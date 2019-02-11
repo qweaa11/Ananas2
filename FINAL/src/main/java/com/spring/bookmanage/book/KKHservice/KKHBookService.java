@@ -183,42 +183,56 @@ public class KKHBookService implements InterKKHBookService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	//개별 도서정보를 수정하는 메소드
 	public int editIndivBookInfo(HashMap<String, String> parameterMap) {
 		int n = bookdao.editIndivBookInfo(parameterMap);
 		return n;
 	}
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	//개별 도서를 테이블에서 삭제하는 메소드
 	public int deleteIndivBook(String bookid) {
 		int n= bookdao.deleteIndivBook(bookid);
 		return n;
 	}
+	
 	@Override
+	//추가될 도서의 시작일련번호를 채번해오는 메소드
+	public int findStartBookNum(String bookid) {
+		int startBookNum = bookdao.findStartBookNum(bookid);
+		return startBookNum;
+	}
+	
+	@Override
+	//추가될 도서에 입력될 도서정보를 해당 도서번호를 가진 책들중 첫번째 책에서 가져오는 메소드
 	public KKHBookVO findBookInfoSample(String bookid) {
 		KKHBookVO bookInfoSample= bookdao.findBookInfoSample(bookid); 
 		
 		return bookInfoSample;
 	}
+	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	//book테이블,book_detail 테이블에 추가할 도서갯수만큼 insert해주는 메소드
 	public int insertAdditionalBook(KKHBookVO bookInfoSample, HashMap<String, String> parameterMap) {
 		int n = bookdao.insertAdditionalBook(bookInfoSample,parameterMap);
 		return n;
 	}
+	
 	@Override
-	public int findStartBookNum(String bookid) {
-		int startBookNum = bookdao.findStartBookNum(bookid);
-		return startBookNum;
-	}
-	@Override
+	//삭제할 도서의 정보를 VO에 저장하는 메소드
 	public List<KKHBookVO> findDeleteBook(String bookid) {
 		List<KKHBookVO> deleteBookList = bookdao.findDeleteBook(bookid);
 		return deleteBookList;
 	}
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
+	//delete_book 테이블에 가져온 도서정보를 insert 한뒤 book, book_detail 테이블에서 해당 도서의 정보를 삭제하는 메소드
 	public int insertAndDeleteBookList(List<KKHBookVO> deleteBookList,String bookid,String cleanerid) {
+		//delete_book 테이블에 삭제할 도서정보를 isnert 해주는 메소드
 		int n1 = bookdao.insertDelete_BookList(deleteBookList,cleanerid);
+		
+		//book, book_detail 테이블에서 해당 도서번호를 가진 모든 책을 delete 해주는 메소드
 		int n2 = bookdao.deleteBookAndBookDetail(bookid);
 		if(n1 == n2 ) return 1;
 		else return 0;

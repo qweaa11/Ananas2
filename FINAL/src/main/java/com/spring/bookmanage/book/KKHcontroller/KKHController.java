@@ -301,7 +301,7 @@ public class KKHController {
 	 * @param request
 	 * @return List<HashMap<String,String>>
 	 */
-	public List<HashMap<String,String>> findDetailField(HttpServletRequest request){
+	public List<HashMap<String,String>> findDetailField(HttpServletRequest request, HttpServletResponse response){
 		
 		String bigfcode = request.getParameter("bigfcode");//큰 field 값을 받아오고
 		
@@ -440,14 +440,21 @@ public class KKHController {
 		return "msg";
 	}
 	
+	/**
+	 * 개별 도서정보를 수정하는 매핑
+	 * ISBN,Price,Weight,TotalPage, Pdate(등록일자) 를 수정한다.
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/editIndivBookInfo.ana", method= {RequestMethod.POST})
 	public String editIndivBookInfo(HttpServletRequest request,HttpServletResponse response) {
-		String editISBN = request.getParameter("editISBN");
-		String editPrice = request.getParameter("editPrice");
-		String editWeight = request.getParameter("editWeight");
-		String editTotalPage = request.getParameter("editTotalPage");
-		String editPdate = request.getParameter("editPdate");
-		String bookid = request.getParameter("bookid");
+		String editISBN = request.getParameter("editISBN");			  	//ISBN
+		String editPrice = request.getParameter("editPrice");			//Price
+		String editWeight = request.getParameter("editWeight");			//Weight
+		String editTotalPage = request.getParameter("editTotalPage");	//TotalPage
+		String editPdate = request.getParameter("editPdate");			//Pdate
+		String bookid = request.getParameter("bookid");					//bookid
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
 		parameterMap.put("EDITISBN", editISBN);
@@ -457,6 +464,7 @@ public class KKHController {
 		parameterMap.put("EDITPDATE", editPdate);
 		parameterMap.put("BOOKID", bookid);
 		
+		//개별 도서 정보수정  메소드
 		int n = service.editIndivBookInfo(parameterMap);
 		
 		if(n != 1) {
@@ -477,9 +485,16 @@ public class KKHController {
 		return "msg";
 	}
 	
+	/**
+	 * 개별 도서를 삭제(테이블에서 delete 시켜버림)하는 매핑
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/deleteIndivBook.ana",method= {RequestMethod.POST})
 	public String deleteIndivBook(HttpServletRequest request,HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
+		//그냥 delete 함
 		int n = service.deleteIndivBook(bookid);
 		if(n != 1) {
 			String msg = "수정 실패";
@@ -500,28 +515,30 @@ public class KKHController {
 		
 	}
 	
+	/**
+	 * 해당 도서를 몇권 추가해주는 매핑
+	 * 추가되는 도서의 정보는 기존 도서들중 첫번째 도서의 정보들로 추가된다.
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/AddBook.ana",method= {RequestMethod.POST})
 	public String AddBook(HttpServletRequest request,HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		String count_str = request.getParameter("count");
-		System.out.println("bookid1:"+bookid);
-	/*	try {
-		count = Integer.parseInt(count_str);
-		}catch(NumberFormatException e) {
-			String msg = "추가 실패";
-			String loc = "javascript:history.back()";
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-			
-			return "msg";
-		}*/
+		
+		//추가될 도서에 부여될 끝부분 이일련번호 시작숫자를 가져오는 메소드
+		//ex) L1000KRE02530UN-1-15가 기존에 존재하는 도서번호중 마지막 번호라면 16을 가져온다.
 		int startBookNum = service.findStartBookNum(bookid); 
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
-		parameterMap.put("BOOKID", bookid);
-		parameterMap.put("COUNT", count_str);
-		parameterMap.put("STARTBOOKNUM", String.valueOf(startBookNum));
+		parameterMap.put("BOOKID", bookid);								//추가될 도서의 큰 일련번호 ex)L1000KRE02530UN-1
+		parameterMap.put("COUNT", count_str);							//추가할 도서수
+		parameterMap.put("STARTBOOKNUM", String.valueOf(startBookNum));	//끝자리 일련번호 시작숫자
+		
+		//추가될 도서에 입력될 도서정보를 가져오는 메소드
 		KKHBookVO bookInfoSample = service.findBookInfoSample(bookid);
 		
+		//도서를 해당 일련버호로 추가하는 메소드
 		int n = service.insertAdditionalBook(bookInfoSample,parameterMap);
 		
 		if(n != 1) {
@@ -541,9 +558,15 @@ public class KKHController {
 	
 	}
 	
+	/**
+	 * 해당 일련번호를 가진 모든 책을 book,book_detail 테이블에서 삭제하고 delete_book 테이블로 옮기는 매핑
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/deleteAllBook.ana",method= {RequestMethod.POST})
 	public String deleteAllBook(HttpServletRequest request, HttpServletResponse response) {
-		String bookid = request.getParameter("bookid");
+		String bookid = request.getParameter("bookid");	//삭제할 도서일련번호(큰번호까지) ex)L1000KRE02530UN-1
 		String cleanerid = "";
 		HttpSession session = request.getSession();
 		if(session.getAttribute("loginLibrarian")!= null) {
@@ -553,7 +576,10 @@ public class KKHController {
 			AdminVO loginAdmin = (AdminVO)session.getAttribute("loginAdmin");
 			cleanerid = loginAdmin.getAdminid();
 		}
+		//삭제할 도서의 정보를 가져오는 메소드
 		List<KKHBookVO> deleteBookList = service.findDeleteBook(bookid);
+		
+		//삭제한 도서들의 정보를 delete_book 테이블에 insert 해주는 메소드
 		int n = service.insertAndDeleteBookList(deleteBookList,bookid,cleanerid);
 		
 		if(n != 1) {
@@ -561,20 +587,22 @@ public class KKHController {
 			String loc = "javascript:history.back()";
 			request.setAttribute("msg", msg);
 			request.setAttribute("loc", loc);
-			
-			
 		}else {
 			String msg = "삭제 성공";
 			String loc = "/bookmanage/bookList.ana";
 			request.setAttribute("msg", msg);
 			request.setAttribute("loc", loc);
-			
 		}
-		
 		return "msg";
 	}
 	
 	
+	/**
+	 * 도서 반납기한을 연장(+7일) 하는 매핑
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/extendBookList.ana",method = {RequestMethod.POST})
 	public String extendBookList(HttpServletRequest request, HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
@@ -583,6 +611,7 @@ public class KKHController {
 		
 			String[] extendBookArr = extendBookid.split(",");
 			System.out.println(extendBookArr[0]);
+			//반납예정일을 +7일 해주는 메소드
 			String[] extendSuccessBook = service.updateDeadline(extendBookArr);
 			
 			
@@ -607,29 +636,18 @@ public class KKHController {
 				
 			}
 		
-			
-		/*	int n = service.updateDeadline(extendBookid);
-			if(n == 0) { 
-				String msg = "연장 실패";
-				String loc = "javascript:history.back()";
-				request.setAttribute("msg", msg);
-				request.setAttribute("loc", loc);
-				
-				
-			}else {
-				String msg = extendBookid+" 연장 성공!!";
-				String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
-				System.out.println("extendBookListAsBookid:"+bookid);
-				request.setAttribute("msg", msg);
-				request.setAttribute("loc", loc);
-				
-			}*/
-		
-		
 		return "msg";
 	}
 	
-	
+	/**
+	 * 대여된 도서를 반납하는 매핑
+	 * 반납시 도서status를 에약이 있을땐 2 없을땐 0 으로 바꾸고
+	 * returned 테이블에 정보를 insert 해준뒤,
+	 * rental 테이블의 해당 도서정보를 delete 해준다.
+	 * @param request
+	 * @param response
+	 * @return 
+	 */
 	@RequestMapping(value="/returnBookList.ana", method = {RequestMethod.POST})
 	public String returnBookList(HttpServletRequest request, HttpServletResponse response) {
 		String returnBookid = request.getParameter("returnBookid");
@@ -637,6 +655,7 @@ public class KKHController {
 		int n=0;
 		//try {
 			String[] returnBookidArr = returnBookid.split(",");
+			//도서번호에 해당하는 책을 반납처리하는 메소드
 			String[] returnSuccessBook = service.returnBook(returnBookidArr);
 			
 			if(returnSuccessBook.length < 1) { 
@@ -644,7 +663,6 @@ public class KKHController {
 				String loc = "javascript:history.back()";
 				request.setAttribute("msg", msg);
 				request.setAttribute("loc", loc);
-				
 				
 			}else {
 				String msg = "";
@@ -660,34 +678,21 @@ public class KKHController {
 				
 			}
 			
-		/*} catch (PatternSyntaxException e) {
-			n = service.returnBook(returnBookid);
-			
-			if(n != 1) {
-				String msg = "반납 실패";
-				String loc = "javascript:history.back()";
-				request.setAttribute("msg", msg);
-				request.setAttribute("loc", loc);
-				
-				
-			}else {
-				String msg = "반납 성공";
-				String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
-				System.out.println("retnrnBookListAsBookid:"+bookid);
-				request.setAttribute("msg", msg);
-				request.setAttribute("loc", loc);
-				
-			}
-		}*/
-		
 		return "msg";
 	}
 	
+	/**
+	 * 예약된 책을 예약취소 처리하는 매핑
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/reserveCancel.ana",method= {RequestMethod.GET})
 	public String reserveCancel(HttpServletRequest request, HttpServletResponse response) {
 		String bookid = request.getParameter("bookid");
 		String cancelBookid = request.getParameter("cancelBookid");
 		
+		//예약취소시키는 메소드
 		int n = service.reserveCancel(cancelBookid);
 		if(n != 1) {
 			String msg = "예약 취소실패";

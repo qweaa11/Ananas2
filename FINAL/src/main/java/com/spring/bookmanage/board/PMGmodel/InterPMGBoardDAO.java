@@ -63,6 +63,17 @@ public interface InterPMGBoardDAO {
 	int reductionCommentCount(String viewIdx);
 	// 댓글 삭제 이후에 댓글의 갯수(commentCount 컬럼) 1감소
 	
+	public int findNoticeMaxidx();
+	// 등록한 공지사항 idx 가져오기
+	
+	
+	void insertAlarm(HashMap<String, String> paraMap, List<String> libIdList) throws Throwable;
+	// 공지사항 글 등록이 완료되면 알람테이블에 insert
+	
+	List<String> findLibId(HashMap<String, String> paraMap);
+	// librarian테이블의 조건(libcode)에 맞는 아이디(도서관장, 사서) 가져오기
+	
+	
 	
 	
 }

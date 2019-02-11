@@ -263,7 +263,7 @@ th, td {
 		
 		
 		$(".rental").click(function(){
-			if(rentalFlag == false){
+			if(rentalFlag == true){
 				alert("대여가 불가능한 책입니다.");
 				return;
 			}
@@ -276,7 +276,7 @@ th, td {
 		});
 		
 		$(".reserve").click(function(){
-			if(reserveFlag == false){
+			if(reserveFlag == true){
 				alert("예약이 불가능한 책입니다.");
 				return;
 			}
@@ -316,6 +316,10 @@ th, td {
 				frm.action = "r3.ana";
 				frm.method = "GET";
 				frm.submit();
+			}else{
+					alert("대여가 불가능한 책입니다.");
+					return;
+				
 			}
 				
 		});

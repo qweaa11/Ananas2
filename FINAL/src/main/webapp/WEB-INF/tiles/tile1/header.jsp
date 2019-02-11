@@ -110,9 +110,9 @@
 					<li class="dropdown" style="margin-left: 15px;"> 
 						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo4-mini.png">
-						<span style="margin-left: 10px;">대출/예약/반납</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
+						<span style="margin-left: 10px;">대여/예약/반납</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
-							<li><a href="r3.ana">대출/반납/예약</a></li>
+							<li><a href="r3.ana">대여/반납/예약</a></li>
 							<li><a href="rentalList.ana">대여목록</a></li>
 							<li><a href="reservationList.ana">예약목록</a></li>
 							<li><a href="bookReturned.ana">반납목록</a></li>

@@ -424,6 +424,35 @@
 	</update>
 	
 	
+	<select id="findNoticeMaxidx" resultType="int">
+		select max(idx)
+		from notice 
+		order by idx desc
+	</select>
+	
+	
+	<insert id="insertAlarm" parameterType="HashMap">
+		insert into alarm(idx, libid_fk, noticeNo, libCode, status)
+		values(alarm_seq.nextval, #{LIBID}, #{PIDX}, 
+		<if test="LIBCODE == null">
+			null
+		</if> 
+		<if test="LIBCODE != null">
+			#{LIBCODE}
+		</if>
+		, default)
+	</insert>
+	
+	<select id="findLibId" parameterType="HashMap" resultType="String">
+		select LIBID
+		from librarian
+		<if test="LIBCODE != null">
+			where libcode_fk = #{LIBCODE}
+			and status <![CDATA[<]]> #{GRADE}
+		</if>
+	</select>
+	
+	
 	
 </mapper>
 

@@ -27,15 +27,23 @@ public class PMGBoardService implements InterPMGBoardService {
 	
 	// 공지사항 글쓰기(파일첨부가 없는 글쓰기)
 	@Override
-	public int noticeWriteadd(PMGNoticeVO noticevo) {
+	@Transactional(propagation=Propagation.REQUIRED, isolation= Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int noticeWriteadd(PMGNoticeVO noticevo) throws Throwable{
 		int n = dao.noticeWriteadd(noticevo);
+		if(n == 1) {
+			n = dao.findNoticeMaxidx();
+		}
 		return n;
 	}
 
 	// 공지사항 글쓰기(파일첨부가 있는 글쓰기)
 	@Override
-	public int noticeWriteadd_withFile(PMGNoticeVO noticevo) {
+	@Transactional(propagation=Propagation.REQUIRED, isolation= Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int noticeWriteadd_withFile(PMGNoticeVO noticevo) throws Throwable{
 		int n = dao.noticeWriteadd_withFile(noticevo);
+		if(n == 1) {
+			n = dao.findNoticeMaxidx();
+		}
 		return n;
 	}
 
@@ -230,10 +238,19 @@ public class PMGBoardService implements InterPMGBoardService {
 		
 		return result;
 	}
-	
-	
-	
 
+	
+	// 공지사항 글 등록이 완료되면 알람테이블에 insert
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation= Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public void insertAlarm(HashMap<String, String> paraMap) throws Throwable {
+		List<String> libIdList = dao.findLibId(paraMap);
+		
+		dao.insertAlarm(paraMap, libIdList);
+		
+	}
+
+	
 	
 	
 	
