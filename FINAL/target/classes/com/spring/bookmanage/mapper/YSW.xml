@@ -4,6 +4,20 @@
 
 <mapper namespace="YSW">
 
+	<!-- 회원 가입시 등록 할 수 있는 도서관 리스트 요청 -->
+	<!-- 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기 맵 -->
+	<resultMap type="HashMap" id="libraryMap">
+		<result property="LIBCODE" column="libcode" javaType="String" />
+		<result property="LIBNAME" column="libname" javaType="String" />
+	</resultMap>
+	
+	<!-- <select id="findLibraryList" resultMap="libraryMap">
+		
+		select libcode, libname
+		from library
+	
+	</select> -->
+
 	<!-- ===== 아이디 중복 체크 요청. ===== -->
 	<select id="idDuplicate" parameterType="String" resultType="int">
 	
@@ -418,12 +432,6 @@
 		group by rollup(gender)
 	
 	</select>
-	
-	
-	<!-- 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기 맵 -->
-	<resultMap type="HashMap" id="libraryMap">
-		<result property="LIBNAME" column="libname" javaType="String"/>
-	</resultMap>
 	
 	<!-- 메세지 보내기 페이지를 보여줄때 도서관 이름 가져오기  -->
 	<select id="findLibrary" resultMap="libraryMap">

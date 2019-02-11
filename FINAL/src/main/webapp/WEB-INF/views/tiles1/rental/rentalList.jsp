@@ -105,7 +105,7 @@ th td {text-align: center;}
 			
 			var idxArr = new Array();
 			 
-			var rentalInfo = $("input[name=rentalInfo]:checked");
+			var rentalInfo = $("input[name=rentalInfo]:checked"); // 체크 박스가 체크되어 있는 줄의 정보를 가져온다.
 			
 			rentalInfo.each(function(i){
 				

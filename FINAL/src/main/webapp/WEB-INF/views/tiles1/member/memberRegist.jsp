@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    
 <% String ctxPath = request.getContextPath(); %>
 
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
@@ -405,22 +407,6 @@
          <div class="col-md-8 col-sm-9">
            <label><input name="gender" type="radio" value="0" checked>남성 </label>
            <label><input name="gender" type="radio" value="1" >여성 </label>
-         </div>
-       </div>
-       
-       <div class="form-group">
-        <label class="control-label col-sm-3"><span class="text-danger">*</span>가입 도서관</label>
-         <div class="col-xs-8">
-           <div class="form-inline">
-           	<div class="form-group" >
-		       <select name="library" class="form-control">
-		         <option value="0">가입 도서관</option>
-		         <option value="서울시립 도서관" >서울시립 도서관 </option>
-		         <option value="수원시립 도서관" >수원시립 도서관 </option>
-		         <option value="인천시립 도서관" >인천시립 도서관</option>
-		       </select>
-        	</div>
-           </div>
          </div>
        </div>
        

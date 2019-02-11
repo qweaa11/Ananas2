@@ -10,6 +10,7 @@ public class YSWMemberVO {
 	private String name; // �̸�
 	private String email; // �̸���
 	private String phone; // ����ó
+	//private String library;
 	private String addr1; // �ּ�
 	private String addr2; // ���ּ�
 	private String post; // �����ȣ
@@ -36,6 +37,7 @@ public class YSWMemberVO {
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
+		//this.library = library;
 		this.addr1 = addr1;
 		this.addr2 = addr2;
 		this.post = post;
@@ -108,6 +110,16 @@ public class YSWMemberVO {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	
+
+	/*public String getLibrary() {
+		return library;
+	}
+
+
+	public void setLibrary(String library) {
+		this.library = library;
+	}*/
 
 
 	public String getAddr1() {

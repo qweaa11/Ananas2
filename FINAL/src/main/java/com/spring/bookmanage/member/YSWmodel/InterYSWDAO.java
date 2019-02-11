@@ -10,6 +10,9 @@ import com.spring.bookmanage.rental.YSWmodel.YSWRentalVO;
 
 @Repository
 public interface InterYSWDAO {
+	
+	// === 회원 가입시 등록 할 수 있는 도서관 리스트 요청
+	//List<HashMap<String, String>> findLibraryList();
 
 	//===== 아이디 중복 체크 요청. =====
 	int idDuplicate(String memberid);
@@ -34,6 +37,7 @@ public interface InterYSWDAO {
 	// 사서 정보 삭제(Real Delete)
 	int deleteLibrarian(String lIBRARIANIDX);
 
+	
 
 
 	
