@@ -37,6 +37,7 @@ public class JGHBookController {
 		HttpSession session = request.getSession();
 		LibrarianVO librarian = (LibrarianVO)session.getAttribute("loginLibrarian");
 		HashMap<String,String> libcode = new HashMap<String,String>();
+
 		if(librarian != null) {
 			libcode.put("LIBCODE", librarian.getLibcode_fk());
 		}// end of if
@@ -60,7 +61,6 @@ public class JGHBookController {
 		}// end of if~else
 
 		request.setAttribute("colname", colname);// view단에서 검색어를 유지시키기 위해 보낸것.
-
 		request.setAttribute("deleteBookList", deleteBookList);
 
 		return "book/deleteLog.tiles1";
@@ -84,7 +84,6 @@ public class JGHBookController {
 
 			msg = "삭제된 도서를 복구하는데 성공했습니다.";
 			loc = "deleteLog.ana";
-
 		} catch (Throwable e) {
 			e.printStackTrace();
 			msg = "삭제된 도서를 복구하는데 실패했습니다.";

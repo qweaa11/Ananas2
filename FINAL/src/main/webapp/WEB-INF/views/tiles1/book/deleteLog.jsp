@@ -143,7 +143,7 @@
 					<thead>
 						<tr>
 							<th style="text-align: center;">선택</th>
-							<th style="text-align: center;">번호(rno)</th>
+							<th style="text-align: center;">번호</th>
 							<th style="text-align: center;">도서일련번호</th>
 							<th style="text-align: center;">도서명</th>
 							<th style="text-align: center;">작가</th>
@@ -165,7 +165,7 @@
 						<tr class="tr-row" style="cursor: pointer;">
 							<td>
 								<input type="checkbox" class="check" name="check" />
-								<input type="text" class="delid" name="delid" value="${deleteBookVO.delid}"/>
+								<input type="hidden" class="delid" name="delid" value="${deleteBookVO.delid}"/>
 							</td>
 							<td class="td">${deleteBookVO.rno}</td>
 							<td class="td">${deleteBookVO.bookid}</td>
