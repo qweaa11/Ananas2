@@ -108,22 +108,6 @@
 				</div>
 				
 				<br/>
-				<div style="float: right;">
-					<div class="collapse navbar-collapse" id="bs-slide-dropdown">
-				        <ul class="nav navbar-nav navbar-right">
-				            <li class="dropdown">
-				              <i class="dropdown-toggle glyphicon glyphicon-th-list"
-				              	data-toggle="dropdown" style="cursor: pointer;"></i>
-				              <ul class="dropdown-menu" role="menu">
-				                <li><a href="#">도서일련번호 오름차순</a></li>
-				                <li><a href="#">도서명 오름차순</a></li>
-				                <li><a href="#">작가명 오름차순</a></li>
-				              </ul>
-				            </li>
-				        </ul>
-					</div>
-				</div>
-				<br/>
 				
 				<div style="margin-bottom: 2%; margin-top: 2%;">
 					<div style="float: left;">
