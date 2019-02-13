@@ -44,7 +44,12 @@ public class YSWController {
 	//===== 회원등록 페이지 요청. =====
 	@RequestMapping(value="/memberRegist.ana", method= {RequestMethod.GET})
 	public String registUser(HttpServletRequest req, HttpServletResponse res) {
-				
+		/*
+		// === 회원 가입시 등록 할 수 있는 도서관 리스트 요청
+		List<HashMap<String, String>> libraryList = service.findLibraryList();
+		
+		req.setAttribute("LIBRARYLIST", libraryList);
+		*/
 		return "member/memberRegist.tiles1";  
 	}// end of public String registUser(HttpServletRequest req) 
 	
@@ -55,11 +60,11 @@ public class YSWController {
 	public HashMap<String,Integer> idDuplicate(HttpServletRequest req, HttpServletResponse res) {
 		
 		String memberid = req.getParameter("memberid");
-		System.out.println("memberid : " + memberid);
+		//System.out.println("memberid : " + memberid);
 		
 		int result = service.idDuplicate(memberid);
 		
-		System.out.println("result : " + result);
+		//System.out.println("result : " + result);
 		
 		HashMap<String,Integer> resultMap = new HashMap<String,Integer>();
 		
@@ -82,6 +87,7 @@ public class YSWController {
 			String name = req.getParameter("name");
 			String email = req.getParameter("email");
 			String phone = req.getParameter("phone");
+			//String library = req.getParameter("library");
 			String addr1 = req.getParameter("addr1");
 			String addr2 = req.getParameter("addr2");
 			String post = req.getParameter("post");
@@ -89,6 +95,7 @@ public class YSWController {
 			String gender = req.getParameter("gender");
 			
 			//System.out.println("birth : " + birth);
+			//System.out.println(library);
 			
 			if(memberid == "" || pwd == "" || name == "" || 
 			   email == "" || birth == "" || gender == "" ||  
@@ -143,19 +150,19 @@ public class YSWController {
 					HttpSession session = req.getSession();
 					String root = session.getServletContext().getRealPath("/");
 					
-					System.out.println("root : " + root);
+					//System.out.println("root : " + root);
 					
 					String path = root + "resources" + File.separator + "profilePicture";
-					System.out.println("path : "+ path);
+					//System.out.println("path : "+ path);
 					
 					bytes = attach.getBytes();
 					
-					System.out.println("fileSize : " + fileSize);
+					//System.out.println("fileSize : " + fileSize);
 					imgFileName = fileManager.doFileUpload(bytes, attach.getOriginalFilename(), path);
 					
 					
 					
-					System.out.println("recordPicName : " + imgFileName);
+					//System.out.println("recordPicName : " + imgFileName);
 					
 					membervo.setImgFileName(imgFileName);
 					membervo.setFileSize(fileSize);
@@ -169,6 +176,7 @@ public class YSWController {
 			membervo.setName(name);		
 			membervo.setEmail(aes.encrypt(email));
 			membervo.setPhone(aes.encrypt(phone));
+			//membervo.setLibrary(library);
 			membervo.setAddr1(addr1);
 			membervo.setAddr2(addr2);
 			membervo.setPost(post);

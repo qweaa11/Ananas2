@@ -41,7 +41,7 @@ public class JGHChartController {
 	 * 해당년도에 월별 최다대여된 도서의 분야를 조회해주는 차트 불러오기
 	 * @param request
 	 * @param response
-	 * @return 
+	 * @return
 	 */
 	@RequestMapping(value = "jghChartBestField.ana", method= {RequestMethod.GET})
 	@ResponseBody
@@ -53,7 +53,7 @@ public class JGHChartController {
 		HashMap<String, String> dateMap = new HashMap<>();
 		dateMap.put("currentyear", currentyear);
 		dateMap.put("month", month);
-		
+
 		List<HashMap<String, Object>> bestFieldRankChart = service.bestFieldRank(dateMap, libraryList);
 
 		return bestFieldRankChart;

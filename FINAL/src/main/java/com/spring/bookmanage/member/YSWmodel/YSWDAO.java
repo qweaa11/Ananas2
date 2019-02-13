@@ -17,6 +17,15 @@ public class YSWDAO implements InterYSWDAO {
 	
 	@Autowired
 	private SqlSessionTemplate sqlsession;
+	
+	
+	// === 회원 가입시 등록 할 수 있는 도서관 리스트 요청
+	/*@Override
+	public List<HashMap<String, String>> findLibraryList() {
+
+		List<HashMap<String, String>> libraryMap = sqlsession.selectList("YSW.findLibraryList");
+		return libraryMap;
+	}*/
 
 	
 	//===== 아이디 중복 체크 요청. =====
@@ -89,6 +98,9 @@ public class YSWDAO implements InterYSWDAO {
 		int result = sqlsession.delete("YSW.deleteLibrarian", lIBRARIANIDX);
 		return result;
 	}
+
+
+	
 
 
 }

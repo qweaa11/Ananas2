@@ -18,6 +18,16 @@ public class YSWService implements InterYSWService {
 	@Autowired
 	private InterYSWDAO dao;
 	
+	
+	// === 회원 가입시 등록 할 수 있는 도서관 리스트 요청
+	/*@Override
+	public List<HashMap<String, String>> findLibraryList() {
+
+		List<HashMap<String, String>> libraryMap  = dao.findLibraryList();
+		return libraryMap;
+	}*/
+
+	
 
 	//===== 아이디 중복 체크 요청. =====
 	@Override
@@ -89,8 +99,6 @@ public class YSWService implements InterYSWService {
 		int result = dao.deleteLibrarian(lIBRARIANIDX);
 		return result;
 	}
-
-
 
 
 }
