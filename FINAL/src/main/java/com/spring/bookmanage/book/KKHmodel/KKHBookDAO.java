@@ -265,27 +265,31 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	}
 	
 	@Override
+	//도서 반납예정일을 +7연장해주는 메소드
 	public int updateDeadline(String extendBookid) {
 		int n = sqlsession.update("KKH.updateDeadline", extendBookid);
 		return n;
 	}
 	
 	@Override
+	//대여된 도서정보를 returned 테이블에 넣기위해 가져오는 메소드
 	public HashMap<String, String> findRentalBook(String returnBookid) {
-		HashMap<String,String> rentalBookInfo = sqlsession.selectOne("KKH.findRentalBook", returnBookid);
-		String reserveCount = sqlsession.selectOne("KKH.getReserveCount", returnBookid);
-		rentalBookInfo.put("RESERVECOUNT", reserveCount);
+		HashMap<String,String> rentalBookInfo = sqlsession.selectOne("KKH.findRentalBook", returnBookid); // 해당 도서의 대여정보를 가져온다.
+		String reserveCount = sqlsession.selectOne("KKH.getReserveCount", returnBookid); //대여된 도서가 예약되어있는지 확인하기위해 reserve테이블에서 count 값을 구해온다.
+		rentalBookInfo.put("RESERVECOUNT", reserveCount);								//구해온 count 값을 HashMap에 넣어줌.
 		System.out.println(rentalBookInfo.get("IDX")+", "+rentalBookInfo.get("BOOKID_FK"));
 		return rentalBookInfo;
 	}
 	
 	@Override
+	//가져온 도서정보를 returned 테이블에 insert해주는 메소드
 	public int insertReturnedBook(HashMap<String, String> rentalBookInfo) {
 		int n = sqlsession.insert("KKH.insertReturnedBook", rentalBookInfo);
 		return n;
 	}
 	
 	@Override
+	//도서 반납시 도서가 예약되어있으면 status =1 아니면 status = 0으로 update해주는 메소드
 	public int updateReturnedBookStatus(HashMap<String, String> rentalBookInfo) {
 		System.out.println("reservecount:"+rentalBookInfo.get("RESERVECOUNT"));
 		int n = sqlsession.update("KKH.updateReturnBookStatus", rentalBookInfo);
@@ -293,18 +297,21 @@ public class KKHBookDAO implements InterKKHBookDAO {
 	}
 	
 	@Override
+	//도서 반납시 반납예정일보다 늦게 반납할경우 해당 회원에게 연체료와 정지일을 부여하는 메소드
 	public int updateLateMemberInfo(HashMap<String, String> rentalBookInfo) {
 		int n = sqlsession.update("KKH.updateLateMember", rentalBookInfo);				
 		return n;
 	}
 	
 	@Override
+	//rental 테이블에서 반납한 도서정보를 delete 하는 메소드
 	public int deleteRentalBook(String returnBookid) {
 		int n = sqlsession.delete("KKH.deleteRentalBook", returnBookid);
 		return n;
 	}
 	
 	@Override
+	//예약되어 잇는 도서를 예약취소하는 메소드
 	public int reserveCancel(String cancelBookid) {
 		sqlsession.update("KKH.CancelChangeStatus", cancelBookid);
 		int n = sqlsession.delete("KKH.reserveCancel", cancelBookid);

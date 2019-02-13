@@ -243,6 +243,8 @@ public class KKHBookService implements InterKKHBookService{
 	public String[] updateDeadline(String[] extendBookArr) {
 		String[] extendSuccessBookArr = new String[extendBookArr.length];
 		for(int i=0; i<extendBookArr.length;i++) {
+			
+			//도서 반납예정일을 +7연장해주는 메소드
 			int n = bookdao.updateDeadline(extendBookArr[i]);
 			if(n == 1) {
 				extendSuccessBookArr[i] = extendBookArr[i];
@@ -252,11 +254,11 @@ public class KKHBookService implements InterKKHBookService{
 		
 		return extendSuccessBookArr;
 	}
-	@Override
+	/*@Override
 	public int updateDeadline(String extendBookid) {
 		int n = bookdao.updateDeadline(extendBookid);
 		return n;
-	}
+	}*/
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
 	public String[] returnBook(String[] returnBookidArr) {
@@ -264,14 +266,21 @@ public class KKHBookService implements InterKKHBookService{
 		//List<HashMap<String,String>> rentalBookInfoList = new ArrayList<HashMap<String,String>>();
 		for(int i =0; i<returnBookidArr.length;i++) {
 			System.out.println("returnBookid1:"+returnBookidArr[i]);
+			
+			//대여 되어있는 도서의 정보를 가져오는 메소드
 			HashMap<String,String> rentalBookInfo = bookdao.findRentalBook(returnBookidArr[i]);
+			
+			//returned 테이블에 insert하는 메소드
 			int n1 = bookdao.insertReturnedBook(rentalBookInfo);
+			//도서가 반납될때 예약이 되어있는 책일경우 status = 1 아닐경우 status = 0 으로 update해주는 메소드
 			int n2 = bookdao.updateReturnedBookStatus(rentalBookInfo);
 			int latedate = Integer.parseInt(rentalBookInfo.get("LATEDATE"));
 			int n3= 1;
 			if(latedate >0) {
+				//도서가 연체되었을 경우 회원정보에 정지일과 연체료를 추가해주는 메소드
 				n3 = bookdao.updateLateMemberInfo(rentalBookInfo);
 			}
+			//rental 테이블에서 대여된 도서 정보를 delete 해주는 메소드
 			int n4 = bookdao.deleteRentalBook(returnBookidArr[i]);
 			if(n1*n2*n3*n4 == 1) {
 				returnSuccessBookArr[i] = returnBookidArr[i];
@@ -280,27 +289,11 @@ public class KKHBookService implements InterKKHBookService{
 		
 		return returnSuccessBookArr;
 	}
-	@Override
-	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
-	public int returnBook(String returnBookid) {
-		System.out.println("returnBookid2:"+returnBookid);
-		HashMap<String,String> rentalBookInfo = bookdao.findRentalBook(returnBookid);
-		int n1 = bookdao.insertReturnedBook(rentalBookInfo);
-		int n2 = bookdao.updateReturnedBookStatus(rentalBookInfo);
-		int latedate = Integer.parseInt(rentalBookInfo.get("LATEDATE"));
-		int n3= 1;
-		if(latedate >0) {
-			n3 = bookdao.updateLateMemberInfo(rentalBookInfo);
-		}
-		int n4 = bookdao.deleteRentalBook(returnBookid);
-		if(n1*n2*n3*n4 == 1) return 1;
-		else return 0;
-	}
-	
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
 	public int reserveCancel(String cancelBookid) {
+		//예약된 도서정보를 reserve 테이블에서 delete해주는 메소드
 		int n = bookdao.reserveCancel(cancelBookid);
 		return n;
 	}

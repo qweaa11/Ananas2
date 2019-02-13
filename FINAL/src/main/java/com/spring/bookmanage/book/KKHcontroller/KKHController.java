@@ -599,6 +599,7 @@ public class KKHController {
 	
 	/**
 	 * 도서 반납기한을 연장(+7일) 하는 매핑
+	 * 연장은 최대 3회까지 가능
 	 * @param request
 	 * @param response
 	 * @return
@@ -611,7 +612,7 @@ public class KKHController {
 		
 			String[] extendBookArr = extendBookid.split(",");
 			System.out.println(extendBookArr[0]);
-			//반납예정일을 +7일 해주는 메소드
+			//반납예정일을 +7일 해주는 메소드 연장은 최대 3번까지 가능
 			String[] extendSuccessBook = service.updateDeadline(extendBookArr);
 			
 			

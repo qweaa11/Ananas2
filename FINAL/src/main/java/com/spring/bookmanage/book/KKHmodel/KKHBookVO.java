@@ -13,6 +13,7 @@ public class KKHBookVO {
 	private int status;		// book 테이블의 도서 상태값 
 	private int agecode;	// book 테이블의 도서연령
 	private int count; 		// 해당 도서번호를 가진 같은 책의 도서권수
+	
 	private String gcode_fk;// genre 코드
 	private String gname; 	// genre 코드  이름(장르 코드)
 	private String ncode_fk;// nation 코드
@@ -27,6 +28,7 @@ public class KKHBookVO {
 	private String libname;	// 도서관 코드 이름
 	private String pubcode_fk;//출판사 코드
 	private String pubname;	// 출판사 코드 이름
+	
 	private String isbn;	// 도서별 ISBN 값
 	private String intro;	// book_detail 테이블의 책소개 글
 	private String image;	// book_detail 테이블의 책 이미지 값

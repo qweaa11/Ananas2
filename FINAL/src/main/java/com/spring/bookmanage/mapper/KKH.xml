@@ -395,7 +395,7 @@
 	<delete id="deleteBook" parameterType="String">
 		delete from  book where bookid like '%'||#{bookid}||'%'
 	</delete>
-	
+	<!-- 도서 반납예정일을 +7연장해주는 쿼리문  최대 3회까지 가능하다.-->
 	<update id="updateDeadline" parameterType="String">
 		update rental set deadline = deadline+7,renew = renew+1
         where bookid_fk = #{extendBookid} 
@@ -415,23 +415,27 @@
 		<result property="LATEDATE" column="latedate" javaType="String"/>
 		<result property="MEMBERID_FK" column="memberid_fk" javaType="String"/>
 	</resultMap>
+	<!-- 대여된 도서정보를 returned 테이블에 넣기위해 가져오는 쿼리문 -->
 	<select id="findRentalBook" parameterType="String" resultMap="rentalBook">
 		select idx,bookid_fk, memberid_fk, rentaldate, deadline,renew , trunc(sysdate - deadline) as latedate 
 		from rental
 		where bookid_fk = #{returnBookid}
 	</select>
 	
+	<!-- 반납할 도서가 예약되어있는지 확인하기위한 쿼리문 -->
 	<select id="getReserveCount" parameterType="String" resultType="String">
 		select count(*) as reserveCount
 		from reservation
 		 where bookid_fk = #{returnBookid}
 	</select>
-	
+
+	<!-- 가져온 도서정보를 returned 테이블에 insert해주는 쿼리문 -->
 	<insert id="insertReturnedBook" parameterType="HashMap">
 		insert into returned(idx,memberid_fk,bookid_fk,returndate,rentaldate,deadline)
 		values(returned_seq.nextval,#{MEMBERID_FK},#{BOOKID_FK}, default, to_date(#{RENTALDATE},'yyyy-mm-dd hh24:mi:ss'), to_date(#{DEADLINE},'yyyy-mm-dd hh24:mi:ss'))
 	</insert>
 	
+	<!-- 도서 반납시 도서가 예약되어있으면 status =1 아니면 status = 0으로 update해주는 쿼리문 -->
 	 <update id="updateReturnBookStatus" parameterType="HashMap">
 	 	update book set 
 	 	<if test="RESERVECOUNT==1">
@@ -443,21 +447,25 @@
 		where bookid = #{BOOKID_FK}
 	</update>
 	
+	<!-- 도서 반납시 반납예정일보다 늦게 반납할경우 해당 회원에게 연체료와 정지일을 부여하는 쿼리문 -->
 	<update id="updateLateMember" parameterType="HashMap">
-		update member set latefee =100*#{LATEDATE}, revokedate = #{LATEDATE}, status = 2
+		update member set latefee =latefee + to_number(100*#{LATEDATE}), revokedate = revokedate + to_number(#{LATEDATE}), status = 2
 		where memberid = #{MEMBERID_FK}	
 	</update> 
 	
+	<!-- rental 테이블에서 반납한 도서정보를 delete 하는 메소드 -->
 	<delete id="deleteRentalBook" parameterType="String">
 		delete from rental where bookid_fk = #{returnBookid}
 	</delete>
 	
+	<!-- 예약취소된 도서의 status 값을 대여되있을 경우 그대로 1로 두고, 아닐경우 0 으로 바꾸는 쿼리문 -->
 	<update id="CancelChangeStatus" parameterType="String">
 		update book set status = 0
 		where bookid = #{cancelBookid}
-			  and status in (1,2,3)
+			  and status =2
 	</update>
 	
+	<!-- 예약되어 잇는 도서정보를 reserve 테이블에서 delete하는 쿼리문 -->
 	<delete id="reserveCancel" parameterType="String">
 		delete from reservation where bookid_fk = #{cancelBookid}
 	</delete>

@@ -144,18 +144,27 @@ public interface InterKKHBookService {
 	int insertAndDeleteBookList(List<KKHBookVO> deleteBookList,String bookid,String cleanerid);
 
 	/**
-	 * 반납예정일을 +7
+	 * 반납예정일을 +7일 해주는 메소드(연장은 최대 3회까지 가능)
 	 * @param extendBookArr
-	 * @return
+	 * @return String[]
 	 */
 	String[] updateDeadline(String[] extendBookArr);
 
-	int updateDeadline(String extendBookid);
-
+	/**
+	 * 대여된 도서를 반납하는 메소드
+	 * rental 테이블에서 정보를 delete한뒤 returned 테이블에 반납정보를 insert한다.
+	 * @param returnBookidArr
+	 * @return String[]
+	 */
 	String[] returnBook(String[] returnBookidArr);
 
-	int returnBook(String returnBookid);
-
+	/**
+	 * 예약되어 잇는 도서를 예약취소하는 메소드
+	 * reserve 테이블에서 해당 도서의 예약정보를 delete 한뒤
+	 * book테이블의 status를 2(예약) 일경우 0으로 바꾸거나, 1(대여) 일경운 그래도 1로 둔다.
+	 * @param cancelBookid
+	 * @return int
+	 */
 	int reserveCancel(String cancelBookid);
 
 }

@@ -116,6 +116,7 @@
 							<li><a href="rentalList.ana">대여목록</a></li>
 							<li><a href="reservationList.ana">예약목록</a></li>
 							<li><a href="bookReturned.ana">반납목록</a></li>
+							<li><a href="deleteLog.ana">삭제목록</a></li>
 						</ul>
 					</li>
 					<li class="dropdown" style="margin-left: 15px;"> 
@@ -151,9 +152,10 @@
 					<li class="dropdown" style="margin-left: 15px;"> 
 						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo7.png">
-						<span style="margin-left: 10px;">쪽지</span><span class="caret" style="margin-left: 3px;"></span></a>  
+						<span style="margin-left: 10px;">쪽지/채팅</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
 							<li><a href="messageForm.ana">발신/수신/보관함</a></li>
+							<li><a href="multichat.ana">실시간 채팅</a></li>
 						</ul>       
 					</li>
 	                

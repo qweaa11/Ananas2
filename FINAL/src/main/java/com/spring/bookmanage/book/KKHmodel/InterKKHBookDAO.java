@@ -154,18 +154,58 @@ public interface InterKKHBookDAO {
 	 */
 	int deleteBookAndBookDetail(String bookid);
 
+	/**
+	 * 대여된 도서의 반납예정일을 +7일 해주는 메소드 
+	 * 3회까지가능
+	 * @param extendBookid
+	 * @return int
+	 */
 	int updateDeadline(String extendBookid);
 
+	/**
+	 * 대여된 도서정보를 returned 테이블에 넣기위해 가져오는 메소드
+	 * @param returnBookid String
+	 * @return HashMap
+	 */
 	HashMap<String, String> findRentalBook(String returnBookid);
 
+	/**
+	 * 가져온 도서정보를 returned 테이블에 insert해주는 메소드
+	 * @param rentalBookInfo HashMap
+	 * @return int
+	 */
 	int insertReturnedBook(HashMap<String, String> rentalBookInfo);
 
+	/**
+	 * 도서 반납시 도서가 예약되어있으면 status =1 아니면 status = 0으로 update해주는 메소드
+	 * @param rentalBookInfo HashMap
+	 * @return int
+	 */
 	int updateReturnedBookStatus(HashMap<String, String> rentalBookInfo);
-
+	
+	/**
+	 * 도서 반납시 반납예정일보다 늦게 반납할경우 
+	 * 해당 회원에게 연체료와 정지일을 부여하는 메소드
+	 * 연체료 = 기존연체료+100*연체일  / 정지일 = 기존정지일+연체일
+	 * @param rentalBookInfo HashMap
+	 * @return int
+	 */
 	int updateLateMemberInfo(HashMap<String, String> rentalBookInfo);
 
+	/**
+	 * rental 테이블에서 반납한 도서정보를 delete 하는 메소드
+	 * @param returnBookid
+	 * @return
+	 */
 	int deleteRentalBook(String returnBookid);
 
+	/**
+	 * 예약되어 잇는 도서를 예약취소하는 메소드
+	 * reserve 테이블에서 해당 도서의 예약정보를 delete 한뒤
+	 * book테이블의 status를 2(예약) 일경우 0으로 바꾸거나, 1(대여) 일경운 그래도 1로 둔다.
+	 * @param cancelBookid
+	 * @return int
+	 */
 	int reserveCancel(String cancelBookid);
 
 
