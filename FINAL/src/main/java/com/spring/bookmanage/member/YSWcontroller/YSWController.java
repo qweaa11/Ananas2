@@ -148,11 +148,11 @@ public class YSWController {
 					String imgFileName = "";
 					
 					HttpSession session = req.getSession();
-					String root = session.getServletContext().getRealPath("/");
+					String root = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\";
 					
 					//System.out.println("root : " + root);
 					
-					String path = root + "resources" + File.separator + "profilePicture";
+					String path = root + "resources"+File.separator+"member";
 					//System.out.println("path : "+ path);
 					
 					bytes = attach.getBytes();
