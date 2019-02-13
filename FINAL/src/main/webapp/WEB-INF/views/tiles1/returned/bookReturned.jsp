@@ -66,6 +66,7 @@
 				$.each(json, function(entryIndex, entry){
 					html += "<tr>" +
 							   "<td style='text-align:center;'>"+entry.idx+"</td>"+
+							   "<td style='text-align:center;'>"+entry.returnlibcode+"</td>"+
 							   "<td style='text-align:center;'>"+entry.memberID+"</td>"+
 							   "<td style='text-align:center;'>"+entry.name+"</td>"+
 							   "<td style='text-align:center;'>"+entry.phone+"</td>"+
@@ -167,7 +168,7 @@
 				$.each(json,function(entryIndex, entry){
 					html += "<tr>" +
 							   "<td style='text-align:center;'>"+entry.idx+"</td>"+
-							   "<td style='text-align:center;'>"+entry.memberID+"</td>"+
+							   "<td style='text-align:center;'>"+entry.returnlibcode+"</td>"+
 							   "<td style='text-align:center;'>"+entry.memberID+"</td>"+
 							   "<td style='text-align:center;'>"+entry.name+"</td>"+
 							   "<td style='text-align:center;'>"+entry.phone+"</td>"+

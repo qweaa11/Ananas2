@@ -68,10 +68,10 @@
 	<!-- returned, book, member 테이블을 조인해서 반납목록에 필요한 정보 얻어오기 -->
 	<select id="listReturned" parameterType="HashMap" resultType="com.spring.bookmanage.returned.YMHmodel.ReturnedVO">
 	
-		select idx, memberid, name, phone, title, author, returndate, rentaldate
+		select idx, memberid, name, phone, title, author, returndate, rentaldate, returnlibcode
 		from 
 		(
-			select row_number() over(order by ${SORT} desc) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			select row_number() over(order by ${SORT} desc) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate, substr(bookid, 1, 4) as returnlibcode
 			from book A join returned B
 			on a.bookid = b.bookid_fk
 			join member C on c.memberid = b.memberid_fk
@@ -92,10 +92,10 @@
 	<!-- returned, book, member 테이블을 조인해서 반납목록에 필요한 정보 얻어오기 -->
 	<select id="listReturnedWithSearch" parameterType="HashMap" resultType="com.spring.bookmanage.returned.YMHmodel.ReturnedVO">
 	
-		select idx, memberid, name, phone, title, author, returndate, rentaldate
+		select idx, memberid, name, phone, title, author, returndate, rentaldate, returnlibcode
 		from 
 		(
-			select row_number() over(order by ${SORT} desc) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate
+			select row_number() over(order by ${SORT} desc) as RNO, b.idx as idx, memberid_fk as memberid, name, phone, title, author, returndate, rentaldate, substr(bookid, 1, 4) as returnlibcode
 			from book A join returned B
 			on a.bookid = b.bookid_fk
 			join member C on c.memberid = b.memberid_fk

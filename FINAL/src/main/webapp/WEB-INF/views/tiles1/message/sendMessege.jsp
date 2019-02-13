@@ -30,7 +30,7 @@
 
 	$(document).ready(function () 
 	{
-		showSendMessage();
+		showSendMessage(1);
 		
 		
 	});
@@ -41,8 +41,9 @@
 		var form_data = {"seq":"${YMHMessageVO.idx}",
 						 "currentShowPageNo":currentShowPageNo,
 						 "userid":"${sessionScope.loginLibrarian.libid}"}
-		console.log(form_data);
-		console.log("AJAX 시작");
+
+
+		
 		$.ajax({
 			url:"<%=request.getContextPath() %>/showSendMessage.ana", 
 			data:form_data,
@@ -50,12 +51,12 @@
 			dataType:"JSON",
 			success:function(json){
 				var resultHTML = "";
-				console.log("AJAX 중간");
+
 				$.each(json, function(entryIndex, entry){
 					resultHTML += "<tr>"+
 					              "<td style='text-align: center;'>"+entry.IDX+"</td>"+
 					              "<td>"+entry.TARTGETID+" - "+entry.TARTGETNAME+"</td>"+
-					              "<td>"+entry.TITLE+"</td>"+
+					              "<td><a onClick=\"window.open(\'showYMHMessage.ana?idx="+entry.IDX+"\',\'Message\',\'width=1000,height=600,top=280, left=460,status=no,scrollbars=no\');\">"+entry.TITLE+"</a></td>"+
 					              "<td style='text-align: center;'>"+entry.SENDDATE+"</td>";
 					              
                if(entry.OPENDATE != null){
@@ -66,28 +67,20 @@
 	           }
 			   
 			   
-				    resultHTML += "<td style='text-align: center;'>삭제</td>"+
+				    resultHTML += "<td><button type='button' onClick='javascript:location.href=\"deleteSendMessage.ana?idx="+entry.IDX+"\"'> 삭제 </button></td>"+
 					              "</tr>";
 				});// end of $.each()-------------
 				
-				console.log("AJAX 끝");
 				
 				$("#messageDisplay").empty().html(resultHTML);
 				
-			//	makeMessegePageBar(currentShowPageNo); 
+				makeSendMessagePageBar(currentShowPageNo); 
 				// 페이지바함수 호출 
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
 		});
-
-		
-		
-		
-		
-		
-		
 	}
 	
 	
@@ -95,13 +88,16 @@
 	
 	
 	// ==== 댓글내용 페이지바 Ajax 로 만들기 ==== //
-	function makemessagePageBar(currentShowPageNo) 
+	function makeSendMessagePageBar(currentShowPageNo) 
 	{
-		var form_data = {seq:"${YMHMessageVO.idx}",
-				         sizePerPage:"5"};
+
+		var form_data = {"userid":"${sessionScope.loginLibrarian.libid}",
+				         sizePerPage:"10", "currentShowPageNo":currentShowPageNo};
+
+
 		
 		$.ajax({
-			url:"<%=request.getContextPath() %>/getMessageTotalPage.ana", 
+			url:"<%=request.getContextPath() %>/getSendMessageTotalPage.ana", 
 			data:form_data,
 			type:"GET",
 			dataType:"JSON",
@@ -111,7 +107,7 @@
 					// 댓글이 있는 경우
 					var totalPage = json.TOTALPAGE;
 					var pageBarHTML = "";
-					
+
 					/////////////////////////////////
 					var blockSize = 10;
 					// blockSize 는 1개 블럭(토막)당 보여지는 페이지번호의 갯수이다. 
@@ -161,12 +157,12 @@
 				    // ------------------------------ //
 				    
 					
-					$("#pageBar").empty().html(pageBarHTML);
+					$("#sendPageBar").empty().html(pageBarHTML);
 					pageBarHTML = "";
-				}
+				}  
 				else {
 					// 댓글이 없는 경우 
-					$("#pageBar").empty();
+					$("#sendPageBar").empty();
 				}
 			},
 			error: function(request, status, error){
@@ -175,25 +171,24 @@
 		});
 	}// end of function makeCommentPageBar(currentShowPageNo)------------- 
 	
-
 	
 </script>
 
 <div style="margin: 1%; width: 90%;">
-	<div id="" style="width: 90%; order: solid red 1px;">
-		<table> 
-			<thead>
+	<div id="" style="width: 90%; order: solid red 0px;">
+		<table style="margin: 1%; width: 99%;"> 
+			<thead> 
 				<tr>
-					<th style="width: 8%;  border: solid red 1px; align-content: center;">쪽지번호</th>
-					<th style="width: 20%; border: solid red 1px;">받는사람</th>
-					<th style="width: 25%; border: solid red 1px;">제목</th>
-					<th style="width: 20%; border: solid red 1px;">발송일자</th>
-					<th style="width: 20%; border: solid red 1px;">열람일자</th>
-					<th style="width: 7%;  border: solid red 1px;">삭제</th>
+					<th style="width: 8%;  border: solid red 0px; align-content: center;">쪽지번호</th>
+					<th style="width: 20%; border: solid red 0px;">받는사람</th>
+					<th style="width: 25%; border: solid red 0px;">제목</th>
+					<th style="width: 20%; border: solid red 0px;">발송일자</th>
+					<th style="width: 20%; border: solid red 0px;">열람일자</th>
+					<th style="width: 7%;  border: solid red 0px;">삭제</th>
 				</tr>
 			</thead>
 			<tbody id="messageDisplay"></tbody>
 		</table>
-		<div id="pageBar"></div>
+		<div id="sendPageBar" align="center"></div>
 	</div>
 </div>

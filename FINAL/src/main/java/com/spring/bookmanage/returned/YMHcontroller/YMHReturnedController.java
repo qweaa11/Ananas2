@@ -86,6 +86,7 @@ public class YMHReturnedController
 				map.put("ageCode", rvo.getAgeCode());
 				map.put("returnDate", rvo.getReturnDate());
 				map.put("rentalDate", rvo.getRentalDate());
+				map.put("returnlibcode", rvo.getReturnlibcode());
 				map.put("phone", aes.decrypt(rvo.getPhone()) );
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -170,6 +171,7 @@ public class YMHReturnedController
 				map.put("ageCode", rvo.getAgeCode());
 				map.put("returnDate", rvo.getReturnDate());
 				map.put("rentalDate", rvo.getRentalDate());
+				map.put("returnlibcode", rvo.getReturnlibcode());
 				map.put("phone", aes.decrypt(rvo.getPhone()) );
 			} catch (Exception e) {
 				e.printStackTrace();
