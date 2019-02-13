@@ -232,8 +232,13 @@
 
 <body>
 	<div class="container" style="text-align:center;">
-		<h1>도서관 목록</h1>
-		<br>
+		<h3 style="border-bottom:solid 1px #a6a6a6; width:950px; text-align:left;">
+			<span style="background-color:black;">
+				<img style="width:30px; height:30px;"src="resources/img/home-logo/home-logo1-mini.png">
+			</span>
+		도서관 관리>도서관 목록</h3>
+		<br/>
+		
 		
 		<form name="searchFrm" style="border:solid green 0px; text-align:right;">
 			<select name="colname" id="colname" style="height:30px; border:solid red 0px;">

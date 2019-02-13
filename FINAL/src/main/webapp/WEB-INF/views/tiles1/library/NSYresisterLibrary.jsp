@@ -29,6 +29,7 @@ $(document).ready(function(){
 		if(!bool){
 			$(".fail").show();
 			$("#tel").val("");
+			$(".unfail").hide();
 		}
 		else{
 			$(".fail").hide();
@@ -128,9 +129,16 @@ function goResister(){
 </head>
 <body>
 <div class="container">
-	<h3>도서관 등록 페이지</h3>
+	<h3 style="border-bottom:solid 1px #a6a6a6; width:600px;">
+		<span style="background-color:black;">
+			<img style="width:30px; height:30px;"src="resources/img/home-logo/home-logo1-mini.png">
+		</span>
+	도서관 관리>도서관 등록</h3>
+	<br/>
 	
-	<form name="libFrm" enctype="multipart/form-data">
+	
+	<form name="libFrm" enctype="multipart/form-data" style="width:600px;">
+	
 		<!-- ==== 도서관명 ==== -->
 		<div class="input-group">
 			<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -175,7 +183,7 @@ function goResister(){
 		</div>
 		
 		<!-- ==== 도서관 등록하기 ==== -->
-		<button type="button" style="margin-top:10px; height:36px; width:100px;" onClick="goResister();">등록하기</button>
+		<button type="button" style="float:right; margin-top:10px; margin-right:20px; height:36px; width:100px;" onClick="goResister();">등록하기</button>
 		
 	</form>
 	<br>

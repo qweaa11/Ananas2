@@ -188,7 +188,7 @@
     	websocket.onopen = function() {
     	//	alert("웹소켓 연결됨!!");
     		$("#chatStatus").text("정보: 채팅방에 접속 되었습니다.");
-   			var userList = $("#userList").val();
+   			//var userList = $("#userList").val();
 
     	/*	
             messageObj = {};  // 초기화

@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -74,7 +75,14 @@ public class NSYLibraryController {
 		//단일파일
 		if(!imgFile.isEmpty()) {
 			// imgFile(첨부파일) 있는경우 
-			String path = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\resources\\NSYfiles";
+			
+			//저장경로 metadata에 저장시키자
+			HttpSession session = req.getSession();
+			String root = session.getServletContext().getRealPath("/"); // #콘텍스트는 프로젝트명을 말한다. -> 슬래시는 wepapp를 의미한다.(mymvc는 왭컨텐트)
+			String path = root + "resources" + File.separator + "NSYfiles"; // #파일이 올라갈 경로다.
+			
+			//metadata로 변경시키자
+			//String path = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\resources\\NSYfiles";
 			
 			try {
 				
@@ -274,8 +282,14 @@ public class NSYLibraryController {
 		int result = 0;
 		
 		if(!imgFile.isEmpty()) { 
-			// imgFile(첨부파일) 있는경우 
-			String path = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\resources\\NSYfiles";
+			// imgFile(첨부파일) 있는경우
+			//저장경로 metadata에 저장시키자
+			HttpSession session = req.getSession();
+			String root = session.getServletContext().getRealPath("/"); // #콘텍스트는 프로젝트명을 말한다. -> 슬래시는 wepapp를 의미한다.(mymvc는 왭컨텐트)
+			String path = root + "resources" + File.separator + "NSYfiles"; // #파일이 올라갈 경로다.
+			
+			//metadata로 변경시키자
+			//String path = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\resources\\NSYfiles";
 			
 			// ==== 기존 파일 삭제처리===================
 			// 첨부파일을 다시 새파일을 업로드할때 기존파일명을 삭제처리한다.
