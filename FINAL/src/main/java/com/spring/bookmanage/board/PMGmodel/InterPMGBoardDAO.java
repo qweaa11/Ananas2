@@ -74,6 +74,10 @@ public interface InterPMGBoardDAO {
 	// librarian테이블의 조건(libcode)에 맞는 아이디(도서관장, 사서) 가져오기
 	
 	
+	int findAlarmByMap(CommentVO commentvo);
+	// 알람테이블의 댓글을 썼는지 안썼는지 가져오는 카운트용
+	int updateAlarm(CommentVO commentvo);
+	// 댓글을 작성하면 알람테이블 status 1로 변경(공지사항 게시글 읽음으로 변경)
 	
 	
 }

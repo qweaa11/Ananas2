@@ -222,6 +222,21 @@ public class PMGBoardDAO implements InterPMGBoardDAO {
 	}
 
 	
+	// 알람테이블의 댓글을 썼는지 안썼는지 가져오는 카운트용
+	@Override
+	public int findAlarmByMap(CommentVO commentvo) {
+		int n = sqlsession.selectOne("PMG.findAlarmByMap", commentvo);
+		return n;
+	}
+
+	// 댓글을 작성하면 알람테이블 status 1로 변경(공지사항 게시글 읽음으로 변경)
+	@Override
+	public int updateAlarm(CommentVO commentvo) {
+		int n = sqlsession.update("PMG.updateAlarm", commentvo);
+		return n;
+	}
+
+	
 
 	
 	

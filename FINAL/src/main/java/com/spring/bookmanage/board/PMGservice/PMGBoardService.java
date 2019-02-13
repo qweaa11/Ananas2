@@ -201,6 +201,12 @@ public class PMGBoardService implements InterPMGBoardService {
 			result = dao.updateCommentCount(commentvo.getParentIdx());
 		}
 		
+		int alarm = dao.findAlarmByMap(commentvo);
+		
+		if(alarm == 1) {
+			dao.updateAlarm(commentvo);
+		}
+		
 		return result;
 	}
 	// 원글 공지사항 글번호에 대한 댓글중 페이지 번호에 해당하는 댓글만 조회

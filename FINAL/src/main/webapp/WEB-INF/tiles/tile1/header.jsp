@@ -21,6 +21,34 @@
 				$(".menu-toggle").click();
 			}
 		});
+		
+		$.ajax({
+			
+			url:"alarm.ana",
+			type:"GET",
+			dataType:"json",
+			success:function(json) {
+				
+				var cnt = json.COUNT;
+				var html = "";
+				if(cnt > 0) {
+					
+					html = "<div class=\"alert alert-info alert-dismissible fade in navbar-right alarm\" style=\"margin-right: 30px; margin-bottom: 0px; float: right; height: 50px;\">\n" + 
+						   "	<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n" + 
+						   "	<strong>공지사항 글이 등록되었습니다.</strong> 총  " + cnt + "개의 글이 등록되었습니다. 확인후 댓글작성 바랍니다.\n" + 
+						   "	<a href=\"noticeList.ana\" class=\"alert-link\">이동</a>\n" + 
+						   "</div>";
+					
+				}
+				
+				$("#alarm").html(html);
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});// end of $.ajax()-------------------------
 	})
 	
 </script>
@@ -45,6 +73,7 @@
 				</div>  
 				
 				<div class="navbar-collapse collapse">
+					    
 					<ul class="nav navbar-nav navbar-right" style="margin-right: 20px;">
 
 						<c:if test="${sessionScope.loginLibrarian != null}">
@@ -61,6 +90,8 @@
 						<li><a href="schedulerRun.ana">스케줄러실행<i class="glyphicon glyphicon-hourglass"></i></a></li>
 						<li><a href="logout.ana">로그아웃</a></li>
 					</ul>
+					<div id="alarm">
+					</div>
 				</div>
 				
 				
@@ -71,8 +102,9 @@
 	</div>
 	
 	<div class="container" style="margin-top: 40px;">
+		
+	
 		<div id="wrapper" style="clear: both;" class="toggled">      
-		        
 		    
 	
 	        <!-- Sidebar -->

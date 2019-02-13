@@ -645,7 +645,7 @@ public class PMGBoardController {
 	// 댓글쓰기
 	@RequestMapping(value="/commentWrite.ana", method= {RequestMethod.POST})
 	@ResponseBody
-	public HashMap<String, String> commentWrite(HttpServletRequest request, HttpServletResponse response, CommentVO commentvo) throws Throwable {
+	public HashMap<String, String> commentWrite(HttpServletRequest request, HttpServletResponse response, CommentVO commentvo) {
 		
 		HashMap<String, String> returnMap = new HashMap<String, String>();
 		
@@ -665,7 +665,14 @@ public class PMGBoardController {
 	//	int commentIdx = service.findCommentIdx();
 		
 		// 댓글쓰기
-		int n = service.commentWrite(commentvo); // 트랜잭션 처리
+		int n = 0;
+		
+		try {
+			n = service.commentWrite(commentvo);
+		} catch (Throwable e) {
+			n = 0;
+			e.printStackTrace();
+		} // 트랜잭션 처리
 	//	System.out.println(MyUtil.getNowTime());
 	//	System.out.println(commentvo.getIdx());
 		if(n==1) {
@@ -1014,6 +1021,9 @@ public class PMGBoardController {
 		
 	}// end of void multiplePhotoUpload(HttpServletRequest req, HttpServletResponse res)----------------
 	// ********************************************** 스마트에디터 ************************************************************** //
+	
+	
+	
 	
 	
 	

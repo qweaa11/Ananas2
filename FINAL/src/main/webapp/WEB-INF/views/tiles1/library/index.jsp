@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <link rel="stylesheet" type="text/css" href="resources/css/styles/blog_styles.css">
 
@@ -8,6 +10,7 @@
 		<div class="row">
 			<div class="col">
 				<div class="blog_posts d-flex flex-row align-items-start justify-content-between">
+					
 					
 					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"" style="padding: 0px;">
 						<!-- Blog post -->

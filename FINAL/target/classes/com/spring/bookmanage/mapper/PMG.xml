@@ -453,6 +453,23 @@
 	</select>
 	
 	
+	<select id="alarmCount" parameterType="String" resultType="int">
+		select count(*)
+		from alarm
+		where status = 0 and libid_fk = #{libId}
+	</select>
+	
+	
+	<select id="findAlarmByMap" parameterType="com.spring.bookmanage.board.PMGmodel.CommentVO" resultType="int">
+		select count(*)
+		from alarm
+		where libid_fk = #{libid_fk} and noticeno = #{parentIdx} and status = 0
+	</select>
+	
+	<update id="updateAlarm" parameterType="com.spring.bookmanage.board.PMGmodel.CommentVO">
+		update alarm set status = 1
+		where libid_fk = #{libid_fk} and noticeno = #{parentIdx}
+	</update>
 	
 </mapper>
 
