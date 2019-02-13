@@ -327,7 +327,7 @@ p{margin:3px;}
         		<input type="text" id="searchWord" name="searchWord" style="width: 30%; margin-left: 30px;" placeholder="검색 할 사서 정보" />
         		<button type="button" onClick="searchList()">검색</button>
   
-        	<a class="btn icon-btn btn-primary pull-right" style="margin-bottom: 10px;" href="adminRegist.ana">
+        	<a class="btn icon-btn btn-primary pull-right" style="margin-bottom: 10px;" href="librarianRegist.ana">
         		<span class="glyphicon btn-glyphicon glyphicon-plus img-circle"></span>새로운 사서 등록
         	</a>
         </div>
