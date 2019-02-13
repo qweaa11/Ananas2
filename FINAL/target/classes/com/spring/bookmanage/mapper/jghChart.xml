@@ -30,7 +30,7 @@
 		select count, fname
 		from
 		    (
-		    select fname, libname, count
+		    select rownum as rno, fname, libname, count
 		        , rank() over(partition by libname order by count desc) as rank
 		    from
 		        (
@@ -50,6 +50,7 @@
 		        )V
 		    )T
 		where rank = 1
+		and rno = 1
 		order by count desc
 	</select>
 	

@@ -364,6 +364,8 @@
 						data-toggle="tooltip" data-placement="top" title="검색" onclick="search();">
 						<i class="glyphicon glyphicon-search"></i></button>
 				</div>
+				
+				<br/><br/><br/><br/><br/>
 
 				<div style="float: left;">
 					<button type="button" id="lock"class="btn btn-dark" 
@@ -392,7 +394,7 @@
 					<thead>
 						<tr>
 							<th style="text-align: center;">선택</th>
-							<th style="text-align: center;">번호(RNO)</th>
+							<th style="text-align: center;">번호</th>
 							<th style="text-align: center;">이름</th>
 							<th style="text-align: center;">아이디</th>
 							<th style="text-align: center;">구분(연령대)</th>
