@@ -156,7 +156,7 @@
 							<td class="td">${deleteBookVO.title}</td>
 							<td class="td">${deleteBookVO.author}</td>
 							<td class="td">${deleteBookVO.pubname}</td>
-							<td class="td">${deleteBookVO.agecode}</td>
+							<td class="td">${deleteBookVO.agecode_trans}</td>
 							<td class="td">${deleteBookVO.count}</td>
 							<td class="td">${deleteBookVO.deldate}</td>
 							<td class="td">${deleteBookVO.cleanerid}</td>
