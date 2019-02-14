@@ -350,8 +350,14 @@
 	}// end of function sideinfo_setOrderRankChart() { }--------------------------
 
 </script>
+<table style="margin-left:15%;">
+	<tr >
+		<td><div id="libraryBookPieChart" style="min-width: 100%; margin-top: 50px; margin-bottom: 50px; padding-left: 20px; padding-right: 20px;"></div></td>
+		<td><div id="libraryBookBarChart" style="min-width: 100%; margin-top: 50px; margin-bottom: 50px; padding-left: 20px; padding-right: 20px;"></div></td>
+	</tr>
+	
+</table>
 
-<div id="libraryBookPieChart" style="min-width: 90%; margin-top: 50px; margin-bottom: 50px; padding-left: 20px; padding-right: 20px;"></div>
-<div id="libraryBookBarChart" style="min-width: 90%; margin-top: 50px; margin-bottom: 50px; padding-left: 20px; padding-right: 20px;"></div>
+
 
 

@@ -68,13 +68,13 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu4">
-							<span style="font-size: 20pt;">SW</span>
+							<span style="font-size: 20pt;">점유</span>
 						</button>
 					</div>
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu5">
-							<span style="font-size:20pt;">SY</span>
+							<span style="font-size:20pt;">보유</span>
 						</button>
 					</div>
 					
