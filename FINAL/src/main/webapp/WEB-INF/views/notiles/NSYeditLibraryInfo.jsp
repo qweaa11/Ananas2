@@ -148,7 +148,13 @@ $(document).ready(function(){
 </head>
 <body>
 <div class="container">
-	<h3>도서관정보수정</h3>
+	
+	<h3 style="border-bottom:solid 1px #a6a6a6; width:600px; text-align:left;">
+			<span style="background-color:black;">
+				<img style="width:30px; height:30px;"src="resources/img/home-logo/home-logo1-mini.png">
+			</span>
+		도서관 관리>도서관 목록>도서관정보 수정</h3>
+		<br/>
 	
 	<form name="libFrm" enctype="multipart/form-data">
 		<input type="hidden" id="idx" name="idx">
@@ -196,7 +202,7 @@ $(document).ready(function(){
 		</div>
 		
 		<!-- ==== 도서관 등록하기 ==== -->
-		<button type="button" style="margin-top:10px; height:36px; width:100px;" onClick="editLibraryInfo();">수정하기</button>
+		<button type="button" style="margin-top:10px; height:36px; width:100px; float:right; margin-right:135px;" onClick="editLibraryInfo();">수정하기</button>
 		
 	</form>
 	<br>

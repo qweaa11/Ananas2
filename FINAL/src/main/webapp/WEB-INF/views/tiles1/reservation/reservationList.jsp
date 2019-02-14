@@ -216,22 +216,28 @@
 <body>
 
 <div class="container">
-<h1>예약목록</h1>
-<br>
+
+	<h3 style="border-bottom:solid 1px #a6a6a6; width:1150px; text-align:left;">
+			<span style="background-color:black;">
+				<img style="width:30px; height:30px;"src="resources/img/home-logo/home-logo4-mini.png">
+			</span>
+		대여/예약/반납>예약목록</h3>
+		<br/>
 	<form name="valueFrm">
 		<!-- 검색분류 -->
-		<select id="colname" name="colname" style="height:30px;">
+		<div style="text-align:right;">
+		<select id="colname" name="colname" style="height:30px; border:0px;">
 			<option value="name">회원명</option>
 			<option value="title">도서명</option>
 			<option value="reserveDate">날짜</option>
 		</select>
 		<!-- 검색어 -->
-		<input id="searchWord" name="searchWord" style="height:30px;" placeholder="Search..">
-		<button type="button" onClick="goSearch('1');" style="height:30px;">검색</button>
+		<input id="searchWord" name="searchWord" style="height:30px; border:0px;" placeholder="Search..">
+		<button type="button" onClick="goSearch('1');" style="height:30px;">Search</button>
 		<!-- 엔터키 리로드 방지용 (같은 form안에 input태그가 2개 이상 있어야 한다)-->
 		<input type="text" style="display:none;"/>
-		<span style="margin-left:50%; font-size:14pt; font-weight:bold;">정렬</span>
-	<br>
+		</div>
+	<br/>
 	
 	<table id="customers" >
 		<thead>

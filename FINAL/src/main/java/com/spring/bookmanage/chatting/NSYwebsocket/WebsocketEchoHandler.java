@@ -14,7 +14,7 @@ import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.chatting.NSYmodel.MessageVO;
 
 
-// === #177. (웹채팅관련8) === 
+// === (웹채팅관련) === 
 
 public class WebsocketEchoHandler extends TextWebSocketHandler {
 
@@ -42,18 +42,18 @@ public class WebsocketEchoHandler extends TextWebSocketHandler {
 	    	                      을 추가한다.  
 	    	*/
 	        
-	        System.out.println("====> 웹채팅확인용 : " + wsession.getId() + "님이 접속했습니다.");
+	        //System.out.println("====> 웹채팅확인용 : " + wsession.getId() + "님이 접속했습니다.");
 	        // ====> 웹채팅확인용 : 0님이 접속했습니다. 
 	        // ====> 웹채팅확인용 : 1님이 접속했습니다.
 	        // wsession.getId() 는 자동증가되는 고유한 숫자로 나옴. #순차적으로
 	        
-	        System.out.println("====> 웹채팅확인용 : " + "연결 컴퓨터명 : " + wsession.getRemoteAddress().getHostName());
+	        //System.out.println("====> 웹채팅확인용 : " + "연결 컴퓨터명 : " + wsession.getRemoteAddress().getHostName());
 	        // ====> 웹채팅확인용 : 연결 컴퓨터명 : DESKTOP-QHPLVB1
 	        
-	        System.out.println("====> 웹채팅확인용 : " + "연결 컴퓨터명 : " + wsession.getRemoteAddress().getAddress().getHostName());
+	        //System.out.println("====> 웹채팅확인용 : " + "연결 컴퓨터명 : " + wsession.getRemoteAddress().getAddress().getHostName());
 	        // ====> 웹채팅확인용 : 연결 컴퓨터명 : DESKTOP-QHPLVB1
 	        
-	        System.out.println("====> 웹채팅확인용 : " + "연결 IP : " + wsession.getRemoteAddress().getAddress().getHostAddress()); 
+	        //System.out.println("====> 웹채팅확인용 : " + "연결 IP : " + wsession.getRemoteAddress().getAddress().getHostAddress()); 
 	        // ====> 웹채팅확인용 : 연결 IP : 192.168.50.29
 	        
 	    }
@@ -87,14 +87,14 @@ public class WebsocketEchoHandler extends TextWebSocketHandler {
 	    	LibrarianVO loginLibrarian = (LibrarianVO)map.get("loginLibrarian");
 	    	AdminVO loginAdmin = (AdminVO)map.get("loginAdmin");
 	    	
-	    	if(loginAdmin != null) {
+	    	/*if(loginAdmin != null) {
 		    	System.out.println("====> 웹채팅확인용 : 로그인 관리자ID : " + loginAdmin.getAdminid());
 		    	// ====> 웹채팅확인용 : 로그인 관리자ID : 
 	    	}
 	    	if(loginLibrarian != null ) {
 	    		System.out.println("====> 웹채팅확인용 : 로그인 관리자ID : " + loginLibrarian.getLibid());
 		    	// ====> 웹채팅확인용 : 로그인 관리자ID : 	
-	    	}
+	    	}*/
 	    	
 	        MessageVO messageVO = MessageVO.convertMessage(message.getPayload());
 	        // 파라미터 message 은  클라이언트 사용자가 웹소켓서버로 보낸 웹소켓 메시지임
@@ -109,12 +109,12 @@ public class WebsocketEchoHandler extends TextWebSocketHandler {
 	                if (!wsession.getId().equals(webSocketSession.getId())) {  // 메시지를 자기자신을 뺀 나머지 모든 사용자들에게 메시지를 보냄.
 	                    if(loginAdmin != null) {
 	                    	webSocketSession.sendMessage(
-		                            new TextMessage("<p class='talk other'>"+wsession.getRemoteAddress().getAddress().getHostAddress() +" [" +loginAdmin.getName()+ "]" + " ▶ " + messageVO.getMessage()+"</p>"));
+		                            new TextMessage("<p class='talk other'>"+wsession.getRemoteAddress().getAddress().getHostAddress() +" [" +loginAdmin.getName()+ "]" + "<span>님 :</span> " + messageVO.getMessage()+"</p>"));
 	                    	
 	                    }
 	                    if(loginLibrarian != null) {
 	                    	webSocketSession.sendMessage(
-		                            new TextMessage("<p class='talk other'>"+wsession.getRemoteAddress().getAddress().getHostAddress() +" [" +loginLibrarian.getName()+ "]" + " ▶ " + messageVO.getMessage()+"</p>"));
+		                            new TextMessage("<p class='talk other'>"+wsession.getRemoteAddress().getAddress().getHostAddress() +" [" +loginLibrarian.getName()+ "]" + "<span>님 :</span> " + messageVO.getMessage()+"</p>"));
 	                    	
 	                    }
 	                	
@@ -126,17 +126,17 @@ public class WebsocketEchoHandler extends TextWebSocketHandler {
 	                	if(loginAdmin != null) {
 	                		 webSocketSession.sendMessage(
 	 	                            new TextMessage(
-	 	                                    "<span style='color:red; font-weight: bold;' >"
-	 	                                    + wsession.getRemoteAddress().getAddress().getHostAddress() +" [" +loginAdmin.getName()+ "]" + "▶ " + messageVO.getMessage()
-	 	                                    + "</span>") );
+	 	                                    "<p class='talk other' style='color:red; font-weight: bold;' >"
+	 	                                    + "<span style='color:blue; font-weight: bold;' >[귓속말 </span>"+ wsession.getRemoteAddress().getAddress().getHostAddress() +loginAdmin.getName()+ "] <span>님 :</span> " + messageVO.getMessage()
+	 	                                    + "</p>") );
 	                	}
 	                	
 	                	if(loginLibrarian != null) {
 	                		 webSocketSession.sendMessage(
 	 	                            new TextMessage(
-	 	                                    "<span style='color:red; font-weight: bold;' >"
-	 	                                    + wsession.getRemoteAddress().getAddress().getHostAddress() +" [" +loginLibrarian.getName()+ "]" + "▶ " + messageVO.getMessage()
-	 	                                    + "</span>") );
+	 	                                    "<p class='talk other' style='color:blue; font-weight: bold;' >"
+	 	                                    + "<span style='color:blue; font-weight: bold;'>[귓속말  </span>"+ wsession.getRemoteAddress().getAddress().getHostAddress() +loginLibrarian.getName()+ "] <span>님 :</span> " + messageVO.getMessage()
+	 	                                    + "</p>") );
 	                	}
 	                   
 	                    break; // 지금의 특정대상(지금은 귓속말대상 IP address 임)은 1개이므로 
@@ -145,7 +145,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler {
 	            }
 	        }
 
-	        System.out.println("====> 웹채팅확인용 : 웹세션ID " + wsession.getId() + "의 메시지 : " + message.getPayload() );
+	        //System.out.println("====> 웹채팅확인용 : 웹세션ID " + wsession.getId() + "의 메시지 : " + message.getPayload() );
 	        // ====> 웹채팅확인용 : 웹세션ID 23의 메시지 : {"message":"채팅방에 <span style='color: red;'>입장</span>했습니다","type":"all","to":"all"}
 	    }
 	    /*
@@ -177,7 +177,7 @@ public class WebsocketEchoHandler extends TextWebSocketHandler {
 	            }
 	        }
 	       
-	        System.out.println("====> 웹채팅확인용 : 웹세션ID " + wsession.getId() + "이 퇴장했습니다.");
+	        //System.out.println("====> 웹채팅확인용 : 웹세션ID " + wsession.getId() + "이 퇴장했습니다.");
 	    }
 	    
 	    

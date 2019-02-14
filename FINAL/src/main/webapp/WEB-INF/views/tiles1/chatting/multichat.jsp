@@ -15,6 +15,7 @@
 	height: 600px; }
     
 .msg {
+	word-break:break-all;
 	display: inline-block;
 	width: 300px;
 	height: 45px;
@@ -44,7 +45,7 @@
 	border-top-radius: 4px;
 	border-bottom-radius: 4px; } 
 
-.close {
+.exit {
 	background-color: #4d4d4d;
 	display: inline-block;
 	margin-bottom: 0;
@@ -62,6 +63,7 @@
 }
 	 
 .talk {
+	word-break:break-all;
 	/* display:block; */
 	position: relative;
 	padding: 10px;
@@ -73,12 +75,14 @@
 	width: auto; }
 
 .talk.other {
+	word-break:break-all;
 	/* display:block;	 */
 	margin-left: 30px;
 	border: 5px solid #fff;
 	background: #fff; }
 
 .talk.me {
+	word-break:break-all;
 	text-align:right;
 	/* display:block; */
 	margin-right: 30px;
@@ -86,6 +90,7 @@
 	background-color: #ffec42; }
 
 .talk:before {
+	word-break:break-all;
 	content: "";
 	position: absolute;
 	bottom: -20px; 
@@ -99,6 +104,7 @@
 
 /* creates the smaller  triangle */
 .talk:after {
+	word-break:break-all;
 	content: "";
 	position: absolute;
 	bottom: -13px; 
@@ -112,6 +118,7 @@
 
 /* creates the larger triangle */
 .talk.other:before {
+	word-break:break-all;
 	top: 10px;
 	bottom: auto;
 	left: -30px;
@@ -120,6 +127,7 @@
 
 /* creates the smaller  triangle */
 .talk.other:after {
+	word-break:break-all;
 	top: 16px;
 	bottom: auto;
 	left: -21px;
@@ -127,6 +135,7 @@
 	border-color: transparent #fff; }
 
 .talk.me:before {
+	word-break:break-all;
 	top: 10px;
 	/* controls vertical position */
 	bottom: auto;
@@ -137,6 +146,7 @@
 	border-color: transparent #ffec42; }
 
 .talk.me:after {
+	word-break:break-all;
 	top: 16px;
 	bottom: auto;
 	left: auto;
@@ -203,7 +213,6 @@
    			
         		     	 
             websocket.send(JSON.stringify(messageObj));
-            
             // JSON.stringify() 는 값을 그 값을 나타내는 JSON 표기법의 문자열(String)로 변환한다 #객체가 아니라 문자열로 바꿈                   
             /*
 				JSON.stringify({});                  // '{}'
@@ -226,17 +235,17 @@
             // websocket.send("채팅을 종료합니다.");
         }
          
-        
         $("#message").keydown(function (key) {
              if (key.keyCode == 13) {
                 $("#sendMessage").click();
              }
           });
 
-        
-        
         $("#sendMessage").click(function() {
-            if( $("#message").val() != "") { // #내용물이 있으면
+        	
+        	var to = $("#to").val();
+        	
+        	if( $("#message").val() != "") { // #내용물이 있으면
             	
             	// ==== 자바스크립트에서 replace를 replaceAll 처럼 사용하기 ====
         		// 자바스크립트에서 replaceAll 은 없다.
@@ -250,7 +259,6 @@
                 messageObj.type = "all";
                 messageObj.to = "all";
                  
-                var to = $("#to").val();
                 if ( to != "" ) { // #귓속말을 읽어와서 비어있지 않으면
                     messageObj.type = "one";
                     messageObj.to = to;
@@ -258,11 +266,20 @@
                  
                 websocket.send(JSON.stringify(messageObj));
                 // JSON.stringify() 는 값을 그 값을 나타내는 JSON 표기법의 문자열로 변환한다
-                
-                $("#chatMessage").append("<p class='talk me'>[나]: " + message + "</p>");
-                $("#chatMessage").append("<br/>");
-                $("#chatMessage").scrollTop(99999999);
-                $("#message").val("");
+                if ( to == ""){
+                	
+                	$("#chatMessage").append("<p class='talk me'> <span style='color:blue; font-weight:bold;'> 나:</span> " + message + "</p>");
+                    $("#chatMessage").append("<br/>");
+                    $("#chatMessage").scrollTop(99999999);
+                    $("#message").val("");
+                }
+                if ( to != ""){
+                	
+                	$("#chatMessage").append("<p class='talk me'> <span style='color:blue; font-weight:bold;'>[귓속말 "+ to +" 님에게] 나:</span> " + message + "</p>");
+                    $("#chatMessage").append("<br/>");
+                    $("#chatMessage").scrollTop(99999999);
+                    $("#message").val("");
+                }
             }
         });
     });
@@ -270,13 +287,19 @@
 </script>
 </head>
 <body>
+<h3 style="margin-left:60px; border-bottom:solid 1px #a6a6a6; width:700px; text-align:left;">
+			<span style="background-color:black;">
+				<img style="width:30px; height:30px;"src="resources/img/home-logo/home-logo7.png">
+			</span>
+		쪽지/채팅>실시간 채팅</h3>
+		<br/>
 <div class="col-sm-8 background" >
 	<div id="chatStatus"></div><br/>
 	<div class="msgbox" id="chatMessage" style="overFlow: auto; max-height: 500px;"></div> <!-- style="overFlow: auto; max-height: 500px;" -->
 	<input type="text" id="to" style="margin-bottom:10px; border:1px solid #ccc;" placeholder="귓속말대상"/><br/>
 	<input class="msg" type="text" id="message" placeholder="메시지 내용"/>
     <input class="send" type="button" id="sendMessage" value="보내기" /> 
-    <input class="close" type="button" onClick="javascript:location.href='<%=request.getContextPath() %>/index.ana'" value="채팅방나가기" />
+    <input class="exit" type="button" onClick="javascript:location.href='<%=request.getContextPath() %>/index.ana'" value="채팅방나가기" />
 </div>
 
 </body>
