@@ -189,8 +189,7 @@ p{margin:3px;}
 								        "<div class='thumbnail' style='background-color: #ffffff;'>"+
 							              "<div class='caption'>"+
 							                 "<div class='col-lg-12' style='background-color: #ffffff;'>"+
-							                    "<span class='glyphicon glyphicon-credit-card'></span>"+
-							                    "<span class='glyphicon glyphicon-trash pull-right text-primary' style='cursor: pointer;' onClick='deleteLibrarian("+entry.LIBRARIANIDX+")'></span>"+				               
+							                    "<span class='glyphicon glyphicon-credit-card'></span>"+				               
 							                   "</div>"+ 
 							                "<div class='col-lg-12 well well-add-card'>"+   
 							                    "<h4> <span style='color: #004080; font-weight: bold;'>사서명 : "+entry.LIBRARIANNAME+"</span></h4>"+
@@ -344,7 +343,7 @@ p{margin:3px;}
      
 
 <body style="background-color: #ffffff;">
-	<div class="container1" id="tourpackages-carousel">
+	<div class="container" id="tourpackages-carousel">
       <div class="row">
         <div class="col-lg-12" class="">
         	<h3>등록 사서 카드</h3>

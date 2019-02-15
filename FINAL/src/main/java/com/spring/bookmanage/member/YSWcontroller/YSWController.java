@@ -232,7 +232,11 @@ public class YSWController {
 			LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
 			libcode_fk= loginLibrarian.getLibcode_fk();
 			status = loginLibrarian.getStatus();
-			System.out.println("libcode_fk: "+ libcode_fk);
+			//System.out.println("libcode_fk: "+ libcode_fk);
+		}
+		
+		if(session.getAttribute("loginAdmin") != null) {
+			status = 1;
 		}
 		
 
@@ -491,36 +495,57 @@ public class YSWController {
 	@RequestMapping(value="/deleteLibrarian.ana", method={RequestMethod.POST})
 	public String deleteLibrarian(HttpServletRequest req, HttpServletResponse res, YjkVO yjkvo) {
 		
-		int result = 0;
+		HttpSession session = req.getSession();
+		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		int status= loginLibrarian.getStatus();
 		
-		//String LIBID = req.getParameter("personalInfo1");
-		String LIBRARIANIDX = req.getParameter("idx");
-
-		System.out.println("LIBRARIANIDX : "+ LIBRARIANIDX);
+		System.out.println("status : " + status);
 		
-		result = service.deleteLibrarian(LIBRARIANIDX);
+		if(status == 1 || session.getAttribute("loginAdmin") != null) {
 		
-		if(result == 0) {
+			int result = 0;
 			
-			String msg = "사서 정보 삭제에 실패했습니다. 다시 시도해 주세요.";
-			String loc = "javascript:history.back()";
+			//String LIBID = req.getParameter("personalInfo1");
+			String LIBRARIANIDX = req.getParameter("idx");
+	
+			System.out.println("LIBRARIANIDX : "+ LIBRARIANIDX);
 			
-			req.setAttribute("msg", msg);
-			req.setAttribute("loc", loc);
+			result = service.deleteLibrarian(LIBRARIANIDX);
 			
-			return "msg";
-			
+			if(result == 0) {
+				
+				String msg = "사서 정보 삭제에 실패했습니다. 다시 시도해 주세요.";
+				String loc = "javascript:history.back()";
+				
+				req.setAttribute("msg", msg);
+				req.setAttribute("loc", loc);
+				
+				return "msg";
+				
+			}
+			else {
+				
+				String msg = "사서정보가 삭제 되었습니다.";
+				String loc = "librarianList.ana";
+				
+				req.setAttribute("msg", msg);
+				req.setAttribute("loc", loc);
+				
+				return "msg";
+	
+			}
+		
 		}
 		else {
 			
-			String msg = "사서정보가 삭제 되었습니다.";
+			String msg = "사서정보 수정은 도서관장만이 가능합니다.";
 			String loc = "librarianList.ana";
 			
 			req.setAttribute("msg", msg);
 			req.setAttribute("loc", loc);
 			
 			return "msg";
-
+			
 		}
 	}// public String deleteLibrarian(HttpServletRequest req, YjkVO yjkvo)
 
