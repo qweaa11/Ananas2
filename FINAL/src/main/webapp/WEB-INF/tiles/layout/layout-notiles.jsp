@@ -12,6 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="resources/img/home-logo/mainlogoblack.png" type="image/png">
 <title>도서관리 시스템</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
