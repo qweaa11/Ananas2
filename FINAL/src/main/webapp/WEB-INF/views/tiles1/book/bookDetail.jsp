@@ -515,9 +515,8 @@ function deleteAllBook(bookid){
 				<div class="col-lg-4 col-sm-4">
 					<!-- Preview Image -->
 					<img  style="width: 100%; height:auto;"   
-						src="resources/img/${bookDetailList.get(0).image}"
+						src="resources/img/${bookDetailList.get(0).image }"
 						alt="도서 이미지">
-					
 				</div>
 				<div class="col-lg-offset-1 col-lg-7 col-sm-8" style="margin-top:5px;">
 					<table class="table shareInfo" style="background-color: #f5f5f5">
@@ -533,7 +532,7 @@ function deleteAllBook(bookid){
 						<tr>
 							<th>출판사</th>
 							<td>${bookDetailList.get(0).pubname }</td>
-						</tr>
+						</tr>        
 						<tr>
 							<th>자료 유형</th>
 							<td>${bookDetailList.get(0).cname }</td>
@@ -604,7 +603,7 @@ function deleteAllBook(bookid){
 								<td>${book.bookid}</td>
 								<td>${book.isbn }</td>
 								<td><fmt:formatNumber value="${book.price}" pattern="#,###,###,###"/>&nbsp;원</td>
-								<td>${book.weight}&nbsp;kg</td>
+								<td>${book.weight}&nbsp;g</td>
 								<td>${book.totalpage}&nbsp;page</td>
 								<td>${book.pdate}</td>
 								<td>${book.regdate}</td>

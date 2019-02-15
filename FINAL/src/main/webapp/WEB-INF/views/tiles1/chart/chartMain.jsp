@@ -86,7 +86,7 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu7">
-							<span style="font-size:20pt;">추가</span>
+							<span style="font-size:20pt;">보유도서</span>
 						</button>
 					</div>
 					
@@ -122,7 +122,7 @@
 				</div>
 				
 				<div id="menu7" class="tab-pane fade">
-					<jsp:include page="./chartDetail/YJKChart.jsp"></jsp:include>
+					<jsp:include page="./chartDetail/KKHChart.jsp"></jsp:include>
 				</div>
 				
 			</div>

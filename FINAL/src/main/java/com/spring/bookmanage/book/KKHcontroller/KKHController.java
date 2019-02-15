@@ -349,9 +349,9 @@ public class KKHController {
 			
 			//WAS의 webapp의 절대 경로를 알아와야 한다.
 			HttpSession session = request.getSession();
-			String root = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\";
+			String root = session.getServletContext().getRealPath("/");
 					
-			String path = root +"resources"+File.separator+"files";
+			String path = root +"resources"+File.separator+"img";
 			//path 가 첨부파일\들을 저장할 WAS(톰캣)의 폴더가 된다.
 			
 			System.out.println("path:"+path);
