@@ -9,7 +9,7 @@
 
 <style type="text/css">
 
-#container {
+#YJKcontainer {
   min-width: 320px;
   max-width: 600px;
   margin: 0 auto;
@@ -48,7 +48,7 @@
 					
 				}); // $.each(json, function(entryIndex, entry)
 					
-				var chart = Highcharts.chart('container', {
+				var chart = Highcharts.chart('YJKcontainer', {
 
 					  title: {
 					    text: '도서관 전체 도서언어 점유율'
@@ -116,7 +116,7 @@
 					});// end of $.each(json, function(entryIndex, entry)
 							
 					// Create the chart
-					Highcharts.chart('container2', {
+					Highcharts.chart('YJKcontainer2', {
 					    chart: {
 					        type: 'column'
 					    },
@@ -163,7 +163,7 @@
 					    "drilldown": {
 					        "series": libBookObjDetailArr
 					    }
-					});// end of Highcharts.chart('container2'
+					});// end of Highcharts.chart('YJKcontainer2'
 			
 		})// end of $.getJSON("liblanguageBookChart"
 	
@@ -171,9 +171,7 @@
 
 </script>
 
-<body>
-	<div class="col-lg-12 col-sm-12" style="border: solid 0px red; margin-bottom: 50px; height: 550px;">
-		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="container" style="height: 400px; display: inline-block; border: solid 0px blue; margin-top:1%; margin-left: 10%;"></div>
-		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="container2" style="height: 400px; display: inline-block; border: solid 0px blue; margin-top:1%; margin-left: 5%;"></div>
+	<div style="border: solid 0px red; margin-bottom: 50px; height: 550px;">
+		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="YJKcontainer" style="height: 400px; display: inline-block; border: solid 0px blue; margin-top:1%; margin-left: 10%;"></div>
+		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="YJKcontainer2" style="height: 400px; display: inline-block; border: solid 0px blue; margin-top:1%; margin-left: 5%;"></div>
 	</div>
-</body>

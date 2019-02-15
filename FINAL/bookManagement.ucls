@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="com.spring.bookmanage.book.KKHcontroller.KKHController" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/KKHcontroller/KKHController.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="351" width="489" x="1151" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="2" language="java" name="com.spring.bookmanage.book.KKHmodel.InterKKHBookDAO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/KKHmodel/InterKKHBookDAO.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="711" width="376" x="317" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="3" language="java" name="com.spring.bookmanage.r3.KGBModel.KGBBookVO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/r3/KGBModel/KGBBookVO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="1989" width="662" x="2314" y="1575"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="4" language="java" name="com.spring.bookmanage.book.KKHservice.InterKKHBookService" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/KKHservice/InterKKHBookService.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="531" width="376" x="754" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="5" language="java" name="com.spring.bookmanage.r3.KGBModel.KGBR3DAO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/r3/KGBModel/KGBR3DAO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="441" width="456" x="2788" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.spring.bookmanage.book.KKHmodel.KKHBookVO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/KKHmodel/KKHBookVO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="2025" width="692" x="714" y="1575"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.spring.bookmanage.r3.KGBService.KGBR3Service" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/r3/KGBService/KGBR3Service.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="261" width="456" x="3284" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.spring.bookmanage.book.KKHmodel.KKHBookDAO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/KKHmodel/KKHBookDAO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="747" width="376" x="277" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.spring.bookmanage.book.KKHservice.KKHBookService" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/KKHservice/KKHBookService.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="549" width="376" x="714" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="10" language="java" name="com.spring.bookmanage.r3.KGBModel.InterKGBR3DAO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/r3/KGBModel/InterKGBR3DAO.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="405" width="456" x="2810" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="11" language="java" name="com.spring.bookmanage.r3.KGBController.KGBR3Controller" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/r3/KGBController/KGBR3Controller.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="261" width="495" x="2253" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="12" language="java" name="com.spring.bookmanage.r3.KGBService.InterKGBR3Service" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/r3/KGBService/InterKGBR3Service.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="225" width="456" x="2314" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="13" language="java" name="com.spring.schedule.Scheduled" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/schedule/Scheduled.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="193" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="com.spring.schedule.JGHscheduler.JGHScheduler" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/schedule/JGHscheduler/JGHScheduler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="158" x="1705" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="com.spring.bookmanage.book.JGHcontroller.JGHBookController" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/JGHcontroller/JGHBookController.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="117" width="310" x="1903" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="com.spring.schedule.MySMTPAuthenticator" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/schedule/MySMTPAuthenticator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="290" x="41" y="1575"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="com.spring.bookmanage.book.JGHservice.JGHBookService" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/JGHservice/JGHBookService.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="135" width="303" x="1903" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="com.spring.bookmanage.book.JGHmodel.JGHBookDAO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/JGHmodel/JGHBookDAO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="415" x="1250" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="19" language="java" name="com.spring.bookmanage.book.JGHmodel.JGHBookMapper" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/JGHmodel/JGHBookMapper.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="135" width="415" x="1467" y="1575"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="20" language="java" name="com.spring.schedule.JGHscheduler.ScheduleMapper" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/schedule/JGHscheduler/ScheduleMapper.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="63" width="158" x="1705" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="21" language="java" name="com.spring.bookmanage.book.JGHmodel.DeleteBookVO" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/bookmanage/book/JGHmodel/DeleteBookVO.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="2007" width="684" x="1903" y="3640"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="com.spring.schedule.GoogleMail" project="FINAL" 
+    file="/FINAL/src/main/java/com/spring/schedule/GoogleMail.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="215" x="41" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="24">    
+    <bendpoint x="2283" y="824"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <realization id="25">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <realization id="26">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <dependency id="27">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="28">    
+    <bendpoint x="2236" y="824"/>    
+    <bendpoint x="2236" y="1575"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <realization id="29">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="31">    
+    <bendpoint x="1912" y="1575"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="32">    
+    <bendpoint x="1436" y="1575"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <realization id="33">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <association id="34">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="35" name="service"/>      
+      <multiplicity id="36" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="37">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="38" name="service"/>      
+      <multiplicity id="39" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="40">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="19"/>  
+  </realization>  
+  <dependency id="41">    
+    <bendpoint x="723" y="824"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="42">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <association id="43">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="44" name="mapper"/>      
+      <multiplicity id="45" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="46">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="47" name="bookdao"/>      
+      <multiplicity id="48" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="49">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="50" name="r3DAO"/>      
+      <multiplicity id="51" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="52">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <dependency id="54">    
+    <bendpoint x="3296" y="824"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="55">    
+    <bendpoint x="286" y="824"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <association id="56">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="57" name="mapper"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="59">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="60">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="61" name="r3service"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="63">    
+    <bendpoint x="1160" y="824"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="64">    
+    <bendpoint x="2262" y="824"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

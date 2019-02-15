@@ -72,7 +72,7 @@ function chartByCategoryInLibrary(){
 			console.log(countByCategoryArr[0].data[0]); 
 			console.log(countByCategoryArr); 
 			
-			Highcharts.chart('container', { 
+			Highcharts.chart('KKHcontainer', { 
 			    chart: {
 			        type: 'bar'
 			    },
@@ -136,7 +136,7 @@ function chartByCategoryInLibrary(){
 
 }
 </script>
-<div id="container" style="min-width: 310px; max-width: 100%; height: 500px; margin: 0 auto">
+<div id="KKHcontainer" style="min-width: 310px; max-width: 100%; height: 500px; margin: 0 auto">
 
 
 </div>
