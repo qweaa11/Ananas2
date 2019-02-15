@@ -112,8 +112,7 @@ public class YJKBoardController {
 		// ========= !!첨부파일이 있는지 없는지 알아오기 시작!! =========
 	//	MultipartFile attach = boardvo.getAttach();
 		
-		
-		List<MultipartFile> attachList = req.getFiles("attach");
+		List<MultipartFile> attachList = req.getFiles("attach"); // 다중파일첨부로 변경하면서 List에 넣기
 		int idx = service.selectBoardIdx();
 		HashMap<String, String> boardMap = new HashMap<String, String>();
 		
@@ -436,7 +435,7 @@ public class YJKBoardController {
 	// ==== 댓글쓰기 ====
 	@RequestMapping(value="/boardAddComment.ana", method={RequestMethod.POST})
 	@ResponseBody
-	public HashMap<String, String> boardAddComment(YJKReplyVO replyvo , HttpServletRequest req, HttpServletResponse res) 
+	public HashMap<String, String> boardAddComment(HttpServletRequest req, HttpServletResponse res, YJKReplyVO replyvo) 
 		throws Throwable {
 		
 		HashMap<String, String> returnMap = new HashMap<String, String>();
@@ -565,7 +564,7 @@ public class YJKBoardController {
 	
 	// ==== 글 수정 페이지 완료하기 ====
 	@RequestMapping(value="/boardEditEnd.ana", method={RequestMethod.POST})
-	public String boardEditEnd(YJKBoardVO boardvo, HttpServletRequest req, HttpServletResponse res) {
+	public String boardEditEnd(HttpServletRequest req, HttpServletResponse res, YJKBoardVO boardvo) {
 		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		paraMap.put("IDX", boardvo.getIdx());

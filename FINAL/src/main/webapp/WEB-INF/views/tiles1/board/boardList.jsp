@@ -45,6 +45,10 @@ ul {
   border: 1px solid #5bc1de;
 }
 
+.subjectstyle {font-weight: bold;
+    	           color: #5bc1de;
+    	           cursor: pointer; }
+
 .pagination a:hover:not(.active) {background-color: #ddd;}
  
 </style>
@@ -53,6 +57,10 @@ ul {
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		
+		if(${search != null && search != '' && search != 'null'}) {
+			searchkeep();
+		}
 		
 		$(".subject").bind("mouseover", function(event){
 			var $target = $(event.target);
@@ -63,12 +71,7 @@ ul {
 			var $target = $(event.target);
 			$target.removeClass("subjectstyle");
 		});
-		
-		if(${search != null && search != '' && search != 'null'}) {
-			searchkeep();
-		}
-
-		
+			
 	});// end of $(document).ready()----------------------
 	
 	function goView(idx, gobackURL) {

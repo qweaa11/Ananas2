@@ -96,7 +96,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-8"> 
-<h1 class="entry-title"><span>관리자 등록</span> </h1>
+<h1 class="entry-title"><span>사서 등록</span> </h1>
 <hr>
 <form class="form-horizontal" method="post" name="adimFrm" enctype="multipart/form-data">                
 

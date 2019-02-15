@@ -45,19 +45,19 @@ public class YjkController {
 	@RequestMapping(value="/librarianRegist.ana",method= {RequestMethod.GET})
 	public String librarianRegist(HttpServletRequest req, HttpServletResponse response) {
 
-		List<LibraryVO> libInfo = service.getliblibrary();
+		List<LibraryVO> libInfo = service.getliblibrary(); // DB에서 가져온 도서관 정보를 리스트로 넣기
 		
 		req.setAttribute("libInfo", libInfo);
 		
 		HttpSession session = req.getSession();
-		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
-		AdminVO loginAdmin = (AdminVO)session.getAttribute("loginAdmin");
+		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian"); // 사서등록 페이지로 이동시키기 위해 session에 저장되어 있는 사서 로그인 여부 확인하기
+		AdminVO loginAdmin = (AdminVO)session.getAttribute("loginAdmin"); // 관리자등록 페이지로 이동시키기 위해 session에 저장되어 있는 관리자 로그인 여부 확인하기
 		
-		if(loginLibrarian != null && loginLibrarian.getStatus()==1) {
+		if(loginLibrarian != null && loginLibrarian.getStatus()==1) { // status 1은 도서관장 도서관장이라면 사서등록 페이지로 이동
 			return "library/librarianRegist2.tiles1";
-		}else if(loginAdmin != null) {
-			return "library/librarianRegist.tiles1";
-		}else if(loginLibrarian != null && loginLibrarian.getStatus()==0) {
+		}else if(loginAdmin != null) { // 총 관리자로 접속시 관리자 등록 페이지 이동
+			return "library/librarianRegist.tiles1"; 
+		}else if(loginLibrarian != null && loginLibrarian.getStatus()==0) { // 사서라면 메세지 출력
 			
 			String msg = "사서는 접근권한이 없습니다.";
 			String loc = "javascript:history.back();";
@@ -88,7 +88,7 @@ public class YjkController {
 		int n = 0;
 		
 		try {
-		
+		// view 페이지에서 관리자 등록을 위한 정보 값 받아오기
 		String libid = req.getParameter("libid");
 		String pwd = req.getParameter("pwd");
 		String name = req.getParameter("name");
@@ -104,7 +104,7 @@ public class YjkController {
 		System.out.println(libcode);
 		System.out.println(status);*/
 		
-		MultipartFile attach = adminvo.getAttach();
+		MultipartFile attach = adminvo.getAttach(); // 파일첨부를 위해
 		
 		if(attach.isEmpty()) {
 			adminvo.setImgFileName("NONE");
@@ -113,9 +113,11 @@ public class YjkController {
 			
 			byte[] bytes = null;
 			String imgFileName = "";
+			String fatternName = "";
 			
 			HttpSession session = req.getSession();
-			String root = "C:\\Users\\user1\\git\\Ananas2\\FINAL\\src\\main\\webapp\\";
+	
+			String root = session.getServletContext().getRealPath("/");
 			
 			System.out.println("root : " + root);
 			
