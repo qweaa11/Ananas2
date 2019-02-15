@@ -20,7 +20,7 @@
 									<img src="resources/img/home-logo/home-logo2.png" style="width: 200px; margin: auto;"/>
 								</div> 
 							</div>
-							<div class="blog_text" style="text-align: center;">도서목록</div>
+							<div class="blog_text" style="text-align: center;">도서관리</div>
 							<div class="blog_button"><a href="bookList.ana">이동하기</a></div> 
 						</div>
 					</div>
@@ -33,7 +33,7 @@
 									<img src="resources/img/home-logo/home-logo3.png" style="width: 200px; margin: auto;"/>
 								</div> 
 							</div>
-							<div class="blog_text" style="text-align: center;">회원목록</div> 
+							<div class="blog_text" style="text-align: center;">회원관리</div> 
 							<div class="blog_button"><a href="memberLsit.ana">이동하기</a></div>
 						</div>
 					</div>
@@ -59,7 +59,7 @@
 									<img src="resources/img/home-logo/home-logo1.png" style="width: 200px; margin: auto;"/>
 								</div>
 							</div>
-							<div class="blog_text" style="text-align: center;">도서관 목록</div>
+							<div class="blog_text" style="text-align: center;">도서관 관리</div>
 							<div class="blog_button"><a href="#">이동하기</a></div>
 						</div>
 					</div>
@@ -85,7 +85,7 @@
 									<img src="resources/img/home-logo/home-logo5.png" style="width: 200px; margin: auto;"/>
 								</div>
 							</div>
-							<div class="blog_text" style="text-align: center;">사서 게시판</div>
+							<div class="blog_text" style="text-align: center;">게시판</div>
 							<div class="blog_button"><a href="#">이동하기</a></div>
 						</div>
 					</div>
