@@ -105,10 +105,11 @@
 		select count(*)
 		from librarian A JOIN library B
 		ON A.libcode_fk = B.libcode
-		where ${sort} like '%'||#{searchWord}||'%' and
-		      libcode_fk = #{libcode_fk}
+		where ${sort} like '%'||#{searchWord}||'%'
+			<if test="libcode_fk != ''">
+		     and libcode_fk = #{libcode_fk}
+		    </if>
 		
-	
 	</select>
 	
 	
@@ -118,7 +119,9 @@
 		select count(*)
 		from librarian A JOIN library B
 		ON A.libcode_fk = B.libcode
-		where libcode_fk = #{libcode_fk}
+			<if test="libcode_fk != ''">
+			where libcode_fk = #{libcode_fk}
+			</if>
 	
 	</select>
 
