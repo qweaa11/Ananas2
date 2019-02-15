@@ -142,7 +142,7 @@
 					<li class="dropdown" style="margin-left: 15px;"> 
 						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo4-mini.png">
-						<span style="margin-left: 10px;">대여/예약/반납</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
+						<span style="margin-left: 10px;">대여/예약/반납</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
 							<li><a href="r3.ana">대여/반납/예약</a></li>
 							<li><a href="rentalList.ana">대여목록</a></li>
@@ -156,9 +156,13 @@
 						<img src="resources/img/home-logo/home-logo1-mini.png">
 						<span style="margin-left: 10px;">도서관 관리</span><span class="caret" style="margin-left: 3px; margin-right: 20px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
-								<li><a href="resisterLibrary.ana">도서관 동록</a></li>
-							<li><a href="libraryList.ana">도서관 목록</a></li>
-							<li><a href="librarianRegist.ana">사서 등록</a></li> 
+								<c:if test="${sessionScope.loginAdmin != null}">
+									<li><a href="resisterLibrary.ana">도서관 등록</a></li>
+								</c:if>
+								<c:if test="${sessionScope.loginAdmin != null || sessionScope.loginLibrarian.status == 1}">
+									<li><a href="libraryList.ana">도서관 목록</a></li>
+									<li><a href="librarianRegist.ana">사서 등록</a></li>
+								</c:if> 
 								<li><a href="librarianList.ana">사서 목록</a></li>
 						</ul>
 					</li>
@@ -183,7 +187,7 @@
 					
 					<li class="dropdown" style="margin-left: 15px;"> 
 						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
-						<img src="resources/img/home-logo/home-logo7.png">
+						<img src="resources/img/home-logo/home-logo7-mini.png">
 						<span style="margin-left: 10px;">쪽지/채팅</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
 							<li><a href="messageForm.ana">발신/수신/보관함</a></li>

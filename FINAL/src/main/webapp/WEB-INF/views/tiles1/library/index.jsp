@@ -51,18 +51,35 @@
 						</div>
 					</div>
 					
-					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"" style="padding: 0px;">
-						<!-- Blog post -->
-						<div class="blog_post" style="cursor: pointer;" onclick="javascript:location.href='#'">
-							<div class="blog_image" style="padding: 15px;">
-								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="margin-bottom: 15px;">
-									<img src="resources/img/home-logo/home-logo1.png" style="width: 200px; margin: auto;"/>
+					<c:if test="${sessionScope.loginAdmin != null || sessionScope.loginLibrarian.status == 1}">
+						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"" style="padding: 0px;">
+							<!-- Blog post -->
+							<div class="blog_post" style="cursor: pointer;" onclick="javascript:location.href='libraryList.ana'">
+								<div class="blog_image" style="padding: 15px;">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="margin-bottom: 15px;">
+										<img src="resources/img/home-logo/home-logo1.png" style="width: 200px; margin: auto;"/>
+									</div>
 								</div>
+								<div class="blog_text" style="text-align: center;">도서관 목록</div>
+								<div class="blog_button"><a href="libraryList.ana">이동하기</a></div>
 							</div>
-							<div class="blog_text" style="text-align: center;">도서관 관리</div>
-							<div class="blog_button"><a href="#">이동하기</a></div>
 						</div>
-					</div>
+					</c:if>
+					
+					<c:if test="${sessionScope.loginLibrarian.status == 0}">
+						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"" style="padding: 0px;">
+							<!-- Blog post -->
+							<div class="blog_post" style="cursor: pointer;" onclick="javascript:location.href='messageForm.ana'">
+								<div class="blog_image" style="padding: 15px;">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="margin-bottom: 15px;">
+										<img src="resources/img/home-logo/home-logo7.png" style="width: 200px; margin: auto;"/>
+									</div>
+								</div>
+								<div class="blog_text" style="text-align: center;">쪽지</div>
+								<div class="blog_button"><a href="messageForm.ana">이동하기</a></div>
+							</div>
+						</div>
+					</c:if>
 
 					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"" style="padding: 0px;">
 						<!-- Blog post -->
@@ -79,14 +96,14 @@
 					
 					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"" style="padding: 0px;">
 						<!-- Blog post -->
-						<div class="blog_post" style="cursor: pointer;" onclick="javascript:location.href='#'">
+						<div class="blog_post" style="cursor: pointer;" onclick="javascript:location.href='boardList.ana'">
 							<div class="blog_image" style="padding: 15px;">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="margin-bottom: 15px;">
 									<img src="resources/img/home-logo/home-logo5.png" style="width: 200px; margin: auto;"/>
 								</div>
 							</div>
 							<div class="blog_text" style="text-align: center;">게시판</div>
-							<div class="blog_button"><a href="#">이동하기</a></div>
+							<div class="blog_button"><a href="boardList.ana">이동하기</a></div>
 						</div>
 					</div>
 					
