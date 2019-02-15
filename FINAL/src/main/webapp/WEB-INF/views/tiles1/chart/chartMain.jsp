@@ -55,7 +55,7 @@
 					</div>
 					
 					<div class="process-step">
-						<button type="button" class="btn btn-warning btn-circle" data-toggle="tab" href="#menu2">
+						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu2">
 							<span style="font-size: 20pt;">분야</span>
 						</button>
 					</div>
@@ -86,7 +86,7 @@
 					
 					<div class="process-step">
 						<button type="button" class="btn btn-default btn-circle" data-toggle="tab" href="#menu7">
-							<span style="font-size:20pt;">보유도서</span>
+							<span style="font-size:20pt;">장서</span>
 						</button>
 					</div>
 					

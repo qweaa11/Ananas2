@@ -229,11 +229,11 @@
 </Script>
 
 <body>
-	<div class="col-lg-12 col-sm-12" style="border: solid 0px red; margin-bottom: 50px; height: 550px;">
+	<div style="border: solid 0px red; margin-top: 70px; margin-bottom: 50px; height: 550px;">
 		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="displayBookChart" style="height: 400px; display: inline-block; border: solid 0px red; margin-left: 5%;"></div>
 		<div class="col-lg-offset-1 col-lg-5 col-sm-11 col-sm-offset-1" id="chart-container" style="height: 400px; display: inline-block; border: solid 0px red; margin-left: 5%;"></div>
 		<select id="year">
-			<option value="2019">2019년</option>
+			<option value="2019">2019년</option> 
 			<option value="2018">2018년</option>
 			<option value="2017">2017년</option>
 		</select>
