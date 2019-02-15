@@ -159,26 +159,54 @@ p{margin:3px;}
 						
 						fileName += entry.IMGFILENAME
 						
-						result += "<div class='col-xs-12 col-sm-4 col-md-4 col-lg-4'>"+
-							        "<div class='thumbnail' style='background-color: #ffffff;'>"+
-						              "<div class='caption'>"+
-						                 "<div class='col-lg-12' style='background-color: #ffffff;'>"+
-						                    "<span class='glyphicon glyphicon-credit-card'></span>"+
-						                    "<span class='glyphicon glyphicon-trash pull-right text-primary' style='cursor: pointer;' onClick='deleteLibrarian("+entry.LIBRARIANIDX+")'></span>"+				               
-						                   "</div>"+ 
-						                "<div class='col-lg-12 well well-add-card'>"+   
-						                    "<h4> <span style='color: #004080; font-weight: bold;'>사서명 : "+entry.LIBRARIANNAME+"</span></h4>"+
-						                "</div>"+
-						                "<div class='col-lg-12'>"+
-						                    "<p><span style='color: #004080; font-weight: bold;'>휴대폰 : "+ entry.LIBRARIANTEL+"</span></p>"+
-						                    "<p class'text-muted'><span style='color: #004080; font-weight: bold;'>아이디 : "+entry.LIBID+"</span></p>"+
-						                "</div>"+
-						                //앵커태그의 버튼을 클릭하면 해당 사서의 정보를 모달 창으로 띄워주기 위해서 앵커태그를 클릭 할 때 해당 사서의 정보를 담아서 보내 주도록 한다. 
-						                "<a class='btn btn-primary btn-xs btn-update btn-add-card updateInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#updateInfo'>Update Info.</a>"+
-						                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
-						             "</div>"+
-						           "</div>"+
-						         "</div>";
+						if(${status} == 1) {
+							
+							result += "<div class='col-xs-12 col-sm-4 col-md-4 col-lg-4'>"+
+								        "<div class='thumbnail' style='background-color: #ffffff;'>"+
+							              "<div class='caption'>"+
+							                 "<div class='col-lg-12' style='background-color: #ffffff;'>"+
+							                    "<span class='glyphicon glyphicon-credit-card'></span>"+
+							                    "<span class='glyphicon glyphicon-trash pull-right text-primary' style='cursor: pointer;' onClick='deleteLibrarian("+entry.LIBRARIANIDX+")'></span>"+				               
+							                   "</div>"+ 
+							                "<div class='col-lg-12 well well-add-card'>"+   
+							                    "<h4> <span style='color: #004080; font-weight: bold;'>사서명 : "+entry.LIBRARIANNAME+"</span></h4>"+
+							                "</div>"+
+							                "<div class='col-lg-12'>"+
+							                    "<p><span style='color: #004080; font-weight: bold;'>휴대폰 : "+ entry.LIBRARIANTEL+"</span></p>"+
+							                    "<p class'text-muted'><span style='color: #004080; font-weight: bold;'>아이디 : "+entry.LIBID+"</span></p>"+
+							                "</div>"+
+							                //앵커태그의 버튼을 클릭하면 해당 사서의 정보를 모달 창으로 띄워주기 위해서 앵커태그를 클릭 할 때 해당 사서의 정보를 담아서 보내 주도록 한다. 
+							                "<a class='btn btn-primary btn-xs btn-update btn-add-card updateInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#updateInfo'>Update Info.</a>"+
+							                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
+							             "</div>"+
+							           "</div>"+
+							         "</div>";
+							
+						}
+						else {
+							
+							result += "<div class='col-xs-12 col-sm-4 col-md-4 col-lg-4'>"+
+								        "<div class='thumbnail' style='background-color: #ffffff;'>"+
+							              "<div class='caption'>"+
+							                 "<div class='col-lg-12' style='background-color: #ffffff;'>"+
+							                    "<span class='glyphicon glyphicon-credit-card'></span>"+
+							                    "<span class='glyphicon glyphicon-trash pull-right text-primary' style='cursor: pointer;' onClick='deleteLibrarian("+entry.LIBRARIANIDX+")'></span>"+				               
+							                   "</div>"+ 
+							                "<div class='col-lg-12 well well-add-card'>"+   
+							                    "<h4> <span style='color: #004080; font-weight: bold;'>사서명 : "+entry.LIBRARIANNAME+"</span></h4>"+
+							                "</div>"+
+							                "<div class='col-lg-12'>"+
+							                    "<p><span style='color: #004080; font-weight: bold;'>휴대폰 : "+ entry.LIBRARIANTEL+"</span></p>"+
+							                    "<p class'text-muted'><span style='color: #004080; font-weight: bold;'>아이디 : "+entry.LIBID+"</span></p>"+
+							                "</div>"+
+							                //앵커태그의 버튼을 클릭하면 해당 사서의 정보를 모달 창으로 띄워주기 위해서 앵커태그를 클릭 할 때 해당 사서의 정보를 담아서 보내 주도록 한다. 
+							                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
+							             "</div>"+
+							           "</div>"+
+							         "</div>";
+						}
+						
+						
 							
 					}
 					else{
@@ -316,7 +344,7 @@ p{margin:3px;}
      
 
 <body style="background-color: #ffffff;">
-	<div class="container" id="tourpackages-carousel">
+	<div class="container1" id="tourpackages-carousel">
       <div class="row">
         <div class="col-lg-12" class="">
         	<h3>등록 사서 카드</h3>

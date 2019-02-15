@@ -32,7 +32,7 @@ public interface InterYSWService {
 	int totalCounttWithOption(HashMap<String, String> paraMap);
 
 	// ===== 조건이 없을때 페이징 처리(더보기)를 위한 totalCount =====
-	int totalNoneOption();
+	int totalNoneOption(HashMap<String, String> paraMap);
 
 	// 사서 정보 수정
 	int updatelibrarianInfo(HashMap<String, String> paraMap);

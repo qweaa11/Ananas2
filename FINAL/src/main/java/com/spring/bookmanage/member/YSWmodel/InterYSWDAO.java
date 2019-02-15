@@ -29,7 +29,7 @@ public interface InterYSWDAO {
 	// ===== 더보기를 위한 totalCount =====
 	int totalCounttWithOption(HashMap<String, String> paraMap);
 
-	int totalNoneOption();
+	int totalNoneOption(HashMap<String, String> paraMap);
 
 	// 사서 정보 수정
 	int updatelibrarianInfo(HashMap<String, String> paraMap);

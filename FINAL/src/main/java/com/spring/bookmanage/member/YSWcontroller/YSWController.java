@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.spring.bookmanage.JDSmodel.AdminVO;
+import com.spring.bookmanage.JDSmodel.LibrarianVO;
 import com.spring.bookmanage.common.AES256;
 import com.spring.bookmanage.common.FileManager;
 import com.spring.bookmanage.common.SHA256;
@@ -221,6 +223,18 @@ public class YSWController {
 	// 사서 리스트의 페이지
 	@RequestMapping(value="/librarianList.ana", method={RequestMethod.GET})
 	public String librarianList(HttpServletRequest req, HttpServletResponse res) {
+		
+		HttpSession session = req.getSession();
+		String libcode_fk = "";
+		int status = 0;
+		
+		if(session.getAttribute("loginLibrarian") != null) {
+			LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+			libcode_fk= loginLibrarian.getLibcode_fk();
+			status = loginLibrarian.getStatus();
+			System.out.println("libcode_fk: "+ libcode_fk);
+		}
+		
 
 		String sort = req.getParameter("sort");
 		String searchWord = req.getParameter("searchWord");
@@ -233,16 +247,22 @@ public class YSWController {
 			HashMap<String, String> paraMap = new HashMap<String, String>();
 			paraMap.put("sort", sort);
 			paraMap.put("searchWord", searchWord);
+			paraMap.put("libcode_fk", libcode_fk);
 			
 			totalCount = service.totalCounttWithOption(paraMap); //검색어가 있을때 검색어에 따른 사서 수
 		}
 		else {
 			
-			totalCount = service.totalNoneOption(); //검색어가 없을때 사서 수
+			HashMap<String, String> paraMap = new HashMap<String, String>();
+			paraMap.put("libcode_fk", libcode_fk);
+			
+			totalCount = service.totalNoneOption(paraMap); //검색어가 없을때 사서 수
 			
 		}
 		
 		req.setAttribute("TOTALCOUNT", totalCount);
+		req.setAttribute("status", status);
+		req.setAttribute("libcode_fk", libcode_fk);
 		//System.out.println("TOTALCOUNT : " + totalCount);
 		
 		return "library/librarianList.tiles1";
@@ -254,6 +274,14 @@ public class YSWController {
 	@RequestMapping(value="/findLibrarianList.ana", method={RequestMethod.GET})
 	@ResponseBody
 	public List<HashMap <String, Object>> findLibrarianList(HttpServletRequest req, HttpServletResponse res) {
+		String libcode_fk = "";
+		HttpSession session = req.getSession();
+		if(session.getAttribute("loginLibrarian") != null) {
+			LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+			libcode_fk = loginLibrarian.getLibcode_fk();
+		}
+		
+		System.out.println("libcode_fk : " + libcode_fk);
 		
 		String sort = req.getParameter("sort");
 		String searchWord = req.getParameter("searchWord");
@@ -274,6 +302,7 @@ public class YSWController {
 			paraMap.put("searchWord", searchWord);
 			paraMap.put("pageNum", pageNum);
 			paraMap.put("lastNum", lastNum);
+			paraMap.put("libcode_fk", libcode_fk);
 			
 			List<YSWLibrarianVO> yswlibvoList = service.findListWithOption(paraMap);
 			
@@ -302,6 +331,7 @@ public class YSWController {
 			HashMap<String, String> paraMap = new HashMap<String, String>();
 			paraMap.put("pageNum", pageNum);
 			paraMap.put("lastNum", lastNum);
+			paraMap.put("libcode_fk", libcode_fk);
 			
 			List<YSWLibrarianVO> yswlibvoList = service.findListNoneOption(paraMap);
 			
@@ -334,35 +364,93 @@ public class YSWController {
 	@RequestMapping(value="/updatelibrarianInfo.ana", method={RequestMethod.POST})
 	public String updatelibrarianInfo(HttpServletRequest req, HttpServletResponse res, YjkVO yjkvo) {
 		
-		int result = 0;
+		HttpSession session = req.getSession();
+		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+		int status= loginLibrarian.getStatus();
 		
-		String LIBID = req.getParameter("personalInfo1");
-		String LIBCODE_FK = req.getParameter("personalInfo2");
-		String LIBRARIANNAME = req.getParameter("personalInfo3");
-		String LIBRARIANTEL = req.getParameter("personalInfo4");
-		String STATUS = req.getParameter("personalInfo5");
-		String IDX = req.getParameter("personalInfo0");
-
-		System.out.println("LIBID : "+ LIBID);
-		System.out.println("LIBCODE_FK : "+ LIBCODE_FK);
-		System.out.println("LIBRARIANNAME : "+ LIBRARIANNAME);
-		System.out.println("LIBRARIANTEL : "+ LIBRARIANTEL);
-		System.out.println("STATUS : "+ STATUS);
-		System.out.println("IDX : "+ IDX);
+		System.out.println("status : " + status);
 		
-		MultipartFile attach = yjkvo.getAttach();
+		if(status == 1 || session.getAttribute("loginAdmin") != null) {
 		
-		String imgFileName = "";
-		if(attach.isEmpty()) {
-			yjkvo.setImgFileName("NONE");
-		}
-		else {
+			int result = 0;
 			
-			long fileSize = attach.getSize();
+			String LIBID = req.getParameter("personalInfo1");
+			String LIBCODE_FK = req.getParameter("personalInfo2");
+			String LIBRARIANNAME = req.getParameter("personalInfo3");
+			String LIBRARIANTEL = req.getParameter("personalInfo4");
+			String STATUS = req.getParameter("personalInfo5");
+			String IDX = req.getParameter("personalInfo0");
+	
+			System.out.println("LIBID : "+ LIBID);
+			System.out.println("LIBCODE_FK : "+ LIBCODE_FK);
+			System.out.println("LIBRARIANNAME : "+ LIBRARIANNAME);
+			System.out.println("LIBRARIANTEL : "+ LIBRARIANTEL);
+			System.out.println("STATUS : "+ STATUS);
+			System.out.println("IDX : "+ IDX);
 			
-			if(fileSize > 10485760) { //10485760 == 10mb
+			MultipartFile attach = yjkvo.getAttach();
+			
+			String imgFileName = "";
+			if(attach.isEmpty()) {
+				yjkvo.setImgFileName("NONE");
+			}
+			else {
 				
-				String msg = "프로필 사진은 10mb 보다 작은 파일을 올려주세요";
+				long fileSize = attach.getSize();
+				
+				if(fileSize > 10485760) { //10485760 == 10mb
+					
+					String msg = "프로필 사진은 10mb 보다 작은 파일을 올려주세요";
+					String loc = "javascript:history.back()";
+					
+					req.setAttribute("msg", msg);
+					req.setAttribute("loc", loc);
+					
+					return "msg";
+					
+				}
+				else {
+					
+					byte[] bytes = null;
+					
+					String root = session.getServletContext().getRealPath("/");
+					
+					System.out.println("root : " + root);
+					
+					String path = root + "resources" + File.separator + "librarian";
+					System.out.println("path : "+ path);
+					
+					try {
+						bytes = attach.getBytes();
+					
+					
+					System.out.println("fileSize : " + fileSize);
+					imgFileName = fileManager.doFileUpload(bytes, attach.getOriginalFilename(), path);
+	
+					System.out.println("recordPicName : " + imgFileName);
+					
+					} catch (Exception e) {
+						e.printStackTrace();
+					}// End of Try ~ Catch
+				}
+				
+			}
+			
+			HashMap<String, String> paraMap = new HashMap<String, String>();
+			
+			paraMap.put("LIBID", LIBID);
+			paraMap.put("LIBCODE_FK", LIBCODE_FK);
+			paraMap.put("LIBRARIANNAME", LIBRARIANNAME);
+			paraMap.put("LIBRARIANTEL", LIBRARIANTEL);
+			paraMap.put("STATUS", STATUS);
+			paraMap.put("IMGFILENAME", imgFileName);
+			paraMap.put("IDX", IDX);
+			
+			result = service.updatelibrarianInfo(paraMap);
+			
+			if(result == 0) {
+				
+				String msg = "사서 정보 수정에 실패했습니다. 다시 시도해 주세요.";
 				String loc = "javascript:history.back()";
 				
 				req.setAttribute("msg", msg);
@@ -373,65 +461,27 @@ public class YSWController {
 			}
 			else {
 				
-				byte[] bytes = null;
+				String msg = "사서정보가 수정 되었습니다.";
+				String loc = "librarianList.ana";
 				
-				HttpSession session = req.getSession();
-				String root = session.getServletContext().getRealPath("/");
+				req.setAttribute("msg", msg);
+				req.setAttribute("loc", loc);
 				
-				System.out.println("root : " + root);
-				
-				String path = root + "resources" + File.separator + "librarian";
-				System.out.println("path : "+ path);
-				
-				try {
-					bytes = attach.getBytes();
-				
-				
-				System.out.println("fileSize : " + fileSize);
-				imgFileName = fileManager.doFileUpload(bytes, attach.getOriginalFilename(), path);
-
-				System.out.println("recordPicName : " + imgFileName);
-				
-				} catch (Exception e) {
-					e.printStackTrace();
-				}// End of Try ~ Catch
+				return "msg";
+	
 			}
-			
-		}
 		
-		HashMap<String, String> paraMap = new HashMap<String, String>();
-		
-		paraMap.put("LIBID", LIBID);
-		paraMap.put("LIBCODE_FK", LIBCODE_FK);
-		paraMap.put("LIBRARIANNAME", LIBRARIANNAME);
-		paraMap.put("LIBRARIANTEL", LIBRARIANTEL);
-		paraMap.put("STATUS", STATUS);
-		paraMap.put("IMGFILENAME", imgFileName);
-		paraMap.put("IDX", IDX);
-		
-		result = service.updatelibrarianInfo(paraMap);
-		
-		if(result == 0) {
-			
-			String msg = "사서 정보 수정에 실패했습니다. 다시 시도해 주세요.";
-			String loc = "javascript:history.back()";
-			
-			req.setAttribute("msg", msg);
-			req.setAttribute("loc", loc);
-			
-			return "msg";
-			
 		}
 		else {
 			
-			String msg = "사서정보가 수정 되었습니다.";
+			String msg = "사서정보 수정은 도서관장만이 가능합니다.";
 			String loc = "librarianList.ana";
 			
 			req.setAttribute("msg", msg);
 			req.setAttribute("loc", loc);
 			
 			return "msg";
-
+			
 		}
 	}// End of public String updatelibrarianInfo(HttpServletRequest req)
 

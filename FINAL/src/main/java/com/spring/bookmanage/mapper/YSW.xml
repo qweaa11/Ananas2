@@ -66,6 +66,9 @@
 		    from librarian A JOIN library B
 		    ON A.libcode_fk = B.libcode
 		    where ${sort} like '%'||#{searchWord}||'%'
+		    	<if test="libcode_fk != ''">
+		    		 and libcode_fk = #{libcode_fk}
+		    	</if>
 		    order by A.idx
 		)V
 		where RNO between #{pageNum} and #{lastNum}
@@ -84,6 +87,11 @@
 		                  ,libName, B.tel as libTel, addr1||addr2||post as addr
 		    from librarian A JOIN library B
 		    ON A.libcode_fk = B.libcode
+		    
+		    <if test="libcode_fk != ''">
+		     where libcode_fk = #{libcode_fk}
+		    </if>
+           
 		    order by A.idx
 		)V
 		where RNO between #{pageNum} and #{lastNum}
@@ -97,17 +105,20 @@
 		select count(*)
 		from librarian A JOIN library B
 		ON A.libcode_fk = B.libcode
-		where ${sort} like '%'||#{searchWord}||'%'
+		where ${sort} like '%'||#{searchWord}||'%' and
+		      libcode_fk = #{libcode_fk}
+		
 	
 	</select>
 	
 	
 	<!--===== 조건이 없을 때 페이징처리(더보기)를 위한 totalCount ===== -->
-	<select id="totalNoneOption" resultType="int">
+	<select id="totalNoneOption" parameterType="HashMap" resultType="int">
 	
 		select count(*)
 		from librarian A JOIN library B
 		ON A.libcode_fk = B.libcode
+		where libcode_fk = #{libcode_fk}
 	
 	</select>
 

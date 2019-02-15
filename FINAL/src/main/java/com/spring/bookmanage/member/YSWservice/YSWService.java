@@ -76,9 +76,9 @@ public class YSWService implements InterYSWService {
 
 	// ===== 조건이 없을때 페이징 처리(더보기)를 위한 totalCount =====
 	@Override
-	public int totalNoneOption() {
+	public int totalNoneOption(HashMap<String, String> paraMap) {
 
-		int totalCount = dao.totalNoneOption();
+		int totalCount = dao.totalNoneOption(paraMap);
 		return totalCount;
 	}
 

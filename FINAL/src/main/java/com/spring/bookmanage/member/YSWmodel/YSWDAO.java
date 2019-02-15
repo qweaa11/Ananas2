@@ -75,9 +75,9 @@ public class YSWDAO implements InterYSWDAO {
 
 	// ===== 조건이 없을 때 페이징처리(더보기)를 위한 totalCount =====
 	@Override
-	public int totalNoneOption() {
+	public int totalNoneOption(HashMap<String, String> paraMap) {
 
-		int totalCount = sqlsession.selectOne("YSW.totalNoneOption");
+		int totalCount = sqlsession.selectOne("YSW.totalNoneOption", paraMap);
 		return totalCount;
 	}
 
