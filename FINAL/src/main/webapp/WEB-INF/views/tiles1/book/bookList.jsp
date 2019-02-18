@@ -463,8 +463,8 @@ div.search button:hover {
 				<div class="sideHeader">분야</div>
 			</div>
 				<ul class="sideinfo">
-				<c:forEach var="field" items="${fieldList }">
-					<li><input type="checkbox"  class="field sideli" value="${field.FCODE} }"/><a onClick="findBookbyField('${field.FCODE}');" class="sideText">${field.FNAME }(${field.COUNT })</a></li>
+				<c:forEach var="field" items="${fieldList }">                 
+					<li><input type="checkbox"  class="field sideli" value="${field.FCODE}"/><a onClick="findBookbyField('${field.FCODE}');" class="sideText">${field.FNAME }(${field.COUNT })</a></li>
 				</c:forEach>
 				
 				<!-- <li><input type="checkbox"  class="field sideli" value="1"/><a onClick="findBookbyField('1');" class="sideText">철학,심리학(도서권수)</a></li>
