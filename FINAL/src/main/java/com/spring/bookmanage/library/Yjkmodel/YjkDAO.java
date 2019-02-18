@@ -23,6 +23,15 @@ public class YjkDAO implements InterYjkDAO {
 		
 		return n;
 	}
+	
+	// ==== 사서 등록하기 ==== //
+	@Override
+	public int adminRegistEnd2(YjkVO adminvo) {
+		
+		int n = sqlsession.insert("bookmanage.adminRegistEnd2", adminvo);
+		
+		return n;
+	}
 
 	// ==== 아이디 중복확인 ==== //
 	@Override

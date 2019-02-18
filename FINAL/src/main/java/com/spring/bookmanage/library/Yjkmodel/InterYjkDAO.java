@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface InterYjkDAO {
 
 	int adminRegistEnd(YjkVO adminvo);// 관리자 등록하기
+	
+	int adminRegistEnd2(YjkVO adminvo);// 사서 등록하기
 
 	int idDuplicateCheck(String libid);// 아이디 중복확인
 

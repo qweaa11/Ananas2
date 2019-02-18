@@ -32,6 +32,15 @@ public class YjkService implements InterYjkService {
 		return n;
 	}
 	
+	// ==== 사서 등록하기 ====
+	@Override
+	public int adminRegistEnd2(YjkVO adminvo) {
+
+		int n = dao.adminRegistEnd2(adminvo);
+		
+		return n;
+	}
+	
 	// ==== 아이디 중복체크 ====
 	@Override
 	public int idDuplicateCheck(String libid) {

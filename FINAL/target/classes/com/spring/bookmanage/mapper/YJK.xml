@@ -19,6 +19,12 @@
 	values(#{libid}, #{libcode_fk}, LIBRARIAN_seq.nextval, #{pwd}, #{name}, #{tel}, #{status}, #{imgFileName}, #{email})
 </insert>
 
+<!-- ==== 사서 등록하기 ==== -->
+<insert id="adminRegistEnd2" parameterType="com.spring.bookmanage.library.Yjkmodel.YjkVO">
+	insert into librarian (libid, libcode_fk, idx, pwd, name, tel, imgFileName, email)
+	values(#{libid}, #{libcode_fk}, LIBRARIAN_seq.nextval, #{pwd}, #{name}, #{tel}, #{imgFileName}, #{email})
+</insert>
+
 <!-- ==== 도서관 정보 가져오기 ==== -->
 <select id="getliblibrary" resultType="com.spring.bookmanage.library.Yjkmodel.LibraryVO">
 	select *

@@ -113,7 +113,7 @@ public class YJKBoardController {
 	//	MultipartFile attach = boardvo.getAttach();
 		
 		List<MultipartFile> attachList = req.getFiles("attach"); // 다중파일첨부로 변경하면서 List에 넣기
-		int idx = service.selectBoardIdx();
+		int idx = service.selectBoardIdx(); // 글쓰기 idx값 채번해오기 요청
 		HashMap<String, String> boardMap = new HashMap<String, String>();
 		
 		boardMap.put("LIBID_FK",boardvo.getLibid_fk());
@@ -193,7 +193,7 @@ public class YJKBoardController {
 			
 			n = service.boardAdd(boardMap);
 			
-			for(int i=0; i<boardMapList.size(); i++) {
+			for(int i=0; i<boardMapList.size(); i++) { // 첨부 된 파일 가져오기
 				m = service.boardAdd_withFile(boardMapList.get(i));
 				if(m == 1) count++;
 			}
@@ -290,9 +290,9 @@ public class YJKBoardController {
 		paraMap.put("STARTRNO", String.valueOf(startRno));
 		paraMap.put("ENDRNO", String.valueOf(endRno));
 		
-		boardList = service.getboardList(paraMap);
+		boardList = service.getboardList(paraMap); // 기본 게시판 리스트
 		
-		List<YJKBoardVO> boardList2 = service.getAttachFileCount(boardList);
+		List<YJKBoardVO> boardList2 = service.getAttachFileCount(boardList); // 기본 게시판 리스트 + 다중파일첨부
 		
 		List<YJKBoardVO> boardList3 = service.getorgTextCount(boardList2);
 		
@@ -454,10 +454,10 @@ public class YJKBoardController {
 		}
 		
 		
-		int cnt = service.getCommentCnt(replyvo);
-		returnMap.put("COMMENTCOUNT", String.valueOf(cnt));
-		System.out.println(cnt+"===========개수잘가져오는거확인1");
-		return returnMap;
+		int cnt = service.getCommentCnt(replyvo); // 댓글갯수 가져오기
+			returnMap.put("COMMENTCOUNT", String.valueOf(cnt));
+			System.out.println(cnt+"===========개수잘가져오는거확인1");
+			return returnMap;
 		
 	}
 		

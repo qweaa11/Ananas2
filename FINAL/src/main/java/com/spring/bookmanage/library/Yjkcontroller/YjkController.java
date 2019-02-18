@@ -174,6 +174,97 @@ public class YjkController {
 
 	}// end of public String adminRegistEnd()--------------
 	
+	// ==== 사서 등록하기 ==== //
+		@RequestMapping(value="/librarianRegistEnd2.ana",method= {RequestMethod.POST})
+		public String adminRegistEnd2(MultipartHttpServletRequest req,HttpServletResponse response, YjkVO adminvo) {
+			
+			int n = 0;
+			
+			try {
+			// view 페이지에서 관리자 등록을 위한 정보 값 받아오기
+			String libid = req.getParameter("libid");
+			String pwd = req.getParameter("pwd");
+			String name = req.getParameter("name");
+			String tel = req.getParameter("tel");
+			String libcode = req.getParameter("libcode");
+			String email = req.getParameter("email");
+
+			/*System.out.println(libid);
+			System.out.println(pwd);
+			System.out.println(name);
+			System.out.println(tel);
+			System.out.println(libcode);
+			System.out.println(status);*/
+			
+			MultipartFile attach = adminvo.getAttach(); // 파일첨부를 위해
+			
+			if(attach.isEmpty()) {
+				adminvo.setImgFileName("NONE");
+			}
+			else {
+				
+				byte[] bytes = null;
+				String imgFileName = "";
+				String fatternName = "";
+				
+				HttpSession session = req.getSession();
+		
+				String root = session.getServletContext().getRealPath("/");
+				
+				System.out.println("root : " + root);
+				
+				String path = root + "resources"+File.separator+"librarian";
+				System.out.println("path : "+ path);
+				
+				bytes = attach.getBytes();
+				
+				imgFileName = fileManager.doFileUpload(bytes, attach.getOriginalFilename(), path);
+				
+				
+				
+				System.out.println("recordPicName : " + imgFileName);
+				
+				adminvo.setImgFileName(imgFileName);
+				
+			}
+			
+			adminvo.setLibid(libid);
+			adminvo.setPwd(SHA256.encrypt(pwd));
+			adminvo.setName(name);
+			adminvo.setTel(tel);
+			adminvo.setLibcode_fk(libcode);
+			adminvo.setEmail(email);
+			
+			n = service.adminRegistEnd2(adminvo);
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			if(n == 1) {
+				
+				String msg = "회원가입 되었습니다.";
+				String loc = "index.ana";
+				
+				req.setAttribute("msg", msg);
+				req.setAttribute("loc", loc);
+				
+				return "msg";
+						
+			}
+			else {
+				
+				String msg = "회원가입 실패하였습니다.";
+				String loc = "javascript:history.back()";
+				
+				req.setAttribute("msg", msg);
+				req.setAttribute("loc", loc);
+				
+				return "msg";
+			}
+
+		}// end of public String adminRegistEnd()--------------
+	
 	// ==== 아이디 중복체크 ==== //
 	@RequestMapping(value="/idDuplicateCheck.ana",method= {RequestMethod.GET})
 	@ResponseBody
