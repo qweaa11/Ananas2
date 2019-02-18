@@ -259,7 +259,6 @@ public class YSWController {
 			
 			HashMap<String, String> paraMap = new HashMap<String, String>();
 			paraMap.put("libcode_fk", libcode_fk);
-			
 			totalCount = service.totalNoneOption(paraMap); //검색어가 없을때 사서 수
 			
 		}
@@ -320,6 +319,8 @@ public class YSWController {
 				 map.put("LIBCODE_FK", ysw.getLibcode_fk());
 				 map.put("LIBRARIANNAME", ysw.getLibrarianName());
 				 map.put("LIBRARIANTEL", ysw.getLibrarianTel());
+				 if(ysw.getStatus() == 0) map.put("STATUSNAME", "사서");
+				 else if(ysw.getStatus() == 1) map.put("STATUSNAME","도서관장");
 				 map.put("STATUS", ysw.getStatus());
 				 map.put("IMGFILENAME", ysw.getImgfilename());
 				 map.put("LIBNAME", ysw.getLibName());
@@ -348,6 +349,8 @@ public class YSWController {
 				 map.put("LIBCODE_FK", ysw.getLibcode_fk());
 				 map.put("LIBRARIANNAME", ysw.getLibrarianName());
 				 map.put("LIBRARIANTEL", ysw.getLibrarianTel());
+				 if(ysw.getStatus() == 0) map.put("STATUSNAME", "사서");
+				 else if(ysw.getStatus() == 1) map.put("STATUSNAME","도서관장");
 				 map.put("STATUS", ysw.getStatus());
 				 map.put("IMGFILENAME", ysw.getImgfilename());
 				 map.put("LIBNAME", ysw.getLibName());
@@ -367,11 +370,13 @@ public class YSWController {
 	// 사서 정보 수정
 	@RequestMapping(value="/updatelibrarianInfo.ana", method={RequestMethod.POST})
 	public String updatelibrarianInfo(HttpServletRequest req, HttpServletResponse res, YjkVO yjkvo) {
-		
+		int status = 0;
 		HttpSession session = req.getSession();
-		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
-		int status= loginLibrarian.getStatus();
-		
+		if(session.getAttribute("loginLibrarian")!=null) {
+			LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+			status= loginLibrarian.getStatus();
+		}
+				
 		System.out.println("status : " + status);
 		
 		if(status == 1 || session.getAttribute("loginAdmin") != null) {
@@ -494,10 +499,12 @@ public class YSWController {
 	// 사서 정보 삭제(Real Delete)
 	@RequestMapping(value="/deleteLibrarian.ana", method={RequestMethod.POST})
 	public String deleteLibrarian(HttpServletRequest req, HttpServletResponse res, YjkVO yjkvo) {
-		
+		int status = 0;
 		HttpSession session = req.getSession();
-		LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
-		int status= loginLibrarian.getStatus();
+		if(session.getAttribute("loginLibrarian")!=null) {
+			LibrarianVO loginLibrarian = (LibrarianVO)session.getAttribute("loginLibrarian");
+			status= loginLibrarian.getStatus();
+		}
 		
 		System.out.println("status : " + status);
 		
@@ -538,7 +545,7 @@ public class YSWController {
 		}
 		else {
 			
-			String msg = "사서정보 수정은 도서관장만이 가능합니다.";
+			String msg = "사서정보 수정은 도서관장만/총관리자 만이 가능합니다.";
 			String loc = "librarianList.ana";
 			
 			req.setAttribute("msg", msg);

@@ -838,7 +838,7 @@ function deleteAllBook(bookid){
 											<th>이미지 변경</th>        
 											<td style="float: left;"><input id="defaultImage" style=" float:left; width:100%;" readonly="readonly"/>
 											<br/>
-											<input type="file" name="editImage" id="editImage"/></td>
+											<input accept="image/*" type="file" name="editImage" id="editImage"/></td>
 										</tr>
 									</table>
 									<input type="hidden" name="bookid" id="bookid">

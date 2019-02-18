@@ -152,7 +152,7 @@ p{margin:3px;}
 				var fileName = "";
 				
 				//console.log("xxxxxx");
-
+ 
 				$.each(json, function(entryIndex, entry){
 					
 					if(json.length != 0){
@@ -177,11 +177,11 @@ p{margin:3px;}
 							                "</div>"+
 							                //앵커태그의 버튼을 클릭하면 해당 사서의 정보를 모달 창으로 띄워주기 위해서 앵커태그를 클릭 할 때 해당 사서의 정보를 담아서 보내 주도록 한다. 
 							                "<a class='btn btn-primary btn-xs btn-update btn-add-card updateInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#updateInfo'>Update Info.</a>"+
-							                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
+							                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUSNAME+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
 							             "</div>"+
 							           "</div>"+
-							         "</div>";
-							
+							         "</div>";      
+							 
 						}
 						else {
 							
@@ -199,7 +199,7 @@ p{margin:3px;}
 							                    "<p class'text-muted'><span style='color: #004080; font-weight: bold;'>아이디 : "+entry.LIBID+"</span></p>"+
 							                "</div>"+
 							                //앵커태그의 버튼을 클릭하면 해당 사서의 정보를 모달 창으로 띄워주기 위해서 앵커태그를 클릭 할 때 해당 사서의 정보를 담아서 보내 주도록 한다. 
-							                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUS+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
+							                "<a class='btn btn-danger btn-xs btn-update btn-add-card detailInfo' data-toggle='modal' data-personal='"+entry.LIBRARIANIDX+","+entry.LIBID+","+entry.LIBCODE_FK+","+entry.LIBRARIANNAME+","+entry.LIBRARIANTEL+","+entry.STATUSNAME+","+entry.IMGFILENAME+","+entry.LIBNAME+","+entry.LIBTEL+","+entry.ADDR+"' href='#detailInfo'>Detail Info.</a>"+						
 							             "</div>"+
 							           "</div>"+
 							         "</div>";
@@ -207,7 +207,7 @@ p{margin:3px;}
 						
 						
 							
-					}
+					} 
 					else{
 						result += "<h1>가입 된 사서가 없습니다!<h1>";
 					}
@@ -285,7 +285,10 @@ p{margin:3px;}
 	
 	
 	function goUpdate() {
-		
+		if(!($(".modal-body .personalInfo5").val() == "0" || $(".modal-body .personalInfo5").val() == "1")){
+			alert("직책은 0(사서) 또는 1(도서관장)만 가능합니다.");
+			return false;
+		}
 		var finalconfirm = prompt( '관리자 암호를 넣어주세요', '비밀번호' );
 		//prompt 를 통해서  alert 형식으로 문장을 띄워주고 입력한 비밀번호를 받아온다.
 		
@@ -294,7 +297,6 @@ p{margin:3px;}
 			confirm("정말 정보 수정을 진행하시겠습니까?");
 			
 			if(confirm) {
-				
 				var frm = document.updateInfoFrm;
 				frm.action = "updatelibrarianInfo.ana";
 				frm.method = "POST";
