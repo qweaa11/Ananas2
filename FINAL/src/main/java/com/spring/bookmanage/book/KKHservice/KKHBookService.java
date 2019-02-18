@@ -240,19 +240,18 @@ public class KKHBookService implements InterKKHBookService{
 	}
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor= {Throwable.class})
-	public String[] updateDeadline(String[] extendBookArr) {
+	public int updateDeadline(String[] extendBookArr) {
+		int n=0;
 		String[] extendSuccessBookArr = new String[extendBookArr.length];
 		for(int i=0; i<extendBookArr.length;i++) {
 			
 			//도서 반납예정일을 +7연장해주는 메소드
-			int n = bookdao.updateDeadline(extendBookArr[i]);
-			if(n == 1) {
-				extendSuccessBookArr[i] = extendBookArr[i];
-			}
+			n += bookdao.updateDeadline(extendBookArr[i]);
+			
 				
 		}
-		
-		return extendSuccessBookArr;
+		if(n == extendBookArr.length) return 1;
+		else return 0;
 	}
 	/*@Override
 	public int updateDeadline(String extendBookid) {

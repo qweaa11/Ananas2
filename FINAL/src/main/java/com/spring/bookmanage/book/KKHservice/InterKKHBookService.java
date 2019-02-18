@@ -146,9 +146,9 @@ public interface InterKKHBookService {
 	/**
 	 * 반납예정일을 +7일 해주는 메소드(연장은 최대 3회까지 가능)
 	 * @param extendBookArr
-	 * @return String[]
+	 * @return int
 	 */
-	String[] updateDeadline(String[] extendBookArr);
+	int updateDeadline(String[] extendBookArr);
 
 	/**
 	 * 대여된 도서를 반납하는 메소드

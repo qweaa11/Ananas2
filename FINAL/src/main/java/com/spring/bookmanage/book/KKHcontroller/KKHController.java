@@ -324,7 +324,7 @@ public class KKHController {
 	 * @return
 	 */
 	@RequestMapping(value="/editPublicBookInfo.ana",method= {RequestMethod.POST})
-	public String editPublicBookInfo(KKHBookVO bookvo,MultipartHttpServletRequest request,HttpServletResponse response) {
+	public String editPublicBookInfo(MultipartHttpServletRequest request,HttpServletResponse response, KKHBookVO bookvo) {
 		
 		HashMap<String,String> parameterMap = new HashMap<String,String>();
 		String editAgecode = request.getParameter("editAgecode"); 	// 연령코드
@@ -336,8 +336,8 @@ public class KKHController {
 		String editCategory = request.getParameter("editCategory");	// 종류코드
 		String editField = request.getParameter("editField");		// 분야코드
 		String editGenre = request.getParameter("editGenre");		// 장르코드
-		String editImage = request.getParameter("editImage");		// 도서 이미지
 		String length = request.getParameter("bookListLength");		// 수정해야할 도서 갯수
+		String editImage ="";
 		int n=0;
 		MultipartFile attach = bookvo.getEditImage();
 		
@@ -380,7 +380,8 @@ public class KKHController {
 				bookvo.setFileName(newFileName);
 				fileSize = attach.getSize();
 				bookvo.setFileSize(String.valueOf(fileSize));
-						
+				
+				editImage = newFileName;		
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -388,7 +389,6 @@ public class KKHController {
 			
 		}
 		
-		System.out.println("eidtIma:"+editImage);
 		String bookid = request.getParameter("bookid");
 		
 		//변경할 도서와 기존 도서의 정보를 비교하기 위해 해당 도서번호(두번째하이푼[-] 이전까지의 코드) 를 가진 도서 1개의 정보를 가져온다.
@@ -613,10 +613,10 @@ public class KKHController {
 			String[] extendBookArr = extendBookid.split(",");
 			System.out.println(extendBookArr[0]);
 			//반납예정일을 +7일 해주는 메소드 연장은 최대 3번까지 가능
-			String[] extendSuccessBook = service.updateDeadline(extendBookArr);
+			int n = service.updateDeadline(extendBookArr);
 			
 			
-			if(extendSuccessBook.length < 1) { 
+			if(n == 0 ) { 
 				String msg = "연장 실패";
 				String loc = "javascript:history.back()";
 				request.setAttribute("msg", msg);
@@ -624,12 +624,7 @@ public class KKHController {
 				
 				
 			}else {
-				String msg = "";
-				for(int i=0; i<extendSuccessBook.length;i++) {
-					System.out.println(extendSuccessBook[i]);
-					if(!extendSuccessBook[i].isEmpty())	msg += extendSuccessBook[i]+",";
-				}
-				msg = msg.substring(0, msg.length()-1)+" 도서 연장 성공!!";
+				String msg = "도서 연장 성공!";
 				String loc = "/bookmanage/bookDetail.ana?bookid="+bookid;
 				System.out.println("extendBookListAsBookid:"+bookid);
 				request.setAttribute("msg", msg);
