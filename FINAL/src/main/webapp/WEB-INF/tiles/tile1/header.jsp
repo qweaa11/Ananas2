@@ -178,7 +178,7 @@
 					<li class="dropdown" style="margin-left: 15px;"> 
 						<a href="#" class="dropdown-toggle sidetoggle" data-toggle="dropdown">
 						<img src="resources/img/home-logo/home-logo5-mini.png">
-						<span style="margin-left: 10px;">사서게시판</span><span class="caret" style="margin-left: 3px;"></span></a>  
+						<span style="margin-left: 10px;">게시판</span><span class="caret" style="margin-left: 3px;"></span></a>  
 						<ul class="dropdown-menu forAnimate drop" role="menu" style="margin-bottom: 20px;">
 							<li><a href="noticeList.ana">공지 게시판</a></li>
 							<li><a href="boardList.ana">자유 게시판</a></li>
