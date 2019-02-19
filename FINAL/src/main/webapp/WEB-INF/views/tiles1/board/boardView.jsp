@@ -214,10 +214,10 @@
 	
 </script>
 
-
-<div style="padding-left: 10%;" class="row">
+<div class="container">
+<div class="row">
 	<h1 style="margin-bottom: 30px;"><a href="<%=request.getContextPath()%>/boardList.ana;">자유게시판</a></h1>
-<div class="container-fluid col-lg-7">
+<div class="col-lg-12">
 	<div>
 		<table>
 		<tr style="display: none;">       
@@ -294,7 +294,7 @@
 		</div>	
 	 </div>
 </div>        
-<div class="col-lg-7">
+<div class="col-lg-12">
 	<div style="float:right; margin-top: 1%; margin-bottom: 1%" >
 		<button type="button" class="btn btn-info btn-sm" onClick="javascript:location.href='<%=request.getContextPath()%>/boardAdd.ana?root=${boardvo.idx}&groupno=${boardvo.groupno}&depthno=${boardvo.depthno}'">답글</button>
 		<button type="button" class="btn btn-info btn-sm" onClick="javascript:location.href='<%=request.getContextPath()%>/boardEdit.ana?idx=${boardvo.idx}'">수정</button>
@@ -306,6 +306,7 @@
 		<hr>
 		<div style="margin-bottom: 1%;">다음글 : <span class="move" onclick="javascript:location.href='boardView.ana?idx=${boardvo.nextidx}'">${boardvo.nextsubject}</span></div>
 	</div>
+</div>
 </div>
 </div>
 

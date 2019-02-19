@@ -6,14 +6,31 @@
 <% String ctxPath = request.getContextPath(); %>
 
 <style type="text/css">
-	table, th, td, input, textarea {border: solid gray 1px;}
+	table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 70%;
+	}
+	
+	td, th {
+	  border: 1px solid #dddddd;
+	  text-align: left;
+	  padding: 8px;
+	}
+	
+	tr:nth-child(even) {
+	  background-color: #f2f2f2;
+	}
+	
+	ul {
+		padding-left: 0px;
+	}
+
+	/* table, th, td, input, textarea {border: solid gray 1px;} */
 	
 	#table {border-collapse: collapse;
 	 		width: 1000px;
 	 		}
-	#table th, #table td{padding: 5px;}
-	#table th{width: 120px; background-color: #DDDDDD;}
-	#table td{width: 860px;}
 	.long {width: 470px;}
 	.short {width: 120px;} 		
 
@@ -72,7 +89,7 @@
 		
 </script>
 
-<div style="padding-left: 10%; margin-bottom: 0.2%; border: solid 0px red;">
+<div class="container" style=" margin-bottom: 0.2%; border: solid 0px red;">
 	<h1>공지사항 작성</h1>
 	<!-- ===== 파일 첨부하기 enctype="multipart/form-data" 을 해주어야만 파일첨부가 된다. ===== -->
 	<form name="addFrm" enctype="multipart/form-data">
@@ -120,8 +137,10 @@
 		</table>
 		<br/>
 		
-		<button type="button" id="btnWrite">쓰기</button>
-		<button type="button" onClick="javascript:history.back();">취소</button>
+		<div style="float: right; padding-right: 12.2%">
+			<button type="button" class="btn btn-info btn-sm" id="btnWrite">쓰기</button>
+			<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
+		</div>
 	</form>
 
 </div>	

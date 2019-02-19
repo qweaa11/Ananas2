@@ -5,18 +5,34 @@
 <% String ctxPath = request.getContextPath(); %>
    
 <style type="text/css">
-	table, th, td, input, textarea {border: solid gray 1px;}
+	
+	table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 70%;
+	}
+	
+	td, th {
+	  border: 1px solid #dddddd;
+	  text-align: left;
+	  padding: 8px;
+	}
+	
+	tr:nth-child(even) {
+	  background-color: #f2f2f2;
+	}
+	
+	ul {
+		padding-left: 0px;
+	}
+
+	/* table, th, td, input, textarea {border: solid gray 1px;} */
 	
 	#table {border-collapse: collapse;
 	 		width: 1000px;
 	 		}
-	#table th, #table td{padding: 5px;}
-	#table th{width: 120px; background-color: #DDDDDD;}
-	#table td{width: 860px;}
 	.long {width: 470px;}
 	.short {width: 120px;} 	
-	
-	a{text-decoration: none;}	
 	
 </style>
 
@@ -79,10 +95,14 @@
     
 </script>
 
-<div style="padding-left: 10%; border: solid 0px red;">
+<div class="container" style="border: solid 0px red;">
 	<h1>공지사항 수정</h1>
 	
 	<table id="table">
+		<tr style="display: none;">             
+			<td></td>
+		</tr>
+		
 		<tr>
 			<th>글번호</th>
 			<td>${noticevo.idx}</td>
@@ -117,8 +137,12 @@
 	
 	<br/>
 	
-	<button type="button" id="btnUpdate" >완료</button> <%-- 상대경로 --%>
-	<button type="button" onClick="javascript:history.back();">취소</button>
+	<div style="float: right; padding-right: 12.2%">
+	
+	<button type="button" class="btn btn-info btn-sm" id="btnUpdate" >완료</button> <%-- 상대경로 --%>
+	<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
+	
+	</div>
 	
 	<form name="editFrm">
 		<input type="hidden" name="idx" value="${noticevo.idx}" />

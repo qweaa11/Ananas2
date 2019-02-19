@@ -129,7 +129,7 @@
 		
 </script>
 
-<div style="padding-left: 20%; margin-bottom: 0.2%; border: solid 0px red;">
+<div class="container" style=" margin-bottom: 0.2%; border: solid 0px red;">
 	<h1>글쓰기</h1>
 	<%-- 
 	<form name="addFrm"> 
@@ -187,10 +187,10 @@
 		<input type="hidden" name="groupno" value="${groupno}" />
 		<input type="hidden" name="depthno" value="${depthno}" /> 
 		
-		<div style="float: right; margin-right: 34.3%">
+		<span style="float: right; padding-right:12.2%;">      
 			<button type="button" class="btn btn-info btn-sm" id="btnWrite">쓰기</button>
 			<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
-		</div>
-	</form>
+		</span>
+	</form>         
 
-</div>	
+</div>	 

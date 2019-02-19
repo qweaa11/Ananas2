@@ -106,7 +106,7 @@
     
 </script>
 
-<div style="padding-left: 20%; border: solid 0px red;">
+<div class="container" style="border: solid 0px red;">
 	<h1>글 수정하기</h1>
 	
 	<table id="table">
@@ -135,10 +135,10 @@
 	
 	<br/>
 	
-	<div style="float: right; margin-right: 34.3%">
+	<div style="float: right; padding-right:12.2%;">
 		<button type="button" class="btn btn-info btn-sm" id="btnUpdate">완료</button>
 		<button type="button" class="btn btn-info btn-sm" onClick="javascript:history.back();">취소</button>
-		<button type="button" class="btn btn-info btn-sm" onClick="javascript:location.href='<%=request.getContextPath()%>/del.ana?idx=${boardvo.idx}'">삭제</button>
+		<button type="button" class="btn btn-info btn-sm" onClick="javascript:location.href='<%=request.getContextPath()%>/boardDel.ana?idx=${boardvo.idx}'">삭제</button>
 	</div>
 	
 	<form name="editFrm">
